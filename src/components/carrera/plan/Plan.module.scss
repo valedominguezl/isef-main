@@ -1,0 +1,142 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding-up) var(--padding-100);
+    gap: 4rem;
+    align-items: center;
+    box-shadow: var(--shadow-in-bl);
+
+    .titulo {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+        text-align: center;
+    }
+
+    .plan {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        row-gap: 2rem;
+    }
+
+    .topic{
+        border-radius: 2em;
+        overflow: hidden;
+        transition: .3s;
+        border: 1px solid rgba(black, .2);
+        height: fit-content;
+        box-shadow: var(--shadow-out);
+    }
+
+    .toggle {
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem 2rem;
+        gap: .5em;
+        cursor: pointer;
+        background: var(--grad-btn-color2);
+
+        h4 {
+            font-weight: var(--bold);
+        }
+
+        &.active {
+            transition: .3s;
+        }
+
+        .text {
+            display: flex;
+            justify-content: space-between;
+            gap: 5rem;
+        }
+
+        .flecha {
+            width: 40px;
+            height: 40px;
+            padding: 8px;
+            border-radius: 300em;
+            background-color: white;
+            box-shadow: var(--shadow-out);
+            transition: transform 0.3s;
+
+            &.active{
+                transform: rotate(90deg);
+            }
+        }
+    }
+
+    .subTopics {
+
+        .subTopic:nth-child(odd) {
+            background: rgba(var(--principal-rgb) .05);
+        }
+
+        .subTopic:nth-child(even) {
+            background: rgba(var(--principal-rgb) .02);
+        }
+
+        .subTopic {
+            list-style-type: disc;
+            padding: 1.5rem 2rem 1.5em 4rem;
+        }
+    }
+}
+
+// Animaciones
+
+.titulo {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: 2s ease;
+
+    &.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@for $i from 1 through 6 {
+    .topic:nth-child(#{$i}) {
+        transition-delay: .2s * $i;
+    }
+}
+
+.topic {
+    opacity: 0;
+    transition: opacity 6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    &.visible {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .text {
+        gap: 1rem;
+    }
+}
+
+
+@media (max-width: 1024px) {
+    .plan {
+        width: 100%;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
+    .topic{
+        width: 100%;
+    }
+}
+
+@media (min-width: 1025px) {
+    .topic {
+        width: 48%;
+    }
+
+    .text{
+        gap: 5rem;
+    }
+}

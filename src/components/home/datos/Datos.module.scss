@@ -1,0 +1,154 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: auto;
+    padding: 4em var(--padding-100);
+    justify-content: center;
+    align-items: center;
+    background: var(--grad-fx);
+    box-shadow: var(--shadow-in);
+}
+
+.datos {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dato {
+    display: flex;
+    width: 100%;
+    height: 13em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 3;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: clamp(10em, 20vw, 15em);
+        height: clamp(10em, 20vw, 15em);
+        z-index: 1;
+        opacity: 0.1;
+        background: var(--background-datos-url);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+
+.dato {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 2s ease;
+}
+
+.dato.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.imgCont {
+    display: flex;
+    width: 5em;
+    height: 100%;
+    justify-content: flex-end;
+    align-items: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .container {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .datos {
+        flex-direction: column;
+    }
+
+    .dato {
+        height: 100%;
+        padding: 3em 0;
+
+        &::before {
+            width: 75%;
+            height: 75%;
+        }
+    }
+
+    .imgCont {
+        display: none;
+    }
+
+}
+
+@media (max-width: 650px) and (min-width: 500px) {
+
+    .container {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .txt {
+        display: flex;
+        width: 10em;
+        flex-direction: column;
+        gap: .5em;
+    }
+
+    .imgCont {
+        height: auto;
+        opacity: .8;
+    }
+
+    .datos {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .dato {
+        height: 100%;
+        padding: 1.5em 0;
+        width: 100%;
+        flex-direction: row-reverse;
+        gap: 1em;
+        background: none;
+
+        &::before {
+            background: none;
+        }
+    }
+}
+
+@media (min-width: 650px) {
+    .imgCont {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) and (min-width: 650px) {
+    .container {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .dato {
+        height: 10em;
+
+        &::before {
+            width: 90%;
+            height: 90%;
+        }
+    }
+}

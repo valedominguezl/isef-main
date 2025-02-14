@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  align-items: center;
+  justify-content: center;
+
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  width: 100%;
+  min-height: 75svh;
+  padding: var(--padding-up) var(--padding-100);
+
+  h4 {
+    color: var(--h3-wcolor);
+  }
+}
+
+.button {
+  color: black;
+  padding: 1em 2em;
+  border-radius: 300em;
+  border: none;
+  font-size: var(--fs-txt);
+  font-weight: var(--bold);
+  align-items: center;
+  box-shadow: var(--shadow-out-img);
+  background: yellow;
+}
+
+@keyframes slide {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.heading, .subHeading {
+  animation: slide 1s ease-out;
+}

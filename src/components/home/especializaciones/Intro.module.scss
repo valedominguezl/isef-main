@@ -1,0 +1,122 @@
+.color {
+    background-color: var(--fondo-principal);
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 0 var(--padding-100);
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 3em;
+    position: relative;
+}
+
+.imgCont,
+.txtCont {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.imgCont {
+    padding: var(--padding-up) 0 0 0;
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+}
+
+.txtCont {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--padding-up) 0;
+    gap: 2em;
+    hyphens: auto;
+}
+
+.txt {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
+
+.titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1em;
+}
+
+.parrafos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    hyphens: auto;
+}
+
+.titulo,
+.parrafos {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 2s ease;
+}
+
+.titulo.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.parrafos.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+
+    .container {
+        &::before {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 1500px) {
+    .imgCont {
+        display: none;
+    }
+
+    .container {
+        padding: 0 var(--padding-100);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: -2em;
+            background-image: url('@/assets/media/home/especializaciones.webp');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.03;
+            pointer-events: none;
+            height: auto;
+        }
+
+        overflow: hidden;
+    }
+
+    .txtCont {
+        display: flex;
+        justify-content: center;
+        max-width: 100%;
+    }
+}

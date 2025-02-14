@@ -1,0 +1,84 @@
+.container {
+    padding: var(--padding-up) var(--padding-100);
+    background: var(--grad-img), url('@/assets/media/home/sanLuis.webp') no-repeat center / cover;
+
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3em;
+
+    box-shadow: var(--shadow-in);
+}
+
+.txtCont{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 1.5em;
+    width: 100%;
+}
+
+.datos {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    align-content: flex-start;
+    gap: 3em;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.dato {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 25em;
+    gap: 2em;
+}
+
+
+.dato img {
+    width: 2.5em;
+}
+
+// Animaciones
+
+.txtCont {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: 2s ease;
+
+    &.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@for $i from 1 through 6 {
+    .dato:nth-child(#{$i}) {
+        transition-delay: .15s * $i;
+    }
+}
+
+.datos {
+    transform: translateX(-100px);
+    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    &.visible {
+        transform: translateX(0);
+    }
+}
+
+.dato {
+    opacity: 0;
+    transition: opacity 6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    &.visible {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding-up) var(--padding-200);
+    align-items: center;
+    justify-content: center;
+    gap: 1.5em;
+    background: var(--grad-img), url('@/assets/media/carrera/gabinete.webp') bottom / cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    text-align: center;
+    hyphens: auto;
+
+}
+
+// Animaciones
+
+.container *:not(div) {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 2s ease;
+
+    &.visible {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+
+    }
+}
+
+@media (max-width: 1200px) {
+    .container {
+        padding: var(--padding-up) var(--padding-100) !important;
+        text-align: left;
+        align-items: flex-start;
+    }
+}

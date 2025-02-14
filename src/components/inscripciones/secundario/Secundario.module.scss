@@ -1,0 +1,98 @@
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+    padding: var(--padding-up) var(--padding-200);
+    background: var(--grad-fx);
+    justify-content: center;
+    gap: 3em;
+}
+
+.txtCont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+    gap: 1em;
+    text-align: center;
+}
+
+
+/* Calendario animado */
+
+.calendar {
+    height: auto;
+    animation: swing ease-in-out 1s infinite alternate;
+    transform-origin: center -20px;
+    box-shadow: var(--shadow-out);
+    background-color: white; // Fondo blanco
+    position: relative;
+    border-radius: 2rem 2rem 1rem 1rem;
+
+    &:before {
+        position: absolute;
+        content: '';
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        background-color: black;
+        border-radius: 50%;
+    }
+
+    &:after {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        margin-left: -20px;
+        content: '';
+        width: 40px;
+        height: 40px;
+        border: 1px solid black;
+        transform: rotate(45deg);
+        z-index: -1;
+    }
+}
+
+.calendar__month {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+    background: var(--grad-nav2);
+    color: white;
+    font-size: var(--fs-txt);
+    border-radius: 1rem 1rem 0 0;
+}
+
+.calendar__day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 8px 1.3em;
+    font-size: var(--fs-h2);
+    color: black;
+}
+
+@keyframes swing {
+    0% {
+        transform: rotate(3deg);
+    }
+
+    100% {
+        transform: rotate(-3deg);
+    }
+}
+
+@media (max-width: 1024px){
+    .container {
+        padding: 4em var(--padding-100);
+    }
+}
+
+

@@ -1,0 +1,70 @@
+.temario {
+    width: 100%;
+    background-color: white;
+}
+
+.topic {
+    display: block;
+    width: 100%;
+
+    & .toggle:hover {
+        opacity: .9;
+    }
+}
+
+.toggle {
+    display: block;
+    width: 100%;
+    text-align: left;
+    color: white;
+    white-space: normal;
+    word-break: break-word;
+    border: none;
+    padding: 1.5rem 2rem 1.5em 3rem;
+    cursor: pointer;
+    border-bottom: 2px solid rgba(white, .1);
+    background: var(--grad-btn-color2);
+
+    strong{
+        font-size: 1.2rem;
+    }
+}
+
+.numbering {
+    margin-right: 0.5em;
+    font-size: 1.2rem;
+}
+
+.arrow {
+    margin-right: 0.5em;
+    font-size: 1.2rem;
+}
+
+.subTopics {
+
+    .numbering{
+        color: var(--principal)
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
+
+    .subTopic:nth-child(odd){
+        background: rgba(var(--principal-rgb) .05);
+    }
+
+    .subTopic:nth-child(even){
+        background: rgba(var(--principal-rgb) .02);
+    }
+}
+
+.subTopic {
+    display: block;
+    width: 100%;
+    text-align: left;
+    white-space: normal;
+    word-break: break-word;
+    border: none;
+    padding: 1.5rem 2rem 1.5em 3rem;
+}

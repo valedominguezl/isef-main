@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 142.42 200">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 20px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <g id="Simbolos">
+    <g>
+      <rect class="cls-2" width="142.42" height="200" transform="translate(142.42 200) rotate(180)"/>
+      <polyline class="cls-1" points="71.09 10.89 71.09 136.28 15.22 77.8 71.09 136.28 126.96 77.8"/>
+      <line class="cls-1" x1="13.17" y1="189.11" x2="129.01" y2="189.11"/>
+    </g>
+  </g>
+</svg>

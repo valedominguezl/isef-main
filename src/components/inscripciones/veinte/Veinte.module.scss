@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: var(--padding-up) var(--padding-200);
+    background-color: var(--fondo-principal);
+    justify-content: center;
+    gap: 2em;
+}
+
+.txtCont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    text-align: center;
+}

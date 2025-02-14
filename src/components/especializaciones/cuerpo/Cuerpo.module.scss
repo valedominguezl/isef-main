@@ -1,0 +1,250 @@
+.container {
+    padding: var(--padding-up) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3em;
+    width: 100%;
+    background-color: var(--fondo-principal);
+
+    .txtCont {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        background: white;
+        width: 100%;
+        height: 100%;
+
+        h4 {
+            padding: 1.5rem 2rem;
+            width: 100%;
+            background: var(--grad-btn-color2);
+            color: white;
+        }
+
+        ul {
+            display: inherit;
+            flex-direction: inherit;
+            gap: 1em;
+            padding: 2rem 3rem;
+            text-align: left;
+
+            li:last-child a {
+                color: var(--principal);
+                font-size: var(--fs-txt);
+            }
+        }
+    }
+
+    .imgCont {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        background: var(--grad-img) var(--principal);
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+    }
+
+    .profesional {
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-out);
+        border-radius: 2em;
+    }
+
+    .swiperCont {
+        .profesional {
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            position: relative;
+
+            ::-webkit-scrollbar {
+                width: 0;
+            }
+
+            :global(.swiper-pagination) {
+                margin-bottom: 35px;
+            }
+        }
+
+        .scroll {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(black, 0.8);
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+
+            p {
+                color: white
+            }
+
+            img {
+                width: 50px;
+                height: auto;
+                animation: bounce 1.5s infinite;
+            }
+        }
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.titulo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 1.5em;
+    padding: 0 var(--padding-100);
+}
+
+.profesionales {
+    display: flex;
+    justify-content: center;
+    gap: 3em;
+    padding: 0 var(--padding-100);
+
+    .profesional {
+        width: 30%;
+        overflow: hidden;
+    }
+
+    .imgCont img {
+        margin-top: 5em;
+        height: 20em;
+    }
+}
+
+.swiperCont {
+    display: none;
+    padding: 0 var(--padding-100);
+
+    .profesional {
+        width: 25em;
+    }
+
+    .imgCont img {
+        margin-top: 1em;
+    }
+}
+
+.swiperSlide {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+.container {
+    --swiper-theme-color: var(--principal);
+}
+
+// Animaciones
+
+.titulo {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 2s ease;
+
+    &.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .swiperCont .profesional {
+        width: 80%;
+    }
+
+    .container {
+        :global(.swiper-button-prev) {
+            width: 15%;
+        }
+
+        :global(.swiper-button-next) {
+            width: 15%;
+        }
+    }
+}
+
+@media (max-width: 1300px) {
+    .swiperCont .imgCont img {
+        height: 15em;
+    }
+}
+
+@media (max-width: 1300px) and (min-width: 768px) {
+
+
+    .container {
+        :global(.swiper-button-prev) {
+            width: 30%;
+        }
+
+        :global(.swiper-button-next) {
+            width: 30%;
+        }
+    }
+}
+
+@media (max-width: 1300px) {
+
+    .container {
+        gap: 0;
+    }
+
+    .swiperCont {
+        display: block;
+        height: 65vh;
+        width: 100%;
+    }
+
+    .profesional {
+        max-height: 100%;
+        background-color: white;
+
+        margin: 50px 0;
+    }
+
+    .swiperSlide {
+        height: 100%;
+    }
+
+    .profesionales {
+        display: none;
+    }
+}

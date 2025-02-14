@@ -1,0 +1,49 @@
+.container {
+    display: flex;
+    padding: var(--padding-up) var(--padding-100) 3em var(--padding-100);
+    flex-direction: column;
+    justify-content: center;
+    gap: 2em;
+    position: relative;
+    background-color: var(--fondo-principal);
+    box-shadow: var(--shadow-in-bl);
+    hyphens: auto;
+}
+
+.txt {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
+ 
+.titulo {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.parrafos {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+// Animaciones
+
+.titulo,
+.parrafos {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 2s ease;
+}
+
+.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 900px) and (min-width: 769px) {
+    .titulo h3 {
+        text-align: center;
+    }
+}
