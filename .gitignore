@@ -25,6 +25,6 @@ dist-ssr
 *.sw?
 
 # Ignórese;
-assets/media/carrera/galeria/videos
+src/assets/media/carrera/galeria/videos/
 generate-sitemap.js
 toWebp.js
