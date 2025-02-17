@@ -4,7 +4,7 @@
 }
 
 :root {
-  --aranceles-tabla-transparencia1: .02;
+  --aranceles-tabla-transparencia1: .05;
   --aranceles-tabla-transparencia2: .07;
 }
 
@@ -17,7 +17,7 @@ tbody {
     }
 
     & tr:first-of-type {
-      background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia2));
+      background: rgba(var(--secundario-rgb) 0.3);
     }
 
   }
@@ -30,12 +30,12 @@ tbody {
     }
 
     & tr:first-of-type {
-      background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia2));
+      background: rgba(var(--principal-rgb) .2);
     }
   }
 
   &.uniforme {
-    background: rgba(black, var(--aranceles-tabla-transparencia2));
+    background: rgba(black, .2);
   }
 
   &.gratis {
@@ -46,7 +46,7 @@ tbody {
     }
 
     & tr:first-of-type {
-      background: rgba(green, var(--aranceles-tabla-transparencia2));
+      background: rgba(green, .2);
     }
   }
 }
@@ -57,7 +57,7 @@ table caption {
   justify-content: center;
   padding: 2em 4em;
   color: white;
-  background: var(--principal);
+  background: var(--grad-btn-color2);
   display: none;
   text-align: center;
 }
@@ -119,7 +119,7 @@ th {
 }
 
 thead tr {
-  background: var(--principal);
+  background: var(--grad-btn-color2);
 }
 
 @media screen and (max-width: 768px) {
@@ -151,7 +151,7 @@ thead tr {
       }
 
       & td:first-of-type {
-        background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia2));
+        background: rgba(var(--secundario-rgb) .2);
       }
     }
 
@@ -163,7 +163,7 @@ thead tr {
       }
 
       & td:first-of-type {
-        background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia2));
+        background: rgba(var(--principal-rgb) .2);
       }
     }
 
@@ -175,7 +175,7 @@ thead tr {
       }
 
       & td:first-of-type {
-        background: rgba(black, var(--aranceles-tabla-transparencia2));
+        background: rgba(black, .2);
       }
 
     }
@@ -188,7 +188,7 @@ thead tr {
       }
 
       & td:first-of-type {
-        background: rgba(green, var(--aranceles-tabla-transparencia2));
+        background: rgba(green, .2);
       }
     }
 

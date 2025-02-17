@@ -8,7 +8,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    box-shadow: var(--shadow-out);
+    box-shadow: 0 -1px 50px -10px rgba(black, .3);
 
     .scroll {
         position: absolute;
@@ -101,16 +101,18 @@
                 padding: 2rem 0;
                 transition: .3s ease;
 
-                h3,small,div{
+                h4,small,div{
                     width: 80%;
                 }
 
-                h3 {
+                h4 {
                     font-size: 1.2rem;
+                    color: white;
                 }
 
                 small {
                     font-size: .9rem;
+                    color: var(--h4-wcolor);
                 }
 
                 &:hover {
@@ -163,18 +165,18 @@
 
         p{
             font-family: var(--tl-font);
-            color: var(--h3-wcolor);
+            color: var(--h4-wcolor);
         }
     }
 
-    h3,
+    h4,
     small,
     div {
         width: 90%;
     }
 
-    h3 {
-        color: var(--txt-wcolor);
+    h4 {
+        color: white;
         font-weight: var(--medium);
         font-size: 1.5em;
         letter-spacing: 2px;
@@ -182,7 +184,7 @@
 
     small {
         font-family: var(--txt-font);
-        color: var(--h3-wcolor);
+        color: var(--h4-wcolor);
         font-size: 1.2rem;
     }
 }
@@ -342,7 +344,7 @@
     .mediaWrapper .caption{
         padding: 2rem .5rem !important;
         
-        h3 {
+        h4 {
             font-size: 1.3rem !important;
         }
 
@@ -374,8 +376,9 @@
     .mediaWrapper .caption{
         padding: 4rem 2rem;
         
-        h3 {
+        h4 {
             font-size: 1.6rem;
+            color: white;
         }
 
         small {

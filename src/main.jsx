@@ -1,55 +1,34 @@
 import React from 'react';
-import ReactGA from 'react-ga';
-
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { ScrollProvider } from '@/components/funciones/context/ScrollContext.jsx';
-
-// Importa el contexto y la barra de carga
 import { LoadingProvider } from '@/components/funciones/context/LoadingContext';
 import LoadingBar from '@/components/funciones/loadingBar/LoadingBar';
-
-import './index.scss';
-import Home from '@/mainComponents/Home.jsx';
-import Aranceles from '@/mainComponents/Aranceles.jsx';
-import Inscripciones from '@/mainComponents/Inscripciones.jsx';
-import Carrera from '@/mainComponents/Carrera.jsx';
-import Especializaciones from '@/mainComponents/Especializaciones.jsx';
-import Institucional from '@/mainComponents/Institucional.jsx';
-
-import Contacto from '@/mainComponents/Institucional/Contacto.jsx';
-import Historia from '@/mainComponents/Institucional/Historia.jsx';
-
 import WhatsAppButton from '@/components/funciones/whatsApp/WhatsAppButton.jsx';
+import ReactGA from 'react-ga4';
+import router from './routes.jsx'; 
+import './index.scss';
 
-const router = createBrowserRouter([
-  { path: '/', element: <Home /> },
-  { path: '/Aranceles', element: <Aranceles /> },
-  { path: '/Inscripciones', element: <Inscripciones /> },
-  { path: '/Carrera', element: <Carrera /> },
-  { path: '/Especializaciones', element: <Especializaciones /> },
-  {
-    path: '/Institucional', 
-    element: <Institucional />, 
-    children: [
-      { path: 'Contacto', element: <Contacto /> }, 
-      { path: 'Historia', element: <Historia /> },
-    ]
-  },
-]);
-
+// Inicializa Google Analytics 4
 ReactGA.initialize('G-L4QFYTY1XM');
-ReactGA.pageview(window.location.pathname + window.location.search);
 
+router.subscribe(({ location }) => {
+  ReactGA.send({ hitType: 'pageview', page: location.pathname });
+});
+
+// Renderiza la aplicación
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LoadingProvider>
-      <ScrollProvider>
-        <LoadingBar />
-        <RouterProvider router={router} />
-        <WhatsAppButton />
-      </ScrollProvider>
-    </LoadingProvider>
-  </StrictMode>,
+    <HelmetProvider>
+      <LoadingProvider>
+        <ScrollProvider>
+          <LoadingBar />
+          <RouterProvider router={router} />
+          <WhatsAppButton />
+        </ScrollProvider>
+      </LoadingProvider>
+    </HelmetProvider>
+  </StrictMode>
 );

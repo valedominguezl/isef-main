@@ -95,4 +95,17 @@
     }
 }
 
+// Animaciones
+
+.txtCont *:not(.linea) {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 2s ease;
+
+    &.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 

@@ -113,7 +113,7 @@ const Tabla = () => {
 
         <tbody className={styles.gratis}>
           <tr>
-            <td>Matrícula</td>
+            <td>Matrícula anual</td>
             <td><strong>Gratis</strong></td>
             <td>—</td>
             <td>—</td>
@@ -135,7 +135,7 @@ const Tabla = () => {
             <td>—</td>
           </tr>
           <tr>
-            <td>Capacitaciones</td>
+            <td>Especializaciones</td>
             <td><strong>Gratis</strong></td>
             <td>—</td>
             <td>—</td>

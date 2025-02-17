@@ -26,21 +26,22 @@
     text-align: center;
     position: relative;
     z-index: 3;
-
-    &::before {
-        content: '';
-        position: absolute;
-        width: clamp(10em, 20vw, 15em);
-        height: clamp(10em, 20vw, 15em);
-        z-index: 1;
-        opacity: 0.1;
-        background: var(--background-datos-url);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-    }
+    /* Se eliminó el ::before */
 }
 
+/* Elemento para el background que reemplaza al ::before */
+.background {
+    position: absolute;
+    width: clamp(10em, 20vw, 15em);
+    height: clamp(10em, 20vw, 15em);
+    z-index: 1;
+    opacity: 0.1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Animación de aparición para cada .dato */
 .dato {
     opacity: 0;
     transform: translateY(20px);
@@ -58,16 +59,16 @@
     height: 100%;
     justify-content: flex-end;
     align-items: center;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
 }
 
-@media (max-width: 500px) {
+.imgCont img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
+/* Media Queries */
+@media (max-width: 500px) {
     .container {
         padding-top: 1.5rem;
         padding-bottom: 1.5rem;
@@ -80,21 +81,19 @@
     .dato {
         height: 100%;
         padding: 3em 0;
+    }
 
-        &::before {
-            width: 75%;
-            height: 75%;
-        }
+    .background {
+        width: 75%;
+        height: 75%;
     }
 
     .imgCont {
         display: none;
     }
-
 }
 
 @media (max-width: 650px) and (min-width: 500px) {
-
     .container {
         padding-top: 1.5rem;
         padding-bottom: 1.5rem;
@@ -104,12 +103,12 @@
         display: flex;
         width: 10em;
         flex-direction: column;
-        gap: .5em;
+        gap: 0.5em;
     }
 
     .imgCont {
         height: auto;
-        opacity: .8;
+        opacity: 0.8;
     }
 
     .datos {
@@ -124,10 +123,10 @@
         flex-direction: row-reverse;
         gap: 1em;
         background: none;
+    }
 
-        &::before {
-            background: none;
-        }
+    .background {
+        display: none;
     }
 }
 
@@ -145,10 +144,10 @@
 
     .dato {
         height: 10em;
+    }
 
-        &::before {
-            width: 90%;
-            height: 90%;
-        }
+    .background {
+        width: 90%;
+        height: 90%;
     }
 }

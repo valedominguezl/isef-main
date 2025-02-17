@@ -40,7 +40,11 @@ const Detalle = ({ curso, onClose }) => {
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
 
 
-                <div className={`${styles.titulo} bl`}>
+                <div className={`${styles.titulo} bl`}
+                    style={{
+                        backgroundImage: curso.bgImage ? `var(--grad-img), url(${curso.bgImage})` : "none",
+                        backgroundPosition: "center",
+                    }}>
                     <div className={styles.botonCont}>
                         <h2><span>{curso.title}</span></h2>
                         <button className={styles.close} onClick={onClose} aria-label="Cerrar">
@@ -70,7 +74,7 @@ const Detalle = ({ curso, onClose }) => {
                 {curso.descripcion && (
                     <div className={styles.dato}>
                         <strong>Descripción:</strong>
-                        <div>{curso.descripcion}</div> 
+                        <div>{curso.descripcion}</div>
                     </div>
                 )}
 

@@ -1,6 +1,4 @@
 import React from 'react'
-import Navbar from '@/components/navbar/Navbar.jsx'
-import Footer from '@/components/footer/Footer.jsx'
 import Intros from '@/components/reutilizables/intros/Intros.jsx'
 import fondo from '@/assets/media/inscripciones/main.webp'
 
@@ -10,9 +8,7 @@ import Veinte from '@/components/inscripciones/veinte/Veinte.jsx'
 
 const Inscripciones = () => {
   return (
-    <div>
-      <Navbar />
-
+    <div className='mainComponent'>
       <Intros
         bgImage={fondo}
         heading="Inscripciones"
@@ -26,8 +22,6 @@ const Inscripciones = () => {
       <Secundario />
 
       <Veinte />
-
-      <Footer />
     </div>
   )
 }

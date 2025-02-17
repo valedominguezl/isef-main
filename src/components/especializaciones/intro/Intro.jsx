@@ -42,7 +42,7 @@ const Intro = () => {
       <div className={styles.txtCont}>
         <div className={styles.txt}>
           <div className={styles.titulo}>
-            <h3>I.S.E.F. San Luís | Cómo te hacemos destacar</h3>
+            <h4>I.S.E.F. San Luís | Cómo te hacemos destacar</h4>
             <h2>Te formamos con las<br /><span className="color2">últimas novedades</span></h2>
           </div>
           <div className="linea-svg"></div>

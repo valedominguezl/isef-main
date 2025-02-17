@@ -1,14 +1,14 @@
 import getCourseImage from '../getCourseImage'
 
 const escritura = {
-    title: "Taller de Escritura Científica",
+    name: "escritura",
+    title: "Taller de escritura científica",
     subTitle: "Apoyo en la realización de la primera investigación",
     bgImage: getCourseImage("escritura.webp"),
     expositor: 1,
     descripcion: <p>
-        Nos centraremos en guiar a los participantes a través del <strong>proceso de escritura científica</strong>, proporcionando el apoyo necesario para realizar su <strong>primera investigación</strong>. Los temas incluyen la redacción de la sección de material y métodos, selección de población y muestra, identificación de variables e indicadores clave, y la aplicación de principios bioéticos.
-        <br /><br />
-        También se explorarán <strong>técnicas estadísticas</strong> para la presentación de resultados y se brindarán herramientas para la discusión y la elaboración de conclusiones, asegurando así una comunicación clara y efectiva de los hallazgos científicos. <strong>Este curso está diseñado para apoyar a los investigadores noveles en la publicación de sus primeros trabajos</strong>.
+        Este Taller de Escritura Científica <strong>(TEC)</strong> tiene como principal tarea la de apoyar al estudiante y profesional en la <strong>realización concreta de su primera investigación</strong>. Se brindan las bases teóricas y fundamentalmente su operacionalización para que desarrolle un trabajo de investigación simple, sencillo, de nivel observacional o correlacional, pero con correctas bases metodológicas. <br /> <br />
+        Se brindan los elementos para que el cursante pueda realizar un trabajo científico de investigación original, preferentemente de características territoriales, es decir ligado a su propio entorno de trabajo, dentro de las líneas de investigación que promueve la institución, y con un <strong>nivel apto para ser publicado en una revista</strong> con revisión por pares. <strong>Este curso está diseñado para apoyar a los investigadores noveles en la publicación de sus primeros trabajos.</strong>
     </p>
     ,
     duracion: null,

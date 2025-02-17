@@ -56,16 +56,19 @@ const profesionales = [
 
 const Cuerpo = () => {
   const containerRef = useRef(null);
+  const effectRef = useRef(null);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    const effect = effectRef.current;
+    if (!container && !effect) return;
 
     // Selecciona elementos a animar
-    const titulo = container.querySelector(`.${styles.titulo}`);
+    const titulo = container?.querySelector(`.${styles.titulo}`);
+    const profesionalesChildren = effect?.querySelectorAll(`.${styles.profesional}`);
 
-    // Añade elementos que necesitan animación
-    const animatedElements = [titulo];
+    // Filtra y agrupa los elementos que necesitan animación
+    const animatedElements = [titulo, ...profesionalesChildren].filter(Boolean);
 
     // IntersectionObserver
     const observer = new IntersectionObserver(
@@ -87,6 +90,7 @@ const Cuerpo = () => {
       animatedElements.forEach(el => observer.unobserve(el));
     };
   }, []);
+
 
   useEffect(() => {
     const containers = document.querySelectorAll(`.${styles.profesional}`);
@@ -113,22 +117,24 @@ const Cuerpo = () => {
     };
   }, []);
 
+
+
   return (
     <div className={styles.container} ref={containerRef}>
 
       <div className={styles.titulo}>
-        <h2>Conocé a los <span className="color1">profesionales</span></h2>
+        <h2>Conocé a los <span className="color1">científicos</span></h2>
         <p>Estos serán los encargados de impulsar tu carrera, para que estés <strong>a la altura de los estándares europeos</strong>.</p>
       </div>
 
-      <div className={styles.profesionales}>
+      <div className={styles.profesionales} ref={effectRef}>
         {profesionales.map((profesional, index) => (
           <div key={index} className={styles.profesional}>
             <div className={styles.imgCont}>
               <img src={profesional.img} alt={profesional.nombre} />
             </div>
             <div className={styles.txtCont}>
-              <h4><span>{profesional.nombre}</span></h4>
+              <h3><span>{profesional.nombre}</span></h3>
               <ul>
                 {profesional.descripcion.map((desc, i) => (
                   <li key={i}><p>{desc}</p></li>
@@ -164,7 +170,7 @@ const Cuerpo = () => {
                 <img src={profesional.img} alt={profesional.nombre} />
               </div>
               <div className={styles.txtCont}>
-                <h4><span>{profesional.nombre}</span></h4>
+                <h3><span>{profesional.nombre}</span></h3>
                 <ul>
                   {profesional.descripcion.map((desc, i) => (
                     <li key={i}><p>{desc}</p></li>

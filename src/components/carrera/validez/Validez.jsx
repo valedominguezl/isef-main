@@ -76,7 +76,7 @@ const Validez = () => {
                 </div>
             </div>
             <div className={styles.txt}>
-                <h3>I.S.E.F. San Luís | Resolución Nº: 442 ME 2016</h3>
+                <h4>I.S.E.F. San Luís | Resolución Nº: 442 ME 2016</h4>
                 <h2>
                     Validez <span>nacional e internacional</span>
                 </h2>

@@ -11,10 +11,10 @@
   background-color: rgba(0, 0, 0, 0.1);
   overflow: hidden;
   animation: skeleton-loading 1.2s infinite;
+  align-items: center;
 
   @media (max-width: 1300px) {
     width: 100%;
-    align-items: center;
   }
 }
 
@@ -64,7 +64,6 @@
 @media (min-width: 1300px) {
   .curso {
     width: 45%;
-    align-items: flex-start;
     flex-wrap: wrap;
   }
 }

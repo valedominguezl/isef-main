@@ -37,7 +37,7 @@ const Gabinete = () => {
 
   return (
     <div ref={containerRef} className={`${styles.container} bl`}>
-            <h3>I.S.E.F. San Luís | Nuestro compromiso institucional</h3>
+            <h4>I.S.E.F. San Luís | Nuestro compromiso institucional</h4>
             <h2>Gabinete de <span>apoyo psicológico</span></h2>
             <div className="linea-svg bl"></div>
             <p>

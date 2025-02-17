@@ -43,7 +43,7 @@ const Intro = () => {
       <div className={styles.txtCont}>
         <div className={styles.txt}>
           <div className={styles.titulo}>
-            <h3>I.S.E.F. San Luís | Profesorado de educación física</h3>
+            <h4>I.S.E.F. San Luís | Profesorado de educación física</h4>
             <h2>Bienvenido al <span className="color2">I.S.E.F.</span></h2>
           </div>
           <div className="linea-svg"></div>
@@ -56,7 +56,7 @@ const Intro = () => {
 
           </div>
         </div>
-        <LoadingAnchor href="/Carrera" className='btn-cta grad' target='_blank'>
+        <LoadingAnchor href="/Carrera" className='btn-cta grad' >
           Enterate más
         </LoadingAnchor>
       </div>

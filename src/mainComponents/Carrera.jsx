@@ -1,6 +1,4 @@
 import React from 'react'
-import Navbar from '@/components/navbar/Navbar.jsx'
-import Footer from '@/components/footer/Footer.jsx'
 import Intros from '@/components/reutilizables/intros/Intros.jsx'
 import fondo from '@/assets/media/carrera/main.webp'
 
@@ -15,13 +13,11 @@ import Especializaciones from '@/components/carrera/especializaciones/Especializ
 
 const Carrera = () => {
   return (
-    <div>
-      <Navbar />
-
+    <div className='mainComponent'>
       <Intros
         bgImage={fondo}
         heading="Profesorado de educación física"
-        subHeading="Titulos oficialez de validez nacional"
+        subHeading="Títulos oficiales de validez nacional"
         showButton={false}
         showLine={true}
       />
@@ -41,8 +37,6 @@ const Carrera = () => {
       <Explora />
 
       <Galeria />
-
-      <Footer />
     </div>
   )
 }

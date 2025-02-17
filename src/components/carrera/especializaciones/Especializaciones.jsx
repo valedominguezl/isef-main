@@ -8,10 +8,26 @@ const Especializaciones = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Selección manual de cursos a mostrar
-const selectedEspecializaciones = cursosData.slice(0, 6);
+  // Nombres de los componentes de los cursos que deseas mostrar en el orden deseado
+  const selectedCourseNames = [
+    "nutricion",
+    "antropometria",
+    "escritura",
+    "investigacion",
+    "intermitente",
+    "neurociencias",
+  ];
 
-  // Determina cuántos cursos mostrar según el ancho de la ventana
+  // Crear un objeto para acceso rápido a los cursos por nombre
+  const cursosDataByName = cursosData.reduce((acc, curso) => {
+    acc[curso.name] = curso;
+    return acc;
+  }, {});
+
+  // Obtener los cursos en el orden especificado
+  const selectedEspecializaciones = selectedCourseNames.map((name) => cursosDataByName[name]).filter(Boolean);
+
+  // Determina cuántos cursos mostrar por slide según el ancho de la ventana
   const getItemsPerSlide = () => (window.innerWidth > 1300 ? 2 : 1);
   const [itemsPerSlide, setItemsPerSlide] = useState(getItemsPerSlide());
 
@@ -38,15 +54,13 @@ const selectedEspecializaciones = cursosData.slice(0, 6);
   const [nextSlide, setNextSlide] = useState(null);
   const [animating, setAnimating] = useState(false);
 
-  // Función que imita el comportamiento de ScrollToSection:
-  // Navega a la ruta targetPage y, tras comprobar que se cargó la sección, hace scroll al elemento con id targetId.
+  // Función para manejar 'Ver Más'
   const handleVerMas = () => {
-    const targetPage = "/Especializaciones"; // Cambia esta ruta según necesites
-    const targetId = "especializacionesCursos"; // Cambia el id de destino si hace falta
+    const targetPage = "/Especializaciones";
+    const targetId = "especializacionesCursos";
 
     navigate(targetPage);
 
-    // Inicia un intervalo para comprobar si ya se cargó la sección.
     const checkExist = setInterval(() => {
       const section = document.getElementById(targetId);
       if (section) {
@@ -55,7 +69,6 @@ const selectedEspecializaciones = cursosData.slice(0, 6);
       }
     }, 300);
 
-    // Como medida de seguridad, se limpia el intervalo después de 5 segundos.
     setTimeout(() => {
       clearInterval(checkExist);
     }, 5000);
@@ -72,51 +85,56 @@ const selectedEspecializaciones = cursosData.slice(0, 6);
         setCurrentSlide(newNext);
         setNextSlide(null);
         setAnimating(false);
-      }, 1000); // Duración de la animación (debe coincidir con el SCSS)
-    }, 5000); // Intervalo entre slides
+      }, 1000); // Duración de la animación
+
+    }, 8000); // Intervalo entre slides
 
     return () => clearInterval(interval);
   }, [currentSlide, slides.length]);
 
-return (
+  return (
     <div className={styles.container}>
-        <div className={`${styles.sliderContainer} bl`}>
-            {/* Renderizado del slide actual sin animación */}
+      <div className={`${styles.sliderContainer} bl`}>
+        {slides.length > 0 && (
+          <>
             {!animating && (
-                <div className={styles.slide}>
-                    {slides[currentSlide].map((curso, idx) => (
-                        <Curso key={idx} {...curso} onVerMas={handleVerMas} />
-                    ))}
-                </div>
+              <div className={styles.slide}>
+                {slides[currentSlide].map((curso, idx) => (
+                  <Curso key={idx} {...curso} onVerMas={handleVerMas} />
+                ))}
+              </div>
             )}
-            {/* Renderizado durante la animación: se muestran dos slides */}
             {animating && nextSlide !== null && (
-                <>
-                    <div className={`${styles.slide} ${styles.slideExit}`}>
-                        {slides[currentSlide].map((curso, idx) => (
-                            <Curso key={idx} {...curso} onVerMas={handleVerMas} />
-                        ))}
-                    </div>
-                    <div className={`${styles.slide} ${styles.slideEnter}`}>
-                        {slides[nextSlide].map((curso, idx) => (
-                            <Curso key={idx} {...curso} onVerMas={handleVerMas} />
-                        ))}
-                    </div>
-                </>
+              <>
+                <div className={`${styles.slide} ${styles.slideExit}`}>
+                  {slides[currentSlide].map((curso, idx) => (
+                    <Curso key={idx} {...curso} onVerMas={handleVerMas} />
+                  ))}
+                </div>
+                <div className={`${styles.slide} ${styles.slideEnter}`}>
+                  {slides[nextSlide].map((curso, idx) => (
+                    <Curso key={idx} {...curso} onVerMas={handleVerMas} />
+                  ))}
+                </div>
+              </>
             )}
-        </div>
-        {/* Pagination Bullets */}
+          </>
+        )}
+      </div>
+      {/* Paginación */}
+      {slides.length > 0 && (
         <div className={styles.pagination}>
-            {slides.map((_, index) => (
-                <span
-                    key={index}
-                    className={`${styles.bullet} ${currentSlide === index ? styles.activeBullet : ""}`}
-                    onClick={() => setCurrentSlide(index)}
-                ></span>
-            ))}
+          {slides.map((_, index) => (
+            <span
+              key={index}
+              className={`${styles.bullet} ${currentSlide === index ? styles.activeBullet : ""}`}
+              onClick={() => setCurrentSlide(index)}
+            ></span>
+          ))}
         </div>
+      )}
     </div>
-);
+  );
 };
 
 export default Especializaciones;

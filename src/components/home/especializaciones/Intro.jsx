@@ -46,7 +46,7 @@ const Intro = () => {
 
           <div className={styles.txt}>
             <div className={styles.titulo}>
-              <h3>I.S.E.F. San Luís | Lo que nos hace distintos</h3>
+              <h4>I.S.E.F. San Luís | Lo que nos hace distintos</h4>
               <h2>Las <span className='color1'>especializaciones</span></h2>
             </div>
 
@@ -54,7 +54,7 @@ const Intro = () => {
 
             <div className={styles.parrafos}>
               <p>
-                En el I.S.E.F. San Luís te formamos en el campo de las <strong>neurociencias</strong>, la actividad física en las ECT (enfermedades crónicas no transmisibles), adulto mayor, menopausia, nutrición deportiva y muchas más áreas. Esto, gracias a nuestros <strong>científicos de renombre mundial</strong> que te darán harramientas para aplicar dentro del sistema educativo como prevención, pero también en clubes, gimnasios, centros de salud, etc. <br /> <br />
+                En el I.S.E.F. San Luís te formamos en el campo de las <strong>neurociencias</strong>, la actividad física en las ECT (enfermedades crónicas no transmisibles), adulto mayor, menopausia, nutrición deportiva y muchas más áreas. Esto, gracias a nuestros <strong>científicos de renombre mundial</strong> que te darán herramientas para aplicar dentro del sistema educativo como prevención, pero también en clubes, gimnasios, centros de salud, etc. <br /> <br />
 
                 Las enfermedades mentales, según las neurociencias, se vinculan con la salud física y atender enfermedades crónicas no transmisibles desde el ejercicio es fundamental. En este campo laboral el profesor de educación física puede <strong>trabajar en equipos interdisciplinarios</strong> con psicólogos, psiquiatras, neurólogos, asistentes terapéuticos, gerontólogos, entre otros.
               </p>
@@ -62,7 +62,7 @@ const Intro = () => {
           </div>
 
           <LoadingAnchor className="btn-cta grad2" href='/Especializaciones'>
-            Especializaciones
+            Ver más
           </LoadingAnchor>
         </div>
 

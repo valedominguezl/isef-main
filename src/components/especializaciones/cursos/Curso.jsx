@@ -10,9 +10,9 @@ const Curso = ({ title, subTitle, bgImage, onVerMas }) => {
         backgroundPosition: "center",
       }}
     >
-      <h4>
+      <h3>
         <span>{title}</span>
-      </h4>
+      </h3>
       <div className="linea-svg bl"></div>
       <p>{subTitle}</p>
       <button className="btn-cta noHover grad3" onClick={onVerMas}>

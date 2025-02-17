@@ -10,38 +10,89 @@ import flechaHover from "@/assets/simbols/faqFlechaInactiveDown.webp";
 
 const Cursos = () => {
   const [searchText, setSearchText] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(4);
   const [hover, setHover] = useState(false);
   const [selectedCurso, setSelectedCurso] = useState(null);
   const [placeholder, setPlaceholder] = useState("Buscar cursos...");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [minLoadingTime, setMinLoadingTime] = useState(false);
+  const [showCursos, setShowCursos] = useState(false);
 
-  // Lógica para la simulación de carga mínima (2 segundos)
+  // Refs
+  const containerRef = useRef(null);
+  const cursosRef = useRef(null);
+  const cursosSentinelRef = useRef(null);
+
+  // Debounce para la búsqueda (300ms)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setMinLoadingTime(true);
-    }, 2000);
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchText);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchText]);
 
-    return () => clearTimeout(timer);
-  }, []);
+  // Helper para extraer texto de elementos (similar a Faq.jsx)
+  const getText = (node) => {
+    if (typeof node === "string" || typeof node === "number") {
+      return node;
+    }
+    if (Array.isArray(node)) {
+      return node.map(getText).join(" ");
+    }
+    if (node && node.props && node.props.children) {
+      return getText(node.props.children);
+    }
+    return "";
+  };
 
-  // Lógica para la carga de datos
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000); // Tiempo de simulación de carga de datos (3 segundos)
+  // Función para obtener el nombre del expositor
+  const getExpositorText = (expositor) => {
+    if (expositor === 1) return "Dr. Nelio Bazán";
+    if (expositor === 2) return "Lic. Jorge Roig";
+    if (expositor === 3) return "Dr. Roberto Rosler";
+    return "";
+  };
 
-    return () => clearTimeout(timer);
-  }, []);
+  // Función para concatenar TODO el contenido textual del curso:
+  // título, subtítulo, descripción, datos y temario (incluyendo subtemas)
+  const getCourseSearchText = (curso) => {
+    let text = "";
+    if (curso.title) text += " " + curso.title;
+    if (curso.subTitle) text += " " + curso.subTitle;
+    if (curso.descripcion) text += " " + getText(curso.descripcion);
+    if (curso.text) text += " " + curso.text;
+    if (curso.expositor) text += " " + getExpositorText(curso.expositor);
+    if (curso.duracion) text += " " + curso.duracion;
+    if (curso.modalidad) text += " " + curso.modalidad;
+    if (curso.costo) text += " " + curso.costo;
+    if (curso.inicio) text += " " + curso.inicio;
+    if (curso.importante) text += " " + curso.importante;
+    if (curso.condiciones) text += " " + curso.condiciones;
+    if (curso.temario && Array.isArray(curso.temario)) {
+      curso.temario.forEach((topic) => {
+        if (topic.tema) text += " " + topic.tema;
+        if (topic.subtemas && Array.isArray(topic.subtemas)) {
+          topic.subtemas.forEach((sub) => {
+            if (sub.tema) text += " " + sub.tema;
+          });
+        }
+      });
+    }
+    return text;
+  };
 
-  const filteredCursos = cursosData.filter(
-    (curso) =>
-      curso.title.toLowerCase().includes(searchText.toLowerCase()) ||
-      curso.subTitle.toLowerCase().includes(searchText.toLowerCase()) ||
-      curso.text.toLowerCase().includes(searchText.toLowerCase())
-  );
+  // Filtrar cursos usando debouncedSearch sobre TODO el texto del curso
+  const filteredCursos = cursosData.filter((curso) => {
+    const aggregatedText = getCourseSearchText(curso).toLowerCase();
+    const search = debouncedSearch.trim().toLowerCase();
+    return aggregatedText.includes(search);
+  });
 
+  // Si hay búsqueda se muestran todos; si no, se limita a visibleCount
+  const cursosToDisplay = debouncedSearch ? filteredCursos : filteredCursos.slice(0, visibleCount);
+
+  // Manejador para el botón "Mostrar más"
   const handleShowMore = () => {
     setIsLoading(true);
     setMinLoadingTime(false);
@@ -56,40 +107,96 @@ const Cursos = () => {
     }, 1000);
   };
 
-  const containerRef = useRef(null);
+  // Simulación de carga mínima (2 segundos)
+  useEffect(() => {
+    if (showCursos) {
+      setMinLoadingTime(false);
+      const timer = setTimeout(() => {
+        setMinLoadingTime(true);
+      }, 2000);
 
+      return () => clearTimeout(timer);
+    }
+  }, [showCursos]);
+
+  // Simulación de carga de datos (3 segundos)
+  useEffect(() => {
+    if (showCursos) {
+      setIsLoading(true);
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showCursos]);
+
+  // Observer para animar el título
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const titulo = container.querySelector(`.${styles.titulo}`);
-
-
-    const animatedElements = [titulo].filter(Boolean);
+    if (!titulo) return;
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add(styles.visible);
-            obs.unobserve(entry.target);
+            titulo.classList.add(styles.visible);
+            obs.unobserve(titulo);
           }
         });
       },
       { threshold: 0.1 }
     );
 
-    animatedElements.forEach(el => observer.observe(el));
-
-    return () => {
-      animatedElements.forEach(el => observer.unobserve(el));
-    };
+    observer.observe(titulo);
+    return () => observer.disconnect();
   }, []);
+
+  // Observer para el sentinela de cursos
+  useEffect(() => {
+    if (!cursosSentinelRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShowCursos(true);
+            obs.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(cursosSentinelRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Observer para animar el contenedor de cursos
+  useEffect(() => {
+    if (showCursos && cursosRef.current) {
+      const cursosEl = cursosRef.current;
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              cursosEl.classList.add(styles.visible);
+              obs.unobserve(cursosEl);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(cursosEl);
+      return () => observer.disconnect();
+    }
+  }, [showCursos]);
 
   return (
     <div ref={containerRef} className={styles.container}>
-      <div className={styles.titulo} id='especializacionesCursos'>
-        <h2 >
+      <div className={styles.titulo} id="especializacionesCursos">
+        <h2>
           Nuestras últimas <span className="color2">especializaciones</span>
         </h2>
         <div className="linea-svg"></div>
@@ -114,21 +221,33 @@ const Cursos = () => {
         />
       </div>
 
-      <div className={`${styles.cursos} bl`}>
-        {isLoading || !minLoadingTime
-          ? [...Array(visibleCount)].map((_, index) => (
-            <Skeleton key={index} />
-          ))
-          : filteredCursos.slice(0, visibleCount).map((curso, index) => (
-            <Curso
-              key={index}
-              {...curso}
-              onVerMas={() => setSelectedCurso(curso)}
-            />
-          ))}
-      </div>
+      {/* Sentinela: elemento invisible para detectar cuándo renderizar los cursos */}
+      <div ref={cursosSentinelRef} style={{ height: "1px" }}></div>
 
-      {visibleCount < filteredCursos.length && !isLoading && (
+      {/* Se renderiza el contenedor de cursos solo cuando showCursos es true */}
+      {showCursos && (
+        <div ref={cursosRef} className={`${styles.cursos} bl`}>
+          {isLoading || !minLoadingTime ? (
+            [...Array(visibleCount)].map((_, index) => <Skeleton key={index} />)
+          ) : cursosToDisplay.length > 0 ? (
+            cursosToDisplay.map((curso, index) => (
+              <Curso
+                key={index}
+                {...curso}
+                onVerMas={() => setSelectedCurso(curso)}
+              />
+            ))
+          ) : (
+            <h3 style={{ color: 'var(--h4-bcolor)' }}>
+              ¡Disculpá!, no se encontraron cursos sobre eso...
+            </h3>
+          )}
+        </div>
+      )}
+
+
+      {/* Mostrar más solo si no hay búsqueda activa */}
+      {!debouncedSearch && visibleCount < filteredCursos.length && !isLoading && (
         <div
           className={styles.showMore}
           onClick={handleShowMore}
@@ -138,11 +257,7 @@ const Cursos = () => {
             backgroundColor: hover ? "var(--principal)" : "white",
           }}
         >
-          <img
-            src={hover ? flecha : flechaHover}
-            alt="Mostrar más"
-            className={styles.flecha}
-          />
+          <img src={hover ? flecha : flechaHover} alt="Mostrar más" className={styles.flecha} />
         </div>
       )}
 

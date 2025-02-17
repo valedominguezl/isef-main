@@ -14,10 +14,8 @@ const Datos = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Selecciona todos los elementos con la clase 'dato'
     const animatedElements = container.querySelectorAll(`.${styles.dato}`);
 
-    // IntersectionObserver
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -30,7 +28,7 @@ const Datos = () => {
                 newStart[index] = true;
                 return newStart;
               });
-            }, index * 500); // Cambia el valor 500 por el delay deseado en milisegundos entre animaciones
+            }, index * 500);
             observer.unobserve(entry.target);
           }
         });
@@ -40,58 +38,66 @@ const Datos = () => {
 
     animatedElements.forEach(el => observer.observe(el));
 
-    // Cleanup
     return () => {
       animatedElements.forEach(el => observer.unobserve(el));
     };
   }, []);
 
-  const backgrounds = {
-    años: 'url(src/assets/simbols/años.webp)',
-    instituciones: 'url(src/assets/simbols/instituciones.webp)',
-    egresados: 'url(src/assets/simbols/egresados.webp)',
-  };
-
   return (
     <div ref={containerRef} className={`${styles.container} bl`}>
       <div className={styles.datos}>
-        <div className={styles.dato} style={{ '--background-datos-url': backgrounds.años }}>
+
+        {/* DATO 1 */}
+        <div className={styles.dato}>
+          <div
+            className={styles.background}
+            style={{ backgroundImage: `url(${añosImg})` }}
+          ></div>
           <div className={styles.txt}>
             <h2>
-              <span>+
-                {startCountUp[0] && <CountUp start={0} end={30} duration={3} />}
-              </span>
+              <span>+{startCountUp[0] && <CountUp start={0} end={30} duration={3} />}</span>
             </h2>
             <p>años formando</p>
           </div>
           <div className={styles.imgCont}>
-            <img src={añosImg} alt="" />
+            <img src={añosImg} alt="Años" />
           </div>
         </div>
 
-        <div className={styles.dato} style={{ '--background-datos-url': backgrounds.instituciones }}>
+        {/* DATO 2 */}
+        <div className={styles.dato}>
+          <div
+            className={styles.background}
+            style={{ backgroundImage: `url(${institucionesImg})` }}
+          ></div>
           <div className={styles.txt}>
-            <h2><span>2</span></h2>
+            <h2>
+              <span>{startCountUp[1] && <CountUp start={1} end={2} duration={10} />}</span>
+            </h2>
             <p>instituciones</p>
           </div>
           <div className={styles.imgCont}>
-            <img src={institucionesImg} alt="" />
+            <img src={institucionesImg} alt="Instituciones" />
           </div>
         </div>
 
-        <div className={styles.dato} style={{ '--background-datos-url': backgrounds.egresados }}>
+        {/* DATO 3 */}
+        <div className={styles.dato}>
+          <div
+            className={styles.background}
+            style={{ backgroundImage: `url(${egresadosImg})` }}
+          ></div>
           <div className={styles.txt}>
             <h2>
-              <span>+
-                {startCountUp[2] && <CountUp start={0} end={5000} duration={3} />}
-              </span>
+              <span>+{startCountUp[2] && <CountUp start={0} end={5000} duration={3} />}</span>
             </h2>
             <p>egresados</p>
           </div>
           <div className={styles.imgCont}>
-            <img src={egresadosImg} alt="" />
+            <img src={egresadosImg} alt="Egresados" />
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -1,6 +1,4 @@
 import React from 'react'
-import Navbar from '@/components/navbar/Navbar.jsx'
-import Footer from '@/components/footer/Footer.jsx'
 import Intros from '@/components/reutilizables/intros/Intros.jsx'
 
 import fondo from '@/assets/media/especializaciones/main.webp'
@@ -11,9 +9,7 @@ import Cursos from '@/components/especializaciones/cursos/Cursos.jsx'
 
 const Especializaciones = () => {
   return (
-    <div>
-      <Navbar />
-
+    <div className='mainComponent'>
       <Intros
         bgImage={fondo}
         heading="Especializaciones"
@@ -26,8 +22,6 @@ const Especializaciones = () => {
       <Cuerpo />
 
       <Cursos />
-
-      <Footer />
     </div>
   )
 }

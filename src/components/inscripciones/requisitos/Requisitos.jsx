@@ -45,9 +45,9 @@ const Requisitos = () => {
     <div ref={containerRef} className={styles.container}>
 
       <div className={styles.txtContTl}>
-        <h2>Requisitos <span className="color2">generales</span></h2>
+        <h2>Requisitos <span className="color2">a presentar</span></h2>
         <div className="linea-svg"></div>
-        <p>Para poder insribirte en el profesorado, tenés que <span>descargar</span> la siguiente documentación, <span>rellenarla</span> y luego <span>presentarla</span> en la sede correspondiente del I.S.E.F. San Luís. (
+        <p>Para poder inscribirte en el profesorado, tenés que <span>descargar</span> la siguiente documentación, <span>rellenarla</span> y luego <span>presentarla</span> en la sede correspondiente del I.S.E.F. San Luís. <br /> (
           <ScrollToSection page="/" id="homeSedes">
             Ver sedes
           </ScrollToSection>
@@ -59,8 +59,8 @@ const Requisitos = () => {
         <div className={styles.requisito}>
           <div className={styles.txtCont}>
             <div className={styles.txt}>
-              <h3>Paso &#8470; 1:</h3>
-              <h4>Solicitud de <span className="color1">inscripción</span></h4>
+              <h4>Paso &#8470; 1:</h4>
+              <h3>Solicitud de <span className="color1">inscripción</span></h3>
               <div className="linea-svg"></div>
               <p>Tenés que llenarla con tus datos personales y llevarla personalmente a nuestras oficinas en una <span>carpeta colgante color marrón</span>.</p>
             </div>
@@ -78,8 +78,8 @@ const Requisitos = () => {
         <div className={styles.requisito}>
           <div className={styles.txtCont}>
             <div className={styles.txt}>
-              <h3>Paso &#8470; 2:</h3>
-              <h4>Exámenes <span className="color2">médicos</span></h4>
+              <h4>Paso &#8470; 2:</h4>
+              <h3>Exámenes <span className="color2">médicos</span></h3>
               <div className="linea-svg"></div>
               <p>Tenés que imprimirla y presentarla en los <span>centros de salud, médicos particulares u hospitales públicos</span> para realizarte los estudios que en ella figuran. La planilla consta de tres hojas en <span>formato A4</span>.</p>
             </div>
@@ -96,8 +96,8 @@ const Requisitos = () => {
         <div className={styles.requisito}>
           <div className={styles.txtCont}>
             <div className={styles.txt}>
-              <h3>Paso &#8470; 3:</h3>
-              <h4>Reservar <span>banco</span></h4>
+              <h4>Paso &#8470; 3:</h4>
+              <h3>Reservar <span>banco</span></h3>
               <div className="linea-svg"></div>
               <p>La inscripción tiene el mismo valor que la cuota: <span>$50.000</span>. Los cupos están limitados al <span>espacio disponible en nuestras aulas</span>, por esto, solo reservamos vacantes con el abono matrícula.</p>
             </div>

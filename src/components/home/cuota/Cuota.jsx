@@ -43,7 +43,7 @@ const Cuota = () => {
       <div className={styles.txt}>
 
         <div className={styles.titulo}>
-          <h3>I.S.E.F. San Luís | No hay competencia</h3>
+          <h3>I.S.E.F. San Luís | Pensamos en vos</h3>
           <h2>La cuota más <span>competitiva</span></h2>
         </div>
 

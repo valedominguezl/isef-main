@@ -4,7 +4,6 @@
     padding: var(--padding-up) var(--padding-100);
     gap: 4rem;
     align-items: center;
-    box-shadow: var(--shadow-in-bl);
 
     .titulo {
         display: flex;
@@ -38,7 +37,7 @@
         cursor: pointer;
         background: var(--grad-btn-color2);
 
-        h4 {
+        h3 {
             font-weight: var(--bold);
         }
 
@@ -99,15 +98,17 @@
 
 @for $i from 1 through 6 {
     .topic:nth-child(#{$i}) {
-        transition-delay: .2s * $i;
+        transition-delay: .25s * $i;
     }
 }
 
 .topic {
+    transform: translateX(-20px);
     opacity: 0;
-    transition: opacity 6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
     &.visible {
+        transform: translateX(0);
         opacity: 1;
     }
 }

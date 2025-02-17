@@ -43,7 +43,7 @@ const Intro = () => {
       <div className={styles.txtCont}>
         <div className={styles.txt}>
           <div className={styles.titulo}>
-            <h3>I.S.E.F. San Luís | Sobre la salida laboral</h3>
+            <h4>I.S.E.F. San Luís | Sobre la salida laboral</h4>
             <h2>Te necesitan, <span className="color2">profesor</span></h2>
           </div>
           <div className="linea-svg"></div>
@@ -51,11 +51,11 @@ const Intro = () => {
             <p>
               Gracias a el I.S.E.F. San Luís, <span>sos necesario</span>. Con los {' '}
               <LoadingAnchor href="/Especializaciones">
-                <span>talleres de especializacion</span>
+                <span>talleres de especialización</span>
               </LoadingAnchor>
               {' '}que te ofrecemos de manera gratuita vas a poder ejercer en equipos interdisciplinarios en centros de salud, gimnasios, clubes, clínicas, hospitales, y mucho más. <br /> <br />
 
-              Nosotros te damos herramientas para que seas capaz de <span>mucho más que la docencia</span>. Vas a trabajar en el club, en el gimnasio, en la pileta, atendiendo a ciclistas, maratonistas, practicantes de artes marciales, de danzas, de patinaje, en <span>centros de alto rendimiento</span>, centros de salud, ayudando a los kinesiólogos en la reinserción deportiva. Los egresados del I.S.E.F., estan en <span>todos lados, mucho más allá de las escuelas</span>.</p>
+              Nosotros te damos herramientas para que seas capaz de <span>mucho más que la docencia</span>. Vas a trabajar en el club, en el gimnasio, en la pileta, atendiendo a ciclistas, maratonistas, practicantes de artes marciales, de danzas, de patinaje, en <span>centros de alto rendimiento</span>, centros de salud, ayudando a los kinesiólogos en la reinserción deportiva. Los egresados del I.S.E.F., están en <span>todos lados, mucho más allá de las escuelas</span>.</p>
           </div>
         </div>
         <LoadingAnchor href="/Especializaciones" className='btn-cta grad' target='_blank'>

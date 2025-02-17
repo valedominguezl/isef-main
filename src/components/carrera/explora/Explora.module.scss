@@ -6,7 +6,6 @@
     gap: 2em;
     position: relative;
     background-color: var(--fondo-principal);
-    box-shadow: var(--shadow-in-bl);
     hyphens: auto;
 }
 
@@ -20,11 +19,14 @@
     display: flex;
     flex-direction: column;
     gap: 1em;
+    text-align: center;
 }
 
 .parrafos {
     display: flex;
     flex-direction: column;
+    text-align: justify;
+    text-align-last: center;
     gap: 2em;
 }
 
@@ -40,10 +42,4 @@
 .visible {
     opacity: 1;
     transform: translateY(0);
-}
-
-@media (max-width: 900px) and (min-width: 769px) {
-    .titulo h3 {
-        text-align: center;
-    }
 }

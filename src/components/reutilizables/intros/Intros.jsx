@@ -25,9 +25,9 @@ const Intros = ({
       {showLine && <div className="linea-svg bl"></div>}
 
       {subHeading && (
-        <h4 className={styles.subHeading}>
+        <h3 className={styles.subHeading}>
           {subHeading}
-        </h4>
+        </h3>
       )}
 
       {showButton && (

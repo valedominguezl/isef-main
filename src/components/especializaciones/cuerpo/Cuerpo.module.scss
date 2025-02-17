@@ -17,7 +17,7 @@
         width: 100%;
         height: 100%;
 
-        h4 {
+        h3 {
             padding: 1.5rem 2rem;
             width: 100%;
             background: var(--grad-btn-color2);
@@ -177,6 +177,23 @@
     opacity: 0;
     transform: translateY(20px);
     transition: 2s ease;
+
+    &.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@for $i from 1 through 6 {
+    .profesionales .profesional:nth-child(#{$i}) {
+        transition-delay: .2s * $i;
+    }
+}
+
+.profesionales .profesional {
+    opacity: 0;
+    transform: translateY(100px);
+    transition: 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
     &.visible {
         opacity: 1;

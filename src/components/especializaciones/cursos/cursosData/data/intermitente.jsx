@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const intermitente = {
+  name: "intermitente",
   title: "El método intermitente",
   subTitle: "En la pérdida de tejido graso y en el rendimiento físico-deportivo",
   bgImage: getCourseImage("intermitente.webp"),

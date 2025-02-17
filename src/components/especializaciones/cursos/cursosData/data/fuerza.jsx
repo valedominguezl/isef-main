@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const fuerza = {
+  name: "fuerza",
   title: "Entrenamiento de la fuerza",
   subTitle: "Las aplicaciones en el gimnasio y su suplementación",
   bgImage: getCourseImage("fuerza.webp"),

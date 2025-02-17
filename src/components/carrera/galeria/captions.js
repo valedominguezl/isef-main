@@ -7,7 +7,7 @@ const captions = {
 
     'moneda.webp': { lugar: 'Salto de la moneda, Potrero de los Funes', epigrafe: 'Foto: Judith Junkers, Flickr' },
 
-    'negraLibre.webp': { lugar: 'Salto de la negra libre, Valle de Pancanta', epigrafe: 'Foto: Damian Álvarez, Wikiloc' },
+    'negraLibre.webp': { lugar: 'Salto de la negra libre, Valle de Pancanta', epigrafe: 'Foto: Damián Álvarez, Wikiloc' },
 
     'corredor.webp': { lugar: 'Corredor de los Comechingones, Villa de Merlo', epigrafe: 'Foto: La Ruta Natural | Turismo Nación' },
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Plan.module.scss";
 import { motion, AnimatePresence } from "framer-motion";
-import faqFlechaInactive from '@/assets/simbols/faqFlechaInactive.webp';
+import faqFlecha from '@/assets/simbols/faqFlechaInactive.webp';
 
 const data = [
   {
@@ -99,11 +99,11 @@ const Plan = () => {
   const isMobile = width < 1024;
 
   // Inicializamos todos los temas como cerrados (false)
-  const [openTemas, setOpenTemas] = useState(data.map(() => false));
+  const [openTemas, setOpenTemas] = useState(data.map(() => true));
 
   // Si el ancho cambia (por ejemplo, al redimensionar), reiniciamos el estado
   useEffect(() => {
-    setOpenTemas(data.map(() => false)); // Todos cerrados
+    setOpenTemas(data.map(() => true)); // Todos cerrados
   }, [isMobile]);
 
   const toggleTema = (index) => {
@@ -186,15 +186,15 @@ const Plan = () => {
               onClick={() => toggleTema(index)} // Toggle el tema correspondiente
             >
               <div className={styles.text}>
-                <h4>{item.tema}</h4>
+                <h3>{item.tema}</h3>
                 <img
-                  src={faqFlechaInactive}
+                  src={faqFlecha}
                   alt="flecha"
                   className={`${styles.flecha} ${openTemas[index] ? styles.active : ''}`}
                 />
               </div>
 
-              <h3>
+              <h4>
                 {item.carga
                   .split('|')
                   .map((line, idx, array) => (
@@ -204,7 +204,7 @@ const Plan = () => {
                       <br />
                     </React.Fragment>
                   ))}
-              </h3>
+              </h4>
             </div>
 
             <AnimatePresence>

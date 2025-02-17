@@ -53,14 +53,14 @@ const Sedes = () => {
     <div id='homeSedes' ref={containerRef} className={styles.container}>
 
       <div className={styles.titulos}>
-        <div  className={styles.selector}>
+        <div className={styles.selector}>
 
           <div className={styles.btn}>
             <button
               className={`btn-cta  ${activeButton === 'sanluis' ? styles.active : styles.inactive}`}
               onClick={() => handleButtonClick('sanluis')}
             >
-              <h4>San Luís</h4>
+              <h3>San Luís</h3>
             </button>
           </div>
 
@@ -69,7 +69,7 @@ const Sedes = () => {
               className={`btn-cta  ${activeButton === 'villamercedes' ? styles.active : styles.inactive}`}
               onClick={() => handleButtonClick('villamercedes')}
             >
-              <h4>Villa Mercedes</h4>
+              <h3>Villa Mercedes</h3>
             </button>
           </div>
 
@@ -85,8 +85,8 @@ const Sedes = () => {
           >
             <div className={styles.txt}>
               <div className={styles.titulo}>
-                <h3>Sede principal</h3>
-                <h4>Ciudad de San Luís</h4>
+                <h4>Sede principal</h4>
+                <h3>Ciudad de San Luís</h3>
               </div>
               <div className="linea-svg bl"></div>
               <div className={styles.contactos}>
@@ -136,8 +136,8 @@ const Sedes = () => {
           ${activeButton === null ? styles.inactive : ''}`}
           >            <div className={styles.txt}>
               <div className={styles.titulo}>
-                <h3>Extensión áulica</h3>
-                <h4>Villa Mercedes</h4>
+                <h4>Extensión áulica</h4>
+                <h3>Villa Mercedes</h3>
               </div>
               <div className="linea-svg bl"></div>
               <div className={styles.contactos}>
@@ -184,15 +184,17 @@ const Sedes = () => {
           <div
             className={`${styles.imgCont} ${activeButton === 'villamercedes' ? styles.moveLeft : ''}`}
           >
-            <LoadingAnchor
-              href={activeButton === 'sanluis' ? 'https://maps.app.goo.gl/mAtAF9dEStP8UWdK7' : 'https://maps.app.goo.gl/hG4cCF2RyTHnie8AA'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-cta grad3"
-              style={{ textDecoration: 'underline', textUnderlineOffset: '5px', }}
-            >
-              Ver en el mapa
-            </LoadingAnchor>
+            <div className={styles.botonImg}>
+              <LoadingAnchor
+                href={activeButton === 'sanluis' ? 'https://maps.app.goo.gl/mAtAF9dEStP8UWdK7' : 'https://maps.app.goo.gl/hG4cCF2RyTHnie8AA'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-cta grad3"
+                style={{ textDecoration: 'underline', textUnderlineOffset: '5px', }}
+              >
+                Ver en el mapa
+              </LoadingAnchor>
+            </div>
           </div>
         </div>
       )}

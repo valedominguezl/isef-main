@@ -1,5 +1,5 @@
 .container {
-    padding: var(--padding-up) var(--padding-100);
+    padding: calc(var(--padding-up)*2) var(--padding-100);
     background: var(--grad-img), url('@/assets/media/home/sanLuis.webp') no-repeat center / cover;
 
     background-attachment: fixed;
@@ -14,7 +14,7 @@
     box-shadow: var(--shadow-in);
 }
 
-.txtCont{
+.txtCont {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -28,7 +28,7 @@
     justify-content: center;
     align-items: stretch;
     align-content: flex-start;
-    gap: 3em;
+    gap: 5rem;
     flex-wrap: wrap;
     width: 100%;
 }
@@ -39,6 +39,10 @@
     align-items: flex-start;
     width: 25em;
     gap: 2em;
+
+    h3 {
+        text-align: left;
+    }
 }
 
 

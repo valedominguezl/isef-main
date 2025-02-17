@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const adultoMayor = {
+  name: "adultoMayor",
   title: "Actividad física en el adulto mayor",
   subTitle: "Su suplementación nutricional",
   bgImage: getCourseImage('adultoMayor.webp'),
@@ -20,7 +21,7 @@ const adultoMayor = {
   condiciones: null,
   temario: [
     {
-      tema: "Metabolismo, sistema endócrino y biomoléculas en la vejez",
+      tema: "Metabolismo, sistema endocrino y biomoléculas en la vejez",
       subtemas: [
         { tema: "Evolución del metabolismo energético con el envejecimiento" },
         { tema: "Respuestas endocrinas en las edades geriátricas" },
@@ -38,7 +39,7 @@ const adultoMayor = {
     {
       tema: "Envejecimiento y patologías. El rol del ejercicio",
       subtemas: [
-        { tema: "Enfermedades Cardio-metabólicas como generadoras de enfermedades músculo-esqueléticas" },
+        { tema: "Enfermedades cardio-metabólicas como generadoras de enfermedades músculo-esqueléticas" },
         { tema: "Diafonía (cross talk) entre los tejidos adiposo, hepático, óseo y muscular en la salud y en la enfermedad" },
         { tema: "Las interleuquinas de acción patológica y su control por las mioquinas a través del ejercicio" },
       ],

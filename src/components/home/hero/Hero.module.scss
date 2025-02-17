@@ -98,40 +98,43 @@
 
 // Animaciones
 
-.titulo {
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: 2s ease;
-
-    &.visible {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@for $i from 4 through 1 {
-    .red:nth-child(#{$i}) {
-        transition-delay: .3s * (5 - $i);
-    }
-}
-
 .redes {
     transform: translateX(100px);
-    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: scroll 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 
-    &.visible {
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(100px);
+    }
+
+    to {
         transform: translateX(0);
     }
 }
 
 .red {
     opacity: 0;
-    transition: opacity 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: fadeIn 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
 
-    &.visible {
+@for $i from 4 through 1 {
+    .red:nth-child(#{$i}) {
+        animation-delay: .3s * (5 - $i);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
         opacity: 1;
     }
 }
+
 
 
 @media (max-width: 500px) {

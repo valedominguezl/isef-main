@@ -79,7 +79,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className={`${styles.container} bl`}>
+        <div className={`${styles.container} bl ${isVisible ? styles.visible : styles.hidden}`}>
             <nav className={`${styles.navBar} ${isScrolled ? styles.scrolled : ''} ${isVisible ? styles.visible : styles.hidden}`}>
                 <Link to="/" onClick={handleLoadingClick} className={styles.logo}>
                     <img src={logo} alt="Logo" />
@@ -114,7 +114,7 @@ const Navbar = () => {
                     </div> */}
                     <div className={styles.menuIcon} onClick={toggleSidebar}>
                         <img src={hamburgerIcon} alt="" />
-                        <h3>Menú</h3>
+                        <h4>Menú</h4>
                     </div>
                 </div>
             </nav>
@@ -130,6 +130,7 @@ const Navbar = () => {
                     <li className={styles.navLink}><Link to='/Carrera' onClick={handleSidebarClick(toggleSidebar)}>Carrera</Link></li>
                     <li className={styles.navLink}><Link to='/Especializaciones' onClick={handleSidebarClick(toggleSidebar)}>Especializaciones</Link></li>
                     <li className={styles.navLink}><Link to='/Aranceles' onClick={handleSidebarClick(toggleSidebar)}>Aranceles</Link></li>
+                    <li className={styles.navLink}><Link to='/' onClick={handleSidebarClick(toggleSidebar)}>Inicio</Link></li>
                     {/* <li className={styles.navLink}><Link to='/Institucional' onClick={handleSidebarClick(toggleSidebar)}>Institucional</Link></li> */}
                 </ul>
             )}

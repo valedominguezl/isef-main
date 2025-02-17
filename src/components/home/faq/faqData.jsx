@@ -6,7 +6,7 @@ const faqData = [
     // Duración
     {
         question: '¿Qué duración tiene la carrera?',
-        answer: <>La carrera tiene una <strong>duración estimada de 4 años</strong> expresados en: <strong>2.976 horas reloj</strong> o <strong>4.446 horas cátedra</strong></>
+        answer: <>La carrera tiene una <strong>duración estimada de 4 años</strong> expresados en: <strong>2.976 horas reloj</strong> o <strong>4.446 horas cátedra</strong>.</>
     },
 
     // Requisitos
@@ -59,9 +59,10 @@ const faqData = [
             <LoadingAnchor href="/Aranceles" target="_blank">
                 <strong>acá</strong>
             </LoadingAnchor>
-            . En el I.S.E.F. San Luís no te cobramos gastos adicionales, sean constancias, certificaciones, cuotas aguinaldo, matricula o pileta de natación. Por otro lado, <strong>el uniforme sí se paga a parte</strong> y es obligatorio. Te recomendamos comprarlo en {' '}
+            . En el I.S.E.F. San Luís no te cobramos gastos adicionales, sean constancias, certificaciones, cuotas aguinaldo, matricula o pileta de natación. <br /> <br />
+            Por otro lado, <strong>el uniforme sí se paga a parte</strong> y es obligatorio. Te recomendamos comprarlo en {' '}
             <LoadingAnchor href="https://wa.me/+5492664554121" target="_blank">
-                <strong>UNIFOR Indumentaria</strong>
+                <strong>UNIFOR Indumentaria</strong>.
             </LoadingAnchor>
         </>
     },

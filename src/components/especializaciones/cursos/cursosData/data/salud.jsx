@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const salud = {
+  name: "salud",
   title: "Actividad física y salud",
   subTitle: "Fisiopatología de las intervenciones en salud",
   bgImage: getCourseImage("salud.webp"),
@@ -84,7 +85,7 @@ const salud = {
         { tema: "Formación y resorción ósea." },
         { tema: "Mineralización y densidad ósea." },
         { tema: "Hueso cortical y trabecular." },
-        { tema: "El sistema endócrino y la salud ósea." },
+        { tema: "El sistema endocrino y la salud ósea." },
         { tema: "Estímulo óseo por ejercicio con carga." },
       ],
     },

@@ -1,0 +1,16 @@
+.container {
+    height: 90vh;
+    width: 100%;
+    padding: var(--padding-up) var(--padding-200);
+    background-color: var(--fondo-principal);
+}
+
+.overlay {
+    height: 100%;
+    width: 100%;
+    background: var(--grad-black), url('@/assets/media/carrera/intro.webp');
+    background-position: center;
+    border-radius: 3rem;
+    box-shadow: var(--shadow-out);
+    padding: var(--padding-up) var(--padding-100);
+}

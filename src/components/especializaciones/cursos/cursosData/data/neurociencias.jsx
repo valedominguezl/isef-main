@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const neurociencias = {
+  name: "neurociencias",
   title: "Neurociencias de la didáctica y la pedagogía",
   subTitle: "Exploración de la creatividad y el aprendizaje",
   bgImage: getCourseImage("neuro.webp"),

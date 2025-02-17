@@ -174,7 +174,7 @@ const Galeria = () => {
                 </div>
 
                 <div className={`${styles.caption} bl`}>
-                  <h3>{file.caption.lugar}</h3>
+                  <h4>{file.caption.lugar}</h4>
                   <div className='linea-svg bl'></div>
                   <small>{file.caption.epigrafe}</small>
                 </div>
@@ -218,7 +218,7 @@ const Galeria = () => {
               )}
 
               <div className={`${styles.caption} bl`}>
-                <h3>{currentMedia.caption.lugar}</h3>
+                <h4>{currentMedia.caption.lugar}</h4>
                 <div className='linea-svg bl'></div>
                 <div className={styles.numbering}>
                   <small>{currentMedia.caption.epigrafe}</small>

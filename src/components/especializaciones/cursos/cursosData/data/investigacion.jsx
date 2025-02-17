@@ -1,7 +1,8 @@
 import getCourseImage from '../getCourseImage'
 
 const investigacion = {
-  title: "Metodología de la Investigación",
+  name: "investigacion",
+  title: "Metodología de la investigación",
   subTitle: "Fundamentos y técnicas de investigación científica",
   bgImage: getCourseImage("investigacion.webp"),
   expositor: 1,

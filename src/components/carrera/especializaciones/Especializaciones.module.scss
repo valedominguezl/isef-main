@@ -2,11 +2,15 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 40vh;
+    height: 45vh;
     position: relative;
-    padding-top: 2.5rem;
-    background: var(--fondo-principal);
+    padding-top: 3rem;
+    background: var(--grad-nav2);
     overflow-x: hidden;
+
+    @media (max-width: 1300px) {
+        height: 48vh;
+    }
 }
 
 .sliderContainer {
@@ -16,27 +20,41 @@
 .slide {
     display: flex;
     position: absolute;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-around;
     padding: 0 2rem;
     width: 100%;
     top: 0;
     left: 0;
 
-    & > div {
+    &>div {
         display: flex;
-        height: 28vh;
+        height: 31vh;
         width: 45vw;
+        gap: 1rem;
         text-align: center;
         align-items: center;
+        border-radius: 3rem;
+        border: 2px solid rgba(white, .5);
+        background: transparent !important;
+        transition: .6s;
 
-        h4, p, button, div{
-            scale: .9;
+        h3,
+        p,
+        button {
+            scale: .8;
+        }
+
+        &:hover {
+            border: 2px solid rgba(white, .5);
+            background: rgba(white, .1) !important;
+            transition: .6s;
         }
 
         @media (max-width: 1300px) {
             width: 100%;
-            height: 28vh;
+            gap: .5rem;
+            height: 34vh;
         }
     }
 }
@@ -71,27 +89,35 @@
 
 .pagination {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 30px;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
+    gap: 2rem;
     justify-content: center;
-    margin-top: 1rem;
+
+    @media (max-width: 1300px) {
+        bottom: 25px;
+    }
+
+    @media (min-width: 1600px) {
+        bottom: 34px;
+    }
 }
 
 .bullet {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(black, .05);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(black, .2);
     cursor: pointer;
     transition: 0.5s;
 
-    &:hover{
-        background-color: rgba(var(--principal-rgb) .7);
+    &:hover:not(.activeBullet) {
+        background-color: rgba(white, .5);
     }
 }
 
 .activeBullet {
-    background-color: rgba(var(--principal-rgb) .7);
+    background-color: rgba(white, .9);
 }

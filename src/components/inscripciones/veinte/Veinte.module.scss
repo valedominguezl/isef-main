@@ -16,3 +16,17 @@
     gap: 1em;
     text-align: center;
 }
+
+// Animaciones
+
+.container *:not(div) {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 2s ease;
+
+    &.visible {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+
+    }
+}

@@ -13,14 +13,14 @@ footer {
     justify-content: space-between;
     width: 100%;
 
-    h3,
+    h4,
     p,
     a {
         font-size: calc(var(--fs-txt) * .9);
     }
 
-    h3 {
-        color: var(--txt-wcolor) !important;
+    h4 {
+        color: var(--txt-wcolor);
         font-weight: var(--tl-bold);
     }
 }
@@ -142,21 +142,6 @@ a.footer-red {
 }
 
 
-
-
-
-// Querys por dispositivo
-
-// xs 
-@media (max-width: 475px) {}
-
-// sm
-@media (min-width: 640px) {}
-
-// md
-@media (max-width: 768px) {}
-
-// lg
 @media (max-width: 900px) {
     .footer-redes-cont {
         display: flex;
@@ -171,10 +156,6 @@ a.footer-red {
     }
 }
 
-// xl
-@media (min-width: 1280px) {}
-
-// 2xl
 @media (max-width: 1440px) {
     .footer-info {
         display: flex;
@@ -197,7 +178,7 @@ a.footer-red {
     }
 
     .footer-redes {
-        h3 {
+        h4 {
             display: none;
         }
     }

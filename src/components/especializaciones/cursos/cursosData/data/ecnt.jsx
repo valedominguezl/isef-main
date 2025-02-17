@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const ecnt = {
+  name: "ecnt",
   title: "Enfermedades crónicas no transmisibles",
   subTitle: "Prevención y manejo de las enfermedades hipocinéticas",
   bgImage: getCourseImage("ecnt.webp"),

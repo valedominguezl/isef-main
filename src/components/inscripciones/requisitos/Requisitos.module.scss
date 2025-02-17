@@ -5,7 +5,6 @@
     justify-content: center;
     padding: var(--padding-up) var(--padding-100);
     gap: 3em;
-    box-shadow: var(--shadow-in-bl);
 }
 
 .txtContTl {
@@ -37,8 +36,12 @@
     gap: 2.5em;
     width: 100%;
 
-    h3{
+    h4{
         font-weight: var(--medium);
+    }
+
+    h3{
+        text-align: left;
     }
 }
 
@@ -115,6 +118,10 @@
         text-align: center;
         align-items: center;
         padding: 2em 2em;
+
+        h3{
+            text-align: center;
+        }
     }
 
     .imgCont {

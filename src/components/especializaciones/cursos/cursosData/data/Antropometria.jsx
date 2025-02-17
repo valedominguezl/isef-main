@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const antropometria = {
+  name: "antropometria",
   title: "Antropometría",
   subTitle: "Técnicas y aplicaciones básicas",
   bgImage: getCourseImage('antropometria.webp'),

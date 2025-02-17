@@ -11,7 +11,7 @@ const Footer = () => {
 
         <div className="footer-telefonos">
 
-          <h3>Teléfonos de contacto</h3>
+          <h4>Teléfonos de contacto</h4>
 
           <div className="footer-telefonos-txt">
             <p><span>General</span>: +54 9 2664 56-4435</p>
@@ -26,7 +26,7 @@ const Footer = () => {
 
         <div className="footer-redes">
 
-          <h3>Redes Sociales</h3>
+          <h4>Redes Sociales</h4>
 
           <div className="footer-redes-cont">
             <a
