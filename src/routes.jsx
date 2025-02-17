@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import Layout from './layout.jsx';
 import Home from '@/mainComponents/Home.jsx';
 import Aranceles from '@/mainComponents/Aranceles.jsx';
@@ -28,6 +28,10 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: '*',  // Ruta comodín 
+    element: <Navigate to="/" />, 
   },
 ]);
 
