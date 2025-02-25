@@ -82,7 +82,7 @@ const Validez = () => {
                 </h2>
                 <div className="linea-svg bl"></div>
                 <p>
-                    Tu título te va a permitir trabajar en todo el territorio argentino y en los <span>países del MERCOSUR</span>, para que no <span>pierdas ninguna oportunidad</span>. Consultá la validez nacional del título
+                    Tu título te va a permitir trabajar en todo el territorio argentino y en los <strong>países del MERCOSUR</strong>, para que no <strong>pierdas ninguna oportunidad</strong>. Consultá la validez nacional del título
                     al 4452000 interno 3309 del Ministerio de Educación de San Luís.
                 </p>
             </div>

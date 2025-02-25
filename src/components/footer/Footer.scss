@@ -13,15 +13,14 @@ footer {
     justify-content: space-between;
     width: 100%;
 
-    h4,
     p,
     a {
         font-size: calc(var(--fs-txt) * .9);
     }
 
     h4 {
-        color: var(--txt-wcolor);
-        font-weight: var(--tl-bold);
+        font-weight: var(--bold);
+        font-size: calc(var(--fs-txt) * 1.2);
     }
 }
 
@@ -138,6 +137,10 @@ a.footer-red {
     a {
         color: var(--txt-wcolor);
         text-decoration: underline;
+    }
+
+    a:not(:first-child) {
+        cursor: pointer;
     }
 }
 

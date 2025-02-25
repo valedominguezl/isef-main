@@ -1,19 +1,21 @@
 import React from 'react'
-import Tabla from '@/components/aranceles/tabla/Tabla.jsx'
+import Intro from '@/components/institucional/historia/Intro/Intro.jsx'
 import Intros from '@/components/reutilizables/intros/Intros.jsx'
-import fondo from '@/assets/media/aranceles/main.webp'
+import fondo from '@/assets/media/home/intro.webp'
 
 
 const Historia = () => {
   return (
-    <div>
+    <div className="mainComponent">
       <Intros
         bgImage={fondo}
-        heading="Aranceles"
-        buttonText="Pagos solo en efectivo"
+        heading="Nuestra historia"
+        subHeading="Conocé cómo llegamos a ser el mejor profesorado de la región"
+        showButton={false}
       />
       
-      <Tabla />
+      <Intro />
+
     </div>
   )
 }

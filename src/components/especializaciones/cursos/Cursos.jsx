@@ -197,7 +197,7 @@ const Cursos = () => {
     <div ref={containerRef} className={styles.container}>
       <div className={styles.titulo} id="especializacionesCursos">
         <h2>
-          Nuestras últimas <span className="color2">especializaciones</span>
+          Nuestras últimas <span className="color1">especializaciones</span>
         </h2>
         <div className="linea-svg"></div>
         <p>

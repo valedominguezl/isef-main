@@ -61,7 +61,7 @@ const Intro = () => {
             </div>
           </div>
 
-          <LoadingAnchor className="btn-cta grad2" href='/Especializaciones'>
+          <LoadingAnchor className="btn-cta grad" href='/Especializaciones'>
             Ver más
           </LoadingAnchor>
         </div>

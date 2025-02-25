@@ -1,0 +1,12 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding-up) var(--padding-100);
+    gap: 3rem;
+}
+
+.titulo{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}

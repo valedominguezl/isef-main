@@ -93,7 +93,7 @@ const Especializaciones = () => {
   }, [currentSlide, slides.length]);
 
   return (
-    <div className={styles.container}>
+    <div id="especializacionesCarrera" className={styles.container}>
       <div className={`${styles.sliderContainer} bl`}>
         {slides.length > 0 && (
           <>

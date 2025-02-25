@@ -6,7 +6,6 @@
     justify-content: center;
     gap: 3em;
     width: 100%;
-    background-color: var(--fondo-principal);
 
     .txtCont {
         display: flex;
@@ -20,8 +19,9 @@
         h3 {
             padding: 1.5rem 2rem;
             width: 100%;
-            background: var(--grad-btn-color2);
+            background: var(--grad-fx);
             color: white;
+            font-size: calc(var(--fs-h3) * .9);
         }
 
         ul {
@@ -83,7 +83,7 @@
             height: 100%;
             background: rgba(black, 0.8);
             z-index: 5;
-            display: flex;
+            display: none;
             flex-direction: column;
             gap: 1.5em;
             justify-content: center;
@@ -151,9 +151,11 @@
 .swiperCont {
     display: none;
     padding: 0 var(--padding-100);
+    height: fit-content !important;
 
     .profesional {
         width: 25em;
+        height: fit-content;
     }
 
     .imgCont img {
@@ -201,12 +203,31 @@
     }
 }
 
+@media (max-width: 600px) {
 
-@media (max-width: 768px) {
-    .swiperCont .profesional {
-        width: 80%;
+    .scroll{
+        display: flex !important;
     }
 
+    .swiperCont {
+        .profesional {
+            width: 25em;
+            height: 35rem;
+        }
+    }
+
+    .container {
+        :global(.swiper-button-prev) {
+            width: 13%;
+        }
+
+        :global(.swiper-button-next) {
+            width: 13%;
+        }
+    }
+}
+
+@media (max-width: 768px) and (min-width: 600px) {
     .container {
         :global(.swiper-button-prev) {
             width: 15%;
@@ -215,6 +236,12 @@
         :global(.swiper-button-next) {
             width: 15%;
         }
+    }
+}
+
+@media (max-width: 768px) {
+    .swiperCont .profesional {
+        width: 80%;
     }
 }
 
@@ -242,6 +269,7 @@
 
     .container {
         gap: 0;
+        padding: var(--padding-up) 0 0 0;
     }
 
     .swiperCont {

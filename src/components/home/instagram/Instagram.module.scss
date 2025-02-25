@@ -1,7 +1,9 @@
-.container{
-  background: var(--grad-nav2);
-  background-attachment: fixed;
-  box-shadow: var(--shadow-in);
+.titulo{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: var(--padding-up) var(--padding-100) 0 var(--padding-100);
+  text-align: center;
 }
 
 .swiper {
@@ -27,9 +29,6 @@
     width: 70px;
   }
 }
-
-
-
 
 @keyframes marquee {
   0% {

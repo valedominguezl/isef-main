@@ -9,8 +9,7 @@ import LoadingAnchor from '@/components/funciones/loadingBar/LoadingAnchor';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation} from 'swiper/modules';
 
 const profesionales = [
   {
@@ -134,7 +133,7 @@ const Cuerpo = () => {
               <img src={profesional.img} alt={profesional.nombre} />
             </div>
             <div className={styles.txtCont}>
-              <h3><span>{profesional.nombre}</span></h3>
+              <h3><strong>{profesional.nombre}</strong></h3>
               <ul>
                 {profesional.descripcion.map((desc, i) => (
                   <li key={i}><p>{desc}</p></li>
@@ -156,8 +155,7 @@ const Cuerpo = () => {
         spaceBetween={20}
         slidesPerView={1}
         navigation={true}
-        pagination={{ clickable: true }}
-        modules={[Navigation, Pagination]}
+        modules={[Navigation]}
       >
         {profesionales.map((profesional, index) => (
           <SwiperSlide key={index} className={styles.swiperSlide}>
@@ -170,7 +168,7 @@ const Cuerpo = () => {
                 <img src={profesional.img} alt={profesional.nombre} />
               </div>
               <div className={styles.txtCont}>
-                <h3><span>{profesional.nombre}</span></h3>
+                <h3><strong>{profesional.nombre}</strong></h3>
                 <ul>
                   {profesional.descripcion.map((desc, i) => (
                     <li key={i}><p>{desc}</p></li>

@@ -103,7 +103,7 @@ const Plan = () => {
 
   // Si el ancho cambia (por ejemplo, al redimensionar), reiniciamos el estado
   useEffect(() => {
-    setOpenTemas(data.map(() => true)); // Todos cerrados
+    setOpenTemas(data.map(() => false)); // Todos cerrados
   }, [isMobile]);
 
   const toggleTema = (index) => {

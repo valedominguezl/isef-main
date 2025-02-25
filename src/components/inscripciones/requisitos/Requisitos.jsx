@@ -26,7 +26,7 @@ const Requisitos = () => {
             const index = Array.from(animatedElements).indexOf(entry.target);
             setTimeout(() => {
               entry.target.classList.add(styles.visible);
-            }, index * 100); // Delay de 0.3 segundos
+            }, index * 100); 
             observer.unobserve(entry.target);
           }
         });
@@ -45,13 +45,15 @@ const Requisitos = () => {
     <div ref={containerRef} className={styles.container}>
 
       <div className={styles.txtContTl}>
-        <h2>Requisitos <span className="color2">a presentar</span></h2>
+        <h2>Requisitos <span className="color1">a presentar</span></h2>
         <div className="linea-svg"></div>
-        <p>Para poder inscribirte en el profesorado, tenés que <span>descargar</span> la siguiente documentación, <span>rellenarla</span> y luego <span>presentarla</span> en la sede correspondiente del I.S.E.F. San Luís. <br /> (
-          <ScrollToSection page="/" id="homeSedes">
-            Ver sedes
+        <p>Para poder inscribirte en el profesorado, tenés que <strong>descargar</strong> la siguiente documentación, <strong>rellenarla</strong> y luego <strong>presentarla</strong> en la sede correspondiente del I.S.E.F. San Luís. {' '}
+
+          <ScrollToSection page="/Institucional/Contacto" id="mapaContacto">
+            (Ver sedes)
           </ScrollToSection>
-          )</p>
+
+        </p>
       </div>
 
       <div className={styles.requisitos}>
@@ -62,9 +64,9 @@ const Requisitos = () => {
               <h4>Paso &#8470; 1:</h4>
               <h3>Solicitud de <span className="color1">inscripción</span></h3>
               <div className="linea-svg"></div>
-              <p>Tenés que llenarla con tus datos personales y llevarla personalmente a nuestras oficinas en una <span>carpeta colgante color marrón</span>.</p>
+              <p>Tenés que llenarla con tus datos personales y llevarla personalmente a nuestras oficinas en una <strong>carpeta colgante color marrón</strong>.</p>
             </div>
-            <LoadingAnchor href={solicitud} download className="btn-cta grad2 download">
+            <LoadingAnchor href={solicitud} download className="btn-cta grad download">
               Descargar
             </LoadingAnchor>
           </div>
@@ -81,9 +83,9 @@ const Requisitos = () => {
               <h4>Paso &#8470; 2:</h4>
               <h3>Exámenes <span className="color2">médicos</span></h3>
               <div className="linea-svg"></div>
-              <p>Tenés que imprimirla y presentarla en los <span>centros de salud, médicos particulares u hospitales públicos</span> para realizarte los estudios que en ella figuran. La planilla consta de tres hojas en <span>formato A4</span>.</p>
+              <p>Tenés que imprimirla y presentarla en los <strong>centros de salud, médicos particulares u hospitales públicos</strong> para realizarte los estudios que en ella figuran. La planilla consta de tres hojas en <strong>formato A4</strong>.</p>
             </div>
-            <LoadingAnchor href={examenes} download className="btn-cta grad download">
+            <LoadingAnchor href={examenes} download className="btn-cta grad2 download">
               Descargar
             </LoadingAnchor>
           </div>
@@ -99,7 +101,7 @@ const Requisitos = () => {
               <h4>Paso &#8470; 3:</h4>
               <h3>Reservar <span>banco</span></h3>
               <div className="linea-svg"></div>
-              <p>La inscripción tiene el mismo valor que la cuota: <span>$50.000</span>. Los cupos están limitados al <span>espacio disponible en nuestras aulas</span>, por esto, solo reservamos vacantes con el abono matrícula.</p>
+              <p>La inscripción tiene el mismo valor que la cuota: <strong>$50.000</strong>. Los cupos están limitados al <strong>espacio disponible en nuestras aulas</strong>, por esto, solo reservamos vacantes con el abono matrícula.</p>
             </div>
             <LoadingAnchor href="/Aranceles" target='_blank' className="btn-cta grad4">
               Aranceles

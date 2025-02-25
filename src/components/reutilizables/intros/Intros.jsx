@@ -11,8 +11,9 @@ const Intros = ({
   showLine = true,
 }) => {
   const containerStyle = {
-    backgroundImage: bgImage ? `var(--grad-img), url(${bgImage})` : "none",
-  };
+    background: bgImage
+    ? `var(--grad-img), url(${bgImage})`  
+    : `var(--grad-fx)`,  };
 
   return (
     <header style={containerStyle} className={`${styles.container} bl`}>

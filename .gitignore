@@ -28,3 +28,4 @@ dist-ssr
 src/assets/media/carrera/galeria/videos/
 generate-sitemap.js
 toWebp.js
+src/components/home/instagram/

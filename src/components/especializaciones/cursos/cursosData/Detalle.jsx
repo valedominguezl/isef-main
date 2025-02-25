@@ -46,7 +46,7 @@ const Detalle = ({ curso, onClose }) => {
                         backgroundPosition: "center",
                     }}>
                     <div className={styles.botonCont}>
-                        <h2><span>{curso.title}</span></h2>
+                        <h2><strong>{curso.title}</strong></h2>
                         <button className={styles.close} onClick={onClose} aria-label="Cerrar">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

@@ -44,18 +44,18 @@ const Intro = () => {
         <div className={styles.txt}>
           <div className={styles.titulo}>
             <h4>I.S.E.F. San Luís | Sobre la salida laboral</h4>
-            <h2>Te necesitan, <span className="color2">profesor</span></h2>
+            <h2>Te necesitan, <span className="color1">profesor</span></h2>
           </div>
           <div className="linea-svg"></div>
           <div className={styles.parrafos}>
             <p>
-              Gracias a el I.S.E.F. San Luís, <span>sos necesario</span>. Con los {' '}
+              Gracias a el I.S.E.F. San Luís, <strong>sos necesario</strong>. Con los {' '}
               <LoadingAnchor href="/Especializaciones">
-                <span>talleres de especialización</span>
+                <strong>talleres de especialización</strong>
               </LoadingAnchor>
               {' '}que te ofrecemos de manera gratuita vas a poder ejercer en equipos interdisciplinarios en centros de salud, gimnasios, clubes, clínicas, hospitales, y mucho más. <br /> <br />
 
-              Nosotros te damos herramientas para que seas capaz de <span>mucho más que la docencia</span>. Vas a trabajar en el club, en el gimnasio, en la pileta, atendiendo a ciclistas, maratonistas, practicantes de artes marciales, de danzas, de patinaje, en <span>centros de alto rendimiento</span>, centros de salud, ayudando a los kinesiólogos en la reinserción deportiva. Los egresados del I.S.E.F., están en <span>todos lados, mucho más allá de las escuelas</span>.</p>
+              Nosotros te damos herramientas para que seas capaz de <strong>mucho más que la docencia</strong>. Vas a trabajar en el club, en el gimnasio, en la pileta, atendiendo a ciclistas, maratonistas, practicantes de artes marciales, de danzas, de patinaje, en <strong>centros de alto rendimiento</strong>, centros de salud, ayudando a los kinesiólogos en la reinserción deportiva. Los egresados del I.S.E.F., están en <strong>todos lados, mucho más allá de las escuelas</strong>.</p>
           </div>
         </div>
         <LoadingAnchor href="/Especializaciones" className='btn-cta grad' target='_blank'>

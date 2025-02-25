@@ -1,254 +1,257 @@
 .container {
   padding: var(--padding-up) var(--padding-100);
   width: 100%;
-}
 
-:root {
   --aranceles-tabla-transparencia1: .05;
-  --aranceles-tabla-transparencia2: .07;
-}
-
-tbody {
-  &.tabla {
-    background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia1));
-
-    & tr:nth-child(even) {
-      background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia1));
-    }
-
-    & tr:first-of-type {
-      background: rgba(var(--secundario-rgb) 0.3);
-    }
-
-  }
-
-  &.cuotas {
-    background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia1));
-
-    & tr:nth-child(even) {
-      background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia1));
-    }
-
-    & tr:first-of-type {
-      background: rgba(var(--principal-rgb) .2);
-    }
-  }
-
-  &.uniforme {
-    background: rgba(black, .2);
-  }
-
-  &.gratis {
-    background: rgba(green, var(--aranceles-tabla-transparencia1));
-
-    & tr:nth-child(even) {
-      background: rgba(green, var(--aranceles-tabla-transparencia1));
-    }
-
-    & tr:first-of-type {
-      background: rgba(green, .2);
-    }
-  }
-}
-
-table caption {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2em 4em;
-  color: white;
-  background: var(--grad-btn-color2);
-  display: none;
-  text-align: center;
-}
-
-table {
-  border-collapse: collapse;
-  table-layout: fixed;
-  width: 100%;
-  box-shadow: var(--shadow-out-img);
-  border-radius: 3em;
-  overflow: hidden;
-  text-align: left;
-
-  a {
-    color: inherit;
-  }
-
-  small {
-    font-size: calc(var(--fs-txt) * .75);
-  }
-
-}
-
-
-span {
-  font-weight: var(--medium);
-}
-
-td div,
-th div {
-  display: flex;
-  flex-direction: column;
-  font-weight: inherit;
-}
-
-tr {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5em 3em;
-  gap: 1em;
-
-  td:first-of-type {
-    font-weight: var(--medium);
-  }
-}
-
-th {
-  font-weight: var(--bold);
-  color: white;
-}
-
-
-
-td,
-th {
-  width: 100%;
-}
-
-thead tr {
-  background: var(--grad-btn-color2);
-}
-
-@media screen and (max-width: 768px) {
-
-  table,
-  thead,
-  tbody,
-  tr {
-    display: block;
-    width: 100%;
-  }
-
-  thead tr {
-    display: none;
-  }
-
-  tr {
-    padding: 0;
-    background: none !important;
-
-  }
+  --aranceles-tabla-transparencia2: .03;
 
   tbody {
     &.tabla {
       background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia1));
 
-      & td:nth-child(even) {
-        background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia1));
+      & tr:nth-child(odd) {
+        background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia2));
       }
 
-      & td:first-of-type {
-        background: rgba(var(--secundario-rgb) .2);
-      }
     }
 
     &.cuotas {
       background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia1));
 
-      & td:nth-child(even) {
-        background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia1));
+      & tr:nth-child(odd) {
+        background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia2));
       }
 
-      & td:first-of-type {
-        background: rgba(var(--principal-rgb) .2);
-      }
     }
 
     &.uniforme {
-      background: rgba(black, var(--aranceles-tabla-transparencia1));
-
-      & td:nth-child(even) {
-        background: rgba(black, var(--aranceles-tabla-transparencia1));
-      }
-
-      & td:first-of-type {
-        background: rgba(black, .2);
-      }
-
+      background: rgba(black, .1);
     }
 
     &.gratis {
       background: rgba(green, var(--aranceles-tabla-transparencia1));
 
-      & td:nth-child(even) {
-        background: rgba(green, var(--aranceles-tabla-transparencia1));
+      & tr:nth-child(odd) {
+        background: rgba(green, var(--aranceles-tabla-transparencia2));
       }
 
-      & td:first-of-type {
-        background: rgba(green, .2);
-      }
     }
-
-
   }
 
   table caption {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2em 4em;
+    color: white;
+    background: var(--grad-fx);
+    display: none;
+    text-align: center;
   }
 
-  td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2em 3em;
-    position: relative;
-    text-align: right;
-    font-weight: inherit;
-    font-weight: var(--light);
-    gap: 1em;
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    box-shadow: var(--shadow-out-img);
+    border-radius: 3em;
+    overflow: hidden;
+    text-align: left;
 
-    td div {
-      text-align: right;
-    }
-
-    &:nth-of-type(1)::before {
-      content: "Concepto: ";
-      font-weight: var(--medium);
-    }
-
-    &:nth-of-type(2)::before {
-      content: "Carácter: ";
-    }
-
-    &:nth-of-type(3)::before {
-      content: "Cuotas: ";
-    }
-
-    &:nth-of-type(4)::before {
-      content: "Precio normal: ";
-    }
-
-    &:nth-of-type(5)::before {
-      content: "Precio con descuento (pagando antes del 10): ";
-      display: inline;
-    }
-
-    &::before {
-      font-weight: inherit;
-      flex-basis: 40%;
-      text-align: left;
+    a {
       color: inherit;
     }
 
-    span,
-    div,
-    p {
-      flex-basis: 60%;
+    small {
+      font-size: calc(var(--fs-txt) * .75);
+    }
+
+  }
+
+
+  span {
+    font-weight: var(--medium);
+  }
+
+  td div,
+  th div {
+    display: flex;
+    flex-direction: column;
+    font-weight: inherit;
+  }
+
+  tr {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5em 3em;
+    gap: 1em;
+
+    td:first-of-type {
+      font-weight: var(--medium);
+    }
+  }
+
+  th {
+    font-weight: var(--bold);
+    color: white;
+    hyphens: auto;
+  }
+
+
+
+  td,
+  th {
+    width: 100%;
+  }
+
+  thead tr {
+    background: var(--grad-fx);
+
+    th {
+      word-break: break-word;
+      hyphens: auto;
+
+      >* {
+        hyphens: auto;
+      }
+    }
+  }
+}
+
+
+
+@media screen and (max-width: 1230px) {
+
+  .container {
+
+    table,
+    thead,
+    tbody,
+    tr {
+      display: block;
+      width: 100%;
+    }
+
+    thead tr {
+      display: none;
+    }
+
+    tr {
+      padding: 0;
+      background: none !important;
+
+    }
+
+    tbody {
+      &.tabla {
+        background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia1));
+
+        & td:nth-child(even) {
+          background: rgba(var(--secundario-rgb) var(--aranceles-tabla-transparencia2));
+        }
+
+        & td:first-of-type {
+          background: rgba(var(--secundario-rgb) .1);
+        }
+      }
+
+      &.cuotas {
+        background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia1));
+
+        & td:nth-child(even) {
+          background: rgba(var(--principal-rgb) var(--aranceles-tabla-transparencia2));
+        }
+
+        & td:first-of-type {
+          background: rgba(var(--principal-rgb) .1);
+        }
+      }
+
+      &.uniforme {
+        background: rgba(black, var(--aranceles-tabla-transparencia1));
+
+        & td:nth-child(even) {
+          background: rgba(black, var(--aranceles-tabla-transparencia2));
+        }
+
+        & td:first-of-type {
+          background: rgba(black, .1);
+        }
+
+      }
+
+      &.gratis {
+        background: rgba(green, var(--aranceles-tabla-transparencia1));
+
+        & td:nth-child(even) {
+          background: rgba(green, var(--aranceles-tabla-transparencia2));
+        }
+
+        & td:first-of-type {
+          background: rgba(green, .1);
+        }
+      }
+
+
+    }
+
+    table caption {
+      display: block;
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2em 3em;
+      position: relative;
       text-align: right;
-      word-wrap: break-word;
+      font-weight: inherit;
+      font-weight: var(--light);
+      gap: 1em;
+
+      td div {
+        text-align: right;
+      }
+
+      &:nth-of-type(1)::before {
+        content: "Concepto: ";
+        font-weight: var(--medium);
+      }
+
+      &:nth-of-type(2)::before {
+        content: "Carácter: ";
+      }
+
+      &:nth-of-type(3)::before {
+        content: "Cuotas: ";
+      }
+
+      &:nth-of-type(4)::before {
+        content: "Precio normal: ";
+      }
+
+      &:nth-of-type(5)::before {
+        content: "Precio con descuento (pagando antes del 10): ";
+        display: inline;
+      }
+
+      &::before {
+        font-weight: inherit;
+        flex-basis: 40%;
+        text-align: left;
+        color: inherit;
+      }
+
+      span,
+      div,
+      p {
+        flex-basis: 60%;
+        text-align: right;
+        word-wrap: break-word;
+      }
     }
   }
 }

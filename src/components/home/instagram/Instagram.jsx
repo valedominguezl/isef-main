@@ -19,20 +19,18 @@ const Instagram = () => {
         document.body.appendChild(script);
 
         script.onload = () => {
+            // Esperamos un poco antes de procesar los embeds
             setTimeout(() => {
                 if (window.instgrm?.Embeds) {
                     window.instgrm.Embeds.process();
                 }
             }, 500);
-            
-            if (window.instgrm && window.instgrm.Embeds) {
-                window.instgrm.Embeds.process();
-            }
 
+            // Eliminamos el overlay cuando se haga scroll o toque en el contenedor
             const containers = document.querySelectorAll(`.${styles.embedContainer}`);
             const removeOverlays = () => {
-                const scroll = document.querySelectorAll(`.${styles.scroll}`);
-                scroll.forEach(overlay => {
+                const scrollOverlays = document.querySelectorAll(`.${styles.scroll}`);
+                scrollOverlays.forEach(overlay => {
                     overlay.style.display = 'none';
                 });
             };
@@ -42,7 +40,6 @@ const Instagram = () => {
                 container.addEventListener('touchstart', removeOverlays);
                 container.addEventListener('mousedown', removeOverlays);
             });
-
         };
 
         return () => {
@@ -50,44 +47,56 @@ const Instagram = () => {
         };
     }, []);
 
+
     return (
         <div className={styles.container}>
+            <div className={styles.titulo}>
+                <h2>Últimas <span className="color1">publicaciones</span></h2>
+                <div className="linea-svg"></div>
+                <p>E</p>
+            </div>
+
             <Swiper
                 className={styles.swiper}
                 modules={[Navigation, Pagination]}
                 centeredSlides={true}
                 navigation={{ enabled: true }}
-                pagination={{ clickable: true }}
+                pagination={{ enabled: true, clickable: true }}
                 breakpoints={{
                     0: {
                         slidesPerView: 1,
                         spaceBetween: 100,
                         loop: false,
                         navigation: { enabled: true },
+                        pagination: { enabled: true },
                     },
                     550: {
                         slidesPerView: 1,
                         spaceBetween: 100,
                         loop: true,
                         navigation: { enabled: true },
+                        pagination: { enabled: true },
                     },
                     750: {
                         slidesPerView: 2,
                         spaceBetween: 10,
                         loop: true,
                         navigation: { enabled: true },
+                        pagination: { enabled: true },
                     },
                     900: {
                         slidesPerView: 2,
                         spaceBetween: 120,
                         loop: true,
                         navigation: { enabled: true },
+                        pagination: { enabled: false },
                     },
                     1400: {
                         slidesPerView: 3,
                         spaceBetween: 120,
                         loop: true,
                         navigation: { enabled: true },
+                        pagination: { enabled: false },
                     },
                 }}
             >

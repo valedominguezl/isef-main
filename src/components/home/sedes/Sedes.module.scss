@@ -59,7 +59,7 @@
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    background: var(--grad-btn-color);
+    background: var(--grad-img), url('@/assets/media/home/intro.webp') center / cover;
     border-radius: 3em;
     overflow: hidden;
     box-shadow: var(--shadow-out);
@@ -278,5 +278,9 @@
     .contactos {
         display: flex;
         flex-direction: column;
+    }
+
+    .txt h4{
+        color: rgba(white, .7) !important;
     }
 }

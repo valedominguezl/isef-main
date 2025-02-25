@@ -1,7 +1,18 @@
 import React from "react";
 import styles from "./Cursos.module.scss";
+import TagManager from "react-gtm-module";
 
 const Curso = ({ title, subTitle, bgImage, onVerMas }) => {
+  const handleClick = () => {
+    TagManager.dataLayer({
+      dataLayer: {
+        event: "curso_ver_mas",
+        curso: title,
+      },
+    });
+    onVerMas(); 
+  };
+
   return (
     <div
       className={styles.curso}
@@ -11,11 +22,11 @@ const Curso = ({ title, subTitle, bgImage, onVerMas }) => {
       }}
     >
       <h3>
-        <span>{title}</span>
+        <strong>{title}</strong>
       </h3>
       <div className="linea-svg bl"></div>
       <p>{subTitle}</p>
-      <button className="btn-cta noHover grad3" onClick={onVerMas}>
+      <button className="btn-cta noHover grad3" onClick={handleClick}>
         Ver más
       </button>
     </div>

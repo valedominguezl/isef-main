@@ -41,7 +41,7 @@ const Gabinete = () => {
             <h2>Gabinete de <span>apoyo psicológico</span></h2>
             <div className="linea-svg bl"></div>
             <p>
-                Pensando siempre en tu formación, nuestro profesorado dispone de un gabinete de apoyo psicopedagógico <strong>gratuito</strong> para acompañarte en el estudio. Así, tus conflictos se transformarán en fortalezas y tu trayecto por esta casa de estudios va a ser una experiencia realmente agradable sin descuidar tus conocimientos. <span>Pedí turnos en secretaría</span>.
+                Pensando siempre en tu formación, nuestro profesorado dispone de un gabinete de apoyo psicopedagógico <strong>gratuito</strong> para acompañarte en el estudio. Así, tus conflictos se transformarán en fortalezas y tu trayecto por esta casa de estudios va a ser una experiencia realmente agradable sin descuidar tus conocimientos. <strong>Pedí turnos en secretaría</strong>.
             </p>
         </div>
     )

@@ -42,7 +42,7 @@ const Explora = () => {
       <div className={styles.txt}>
         <div className={styles.titulo}>
           <h4>I.S.E.F. San Luís | Actividades y deportes regionales</h4>
-          <h2>Exploramos <span className="color2">lo lindo que es San Luís</span></h2>
+          <h2>Exploramos <span className="color1">lo lindo que es San Luís</span></h2>
         </div>
         <div className="linea-svg"></div>
         <div className={styles.parrafos}>

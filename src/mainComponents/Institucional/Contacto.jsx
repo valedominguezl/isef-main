@@ -1,19 +1,21 @@
 import React from 'react'
-import Tabla from '@/components/aranceles/tabla/Tabla.jsx'
+import Intro from '@/components/institucional/contacto/intro/Intro.jsx'
+import Mapa from '@/components/institucional/contacto/mapa/Mapa.jsx'
 import Intros from '@/components/reutilizables/intros/Intros.jsx'
-import fondo from '@/assets/media/aranceles/main.webp'
 
 
 const Contacto = () => {
   return (
-    <div>
+    <div className="mainComponent">
       <Intros
-        bgImage={fondo}
-        heading="Aranceles"
-        buttonText="Pagos solo en efectivo"
+        heading="Contacto"
+        subHeading="Comunicate con nosotros mediante Whatsapp"
+        showButton={false}
       />
       
-      <Tabla />
+      <Intro />
+
+      <Mapa />
     </div>
   )
 }

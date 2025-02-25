@@ -44,7 +44,7 @@ const Intro = () => {
         <div className={styles.txt}>
           <div className={styles.titulo}>
             <h4>I.S.E.F. San Luís | Profesorado de educación física</h4>
-            <h2>Bienvenido al <span className="color2">I.S.E.F.</span></h2>
+            <h2>Bienvenido al <span className="color1">I.S.E.F.</span></h2>
           </div>
           <div className="linea-svg"></div>
           <div className={styles.parrafos}>

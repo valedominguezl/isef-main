@@ -5,6 +5,7 @@ import Aranceles from '@/mainComponents/Aranceles.jsx';
 import Inscripciones from '@/mainComponents/Inscripciones.jsx';
 import Carrera from '@/mainComponents/Carrera.jsx';
 import Especializaciones from '@/mainComponents/Especializaciones.jsx';
+import Cookies from '@/mainComponents/privacyPolicy/PrivacyPolicy.jsx';
 import Institucional from '@/mainComponents/Institucional.jsx';
 import Contacto from '@/mainComponents/Institucional/Contacto.jsx';
 import Historia from '@/mainComponents/Institucional/Historia.jsx';
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: 'Inscripciones', element: <Inscripciones /> },
       { path: 'Carrera', element: <Carrera /> },
       { path: 'Especializaciones', element: <Especializaciones /> },
+      { path: 'Cookies', element: <Cookies /> },
       {
         path: 'Institucional',
         element: <Institucional />,

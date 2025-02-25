@@ -1,16 +1,97 @@
-.container {
+.swiper {
     height: 90vh;
-    width: 100%;
-    padding: var(--padding-up) var(--padding-200);
-    background-color: var(--fondo-principal);
+    padding: var(--padding-up) var(--padding-100) 3rem var(--padding-100);
+    user-select: none;
+
+    --swiper-theme-color: white;
+
+    :global(.swiper-button-prev) {
+        border-radius: 300px;
+        background: rgba(black, .8);
+        height: 70px;
+        width: 70px;
+    }
+
+    :global(.swiper-button-next) {
+        border-radius: 300px;
+        background: rgba(black, .8);
+        height: 70px;
+        width: 70px;
+    }
+}
+
+.swiperSlide {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    border-radius: 3rem;
+    box-shadow: var(--shadow-out);
+    overflow: hidden;
+    max-width: 100% !important;
 }
 
 .overlay {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1rem;
     width: 100%;
-    background: var(--grad-black), url('@/assets/media/carrera/intro.webp');
-    background-position: center;
-    border-radius: 3rem;
-    box-shadow: var(--shadow-out);
     padding: var(--padding-up) var(--padding-100);
+
+    :last-child {
+        margin-top: 1rem;
+
+        @media (max-width: 500px) and (min-width: 390px) {
+            width: 87%;
+        }
+
+        @media (max-width: 600px) and (min-width: 500px) {
+            width: 90%;
+        }
+
+        @media (max-width: 768px) and (min-width: 600px) {
+            width: 93%;
+        }
+    }
+}
+
+// Animaciones
+
+.overlay {
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+    transition: opacity 2s ease, transform 2s ease !important;
+
+    &.visible {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+}
+
+@media (max-width: 550px) {
+
+    .swiper {
+        :global(.swiper-button-prev) {
+            transform: scale(.65);
+            margin-left: -15px;
+        }
+
+        :global(.swiper-button-next) {
+            transform: scale(.65);
+            margin-right: -15px;
+        }
+    }
+}
+
+@media (max-width: 900px) and (min-width: 550px) {
+    .swiper {
+        :global(.swiper-button-prev) {
+            transform: scale(.7);
+        }
+
+        :global(.swiper-button-next) {
+            transform: scale(.7);
+        }
+    }
+
 }

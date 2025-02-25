@@ -6,7 +6,7 @@ const Tabla = () => {
   return (
     <div className={styles.container}>
       <table>
-        <caption><h2><span>Tabla de valores</span></h2></caption>
+        <caption><h2>Tabla de <span>valores</span></h2></caption>
 
         <thead>
           <tr>
@@ -16,8 +16,8 @@ const Tabla = () => {
             <th>Precio normal</th>
             <th>
               <div>
-                Precio con descuento
-                <small>(pagando antes del 10)</small>
+                Precio c/ descuento
+                <small>(antes del 10 de cada mes)</small>
               </div>
             </th>
           </tr>

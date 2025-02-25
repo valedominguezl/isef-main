@@ -1,0 +1,288 @@
+.container {
+  position: relative;
+}
+
+.banner {
+  /* Estilos existentes */
+  position: fixed;
+  padding: 1rem 4rem;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 50;
+
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 60%;
+
+    @media (max-width: 1200px) {
+      width: 100%;
+    }
+
+    small {
+      font-weight: var(--medium);
+      color: var(--txt-bcolor);
+      font-size: 14px;
+    }
+  }
+
+  .imgCont {
+    display: flex;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    img:last-of-type {
+      position: absolute;
+      transition: 0.3s;
+      top: 0;
+      right: 0;
+      margin: 15px 30px;
+      width: 20px;
+      height: 20px;
+      filter: invert(1);
+      opacity: 0.3;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 40%;
+
+    @media (max-width: 1200px) {
+      width: 100%;
+    }
+
+    button {
+      padding: 0.5rem 3rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:first-of-type {
+      background-color: transparent;
+      opacity: 0.6;
+      transition: 0.3s;
+
+      p {
+        font-size: 14px;
+        color: var(--principal);
+      }
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    button:last-of-type {
+      p {
+        color: white;
+      }
+
+      &::after {
+        content: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+    }
+  }
+}
+
+/* Estilos para el modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 51;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  width: 900px;
+  height: 80vh;
+  overflow-y: auto;
+
+  @media (max-width: 900px) {
+    width: 100%;
+    height: 100%;
+
+    .title h3 {
+      font-size: 20px !important;
+    }
+  }
+
+  .title {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+
+    h3 {
+      font-size: 25px;
+      font-weight: var(--bold);
+      color: var(--txt-bcolor);
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    img:last-of-type {
+      cursor: pointer;
+      filter: invert(1);
+      width: 20px;
+      height: 20px;
+      opacity: 0.3;
+      transition: .2s;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .privacy {
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+    .cookieSection {
+
+      .cookieTitle {
+        position: relative;
+        padding: 1rem 2rem;
+        background-color: rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        &.selected {
+          background: transparent;
+          position: relative;
+          border: none;
+          cursor: default;
+
+          h4 {
+            color: var(--principal);
+            font-weight: var(--medium);
+          }
+
+          &::after {
+            content: '';
+            position: absolute;
+            background-color: var(--principal);
+            height: 100%;
+            width: 15px;
+            left: 0;
+            top: 0;
+          }
+        }
+
+        h4 {
+          font-size: 20px;
+          font-weight: var(--bold);
+        }
+
+        .toggleSelect {
+          position: absolute;
+          background: transparent;
+          border: none;
+          right: 0;
+          top: 50%;
+          transform: translate(0, -50%);
+          margin-right: 2rem;
+          cursor: pointer;
+          outline: none;
+          font-size: 20px;
+          color: var(--principal);
+          opacity: 0.7;
+          transition: 0.3s;
+
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+
+      .cookiesText {
+        padding: 0 2rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: 0.3s ease;
+
+        &.active {
+          padding: 1rem 2rem;
+          max-height: 700px;
+        }
+
+        p {
+          margin: 0.5rem 0;
+        }
+      }
+    }
+  }
+
+  .save {
+    display: flex;
+    padding: 1rem 2rem;
+    justify-content: center;
+
+    button {
+      font-size: var(--fs-txt);
+      padding: 0.7rem 3rem;
+
+      &::after {
+        content: none;
+      }
+    }
+  }
+}

@@ -130,8 +130,9 @@ const Navbar = () => {
                     <li className={styles.navLink}><Link to='/Carrera' onClick={handleSidebarClick(toggleSidebar)}>Carrera</Link></li>
                     <li className={styles.navLink}><Link to='/Especializaciones' onClick={handleSidebarClick(toggleSidebar)}>Especializaciones</Link></li>
                     <li className={styles.navLink}><Link to='/Aranceles' onClick={handleSidebarClick(toggleSidebar)}>Aranceles</Link></li>
+                    <li className={styles.navLink}><Link to='/Institucional/Contacto' onClick={handleSidebarClick(toggleSidebar)}>Contacto</Link></li>
+                    <li className={styles.navLink}><Link to='/Institucional/Historia' onClick={handleSidebarClick(toggleSidebar)}>Nuestra historia</Link></li>
                     <li className={styles.navLink}><Link to='/' onClick={handleSidebarClick(toggleSidebar)}>Inicio</Link></li>
-                    {/* <li className={styles.navLink}><Link to='/Institucional' onClick={handleSidebarClick(toggleSidebar)}>Institucional</Link></li> */}
                 </ul>
             )}
         </div>

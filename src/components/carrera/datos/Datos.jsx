@@ -57,42 +57,42 @@ const Datos = () => {
                 <div className={styles.dato}>
                     <img src={titulo} alt="" />
                     <div className={styles.datoTxt}>
-                        <h3>Título: <span>profesor/a de educación física</span></h3>
+                        <h3>Título: <strong>profesor/a de educación física</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
                     <img src={duracion} alt="" />
                     <div className={styles.datoTxt}>
-                        <h3>Duración: <span>4 años</span></h3>
+                        <h3>Duración: <strong>4 años</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
                     <img src={modalidad} alt="" />
                     <div className={styles.datoTxt}>
-                        <h3>Modalidad: <span>presencial</span></h3>
+                        <h3>Modalidad: <strong>presencial</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
                     <img src={cursado} alt="" />
                     <div className={styles.datoTxt}>
-                        <h3>Cursado: <span>de lunes a viernes</span></h3>
+                        <h3>Cursado: <strong>de lunes a viernes</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
                     <img src={horarios} alt="" />
                     <div className={styles.datoTxt}>
-                        <h3>Horarios: <span>de 07:30hs a 13:30hs</span></h3>
+                        <h3>Horarios: <strong>de 07:30hs a 13:30hs</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
                     <img src={validez} alt="" />
                     <div className={styles.datoTxt}>
-                        <h3>Validez: <span>nacional e internacional</span></h3>
+                        <h3>Validez: <strong>nacional e internacional</strong></h3>
                     </div>
                 </div>
 

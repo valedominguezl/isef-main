@@ -22,8 +22,10 @@ const Home = () => {
 
       <Intro />
 
+      <Novedades />
+
       <Suspense fallback={<div>Loading...</div>}>
-        <Instagram />
+        {/* <Instagram /> */}
       </Suspense>
 
       <Especializaciones />

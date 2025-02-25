@@ -43,11 +43,11 @@ const Secundario = () => {
                 </h2>
                 <div className={`${styles.linea} linea-svg bl`}></div>
                 <p>
-                    No te preocupes, tenés hasta el <span>30 de Julio</span> para sacar todas las materias que adeudes.
-                    <span>
-                        <br />
+                    No te preocupes, tenés hasta el <strong>30 de Julio</strong> para sacar todas las materias que adeudes.
+                    <br />
+                    <strong>
                         Después de esta fecha, ya no podrás seguir cursando
-                    </span>
+                    </strong>
                 </p>
             </div>
 

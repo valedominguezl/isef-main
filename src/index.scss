@@ -47,8 +47,8 @@
     --shadow-out: 0px 10px 15px 0px rgba(0, 0, 0, .10);
     --shadow-out-img: 0px 10px 50px 0px rgba(0, 0, 0, .4);
 
-    --grad-btn-color: linear-gradient(90deg, #FF554E 35.09%, #FF241A 99.71%);
-    --grad-btn-color2: linear-gradient(90deg, #7761FF 35.09%, #4B2EFF 99.7%);
+    --grad-btn-color: linear-gradient(90deg, #7761FF 35.09%, #4B2EFF 99.7%);
+    --grad-btn-color2: linear-gradient(90deg, #FF554E 35.09%, #FF241A 99.71%);
     --grad-btn-color3: linear-gradient(90deg, black 35.09%, black 99.7%);
 
 }
@@ -71,11 +71,9 @@ html {
     overflow-anchor: none;
 }
 
-.mainComponent > *:nth-child(even) {
-    box-shadow: var(--shadow-in);
-}
-
-
+// .mainComponent > *:nth-child(even) {
+//     box-shadow: var(--shadow-in);
+// }
 
 // Estilos de texto
 

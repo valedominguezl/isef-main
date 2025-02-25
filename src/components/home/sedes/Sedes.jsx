@@ -108,7 +108,7 @@ const Sedes = () => {
                 </div>
                 <div className={styles.contacto}>
                   <img src={mail} alt="" />
-                  <p>esef4@hotmail.com</p>
+                  <p><a href="mailto:esef4@hotmail.com">esef4@hotmail.com</a></p>
                 </div>
                 <div className={styles.contacto}>
                   <img src={fb} alt="" />
@@ -159,7 +159,7 @@ const Sedes = () => {
                 </div>
                 <div className={styles.contacto}>
                   <img src={mail} alt="" />
-                  <p>esef4@hotmail.com</p>
+                  <p><a href="mailto:esef4@hotmail.com">esef4@hotmail.com</a></p>
                 </div>
                 <div className={styles.contacto}>
                   <img src={fb} alt="" />

@@ -16,7 +16,7 @@ const Hero = () => {
                     <span>abriendo caminos</span>
                 </h1>
 
-                <LoadingAnchor className='btn-cta grad2' href='/Carrera'>
+                <LoadingAnchor className='btn-cta grad3' href='/Carrera'>
                     Enterate más
                 </LoadingAnchor>
             </div>
