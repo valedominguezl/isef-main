@@ -1,5 +1,5 @@
 import React from 'react'
-import Intro from '@/components/institucional/historia/Intro/Intro.jsx'
+import Intro from '@/components/institucional/historia/intro/Intro.jsx'
 import Intros from '@/components/reutilizables/intros/Intros.jsx'
 import fondo from '@/assets/media/home/intro.webp'
 

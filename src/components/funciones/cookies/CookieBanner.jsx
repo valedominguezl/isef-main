@@ -123,7 +123,7 @@ const CookieBanner = ({ activateTracking }) => {
               }}>
                 <p>Configurar cookies</p>
               </button>
-              <button className="btn-cta grad2 bl" onClick={handleAcceptAll}>
+              <button className="btn-cta grad bl" onClick={handleAcceptAll}>
                 <p>Aceptar</p>
               </button>
             </div>
