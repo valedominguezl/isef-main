@@ -20,4 +20,4 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh root@167.114.144.67 'cd /var/www/isef_sanluis && git pull origin main && npm install && npm run build'
+          ssh root@167.114.144.67 'cd /var/www/isef_sanluis/isef && git pull origin main && npm install && npm run build'
