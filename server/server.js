@@ -1,31 +1,26 @@
-// Requiere Babel en tiempo de ejecución
+const React = require('react');
+const ReactDOMServer = require('react-dom/server');
+const { StaticRouter } = require('react-router-dom/server');
+const App = require('./src/main.jsx').default;
+const path = require('path');
+const express = require('express');
+
 require('@babel/register')({
     presets: ['@babel/preset-env', '@babel/preset-react'],
-    ignore: [/(node_module)/]  // No se transforman los módulos de node_modules
-  });
-  
-  // Ahora importa tus módulos
-  import React from 'react';
-  import ReactDOMServer from 'react-dom/server';
-  import { StaticRouter } from 'react-router-dom/server';  // Usado para manejar rutas en SSR
-  import App from './src/main.jsx';  
-  import path from 'path';
-  import express from 'express';
-  
-  const app = express();
-  
-  // Servir archivos estáticos como el CSS generado
-  app.use(express.static(path.resolve(__dirname, 'dist')));
-  
-  // Ruta para manejar todas las solicitudes de la app
-  app.get('*', (req, res) => {
-    // Renderiza la app en el servidor
+    ignore: [/(node_module)/],
+});
+
+const app = express();
+
+app.use(express.static(path.resolve(__dirname, 'dist')));
+
+app.get('*', (req, res) => {
     const appMarkup = ReactDOMServer.renderToString(
-      <StaticRouter location={req.url}>
-        <App />
-      </StaticRouter>
+        <StaticRouter location={req.url}>
+            <App />
+        </StaticRouter>
     );
-  
+
     // Generar HTML dinámico
     const html = `
       <!DOCTYPE html>
@@ -60,14 +55,13 @@ require('@babel/register')({
         </body>
       </html>
     `;
-  
+
     // Enviar la respuesta al navegador
     res.send(html);
-  });
-  
-  // Cambiar a tu puerto de producción
-  const port = process.env.PORT || 3000;
-  app.listen(port, () => {
+});
+
+// Cambiar a tu puerto de producción
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
     console.log(`Servidor escuchando en http://isefsanluis.net:${port}`);
-  });
-  
+});
