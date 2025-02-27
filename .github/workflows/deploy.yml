@@ -44,15 +44,13 @@ jobs:
           # Subir el build al VPS
           rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$BUILD_DIR/
 
-          # En el VPS, eliminar el enlace simbólico o el contenido de /var/www/html,
-          # recrear /var/www/html y copiar el contenido del nuevo build
+          # En el VPS, crear enlace simbólico apuntando al último build
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-            # Elimina /var/www/html (ya sea un enlace simbólico o directorio)
+            # Elimina el enlace simbólico actual de /var/www/html si existe
             rm -rf /var/www/html
-            # Crea nuevamente el directorio /var/www/html
-            mkdir -p /var/www/html
-            # Copia el contenido del nuevo build en /var/www/html
-            cp -r /var/www/builds/$BUILD_DIR/* /var/www/html/
+            # Crear un nuevo enlace simbólico apuntando al último build
+            LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
+            ln -sfn "$LATEST_BUILD" /var/www/html
             echo "🚀 Deploy completado. Nueva versión activa en /var/www/html"
           EOF
 
