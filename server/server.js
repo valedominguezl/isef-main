@@ -1,7 +1,7 @@
-// Requiere Babel para transformar el código en tiempo de ejecución
-require('babel-register')({
+// Requiere Babel en tiempo de ejecución
+require('@babel/register')({
     presets: ['@babel/preset-env', '@babel/preset-react'],
-    ignore: [/node_modules/]  // No transformes los módulos de node_modules
+    ignore: [/(node_module)/]  // No se transforman los módulos de node_modules
   });
   
   // Ahora importa tus módulos
