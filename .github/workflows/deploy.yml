@@ -9,51 +9,50 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Paso 1: Checkout del código del repositorio
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Paso 2: Configurar Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'  # Usa la versión de Node.js que necesitas
+          node-version: '18'
 
-      # Paso 3: Instalar dependencias
       - name: Install dependencies
         run: npm install
 
-      # Paso 4: Build de la aplicación con Vite
       - name: Build app
         run: npm run build
 
-      # Paso 5: Transferir el build al servidor VPS
       - name: Upload build to VPS
         env:
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Agrega la clave SSH en GitHub Secrets
-          VPS_USER: ${{ secrets.VPS_USER }}  # Usuario del VPS
-          VPS_HOST: ${{ secrets.VPS_HOST }}  # Dirección IP o dominio del servidor
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           # Guardar la clave privada temporalmente
           echo "$PRIVATE_KEY" > key.pem
           chmod 600 key.pem
 
-          # Crear directorio builds si no existe
+          # Crear directorio de builds si no existe
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
             mkdir -p /var/www/builds
           EOF
 
+          # Definir nombre del directorio (timestamp) para el build actual
+          BUILD_DIR=$(date +%Y%m%d%H%M%S)
+
           # Subir el build al VPS
-          rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$(date +%Y%m%d%H%M%S)
+          rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$BUILD_DIR/
 
-          # Conectar al VPS y actualizar el enlace simbólico después de la transferencia
+          # En el VPS, eliminar el enlace simbólico o el contenido de /var/www/html,
+          # recrear /var/www/html y copiar el contenido del nuevo build
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-            # Obtener el último build
-            LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
-
-            # Actualizar el enlace simbólico para apuntar al nuevo build
-            ln -sfn "$LATEST_BUILD" /var/www/html
-
+            # Elimina /var/www/html (ya sea un enlace simbólico o directorio)
+            rm -rf /var/www/html
+            # Crea nuevamente el directorio /var/www/html
+            mkdir -p /var/www/html
+            # Copia el contenido del nuevo build en /var/www/html
+            cp -r /var/www/builds/$BUILD_DIR/* /var/www/html/
             echo "🚀 Deploy completado. Nueva versión activa en /var/www/html"
           EOF
 
