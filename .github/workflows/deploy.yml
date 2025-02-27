@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main # Puedes cambiar esto si utilizas otra rama, como 'master' o 'production'
+      - main
 
 jobs:
   build:
@@ -34,22 +34,24 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}  # Usuario del VPS
           VPS_HOST: ${{ secrets.VPS_HOST }}  # Dirección IP o dominio del servidor
         run: |
-          
+          # Guardar la clave privada temporalmente
           echo "$PRIVATE_KEY" > key.pem
           chmod 600 key.pem
 
-          
+          # Crear directorio builds si no existe
+          ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
+            mkdir -p /var/www/builds
+          EOF
+
+          # Subir el build al VPS
           rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$(date +%Y%m%d%H%M%S)
 
-          
+          # Conectar al VPS y actualizar el enlace simbólico después de la transferencia
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-            
-            rm -f /var/www/html
-
-            
+            # Obtener el último build
             LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
 
-            
+            # Actualizar el enlace simbólico para apuntar al nuevo build
             ln -sfn "$LATEST_BUILD" /var/www/html
 
             echo "🚀 Deploy completado. Nueva versión activa en /var/www/html"
