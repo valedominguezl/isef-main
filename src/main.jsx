@@ -95,6 +95,8 @@ const App = () => (
   </CookiesProvider>
 );
 
+export default App;
+
 hydrateRoot(document.getElementById('root'), (
   <React.StrictMode>
     <App />
