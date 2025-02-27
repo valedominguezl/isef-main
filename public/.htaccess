@@ -1,7 +1,16 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Excepción: sirve las subcarpetas de /var/www/conferencias si existen
+    RewriteCond %{DOCUMENT_ROOT}/var/www/conferencias%{REQUEST_URI} -d
+    RewriteRule ^(.*)$ /var/www/conferencias%{REQUEST_URI} [L]
+
+    # Permite el acceso a archivos y directorios existentes
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Redirige todo lo demás a index.html (para React)
     RewriteRule ^ index.html [QSA,L]
 </IfModule>
