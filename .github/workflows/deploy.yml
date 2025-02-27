@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main 
+      - main  # Puedes cambiar 'main' por el nombre de tu rama principal si es diferente
 
 jobs:
   deploy:
@@ -20,4 +20,10 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh root@167.114.144.67 'cd /var/www/isef_sanluis/isef && git pull origin main && npm install && npm run build'
+          ssh root@167.114.144.67 << 'EOF'
+            cd /home/wiroos-c1103-cloud/htdocs/c1103.cloud.wiroos.net || exit
+            git pull origin main || exit  
+            npm install || exit  
+            npm run build || exit 
+            sudo systemctl restart nginx || exit  
+          EOF
