@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';  // Usado para manejar rutas en SSR
-import App from './src/main.jsx';  
+import {App} from './src/main.jsx';  
 import path from 'path';
 import express from 'express';
 
