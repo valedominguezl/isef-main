@@ -1,29 +1,59 @@
-name: Deploy to Server
+name: Deploy to VPS
 
 on:
   push:
     branches:
-      - main  # Puedes cambiar 'main' por el nombre de tu rama principal si es diferente
+      - main # Puedes cambiar esto si utilizas otra rama, como 'master' o 'production'
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
+      # Paso 1: Checkout del código del repositorio
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.5.3
+      # Paso 2: Configurar Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          node-version: '18'  # Usa la versión de Node.js que necesitas
 
-      - name: Deploy to Server
+      # Paso 3: Instalar dependencias
+      - name: Install dependencies
+        run: npm install
+
+      # Paso 4: Build de la aplicación con Vite
+      - name: Build app
+        run: npm run build
+
+      # Paso 5: Transferir el build al servidor VPS
+      - name: Upload build to VPS
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Agrega la clave SSH en GitHub Secrets
+          VPS_USER: ${{ secrets.VPS_USER }}  # Usuario del VPS
+          VPS_HOST: ${{ secrets.VPS_HOST }}  # Dirección IP o dominio del servidor
         run: |
-          ssh root@167.114.144.67 << 'EOF'
-            cd /home/wiroos-c1103-cloud/htdocs/c1103.cloud.wiroos.net || exit
-            git pull origin main || exit  
-            npm install || exit  
-            npm run build || exit 
-            sudo systemctl restart nginx || exit  
+          
+          echo "$PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+
+          
+          rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$(date +%Y%m%d%H%M%S)
+
+          
+          ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
+            
+            rm -f /var/www/html
+
+            
+            LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
+
+            
+            ln -sfn "$LATEST_BUILD" /var/www/html
+
+            echo "🚀 Deploy completado. Nueva versión activa en /var/www/html"
           EOF
+
+          # Borrar la clave privada por seguridad
+          rm -f key.pem

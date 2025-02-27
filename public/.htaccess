@@ -1,15 +1,9 @@
+<IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
-
-# Redirige de http://www.isefsanluis.net o http://isefsanluis.net a https://isefsanluis.net
-RewriteCond %{HTTP_HOST} ^www\.isefsanluis\.net$ [NC]
-RewriteRule ^(.*)$ https://isefsanluis.net/$1 [L,R=301]
-
-# Si la conexión es HTTP, redirige a HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://isefsanluis.net%{REQUEST_URI} [L,R=301]
-
-# Redirige rutas inexistentes a index.html
+RewriteRule ^index\.html$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
 RewriteRule . /index.html [L]
+</IfModule>
