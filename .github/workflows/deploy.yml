@@ -36,6 +36,9 @@ jobs:
           # Crear directorio de builds si no existe
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
             mkdir -p /var/www/builds
+            cd /var/www/isef  # Cambiar a la carpeta donde está clonado el repositorio
+            git reset --hard   # Limpiar cualquier cambio local antes de hacer el pull
+            git pull            # Traer los cambios del repositorio
           EOF
 
           # Definir nombre del directorio (timestamp) para el build actual
@@ -49,9 +52,6 @@ jobs:
           rm -rf /var/www/html
           LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
           ln -sfn "$LATEST_BUILD" /var/www/html
-          sudo systemctl restart apache2
-          sudo chown -R www-data:www-data /var/www/builds
-          sudo chmod -R 755 /var/www/builds
           echo "🚀 Deploy completado. Nueva versión activa en /var/www/html"
           EOF
 
