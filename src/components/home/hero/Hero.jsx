@@ -13,7 +13,7 @@ const Hero = () => {
                 <h4>Profesorado de Educación Física</h4>
                 <h1>Desde 1993,
                     <br />
-                    <span>abriendo caminos</span>
+                    <span>abriendo caminoss</span>
                 </h1>
 
                 <LoadingAnchor className='btn-cta grad3' href='/Carrera'>

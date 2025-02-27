@@ -29,31 +29,28 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          # Guardar la clave privada temporalmente
           echo "$PRIVATE_KEY" > key.pem
           chmod 600 key.pem
 
-          # Crear directorio de builds si no existe
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-            mkdir -p /var/www/builds
-            cd /var/www/isef  # Cambiar a la carpeta donde está clonado el repositorio
-            git reset --hard   # Limpiar cualquier cambio local antes de hacer el pull
-            git pull            # Traer los cambios del repositorio
+           mkdir -p /var/www/builds
+           cd /var/www/isef
+           git fetch origin main
+           git checkout main
+           git reset --hard origin/main
+           git clean -fd
+           git pull origin main
           EOF
 
-          # Definir nombre del directorio (timestamp) para el build actual
           BUILD_DIR=$(date +%Y%m%d%H%M%S)
 
-          # Subir el build al VPS
           rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$BUILD_DIR/
 
-          # En el VPS, eliminar /var/www/html (sea directorio o enlace) y crear el enlace simbólico al último build
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-          rm -rf /var/www/html
-          LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
-          ln -sfn "$LATEST_BUILD" /var/www/html
-          echo "🚀 Deploy completado. Nueva versión activa en /var/www/html"
+           rm -rf /var/www/html
+           LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
+           ln -sfn "$LATEST_BUILD" /var/www/html
+           echo "🚀 Deploy completado. Nueva versión activa en /var/www/html"
           EOF
 
-          # Borrar la clave privada por seguridad
           rm -f key.pem
