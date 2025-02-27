@@ -3,19 +3,9 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
-  build: {
-    ssr: true, 
-    outDir: 'dist', 
-    rollupOptions: {
-      input: path.resolve(__dirname, 'src/entry-server.jsx')
-    },
-  },
-  server: {
-    proxy: {
-      '/api': 'http://localhost:3000',
-    },
-  },
+  plugins: [
+    react(),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

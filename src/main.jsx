@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { hydrateRoot  } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { ScrollProvider } from '@/components/funciones/context/ScrollContext.jsx';
-import { LoadingProvider } from '@/components/funciones/context/LoadingContext';
-import { CookiesProvider, useCookies } from '@/components/funciones/context/CookiesContext';
+import { ScrollProvider } from './components/funciones/context/ScrollContext.jsx';
+import { LoadingProvider } from './components/funciones/context/LoadingContext.jsx';
+import { CookiesProvider, useCookies } from './components/funciones/context/CookiesContext.jsx';
 
-import LoadingBar from '@/components/funciones/loadingBar/LoadingBar';
-import WhatsAppButton from '@/components/funciones/whatsApp/WhatsAppButton.jsx';
+import LoadingBar from './components/funciones/loadingBar/LoadingBar.jsx';
+import WhatsAppButton from './components/funciones/whatsApp/WhatsAppButton.jsx';
 import TagManager from 'react-gtm-module';
-import CookieBanner from '@/components/funciones/cookies/CookieBanner.jsx';
+import CookieBanner from './components/funciones/cookies/CookieBanner.jsx';
 import router from './routes.jsx';
 import './index.scss';
 
@@ -94,8 +94,6 @@ const App = () => (
     <AppContent />
   </CookiesProvider>
 );
-
-export default App;
 
 hydrateRoot(document.getElementById('root'), (
   <React.StrictMode>

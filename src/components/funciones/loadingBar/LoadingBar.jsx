@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLoading } from '@/components/funciones/context/LoadingContext';
+import { useLoading } from '../context/LoadingContext.jsx';
 import styles from './LoadingBar.module.scss';
 
 const LoadingBar = () => {
