@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { hydrateRoot  } from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ScrollProvider } from './components/funciones/context/ScrollContext.jsx';
@@ -95,8 +96,8 @@ const App = () => (
   </CookiesProvider>
 );
 
-hydrateRoot(document.getElementById('root'), (
-  <React.StrictMode>
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
     <App />
-  </React.StrictMode>
-));
+  </StrictMode>
+);

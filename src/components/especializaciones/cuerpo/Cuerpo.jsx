@@ -23,7 +23,7 @@ const profesionales = [
       'Co - director del centro de entrenamiento French Clay Tenis',
       'Conferencista',
     ],
-    cvLink: 'https://docs.google.com/document/d/1UIq49gb1w01KGQbo09r-9Dku5wTCCsev/edit?usp=sharing&ouid=104941986694218560787&rtpof=true&sd=true'
+    cvLink: 'https://docs.google.com/document/d/1QtxtySVFjnpRzB1e1UXTJjKsCeSrCmff/edit?usp=sharing&ouid=104941986694218560787&rtpof=true&sd=true'
   },
   {
     nombre: 'Lic. Jorge Roig',

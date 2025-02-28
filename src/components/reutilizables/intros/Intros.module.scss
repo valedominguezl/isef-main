@@ -1,23 +1,21 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 1.5em;
   align-items: center;
   justify-content: center;
+  min-height: 80svh;
+  padding: var(--padding-up) var(--padding-100);
+}
 
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-
-  background-size: cover;
-  background-position: center;
+.container header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   width: 100%;
-  min-height: 75svh;
-  padding: var(--padding-up) var(--padding-100);
 
-  h3 {
-    color: var(--h4-wcolor);
-  }
 }
 
 .button {
@@ -43,6 +41,7 @@
   }
 }
 
-.heading, .subHeading {
+.heading,
+.subHeading {
   animation: slide 1s ease-out;
 }

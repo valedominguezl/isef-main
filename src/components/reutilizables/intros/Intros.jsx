@@ -11,32 +11,31 @@ const Intros = ({
   showLine = true,
 }) => {
   const containerStyle = {
-    background: bgImage
-    ? `var(--grad-img), url(${bgImage})`  
-    : `var(--grad-fx)`,  };
+    background: bgImage ? `var(--grad-img), url(${bgImage})` : `var(--grad-fx)`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundAttachment: "fixed",
+  };
 
   return (
-    <header style={containerStyle} className={`${styles.container} bl`}>
-      {showHeading && (
-        <h1 className={styles.heading}>
-          <span dangerouslySetInnerHTML={{ __html: heading || "Default Heading" }} />
-        </h1>
-      )}
+    <div style={containerStyle} className={`${styles.container} bl`}>
+      <header >
+        {showHeading && (
+          <h1 className={styles.heading}>
+            <span
+              dangerouslySetInnerHTML={{ __html: heading || "Default Heading" }}
+            />
+          </h1>
+        )}
 
-      {showLine && <div className="linea-svg bl"></div>}
+        {showLine && <div className="linea-svg bl"></div>}
 
-      {subHeading && (
-        <h3 className={styles.subHeading}>
-          {subHeading}
-        </h3>
-      )}
+        {subHeading && <h3 className={styles.subHeading}>{subHeading}</h3>}
 
-      {showButton && (
-        <button className={styles.button}>
-          {buttonText}
-        </button>
-      )}
-    </header>
+        {showButton && <button className={styles.button}>{buttonText}</button>}
+      </header>
+    </div>
   );
 };
 

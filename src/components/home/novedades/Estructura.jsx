@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './Novedades.module.scss';
 import ScrollToSection from '@/components/funciones/scroll/ScrollToSection';
-import { getImageUrl } from './getImageUrl.js';
 
 const Estructura = ({ title, description, page, id, imagePath }) => {
-  const backgroundImageUrl = getImageUrl(imagePath);
   const overlayStyle = {
-    background: `linear-gradient(to bottom, transparent, black), url(${backgroundImageUrl})`,
+    background: `linear-gradient(to bottom, transparent, black), url(${imagePath})`,
     backgroundPosition: 'center',
   };
 
