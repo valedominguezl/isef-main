@@ -5,8 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ScrollProvider } from './components/funciones/context/ScrollContext.jsx';
 import { LoadingProvider } from './components/funciones/context/LoadingContext.jsx';
-import { CookiesProvider, useCookies } from './components/funciones/context/CookiesContext.jsx';
-
+import { CookiesProvider, useCookies } from '@/components/funciones/context/CookiesContext';
 import LoadingBar from './components/funciones/loadingBar/LoadingBar.jsx';
 import WhatsAppButton from './components/funciones/whatsApp/WhatsAppButton.jsx';
 import TagManager from 'react-gtm-module';

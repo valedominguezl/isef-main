@@ -72,7 +72,7 @@ const PrivacyPolicy = () => {
                 Estas cookies están relacionadas con la seguridad del sitio y permiten la autenticación en el sistema <strong>para proteger tu información personal</strong>.
               </p>
               <ul>
-                <li><p><strong>Cookies utilizadas:</strong> datr, ds_user_id, ig_did, mid, rur</p></li>
+                <li><p><strong>Cookies utilizadas:</strong> datr, ds_user_id, mid, rur</p></li>
               </ul>
             </div>
           </div>

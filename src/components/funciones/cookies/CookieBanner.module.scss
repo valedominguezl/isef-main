@@ -176,7 +176,7 @@
       width: 20px;
       height: 20px;
       opacity: 0.3;
-      transition: .2s;
+      transition: 0.2s;
 
       &:hover {
         opacity: 1;
@@ -192,7 +192,6 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
     .cookieSection {
-
       .cookieTitle {
         position: relative;
         padding: 1rem 2rem;
@@ -217,7 +216,7 @@
           }
 
           &::after {
-            content: '';
+            content: "";
             position: absolute;
             background-color: var(--principal);
             height: 100%;
@@ -247,7 +246,6 @@
           opacity: 0.7;
           transition: 0.3s;
 
-
           &:hover {
             opacity: 1;
           }
@@ -274,12 +272,34 @@
 
   .save {
     display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
     padding: 1rem 2rem;
+    gap: 1rem;
     justify-content: center;
 
-    button {
+    button:last-of-type {
+      background: transparent;
+      outline: none;
+      border: none;
+      font-size: calc(var(--fs-txt) * 0.9);
+      color: rgba(var(--principal-rgb) .7);
+      text-decoration: underline;
+      text-decoration-color: white;
+      text-underline-offset: 3px;
+      transition: .3s;
+
+      &:hover {
+        color: var(--principal);
+        text-decoration-color: var(--principal);
+        text-underline-offset: 5px;
+      }
+    }
+
+    button:first-of-type {
       font-size: var(--fs-txt);
       padding: 0.7rem 3rem;
+      cursor: pointer;
 
       &::after {
         content: none;

@@ -1,4 +1,3 @@
-// CookiesContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CookiesContext = createContext();
@@ -32,7 +31,7 @@ export const CookiesProvider = ({ children }) => {
     if (activateTracking) {
       activateTracking(preferences);
     }
-    // Si deseas cerrar el banner o modal después de aceptar, puedes agregar:
+    // Cerrar el banner o modal después de aceptar
     setShowCookieBanner(false);
     setShowCookieModal(false);
   };
