@@ -1,38 +1,18 @@
-import investigacion from '@/assets/media/especializaciones/cursos/investigacion.webp';
+import { getImage } from '@/components/funciones/utils/getImages.js';
 
-const novedadLista = [
-  {
-    title: 'Laboratorio de investigación',
-    description:
-      'En este 2025 comenzará la primera etapa de nuestro laboratorio de anatomía funcional, fisiología del ejercicio y nutrición, a los efectos de promover y desarrollar investigaciones en las áreas afines. Será una nueva etapa en la historia de nuestra institución, que nos permitirá seguir creciendo y aportando al conocimiento científico.',
-    page: '/Especializaciones',
-    id: 'especializacionesCursos',
-    imagePath: investigacion,
-  },
-  // {
-  //   title: 'Laboratorio de investigación',
-  //   description:
-  //     'En este 2025 comenzará la primera etapa de nuestro laboratorio de anatomía funcional, fisiología del ejercicio y nutrición, a los efectos de promover y desarrollar investigaciones en las áreas afines. Será una nueva etapa en la historia de nuestra institución, que nos permitirá seguir creciendo y aportando al conocimiento científico.',
-  //   page: '/Especializaciones',
-  //   id: 'especializacionesCursos',
-  //   imagePath: getCourseImage('investigacion.webp'),  
-  // },
-  // {
-  //   title: 'Laboratorio de investigación',
-  //   description:
-  //     'En este 2025 comenzará la primera etapa de nuestro laboratorio de anatomía funcional, fisiología del ejercicio y nutrición, a los efectos de promover y desarrollar investigaciones en las áreas afines. Será una nueva etapa en la historia de nuestra institución, que nos permitirá seguir creciendo y aportando al conocimiento científico.',
-  //   page: '/Especializaciones',
-  //   id: 'especializacionesCursos',
-  //   imagePath: getCourseImage('investigacion.webp'),  
-  // },
-  // {
-  //   title: 'Laboratorio de investigación',
-  //   description:
-  //     'En este 2025 comenzará la primera etapa de nuestro laboratorio de anatomía funcional, fisiología del ejercicio y nutrición, a los efectos de promover y desarrollar investigaciones en las áreas afines. Será una nueva etapa en la historia de nuestra institución, que nos permitirá seguir creciendo y aportando al conocimiento científico.',
-  //   page: '/Especializaciones',
-  //   id: 'especializacionesCursos',
-  //   imagePath: getCourseImage('investigacion.webp'),  
-  // },
-];
+const novedad = async () => {
+  return [
+    {
+      title: 'Laboratorio de investigación',
+      description:
+        'En este 2025 comenzará la primera etapa de nuestro laboratorio de anatomía funcional, fisiología del ejercicio y nutrición, a los efectos de promover y desarrollar investigaciones en las áreas afines. Será una nueva etapa en la historia de nuestra institución, que nos permitirá seguir creciendo y aportando al conocimiento científico.',
+      page: '/Especializaciones',
+      id: 'especializacionesCursos',
+      imagePath: await getImage('especializaciones/cursos/investigacion.webp'),
+    },
+  ];
+};
 
-export default novedadLista;
+export default novedad;
+
+

@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
 import styles from './Novedades.module.scss';
 import Estructura from './Estructura.jsx';
-import novedadLista from './novedadLista.js';
+import loadImages from './novedadLista';
 
 const Novedades = () => {
+  const [novedades, setNovedades] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await loadImages();
+      setNovedades(data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className={styles.container}>
       <Swiper
@@ -21,37 +30,14 @@ const Novedades = () => {
         loop={true}
         navigation={{ enabled: true }}
         pagination={{ enabled: true, clickable: true }}
-        breakpoints={{
-          0: {
-            navigation: { enabled: false },
-            pagination: { enabled: true },
-          },
-          550: {
-            navigation: { enabled: false },
-            pagination: { enabled: true },
-          },
-          750: {
-            navigation: { enabled: true },
-            pagination: { enabled: true },
-          },
-          900: {
-            navigation: { enabled: false },
-            pagination: { enabled: false },
-          },
-          1400: {
-            navigation: { enabled: true },
-            pagination: { enabled: false },
-          },
-        }}
       >
-
-        {novedadLista.map((news, index) => (
+        {novedades.map((news, index) => (
           <SwiperSlide key={index} className={styles.swiperSlide}>
             <Estructura {...news} />
           </SwiperSlide>
         ))}
       </Swiper>
-    </div >
+    </div>
   );
 };
 
