@@ -29,9 +29,9 @@ const TopicItem = ({ topic, numbering }) => {
             {hasSubtemas ? (
                 <div
                     onClick={() => setExpanded(!expanded)}
-                    className={styles.toggle}
+                    className={`${styles.toggle} ${expanded ? styles.active : ''}`}
                 >
-                    <span className={styles.arrow}>{expanded ? "▼" : "▶"}</span>
+                    <span className={`${styles.activador} ${expanded ? styles.active : ''}`}></span>
                     <span className={styles.numbering}>{numberingText}</span>
                     <strong> {topic.tema} </strong>
                 </div>
@@ -62,6 +62,9 @@ const TopicItem = ({ topic, numbering }) => {
                                     </p>
                                 </div>
                             ))}
+
+                            <span className={`${styles.activador2} ${expanded ? styles.active : ''}`}></span>
+
                         </motion.div>
                     )}
                 </AnimatePresence>

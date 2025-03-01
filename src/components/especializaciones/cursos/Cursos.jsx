@@ -10,6 +10,9 @@ import flechaHover from "@/assets/simbols/faqFlechaInactiveDown.webp";
 
 const Cursos = () => {
   const [searchText, setSearchText] = useState("");
+  const normalizeText = (text) => {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(4);
   const [hover, setHover] = useState(false);
@@ -79,13 +82,15 @@ const Cursos = () => {
         }
       });
     }
-    return text;
+
+    return normalizeText(text);
+
   };
 
   // Filtrar cursos usando debouncedSearch sobre TODO el texto del curso
   const filteredCursos = cursosData.filter((curso) => {
-    const aggregatedText = getCourseSearchText(curso).toLowerCase();
-    const search = debouncedSearch.trim().toLowerCase();
+    const aggregatedText = normalizeText(getCourseSearchText(curso)).toLowerCase();
+    const search = normalizeText(debouncedSearch.trim()).toLowerCase();
     return aggregatedText.includes(search);
   });
 

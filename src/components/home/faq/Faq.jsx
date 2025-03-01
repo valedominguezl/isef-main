@@ -11,6 +11,9 @@ const Faq = () => {
   // Estados para controlar preguntas activas, textos y animaciones
   const [active, setActive] = useState({});
   const [searchText, setSearchText] = useState('');
+  const normalizeText = (text) => {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [hover, setHover] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
@@ -32,7 +35,7 @@ const Faq = () => {
   // Función auxiliar para extraer texto de la respuesta
   const getText = (node) => {
     if (typeof node === 'string' || typeof node === 'number') {
-      return node;
+      return normalizeText(node.toString());
     }
     if (Array.isArray(node)) {
       return node.map(getText).join(' ');
@@ -45,8 +48,8 @@ const Faq = () => {
 
   // Filtrar FAQs usando el texto de búsqueda
   const filteredFaqs = faqData.filter((faq) => {
-    const search = debouncedSearch.trim().toLowerCase();
-    const questionMatches = faq.question.toLowerCase().includes(search);
+    const search = normalizeText(debouncedSearch.trim()).toLowerCase();
+    const questionMatches = normalizeText(faq.question).toLowerCase().includes(search);
     const answerText = getText(faq.answer).toLowerCase();
     const answerMatches = answerText.includes(search);
     return questionMatches || answerMatches;
@@ -141,16 +144,14 @@ const Faq = () => {
             faqsToDisplay.map((faq, index) => (
               <div
                 key={index}
-                className={`${styles.pregunta} ${
-                  questionsVisible ? styles.visible : ''
-                } ${active[index] ? styles.active : styles.inactive}`}
+                className={`${styles.pregunta} ${questionsVisible ? styles.visible : ''
+                  } ${active[index] ? styles.active : styles.inactive}`}
               >
                 <div className={`${styles.toggle}`} onClick={() => toggleFAQ(index)}>
                   <h4>{faq.question}</h4>
                   <div
-                    className={`${styles.flecha} ${
-                      active[index] ? styles.active : styles.inactive
-                    }`}
+                    className={`${styles.flecha} ${active[index] ? styles.active : styles.inactive
+                      }`}
                   >
                     <img src={faqFlecha} alt="flecha" />
                   </div>

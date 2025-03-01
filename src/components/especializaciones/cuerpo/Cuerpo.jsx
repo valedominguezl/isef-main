@@ -123,6 +123,7 @@ const Cuerpo = () => {
 
       <div className={styles.titulo}>
         <h2>Conocé a los <span className="color1">científicos</span></h2>
+        <div className="linea-svg"></div>
         <p>Estos serán los encargados de impulsar tu carrera, para que estés <strong>a la altura de los estándares europeos</strong>.</p>
       </div>
 

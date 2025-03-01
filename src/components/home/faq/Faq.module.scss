@@ -3,7 +3,6 @@
     padding: var(--padding-up) var(--padding-100);
     justify-content: center;
     width: 100%;
-    // background-color: var(--fondo-principal);
 }
 
 .faq {
@@ -65,7 +64,7 @@
 
         &:focus {
             color: black;
-            box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.10) inset;
+            border: 1px solid rgba(black, .5);
         }
 
 
@@ -111,7 +110,7 @@
     gap: 1.5rem;
     align-items: center;
     cursor: pointer;
-    background-color: var(--principal);
+    background: var(--grad-btn-color);
     user-select: none;
 
     h4 {

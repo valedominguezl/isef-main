@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    padding: 0 var(--padding-100);
+    padding: var(--padding-up) var(--padding-100);
     background: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
@@ -12,13 +12,51 @@
     z-index: 20;
 }
 
+.selector {
+    display: flex;
+    background: white;
+
+    .seccion {
+        display: flex;
+        background: var(--grad-btn-color);
+        width: 100%;
+        justify-content: center;
+        cursor: pointer;
+        padding: 1rem 2rem;
+        opacity: .5;
+        transition: .4s;
+
+        h4 {
+            color: var(--h4-wcolor);
+            transition: .4s;
+        }
+
+        &:hover:not(.active) {
+            opacity: .7;
+
+            h4 {
+                color: white;
+            }
+        }
+
+        &.active {
+            opacity: 1;
+
+            h4 {
+                color: white;
+                font-weight: var(--medium);
+            }
+        }
+    }
+}
+
 .modal {
     display: flex;
     flex-direction: column;
+    align-self: start;
     border-radius: 1em;
     max-width: 100%;
-    max-height: 90%;
-    text-align: left;
+    max-height: 100%;
     overflow-y: auto;
     position: relative;
 
@@ -32,7 +70,7 @@
         display: flex;
         flex-direction: column;
         gap: 1.3em;
-        padding: 1.5rem 2rem;
+        padding: 3rem 2rem 5rem 2rem;
         background: var(--grad-img) var(--principal);
 
     }
@@ -43,14 +81,22 @@
 
 
     h3 {
+        color: var(--h4-wcolor);
         font-size: 1.3rem;
+    }
+
+    .datos {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+        background-color: white;
     }
 
     .dato {
         display: flex;
-        gap: 1em;
+        gap: 1rem;
         font-size: 1.3rem;
-        padding: 1rem 2rem;
         flex-direction: column;
         background-color: white;
 
@@ -63,7 +109,7 @@
         p {
             font-size: inherit;
 
-            strong{
+            strong {
                 text-decoration: none;
                 color: inherit;
             }
@@ -75,6 +121,11 @@
     display: flex;
     width: 100%;
     justify-content: center;
+
+    a {
+        text-decoration: none;
+
+    }
 }
 
 .close {
@@ -84,11 +135,17 @@
     background: none;
     border: none;
     padding: 1.5rem 2rem;
-    cursor: pointer;
 
     img {
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        opacity: .7;
+        transition: .3s;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 }
 
