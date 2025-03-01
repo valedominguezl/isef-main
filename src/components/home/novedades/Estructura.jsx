@@ -4,7 +4,7 @@ import ScrollToSection from '@/components/funciones/scroll/ScrollToSection';
 
 const Estructura = ({ title, description, page, id, imagePath }) => {
   const overlayStyle = {
-    background: `linear-gradient(to bottom, transparent, black), url(${imagePath})`,
+    background: `var(--grad-img), url(${imagePath})`,
     backgroundPosition: 'center',
   };
 
@@ -15,10 +15,7 @@ const Estructura = ({ title, description, page, id, imagePath }) => {
     if (!container) return;
 
     // Seleccion elementos a animar:
-    const overlay = container.querySelector(`.${styles.overlay}`);
-
-    // Array
-    const animatedElements = [overlay].filter(Boolean);
+    const animatedElements = container.querySelectorAll(`.${styles.info}`);
 
     // IntersectionObserver
     const observer = new IntersectionObserver(
@@ -44,11 +41,11 @@ const Estructura = ({ title, description, page, id, imagePath }) => {
   return (
     <div ref={containerRef} className={styles.swiperSlide}>
       <div className={styles.overlay} style={overlayStyle}>
-        <h4>Últimas novedades</h4>
-        <h2>{title}</h2>
-        <div className="linea-svg bl"></div>
-        <p>{description}</p>
-        <ScrollToSection className="btn-cta grad3" page={page} id={id}>
+        <h4 className={styles.info}>Últimas novedades</h4>
+        <h2 className={styles.info}>{title}</h2>
+        <div className={`${styles.info} linea-svg bl`}></div>
+        <p className={styles.info}>{description}</p>
+        <ScrollToSection className={`${styles.info} btn-cta grad3`} page={page} id={id}>
           Ver más
         </ScrollToSection>
       </div>

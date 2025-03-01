@@ -1,6 +1,6 @@
 .container {
     display: flex;
-    padding-top: var(--padding-up) ;
+    padding: var(--padding-up) 0 3rem 0;
     justify-content: space-between;
     align-items: stretch;
     width: 100%;

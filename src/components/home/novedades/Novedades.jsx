@@ -21,22 +21,38 @@ const Novedades = () => {
 
   return (
     <div className={styles.container}>
-      <Swiper
-        id='novedades'
-        className={`${styles.swiper} bl`}
-        modules={[Navigation, Pagination]}
-        centeredSlides={true}
-        spaceBetween={30}
-        loop={true}
-        navigation={{ enabled: true }}
-        pagination={{ enabled: true, clickable: true }}
-      >
-        {novedades.map((news, index) => (
-          <SwiperSlide key={index} className={styles.swiperSlide}>
-            <Estructura {...news} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      <div className={styles.titulo}>
+        <h2>Las <span className="color1">últimas noticias</span></h2>
+        <div className="linea-svg"></div>
+        <p>Enterate qué hay de nuevo en el profesorado: especializaciones, cambios institucionales y más</p>
+      </div>
+      {novedades.length > 0 && (
+        <Swiper
+          id='novedades'
+          className={`${styles.swiper} bl`}
+          modules={[Navigation, Pagination]}
+          initialSlide={Math.floor(novedades.length / 2)}
+          centeredSlides={true}
+          spaceBetween={40}
+          loop={false}
+          navigation={{ enabled: true }}
+          pagination={{ clickable: true }}
+          breakpoints={{
+            0: {
+              navigation: { enabled: false },
+            },
+            1400: {
+              navigation: { enabled: true },
+            },
+          }}
+        >
+          {novedades.map((news, index) => (
+            <SwiperSlide key={index} className={styles.swiperSlide}>
+              <Estructura {...news} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
     </div>
   );
 };

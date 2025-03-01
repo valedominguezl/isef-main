@@ -10,14 +10,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 3em;
+    gap: 2rem;
     width: 100%;
 }
 
 .titulo {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     width: 100%;
+    gap: .7rem;
     text-align: center;
 }
 
@@ -66,8 +69,6 @@
             color: black;
             border: 1px solid rgba(black, .5);
         }
-
-
     }
 }
 
@@ -168,6 +169,12 @@
 @media (max-width: 1300px) {
     .searchCont {
         width: 100%;
+    }
+}
+
+@media (max-width: 1500px){
+    .container{
+        padding: 0 var(--padding-100) var(--padding-up) var(--padding-100);
     }
 }
 

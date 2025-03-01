@@ -1,9 +1,21 @@
-.swiper {
-    height: 90vh;
-    padding: var(--padding-up) var(--padding-100) 3rem var(--padding-100);
-    user-select: none;
+.container{
+    padding: var(--padding-up) 0;
 
+    .titulo{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 0 var(--padding-100);
+    }
+}
+
+
+
+.swiper {
+    user-select: none;
     --swiper-theme-color: white;
+    padding: var(--padding-up) var(--padding-100);
 
     :global(.swiper-button-prev) {
         border-radius: 300px;
@@ -18,16 +30,27 @@
         height: 70px;
         width: 70px;
     }
+
+    :global(.swiper-pagination-bullet) {
+        height: 15px;
+        width: 15px;
+        margin: 0 10px !important;
+    }
+
+    :global(.swiper-pagination-bullet-active) {
+        background: var(--principal);
+    }
+
+    :global(.swiper-pagination-bullets) {
+        bottom: 0px;
+    }
+
 }
 
 .swiperSlide {
     display: flex;
     justify-content: center;
     align-items: stretch;
-    border-radius: 3rem;
-    box-shadow: var(--shadow-out);
-    overflow: hidden;
-    max-width: 100% !important;
 }
 
 .overlay {
@@ -35,13 +58,15 @@
     flex-direction: column;
     justify-content: flex-end;
     gap: 1rem;
+    border-radius: 3rem;
     width: 100%;
+    box-shadow: var(--shadow-out);
     padding: var(--padding-up) var(--padding-100);
 
     :last-child {
         margin-top: 1rem;
 
-        @media (max-width: 500px) and (min-width: 390px) {
+        @media (max-width: 500px) {
             width: 87%;
         }
 
@@ -57,20 +82,26 @@
 
 // Animaciones
 
-.overlay {
-    opacity: 0 !important;
-    transform: translateY(20px) !important;
-    transition: opacity 2s ease, transform 2s ease !important;
+.info {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 2s ease, transform 2s ease;
 
-    &.visible {
-        opacity: 1 !important;
-        transform: translateY(0) !important;
+    &.visible:not(:nth-child(3)) {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    &.visible:nth-child(3) {
+        transform: translateY(0);
     }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 500px) {
 
     .swiper {
+        min-height: 80vh;
+
         :global(.swiper-button-prev) {
             transform: scale(.65);
             margin-left: -15px;
@@ -80,6 +111,7 @@
             transform: scale(.65);
             margin-right: -15px;
         }
+
     }
 }
 
@@ -94,4 +126,20 @@
         }
     }
 
+}
+
+@media (min-width: 500px) {
+    .swiper {
+        height: 80vh;
+    }
+}
+
+@media (max-width: 1500px) {
+    .container {
+        padding: var(--padding-up) 0 0 0;
+    }
+
+    .swiper{
+        padding: 3rem var(--padding-100) var(--padding-up) var(--padding-100);
+    }
 }

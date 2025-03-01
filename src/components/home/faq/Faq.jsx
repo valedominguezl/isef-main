@@ -118,20 +118,22 @@ const Faq = () => {
           <h2>
             Preguntas <span className="color1">frecuentes</span>
           </h2>
-        </div>
-        <div className={styles.searchCont}>
-          <div className={styles.img}>
-            <img src={searchIcon} alt="search icon" />
+
+          <div className={styles.searchCont}>
+            <div className={styles.img}>
+              <img src={searchIcon} alt="search icon" />
+            </div>
+            <input
+              type="text"
+              id="searchFAQ"
+              className={styles.txt}
+              placeholder={'Buscar en las preguntas...'}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
           </div>
-          <input
-            type="text"
-            id="searchFAQ"
-            className={styles.txt}
-            placeholder={'Buscar en las preguntas...'}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
         </div>
+
         <div
           ref={questionsRef}
           className={`${styles.preguntas} ${questionsVisible ? styles.visible : ''}`}

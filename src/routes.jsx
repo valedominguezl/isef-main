@@ -7,8 +7,11 @@ import Carrera from '@/mainComponents/Carrera.jsx';
 import Especializaciones from '@/mainComponents/Especializaciones.jsx';
 import Cookies from '@/mainComponents/privacyPolicy/PrivacyPolicy.jsx';
 import Institucional from '@/mainComponents/Institucional.jsx';
-import Contacto from '@/mainComponents/Institucional/Contacto.jsx';
-import Historia from '@/mainComponents/Institucional/Historia.jsx';
+import Contacto from '@/mainComponents/institucional/Contacto.jsx';
+import Historia from '@/mainComponents/institucional/Historia.jsx';
+
+// TEMPORAL
+import Hijos from '@/mainComponents/Hijos.jsx';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +19,10 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Home /> },
+
+      // TEMPORAL
+      { path: 'hijos.htm', element: <Hijos/> },
+
       { path: 'Aranceles', element: <Aranceles /> },
       { path: 'Inscripciones', element: <Inscripciones /> },
       { path: 'Carrera', element: <Carrera /> },
