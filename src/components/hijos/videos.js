@@ -2,12 +2,12 @@ const videoData = [
     {
       title: "Entrenamiento de la Fuerza | 2023",
       links: [
-        { name: "Fuerza 1", url: "/EntrenamientoDeLaFuerza/Fuerza1.mp4" },
-        { name: "Fuerza 2", url: "/EntrenamientoDeLaFuerza/Fuerza2.mp4" },
-        { name: "Fuerza 3", url: "/EntrenamientoDeLaFuerza/Fuerza3.mp4" },
-        { name: "Fuerza 4", url: "/EntrenamientoDeLaFuerza/Fuerza4.mp4" },
-        { name: "Fuerza 5", url: "/EntrenamientoDeLaFuerza/Fuerza5.mp4" },
-        { name: "Fuerza 6", url: "/EntrenamientoDeLaFuerza/Fuerza6.mp4" },
+        { name: "Fuerza 1", url: "/fuerza/E1 FUERZA ISEF SL 2023.mp4" },
+        { name: "Fuerza 2", url: "/fuerza/E2 FUERZA ISEF SL 2023.mp4" },
+        { name: "Fuerza 3", url: "/fuerza/E3 FUERZA Y SUPLEMENTACIÓN.mp4" },
+        { name: "Fuerza 4", url: "/fuerza/E4 FUERZA ISEF SL 2023_2.mp4" },
+        { name: "Fuerza 5", url: "/fuerza/E5 FUERZA ISEF SL 2023.mp4" },
+        { name: "Fuerza 6", url: "/fuerza/E6 CREATINA ISEF SL 2023.mp4" },
       ],
     },
     {
