@@ -2,12 +2,13 @@ const videoData = [
     {
       title: "Entrenamiento de la Fuerza | 2023",
       links: [
+        { name: "Agradece", url: "/fuerza/agradecefuerza.mp4" },
         { name: "Fuerza 1", url: "/fuerza/E1 FUERZA ISEF SL 2023.mp4" },
         { name: "Fuerza 2", url: "/fuerza/E2 FUERZA ISEF SL 2023.mp4" },
-        { name: "Fuerza 3", url: "/fuerza/E3 FUERZA Y SUPLEMENTACIÓN.mp4" },
+        { name: "Fuerza 3", url: "/fuerza/E3 FUERZA Y SUPLEMENTACION.mp4" },
         { name: "Fuerza 4", url: "/fuerza/E4 FUERZA ISEF SL 2023_2.mp4" },
         { name: "Fuerza 5", url: "/fuerza/E5 FUERZA ISEF SL 2023.mp4" },
-        { name: "Fuerza 6", url: "/fuerza/E6 CREATINA ISEF SL 2023.mp4" },
+        { name: "Fuerza 6", url: "/fuerza/E6 CREATINA ISEF SL NOV 2023.mp4" },
       ],
     },
     {
@@ -15,7 +16,7 @@ const videoData = [
       links: [
         { name: "Suplementación 1", url: "/hijos/clase 1 suplementacion.mp4" },
         { name: "Suplementación 2", url: "/hijos/clase 2 suplementacion.mp4" },
-        { name: "Suplementación 3", url: "/hijos/clase 3" },
+        { name: "Suplementación 3", url: "/hijos/clase 3.mp4" },
         { name: "Suplementación 4", url: "/hijos/clase 4.mp4" },
         { name: "Suplementación 5", url: "/hijos/clase 5 hmb.mp4" },
         { name: "Suplementación 6", url: "/hijos/clase 6 armado.mp4" },
@@ -55,13 +56,13 @@ const videoData = [
         { name: "Encuentro 3", url: "/hijos/BIOQUIMICA3.mp4" },
         { name: "Pdf 3", url: "/hijos/E3-CURSO-BIOQUÍMICA-METABOLISMO-DE-LAS-GRASAS-2022.pptx-LAST.pdf" },
 
-        { name: "Encuentro 4", url: "/hijos/BIOQUÍMICA4.mp4" },
+        { name: "Encuentro 4", url: "/hijos/BIOQUIMICA4.mp4" },
         { name: "Pdf 4", url: "/hijos/E4_CURSO-BIOQUÍMICA-METAB-PROTEÍNAS-2022.pptx.pdf" },
 
-        { name: "Encuentro 5", url: "/hijos/BIOQUÍMICA5.mp4" },
+        { name: "Encuentro 5", url: "/hijos/BIOQUIMICA5.mp4" },
         { name: "Pdf 5", url: "/hijos/E5-VÍAS-MOLECULARES-CURSO-BIOQUÍMICA-2022-LAST-LAST.pdf" },
 
-        { name: "Encuentro 6", url: "/hijos/BIOQUÍMICA6.mp4" },
+        { name: "Encuentro 6", url: "/hijos/BIOQUIMICA6.mp4" },
         { name: "Pdf 6", url: "/hijos/E6-CURSO-BIOQUÍMICA-DEL-EJERCICIO-2022.pdf" },
       ],
     },
