@@ -3,7 +3,7 @@ import { getImage } from '@/components/funciones/utils/getImages.js';
 const novedad = async () => {
   return [
     {
-      videoPath: '/publi 2025 aulas.mp4',
+      videoPath: 'https://isefsanluis.net/publi 2025 aulas.mp4',
     },
     {
       title: 'Laboratorio de investigación',
