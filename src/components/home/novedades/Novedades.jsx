@@ -52,7 +52,6 @@ const Novedades = () => {
                <video
                  src={news.videoPath}
                  controls
-                 autoPlay
                  loop
                  muted
                  className={styles.videoSlide}
