@@ -31,7 +31,7 @@ const Novedades = () => {
           id='novedades'
           className={`${styles.swiper} bl`}
           modules={[Navigation, Pagination]}
-          initialSlide={Math.floor(novedades.length / 2)}
+          // initialSlide={Math.floor(novedades.length / 2)}
           centeredSlides={true}
           spaceBetween={40}
           loop={false}
@@ -47,9 +47,20 @@ const Novedades = () => {
           }}
         >
           {novedades.map((news, index) => (
-            <SwiperSlide key={index} className={styles.swiperSlide}>
-              <Estructura {...news} />
-            </SwiperSlide>
+             <SwiperSlide key={index} className={styles.swiperSlide}>
+             {news.videoPath ? ( 
+               <video
+                 src={news.videoPath}
+                 controls
+                 autoPlay
+                 loop
+                 muted
+                 className={styles.videoSlide}
+               />
+             ) : (
+               <Estructura {...news} />
+             )}
+           </SwiperSlide>
           ))}
         </Swiper>
       )}
