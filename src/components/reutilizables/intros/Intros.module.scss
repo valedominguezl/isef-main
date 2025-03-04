@@ -26,7 +26,6 @@
   font-size: var(--fs-txt);
   font-weight: var(--bold);
   align-items: center;
-  box-shadow: var(--shadow-out-img);
   background: yellow;
 }
 
@@ -44,4 +43,8 @@
 .heading,
 .subHeading {
   animation: slide 1s ease-out;
+}
+
+.subHeading{
+  color: var(--txt-wcolor);
 }

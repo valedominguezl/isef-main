@@ -1,17 +1,10 @@
 .container {
-    padding: calc(var(--padding-up)*2) var(--padding-100);
-    background: var(--grad-img), url('@/assets/media/home/sanLuis.webp') no-repeat center / cover;
-
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-
+    padding: var(--padding-up) var(--padding-100);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 3em;
-
-    box-shadow: var(--shadow-in);
 }
 
 .txtCont {
@@ -40,12 +33,9 @@
     align-items: flex-start;
     width: 28rem;
     gap: 1rem;
-    border: 1px solid white;
+    border: 1px solid var(--principal);
     border-radius: 2rem;
-
-    h3 {
-        text-align: left;
-    }
+    box-shadow: var(--shadow-out);
 
     .datoTxt {
         padding: 1rem 2rem 2rem 2rem;
@@ -56,7 +46,13 @@
 
         p a {
             font-weight: var(--bold);
-            color: white;
+            color: var(--principal);
+            opacity: .7;
+            transition: .3s;
+
+            &:hover {
+                opacity: 1;
+            }
         }
     }
 }
@@ -68,14 +64,13 @@
     align-items: center;
     width: 100%;
     height: 7vh;
-    background-color: white;
+    background: var(--grad-btn-color);
     border-radius: 2rem 2rem 0 0;
 
 
     img {
         height: 2.5rem;
         object-fit: contain;
-        filter: invert(1);
     }
 }
 

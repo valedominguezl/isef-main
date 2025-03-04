@@ -13,8 +13,9 @@ const Especializaciones = () => {
       <Intros
         bgImage={fondo}
         heading="Especializaciones"
+        subHeading="Conocé lo que nos hace únicos"
         showButton={false}
-        showLine={false}
+        showLine={true}
       />
 
       <Intro />

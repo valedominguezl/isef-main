@@ -35,7 +35,7 @@
     --h4-wcolor: rgba(255, 255, 255, 0.4);
     --h4-bcolor: rgba(0, 0, 0, 0.4);
 
-    --grad-black: linear-gradient(120deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, .7));
+    --grad-black: linear-gradient(120deg, rgb(0, 0, 0), rgb(70, 70, 70));
     --grad-img: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(119, 97, 255, 0.64));
     --grad-nav: linear-gradient(120deg, rgba(var(--principal-rgb) .9), rgba(var(--secundario-rgb) 0.9));
     --grad-nav2: linear-gradient(120deg, rgba(var(--principal-rgb) 1), rgba(var(--secundario-rgb) 1));

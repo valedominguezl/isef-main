@@ -26,7 +26,7 @@ const Requisitos = () => {
             const index = Array.from(animatedElements).indexOf(entry.target);
             setTimeout(() => {
               entry.target.classList.add(styles.visible);
-            }, index * 100); 
+            }, index * 100);
             observer.unobserve(entry.target);
           }
         });
@@ -47,7 +47,7 @@ const Requisitos = () => {
       <div className={styles.txtContTl}>
         <h2>Requisitos <span className="color1">a presentar</span></h2>
         <div className="linea-svg"></div>
-        <p>Para poder inscribirte en el profesorado, tenés que <strong>descargar</strong> la siguiente documentación, <strong>rellenarla</strong> y luego <strong>presentarla</strong> en la sede correspondiente del I.S.E.F. San Luís. {' '}
+        <p>Para poder inscribirte en el profesorado, tenés que <strong>descargar</strong> la siguiente documentación, <strong>rellenarla</strong> y luego <strong>presentarla</strong> en la sede correspondiente del I.S.E.F. San Luís. {' '} <br />
 
           <ScrollToSection page="/Institucional/Contacto" id="mapaContacto">
             (Ver sedes)
@@ -59,10 +59,14 @@ const Requisitos = () => {
       <div className={styles.requisitos}>
 
         <div className={styles.requisito}>
+
+          <div className={styles.paso}>
+            <h4>#1</h4>
+          </div>
+
           <div className={styles.txtCont}>
             <div className={styles.txt}>
-              <h4>Paso &#8470; 1:</h4>
-              <h3>Solicitud de <span className="color1">inscripción</span></h3>
+              <h3>Ficha de <span className="color1">inscripción</span></h3>
               <div className="linea-svg"></div>
               <p>Tenés que llenarla con tus datos personales y llevarla personalmente a nuestras oficinas en una <strong>carpeta colgante color marrón</strong>.</p>
             </div>
@@ -78,9 +82,13 @@ const Requisitos = () => {
         </div>
 
         <div className={styles.requisito}>
+
+          <div className={styles.paso}>
+            <h4>#2</h4>
+          </div>
+
           <div className={styles.txtCont}>
             <div className={styles.txt}>
-              <h4>Paso &#8470; 2:</h4>
               <h3>Exámenes <span className="color2">médicos</span></h3>
               <div className="linea-svg"></div>
               <p>Tenés que imprimirla y presentarla en los <strong>centros de salud, médicos particulares u hospitales públicos</strong> para realizarte los estudios que en ella figuran. La planilla consta de tres hojas en <strong>formato A4</strong>.</p>
@@ -96,9 +104,13 @@ const Requisitos = () => {
         </div>
 
         <div className={styles.requisito}>
+
+          <div className={styles.paso}>
+            <h4>#3</h4>
+          </div>
+
           <div className={styles.txtCont}>
             <div className={styles.txt}>
-              <h4>Paso &#8470; 3:</h4>
               <h3>Reservar <span>banco</span></h3>
               <div className="linea-svg"></div>
               <p>La inscripción tiene el mismo valor que la cuota: <strong>$50.000</strong>. Los cupos están limitados al <strong>espacio disponible en nuestras aulas</strong>, por esto, solo reservamos vacantes con el abono matrícula.</p>

@@ -9,7 +9,7 @@ const Contacto = () => {
     <div className="mainComponent">
       <Intros
         heading="Contacto"
-        subHeading="Comunicate con nosotros mediante Whatsapp"
+        subHeading="Toda la información de nuestras sedes"
         showButton={false}
       />
       

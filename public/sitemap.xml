@@ -24,10 +24,12 @@
 <loc>https://isefsanluis.net/Institucional/Contacto</loc>
 <priority>0.7</priority>
 </url>
-<url>
+
+<!-- <url>
 <loc>https://isefsanluis.net/Institucional/Historia</loc>
 <priority>0.5</priority>
-</url>
+</url> -->
+
 <url>
 <loc>https://isefsanluis.net/Cookies</loc>
 <priority>0.1</priority>

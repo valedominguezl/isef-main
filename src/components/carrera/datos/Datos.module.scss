@@ -1,6 +1,5 @@
 .container {
-    padding: calc(var(--padding-up)*2) var(--padding-100);
-    background: var(--grad-img), url('@/assets/media/home/sanLuis.webp') no-repeat center / cover;
+    padding: var(--padding-up) var(--padding-100);
 
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -10,8 +9,6 @@
     justify-content: center;
     align-items: center;
     gap: 3em;
-
-    box-shadow: var(--shadow-in);
 }
 
 .txtCont {
@@ -35,19 +32,49 @@
 
 .dato {
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    width: 25em;
-    gap: 2em;
+    flex-direction: column;
+    border: 1px solid var(--principal);
+    border-radius: 3rem;
+    background: white;
+    box-shadow: var(--shadow-out);
+    align-items: center;
+    width: 25rem;
+    overflow: hidden;
 
-    h3 {
-        text-align: left;
+    .datoImg {
+        display: flex;
+        padding: 1rem 2rem;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        background: var(--principal);
+
+        img {
+            width: 2.5em;
+        }
     }
-}
 
+    .datoTxt {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        text-align: center;
 
-.dato img {
-    width: 2.5em;
+        h3:first-of-type{
+            text-decoration: underline;
+            text-underline-offset: 5px;
+            text-decoration-thickness: 1px;
+            
+            font-weight: var(--light);
+            color: var(--principal);
+        }
+
+        h3 strong{
+            font-weight: var(--light);
+            color: var(--txt-bcolor);
+        }
+    }
 }
 
 // Animaciones
@@ -84,5 +111,30 @@
 
     &.visible {
         opacity: 1;
+    }
+}
+
+@media (max-width: 1050px) {
+    .datos {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .dato {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .datoTxt {
+        padding: 2rem 3rem;
+    }
+}
+
+@media (min-width: 1050px) {
+    .datoTxt {
+        padding: 1.5rem 2rem;
     }
 }

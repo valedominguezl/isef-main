@@ -4,13 +4,28 @@
     align-items: center;
     justify-content: center;
     padding: var(--padding-up) var(--padding-100);
-    gap: 3em;
+    gap: 3.5rem;
 }
 
 .txtContTl {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     gap: 1.5rem;
+
+    a {
+        text-decoration: underline;
+        cursor: pointer;
+        color: var(--principal);
+        opacity: .7;
+        transition: .3s;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
 }
 
 .requisitos {
@@ -23,34 +38,52 @@
 
     >:first-child {
         border: 1px solid var(--principal);
+
+        >:first-child {
+            background: var(--grad-btn-color);
+        }
     }
 
     >:nth-child(2) {
         border: 1px solid var(--secundario);
+
+        >:first-child {
+            background: var(--grad-btn-color2);
+        }
     }
 
     >:last-child {
         border: 1px solid black;
+
+        >:first-child {
+            background: var(--grad-black);
+        }
     }
 }
 
 .requisito {
+    position: relative;
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
     align-items: center;
-    padding: 3rem 0;
     border-radius: 3em;
     box-shadow: var(--shadow-out);
     gap: 2.5em;
     width: 100%;
+    overflow: hidden;
 
+    .paso {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 1rem 2.5rem;
+        text-align: center;
 
-
-    h4 {
-        font-weight: var(--medium);
-        text-decoration: underline;
-        text-underline-offset: 3px;
+        h4 {
+            color: white;
+            font-weight: var(--medium);
+        }
     }
 
     h3 {
@@ -124,25 +157,32 @@
     }
 }
 
-@media (max-width: 1024px) and (min-width: 768px) {
+@media (min-width: 768px) {
+
+    .requisito {
+        padding: calc(var(--fs-txt) + 1.5rem + 3rem) 0 3rem 0;
+
+        .paso {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+    }
+}
+
+@media (max-width: 768px) {
 
     .requisito {
         align-items: center;
+        padding: calc(var(--fs-txt) + 1rem + 2rem) 0 3rem 0;
 
-        h3,
-        h4 {
-            text-align: center;
+        .paso {
+            border-radius: 0 0 0 300rem;
         }
     }
-
-    .txtCont {
-        align-items: center;
-        text-align: center;
-    }
-
-}
-
-@media (max-width: 1024px) {
 
     .txt {
         h3 {
@@ -150,23 +190,18 @@
         }
     }
 
-    .requisito {
-        padding: 3rem 2rem;
-    }
-
     .imgCont {
         display: none;
     }
 
     .txtCont {
-        width: 90%;
-    }
-}
-
-@media (min-width: 700px) {
-    .txtContTl {
-        justify-content: center;
+        width: 100%;
+        padding: 1rem 3rem;
         align-items: center;
         text-align: center;
+
+        h3 {
+            text-align: center;
+        }
     }
 }

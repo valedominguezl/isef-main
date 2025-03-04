@@ -1,6 +1,6 @@
 .container {
     display: flex;
-    padding: var(--padding-up) 0 3rem 0;
+    padding-top: var(--padding-up);
     justify-content: space-between;
     align-items: stretch;
     width: 100%;
@@ -83,25 +83,12 @@
         padding: 0;
     }
 
-    .container::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('./src/assets/media/home/intro.webp') center center;
-        background-size: cover;
-        opacity: .07;
-        z-index: -1;
-    }
-
     .container img {
         display: none;
     }
  
     .txtCont {
         width: 100%;
-        padding: var(--padding-up) var(--padding-100); 
+        padding: var(--padding-up) var(--padding-100) 0 var(--padding-100); 
     }
 }

@@ -23,6 +23,16 @@
     justify-content: center;
     gap: 2em;
     position: relative;
+
+    p a{
+        color: var(--principal);
+        opacity: .7;
+        transition: .3s;
+
+        &:hover{
+            opacity: 1;
+        }
+    }
 }
 
 .txt {
@@ -75,19 +85,6 @@
 }
 
 @media (max-width: 1500px) {
-
-    .container::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('@/assets/media/carrera/intro.webp') center center;
-        background-size: cover;
-        opacity: .05;
-        z-index: -1;
-    }
 
     .container img {
         display: none;

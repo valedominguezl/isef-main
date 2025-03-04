@@ -2,19 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import styles from './Sedes.module.scss'
 import LoadingAnchor from '@/components/funciones/loadingBar/LoadingAnchor';
 
-import ubicacion from '@/assets/simbols/contacto/ubicacion.webp'
-import telefono from '@/assets/simbols/contacto/telefono.webp'
-import mail from '@/assets/simbols/contacto/mail.webp'
-import fb from '@/assets/simbols/contacto/fb.webp'
-import atencion from '@/assets/simbols/contacto/atencion.webp'
+import ubicacion from '@/assets/simbols/contacto/ubicacion2.webp'
+import telefono from '@/assets/simbols/contacto/telefono2.webp'
+import mail from '@/assets/simbols/contacto/mail2.webp'
+import fb from '@/assets/simbols/contacto/fb2.webp'
+import atencion from '@/assets/simbols/contacto/atencion2.webp'
 
 const Sedes = () => {
-
-  const [activeButton, setActiveButton] = useState('sanluis');
-
-  const handleButtonClick = (button) => {
-    setActiveButton(button);
-  };
 
   const containerRef = useRef(null);
 
@@ -52,152 +46,124 @@ const Sedes = () => {
   return (
     <div id='homeSedes' ref={containerRef} className={styles.container}>
 
-      <div className={styles.titulos}>
-        <div className={styles.selector}>
+      <div className={styles.titulo}>
+        <h4>I.S.E.F. San Luís | Dónde encontrarnos</h4>
+        <h2>Conocé <span className="color1">nuestras sedes</span></h2>
+        <div className="linea-svg"></div>
+        <p>
+          Actualmente, podés encontrarnos tanto en la <strong>sede principal</strong>, ubicada en la Ciudad de San Luís, así como también en la <strong>extensión áulica</strong> ubicada en Villa Mercedes. Podés encontrar más información (como <strong>números de teléfono importantes</strong>) en la sección {' '}
 
-          <div className={styles.btn}>
-            <button
-              className={`btn-cta  ${activeButton === 'sanluis' ? styles.active : styles.inactive}`}
-              onClick={() => handleButtonClick('sanluis')}
-            >
-              <h3>San Luís</h3>
-            </button>
-          </div>
+          <LoadingAnchor
+            href="/Institucional/Contacto"
+            target='_blank'
+            rel="noopener noreferrer"
+          >
+            Contacto.
+          </LoadingAnchor>
 
-          <div className={styles.btn}>
-            <button
-              className={`btn-cta  ${activeButton === 'villamercedes' ? styles.active : styles.inactive}`}
-              onClick={() => handleButtonClick('villamercedes')}
-            >
-              <h3>Villa Mercedes</h3>
-            </button>
-          </div>
-
-        </div>
+        </p>
       </div>
 
-      {activeButton && (
-        <div className={`${styles.sede} bl`}>
-          <div
-            className={`${styles.sedeTxt} 
-          ${activeButton === 'sanluis' ? `${styles.active} ${styles.sanLuis}` : ''}  
-          ${activeButton === null ? styles.inactive : ''}`}
-          >
-            <div className={styles.txt}>
-              <div className={styles.titulo}>
-                <h4>Sede principal</h4>
-                <h3>Ciudad de San Luís</h3>
-              </div>
-              <div className="linea-svg bl"></div>
-              <div className={styles.contactos}>
-                <div className={styles.contacto}>
-                  <img src={ubicacion} alt="" />
-                  <p>
-                    <LoadingAnchor
-                      href="https://maps.app.goo.gl/mAtAF9dEStP8UWdK7"
-                      target='_blank'
-                      rel="noopener noreferrer"
-                    >
-                      Colón 1138, Club Sociedad Española
-                    </LoadingAnchor>
-                  </p>
-                </div>
-                <div className={styles.contacto}>
-                  <img src={telefono} alt="" />
-                  <p>+54 2664564435</p>
-                </div>
-                <div className={styles.contacto}>
-                  <img src={mail} alt="" />
-                  <p><a href="mailto:esef4@hotmail.com">esef4@hotmail.com</a></p>
-                </div>
-                <div className={styles.contacto}>
-                  <img src={fb} alt="" />
-                  <p>
-                    <LoadingAnchor
-                      href="https://www.fb.com/isefsanluis.info"
-                      target='_blank'
-                      rel="noopener noreferrer"
-                    >
-                      fb.com/isefsanluis.info
-                    </LoadingAnchor>
-                  </p>
-                </div>
-                <div className={styles.contacto}>
-                  <img src={atencion} alt="" />
-                  <p><strong>Atención de 9 a 13hs</strong></p>
-                </div>
-              </div>
-            </div>
+      <div className={styles.sedes}>
+        <div className={styles.sede}>
+          <div className={`${styles.txt} bl`}>
+            <h4>Sede principal</h4>
+            <h3>Ciudad de San Luís</h3>
           </div>
 
-          <div
-            className={`${styles.sedeTxt} 
-          ${activeButton === 'villamercedes' ? `${styles.active} ${styles.villaMercedes}` : ''}  
-          ${activeButton === null ? styles.inactive : ''}`}
-          >            <div className={styles.txt}>
-              <div className={styles.titulo}>
-                <h4>Extensión áulica</h4>
-                <h3>Villa Mercedes</h3>
-              </div>
-              <div className="linea-svg bl"></div>
-              <div className={styles.contactos}>
-                <div className={styles.contacto}>
-                  <img src={ubicacion} alt="" />
-                  <p>
-                    <LoadingAnchor
-                      href="https://maps.app.goo.gl/mAtAF9dEStP8UWdK7"
-                      target='_blank'
-                      rel="noopener noreferrer"
-                    >
-                      Pedernera 635 Fundación Eva Perón
-                    </LoadingAnchor>
-                  </p>
-                </div>
-                <div className={styles.contacto}>
-                  <img src={telefono} alt="" />
-                  <p>+54 2664564435</p>
-                </div>
-                <div className={styles.contacto}>
-                  <img src={mail} alt="" />
-                  <p><a href="mailto:esef4@hotmail.com">esef4@hotmail.com</a></p>
-                </div>
-                <div className={styles.contacto}>
-                  <img src={fb} alt="" />
-                  <p>
-                    <LoadingAnchor
-                      href="https://www.facebook.com/isef.villamercedes/"
-                      target='_blank'
-                      rel="noopener noreferrer"
-                    >
-                      fb.com/isef.villamercedes
-                    </LoadingAnchor>
-                  </p>
-                </div>
-                <div className={styles.contacto}>
-                  <img src={atencion} alt="" />
-                  <p><strong>Atención de 9 a 13hs</strong></p>
-                </div>
-              </div>
+          <div className={styles.contactos}>
+            <div className={styles.contacto}>
+              <img src={ubicacion} alt="" />
+              <p>
+                <LoadingAnchor
+                  href="https://maps.app.goo.gl/mAtAF9dEStP8UWdK7"
+                  target='_blank'
+                  rel="noopener noreferrer"
+                >
+                  Colón 1138, Club Sociedad Española
+                </LoadingAnchor>
+              </p>
             </div>
-          </div>
+            <div className={styles.contacto}>
+              <img src={telefono} alt="" />
 
-          <div
-            className={`${styles.imgCont} ${activeButton === 'villamercedes' ? styles.moveLeft : ''}`}
-          >
-            <div className={styles.botonImg}>
-              <LoadingAnchor
-                href={activeButton === 'sanluis' ? 'https://maps.app.goo.gl/mAtAF9dEStP8UWdK7' : 'https://maps.app.goo.gl/hG4cCF2RyTHnie8AA'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-cta grad3"
-                style={{ textDecoration: 'underline', textUnderlineOffset: '5px', }}
-              >
-                Ver en el mapa
-              </LoadingAnchor>
+              <p><a href="https://wa.me/+5492664564435" target='_blank'>
+                +54 9 2664 56-4435
+              </a></p>
+            </div>
+            <div className={styles.contacto}>
+              <img src={mail} alt="" />
+              <p><a href="mailto:esef4@hotmail.com">esef4@hotmail.com</a></p>
+            </div>
+            <div className={styles.contacto}>
+              <img src={fb} alt="" />
+              <p>
+                <LoadingAnchor
+                  href="https://www.fb.com/isefsanluis.info"
+                  target='_blank'
+                  rel="noopener noreferrer"
+                >
+                  fb.com/isefsanluis.info
+                </LoadingAnchor>
+              </p>
+            </div>
+            <div className={styles.contacto}>
+              <img src={atencion} alt="" />
+              <p><strong>Atención de 9 a 13hs</strong></p>
             </div>
           </div>
         </div>
-      )}
+
+        <div className={styles.sede}>
+
+          <div className={`${styles.txt} bl`}>
+            <h4>Extensión áulica</h4>
+            <h3>Villa Mercedes</h3>
+          </div>
+
+          <div className={styles.contactos}>
+            <div className={styles.contacto}>
+              <img src={ubicacion} alt="" />
+
+              <p>
+                <LoadingAnchor
+                  href="https://maps.app.goo.gl/mAtAF9dEStP8UWdK7"
+                  target='_blank'
+                  rel="noopener noreferrer"
+                >
+                  Pedernera 635 Fundación Eva Perón
+                </LoadingAnchor>
+              </p>
+            </div>
+            <div className={styles.contacto}>
+              <img src={telefono} alt="" />
+              <p><a href="https://wa.me/+5492664564435" target='_blank'>
+                +54 9 2664 56-4435
+              </a></p>
+            </div>
+            <div className={styles.contacto}>
+              <img src={mail} alt="" />
+              <p><a href="mailto:esef4@hotmail.com">esef4@hotmail.com</a></p>
+            </div>
+            <div className={styles.contacto}>
+              <img src={fb} alt="" />
+              <p>
+                <LoadingAnchor
+                  href="https://www.facebook.com/isef.villamercedes/"
+                  target='_blank'
+                  rel="noopener noreferrer"
+                >
+                  fb.com/isef.villamercedes
+                </LoadingAnchor>
+              </p>
+            </div>
+            <div className={styles.contacto}>
+              <img src={atencion} alt="" />
+              <p><strong>Atención de 9 a 13hs</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

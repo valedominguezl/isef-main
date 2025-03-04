@@ -20,9 +20,9 @@ const Intro = () => {
                 </p>
             </div>
 
-            <ScrollToSection page="/Home" id="novedades" className="btn-cta grad">
+            {/* <ScrollToSection page="/Home" id="novedades" className="btn-cta grad">
                 Laboratorio
-            </ScrollToSection>
+            </ScrollToSection> */}
 
         </div>
     )

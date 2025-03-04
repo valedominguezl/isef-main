@@ -3,13 +3,13 @@ import styles from './Cuerpo.module.scss';
 import nelio from '@/assets/media/especializaciones/profesionales/nelioLogo.webp';
 import roig from '@/assets/media/especializaciones/profesionales/roigLogo.webp';
 import rosler from '@/assets/media/especializaciones/profesionales/roslerLogo.webp';
-import scroll from '@/assets/simbols/faqFlechaActive.webp';
 
 import LoadingAnchor from '@/components/funciones/loadingBar/LoadingAnchor';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Navigation} from 'swiper/modules';
+import 'swiper/css/pagination';
+import { Navigation, Pagination } from 'swiper/modules';
 
 const profesionales = [
   {
@@ -20,7 +20,7 @@ const profesionales = [
       'Especializado en medicina del deporte',
       'Egresado de la UBA',
       'Docente en la UNR',
-      'Co - director del centro de entrenamiento French Clay Tenis',
+      'Co - director en French Clay Tenis',
       'Conferencista',
     ],
     cvLink: 'https://docs.google.com/document/d/1QtxtySVFjnpRzB1e1UXTJjKsCeSrCmff/edit?usp=sharing&ouid=104941986694218560787&rtpof=true&sd=true'
@@ -90,34 +90,6 @@ const Cuerpo = () => {
     };
   }, []);
 
-
-  useEffect(() => {
-    const containers = document.querySelectorAll(`.${styles.profesional}`);
-    const removeOverlays = () => {
-      const scroll = document.querySelectorAll(`.${styles.scroll}`);
-      scroll.forEach(overlay => {
-        overlay.style.display = 'none';
-      });
-    };
-
-    containers.forEach(container => {
-      container.addEventListener('scroll', removeOverlays);
-      container.addEventListener('touchstart', removeOverlays);
-      container.addEventListener('mousedown', removeOverlays);
-    });
-
-    // Cleanup
-    return () => {
-      containers.forEach(container => {
-        container.removeEventListener('scroll', removeOverlays);
-        container.removeEventListener('touchstart', removeOverlays);
-        container.removeEventListener('mousedown', removeOverlays);
-      });
-    };
-  }, []);
-
-
-
   return (
     <div className={styles.container} ref={containerRef}>
 
@@ -130,19 +102,21 @@ const Cuerpo = () => {
       <div className={styles.profesionales} ref={effectRef}>
         {profesionales.map((profesional, index) => (
           <div key={index} className={styles.profesional}>
-            <div className={styles.imgCont}>
-              <img src={profesional.img} alt={profesional.nombre} />
-            </div>
+            <h3><strong>{profesional.nombre}</strong></h3>
+
             <div className={styles.txtCont}>
-              <h3><strong>{profesional.nombre}</strong></h3>
-              <ul>
+              <div className={styles.imgCont}>
+                <img src={profesional.img} alt={profesional.nombre} />
+              </div>
+
+              <ul >
                 {profesional.descripcion.map((desc, i) => (
                   <li key={i}><p>{desc}</p></li>
                 ))}
                 <li>
                   <LoadingAnchor
                     href={profesional.cvLink} target="_blank">
-                    <strong>Ver CV completo</strong>
+                    Ver CV completo
                   </LoadingAnchor>
                 </li>
               </ul>
@@ -153,18 +127,26 @@ const Cuerpo = () => {
 
       <Swiper
         className={styles.swiperCont}
-        spaceBetween={20}
+        centeredSlides={true}
+        spaceBetween={50}
         slidesPerView={1}
-        navigation={true}
-        modules={[Navigation]}
+        navigation={{ enabled: true }}
+        pagination={{ enabled: true, clickable: true }}
+        modules={[Navigation, Pagination]}
+        breakpoints={{
+          0: {
+            navigation: { enabled: false },
+            pagination: { enabled: true },
+          },
+          768: {
+            navigation: { enabled: true },
+            pagination: { enabled: false },
+          },
+        }}
       >
         {profesionales.map((profesional, index) => (
           <SwiperSlide key={index} className={styles.swiperSlide}>
             <div className={styles.profesional}>
-              <div className={`${styles.scroll} bl`}>
-                <p>Deslizá para ver más</p>
-                <img src={scroll} alt="Deslizá para ver más" />
-              </div>
               <div className={styles.imgCont}>
                 <img src={profesional.img} alt={profesional.nombre} />
               </div>
@@ -175,7 +157,9 @@ const Cuerpo = () => {
                     <li key={i}><p>{desc}</p></li>
                   ))}
                   <li>
-                    <LoadingAnchor href={profesional.cvLink} target="_blank"><strong>Ver CV completo</strong></LoadingAnchor>
+                    <LoadingAnchor href={profesional.cvLink} target="_blank">
+                      Ver CV completo
+                    </LoadingAnchor>
                   </li>
                 </ul>
               </div>
