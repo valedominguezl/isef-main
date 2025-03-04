@@ -50,7 +50,7 @@
         flex-direction: column;
         justify-content: flex-end;
         align-items: center;
-        background: linear-gradient(to bottom, transparent 50%, rgba(var(--principal-rgb) .1)), var(--fondo-principal);
+        background: var(--grad-principal), var(--fondo-principal);
 
         img {
             width: 100%;

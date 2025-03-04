@@ -8,7 +8,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 3em;
+    gap: 5rem;
 }
 
 .txtCont {
@@ -22,29 +22,24 @@
 
 .datos {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: stretch;
     align-content: flex-start;
-    gap: 5rem;
     flex-wrap: wrap;
     width: 100%;
 }
 
 .dato {
     display: flex;
-    flex-direction: column;
     border: 1px solid var(--principal);
     border-radius: 3rem;
     background: white;
     box-shadow: var(--shadow-out);
     align-items: center;
-    width: 25rem;
     overflow: hidden;
 
     .datoImg {
         display: flex;
-        padding: 1rem 2rem;
-        width: 100%;
         justify-content: center;
         align-items: center;
         background: var(--principal);
@@ -56,23 +51,25 @@
 
     .datoTxt {
         display: flex;
-        flex-direction: column;
         gap: 1rem;
         width: 100%;
-        text-align: center;
 
-        h3:first-of-type{
+        h3:first-of-type {
             text-decoration: underline;
             text-underline-offset: 5px;
             text-decoration-thickness: 1px;
-            
+
             font-weight: var(--light);
             color: var(--principal);
         }
 
-        h3 strong{
-            font-weight: var(--light);
-            color: var(--txt-bcolor);
+        h3:last-of-type {
+            font-size: calc(var(--fs-h3) * .8);
+
+            strong {
+                font-weight: var(--light);
+                color: var(--txt-bcolor);
+            }
         }
     }
 }
@@ -114,27 +111,77 @@
     }
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1100px) and (min-width:850px) {
+    .dato{
+        width: 20rem;
+    }
+}
+
+@media (max-width: 850px){
+    .dato{
+        width: 100%;
+    }
+}
+
+@media (max-width: 1100px) {
     .datos {
         display: flex;
         justify-content: center;
         align-items: stretch;
         width: 100%;
+        gap: 5rem;
     }
 
     .dato {
         display: flex;
         flex-direction: column;
+    }
+
+    .datoImg {
+        padding: 1rem 2rem;
         width: 100%;
     }
 
     .datoTxt {
         padding: 2rem 3rem;
+        flex-direction: column;
+        text-align: center;
     }
 }
 
-@media (min-width: 1050px) {
+@media (min-width: 1100px) {
+
+    .container{
+        padding: var(--padding-up) var(--padding-200);
+    }
+
     .datoTxt {
-        padding: 1.5rem 2rem;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 1.5rem 4rem;
+    }
+
+    .datos {
+        row-gap: 3rem;
+        justify-content: center;
+    }
+
+    .dato {
+        width: 55rem;
+        align-items: center;
+    }
+
+    .datoImg {
+        display: flex;
+        width: fit-content;
+        height: 100%;
+        padding: 1.5rem 4rem;
+        justify-content: center;
+        align-items: center;
+        background: var(--principal);
+
+        img {
+            width: 2.5em;
+        }
     }
 }
