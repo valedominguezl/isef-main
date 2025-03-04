@@ -37,9 +37,13 @@
 
     --grad-black: linear-gradient(120deg, rgb(0, 0, 0), rgb(70, 70, 70));
     --grad-img: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(119, 97, 255, 0.64));
+
     --grad-nav: linear-gradient(120deg, rgba(var(--principal-rgb) .9), rgba(var(--secundario-rgb) 0.9));
     --grad-nav2: linear-gradient(120deg, rgba(var(--principal-rgb) 1), rgba(var(--secundario-rgb) 1));
     --grad-nav3: linear-gradient(120deg, rgba(var(--principal-rgb) .5), rgba(var(--secundario-rgb) .5));
+
+    --grad-principal: linear-gradient(to bottom, transparent 50%, rgba(var(--principal-rgb) .1));
+
     --grad-fx: linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), url('@/assets/media/fx/fondo.webp') lightgray 50% / cover no-repeat;
 
     --shadow-in: 0px 0px 40px 0px rgba(0, 0, 0, .2) inset;
@@ -199,7 +203,6 @@ strong {
     &.noHover {
         opacity: 1 !important;
         transform: scale(1) !important;
-
     }
 
     // Flecha SVG como pseudo-elemento
@@ -218,8 +221,6 @@ strong {
             scale: 1.2;
             background-image: url('@/assets/simbols/downloadIconBl.svg');
         }
-
-
     }
 
     // Clases según color de gradiente
@@ -242,7 +243,6 @@ strong {
         &:hover {
             opacity: 1;
             background: white;
-            // border: 2px solid black;
             color: black;
 
             &::after {

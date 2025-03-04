@@ -94,7 +94,7 @@ const Especializaciones = () => {
 
   return (
     <div id="especializacionesCarrera" className={styles.container}>
-      <div className={`${styles.sliderContainer} bl`}>
+      <div className={`${styles.sliderContainer}`}>
         {slides.length > 0 && (
           <>
             {!animating && (

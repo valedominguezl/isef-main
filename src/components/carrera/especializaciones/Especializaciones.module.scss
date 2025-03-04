@@ -27,18 +27,60 @@
 
     &>div {
         display: flex;
+        box-shadow: var(--shadow-out);
         height: 31vh;
         width: 45vw;
-        gap: 1rem;
+        gap: .3rem;
         text-align: center;
         align-items: center;
         border-radius: 3rem;
-        background: var(--grad-btn-color) !important;
+        background: transparent !important;
+        border: 1px solid var(--principal);
+
+        strong {
+            font-weight: var(--medium);
+        }
+
+        h3 {
+            color: var(--principal);
+        }
 
         h3,
         p,
         button {
             scale: .8;
+        }
+
+        button {
+            width: 5rem;
+            position: relative;
+            border-radius: 300rem;
+            height: 5rem;
+            border: 1px solid var(--principal) !important;
+
+            &:hover{
+                color: var(--principal) !important;
+                background-color: var(--principal) !important;
+               
+                &::after{
+                    background-image: url('@/assets/simbols/click.webp') !important;
+                    filter: none;
+                }
+            }
+
+            &::after {
+                position: absolute;
+                content: '';
+                top: 50%;
+                right: 50%;
+                transform: translate(50%, -50%);
+                width: 50%;
+                height: 50%;
+                background-image: url('@/assets/simbols/click.webp');
+                background-size: contain;
+                background-position: center;
+                filter: invert(1);
+            }
         }
 
         @media (max-width: 1300px) {
