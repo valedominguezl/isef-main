@@ -194,6 +194,8 @@ const Plan = () => {
                 />
               </div>
 
+              <div className="linea-svg bl"></div>
+
               <h4>
                 {item.carga
                   .split('|')

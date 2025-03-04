@@ -22,7 +22,7 @@ const Datos = () => {
 
         // Array
         const animatedElements = [titulo, datos, ...datosChildren].filter(Boolean);
-    
+
         // IntersectionObserver
         const observer = new IntersectionObserver(
             (entries, obs) => {
@@ -45,58 +45,81 @@ const Datos = () => {
     }, []);
 
     return (
-        <div ref={containerRef} className={`${styles.container} bl`}>
+        <div ref={containerRef} className={styles.container}>
 
-            <div className={`${styles.txtCont} bl`}>
-                <h2>Información <span>general</span></h2>
-                <div className="linea-svg bl"></div>
+            <div className={styles.txtCont} >
+                <h2>Información <span className='color1'>general</span></h2>
+                <div className="linea-svg"></div>
             </div>
 
             <div className={styles.datos}>
 
                 <div className={styles.dato}>
-                    <img src={titulo} alt="" />
+                    <div className={styles.datoImg}>
+                        <img src={titulo} alt="" />
+                    </div>
+
                     <div className={styles.datoTxt}>
-                        <h3>Título: <strong>profesor/a de educación física</strong></h3>
+                        <h3>Título:</h3>
+                        <h3><strong>profesor/a de educación física</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
-                    <img src={duracion} alt="" />
+                    <div className={styles.datoImg}>
+                        <img src={duracion} alt="" />
+                    </div>
+
                     <div className={styles.datoTxt}>
-                        <h3>Duración: <strong>4 años</strong></h3>
+                        <h3>Duración:</h3>
+                        <h3><strong>4 años</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
-                    <img src={modalidad} alt="" />
+                    <div className={styles.datoImg}>
+                        <img src={modalidad} alt="" />
+                    </div>
                     <div className={styles.datoTxt}>
-                        <h3>Modalidad: <strong>presencial</strong></h3>
+                        <h3>Modalidad:</h3>
+                        <h3><strong>presencial</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
-                    <img src={cursado} alt="" />
+                    <div className={styles.datoImg}>
+                        <img src={cursado} alt="" />
+                    </div>
                     <div className={styles.datoTxt}>
-                        <h3>Cursado: <strong>de lunes a viernes</strong></h3>
+                        <h3>Cursado:</h3>
+                        <h3><strong>de lunes a viernes</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
-                    <img src={horarios} alt="" />
+                    <div className={styles.datoImg}>
+                        <img src={horarios} alt="" />
+                    </div>
                     <div className={styles.datoTxt}>
-                        <h3>Horarios: <strong>de 07:30hs a 13:30hs</strong></h3>
+                        <h3>Horarios:</h3>
+                        <h3><strong>de 07:30hs a 13:30hs</strong></h3>
                     </div>
                 </div>
 
                 <div className={styles.dato}>
-                    <img src={validez} alt="" />
+                    <div className={styles.datoImg}>
+                        <img src={validez} alt="" />
+                    </div>
                     <div className={styles.datoTxt}>
-                        <h3>Validez: <strong>nacional e internacional</strong></h3>
+                        <h3>Validez:</h3>
+                        <h3><strong>nacional e internacional</strong></h3>
                     </div>
                 </div>
 
             </div>
+
+
+
         </div>
     )
 }

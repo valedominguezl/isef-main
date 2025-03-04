@@ -10,7 +10,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: 3.5rem;
     width: 100%;
 }
 
@@ -173,9 +173,8 @@
 }
 
 @media (max-width: 1500px){
-    .container{
-        padding: 0 var(--padding-100) var(--padding-up) var(--padding-100);
-    }
+
+   
 }
 
 // Animaciones

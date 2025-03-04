@@ -51,7 +51,7 @@ const Intro = () => {
             <p>
               Gracias a el I.S.E.F. San Luís, <strong>sos necesario</strong>. Con los {' '}
               <LoadingAnchor href="/Especializaciones">
-                <strong>talleres de especialización</strong>
+                talleres de especialización
               </LoadingAnchor>
               {' '}que te ofrecemos de manera gratuita vas a poder ejercer en equipos interdisciplinarios en centros de salud, gimnasios, clubes, clínicas, hospitales, y mucho más. <br /> <br />
 
