@@ -4,7 +4,7 @@ import ScrollToSection from '@/components/funciones/scroll/ScrollToSection';
 
 const Estructura = ({ title, description, page, id, imagePath }) => {
   const overlayStyle = {
-    background: `var(--grad-img), url(${imagePath})`,
+    background: `linear-gradient(to bottom, transparent, black), url(${imagePath})`,
     backgroundPosition: 'center',
   };
 

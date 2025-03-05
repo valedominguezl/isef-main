@@ -99,42 +99,17 @@ const Cursos = () => {
 
   // Manejador para el botón "Mostrar más"
   const handleShowMore = () => {
-    setIsLoading(true);
-    setMinLoadingTime(false);
-
-    setTimeout(() => {
-      setMinLoadingTime(true);
-    }, 1000);
-
-    setTimeout(() => {
-      setVisibleCount((prevCount) => prevCount + 4);
-      setIsLoading(false);
-    }, 1000);
+    setVisibleCount((prevCount) => prevCount + 4);
   };
 
-  // Simulación de carga mínima (2 segundos)
   useEffect(() => {
-    if (showCursos) {
-      setMinLoadingTime(false);
-      const timer = setTimeout(() => {
-        setMinLoadingTime(true);
-      }, 2000);
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
-      return () => clearTimeout(timer);
-    }
-  }, [showCursos]);
-
-  // Simulación de carga de datos (3 segundos)
-  useEffect(() => {
-    if (showCursos) {
-      setIsLoading(true);
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [showCursos]);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Observer para animar el título
   useEffect(() => {
@@ -232,7 +207,7 @@ const Cursos = () => {
       {/* Se renderiza el contenedor de cursos solo cuando showCursos es true */}
       {showCursos && (
         <div ref={cursosRef} className={`${styles.cursos} bl`}>
-          {isLoading || !minLoadingTime ? (
+          {isLoading ? (
             [...Array(visibleCount)].map((_, index) => <Skeleton key={index} />)
           ) : cursosToDisplay.length > 0 ? (
             cursosToDisplay.map((curso, index) => (
@@ -249,6 +224,7 @@ const Cursos = () => {
           )}
         </div>
       )}
+
 
 
       {/* Mostrar más solo si no hay búsqueda activa */}

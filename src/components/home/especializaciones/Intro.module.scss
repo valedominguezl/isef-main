@@ -89,23 +89,6 @@
 
     .container {
         padding: var(--padding-up) var(--padding-100);
-
-        &::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: -2em;
-            background-image: url('@/assets/media/home/especializaciones.webp');
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0.03;
-            pointer-events: none;
-            height: auto;
-        }
-
         overflow: hidden;
     }
 
