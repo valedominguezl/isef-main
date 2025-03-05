@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: http://www.isefsanluis.net/
 Sitemap: https://isefsanluis.net/sitemap.xml

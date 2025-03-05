@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { StrictMode } from 'react';
+import React, { useEffect, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -13,29 +12,29 @@ import CookieBanner from './components/funciones/cookies/CookieBanner.jsx';
 import router from './routes.jsx';
 import './index.scss';
 
-// Función para inicializar gtag.js y GTM basándose en el consentimiento del usuario
+// Función para inicializar el consentimiento en gtag y GTM
 const initializeGtag = (consent) => {
   if (typeof window.gtag === 'function') {
-    window.gtag('consent', 'default', {
+    window.gtag('consent', 'update', {
       'analytics_storage': consent.rendimiento ? 'granted' : 'denied',
       'ad_storage': consent.seguridad ? 'granted' : 'denied',
       'ad_user_data': consent.seguridad ? 'granted' : 'denied',
       'ad_personalization': consent.seguridad ? 'granted' : 'denied',
     });
+  }
 
-    if (consent.seguridad) {
-      TagManager.initialize({ gtmId: 'GTM-KFMMQ36H' });
-    }
-  } else {
-    console.warn('gtag.js aún no está cargado.');
+  // Evitar múltiples inicializaciones de GTM
+  if (consent.seguridad && !window._gtmInitialized) {
+    TagManager.initialize({ gtmId: 'GTM-KFMMQ36H' });
+    window._gtmInitialized = true;
   }
 };
 
 const AppContent = () => {
   const { consent } = useCookies();
 
+  // Efecto para cargar gtag.js solo una vez
   useEffect(() => {
-    // Carga gtag.js independientemente del consentimiento, pero configura según el consentimiento
     if (!window.gtag) {
       const script = document.createElement('script');
       script.src = 'https://www.googletagmanager.com/gtag/js?id=G-L4QFYTY1XM';
@@ -46,31 +45,21 @@ const AppContent = () => {
         function gtag(){ window.dataLayer.push(arguments); }
         window.gtag = gtag;
 
-        // Establecer consentimiento predeterminado ANTES de cualquier otra configuración
-        window.gtag('consent', 'default', {
-          'analytics_storage': consent?.rendimiento ? 'granted' : 'denied',
-          'ad_storage': consent?.seguridad ? 'granted' : 'denied',
-          'ad_user_data': consent?.seguridad ? 'granted' : 'denied',
-          'ad_personalization': consent?.seguridad ? 'granted' : 'denied',
-        });
-
-        // Inicializar Google Analytics
         window.gtag('js', new Date());
         window.gtag('config', 'G-L4QFYTY1XM', { anonymize_ip: true });
 
-        // Inicializar GTM si es necesario
-        if (consent?.seguridad) {
-          TagManager.initialize({ gtmId: 'GTM-KFMMQ36H' });
-        }
+        // Aplicar el consentimiento inicial
+        initializeGtag(consent);
       };
 
-      script.onerror = () => {
-        console.error('Error al cargar gtag.js');
-      };
-
+      script.onerror = () => console.error('Error al cargar gtag.js');
       document.head.appendChild(script);
-    } else {
-      // Si gtag ya está disponible, actualizamos el consentimiento
+    }
+  }, []);
+
+  // Efecto para actualizar el consentimiento si cambia
+  useEffect(() => {
+    if (window.gtag) {
       initializeGtag(consent);
     }
   }, [consent]);
