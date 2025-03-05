@@ -1,6 +1,6 @@
 .container {
     display: flex;
-    padding-top: var(--padding-up);
+    padding: var(--padding-up) 0;
     justify-content: space-between;
     align-items: stretch;
     width: 100%;
@@ -89,6 +89,6 @@
  
     .txtCont {
         width: 100%;
-        padding: var(--padding-up) var(--padding-100) 0 var(--padding-100); 
+        padding: var(--padding-up) var(--padding-100); 
     }
 }

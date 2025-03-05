@@ -13,7 +13,7 @@
         background: rgba(var(--principal-rgb) .07);
     }
 
-    &::after{
+    &::after {
         content: '';
         position: absolute;
         width: var(--width-activador);
@@ -26,7 +26,7 @@
         z-index: 2;
     }
 
-    @keyframes temp{
+    @keyframes temp {
         from {
             opacity: 1;
         }
@@ -42,14 +42,16 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    text-align: left;
-    white-space: normal;
-    word-break: break-word;
     padding: 2rem;
     cursor: pointer;
     transition: .3s;
+    justify-content: flex-start;
 
-    &::after{
+    .numbering {
+        width: 40px;
+    }
+
+    &::after {
         content: '';
         position: absolute;
         width: var(--width-activador);
@@ -65,12 +67,13 @@
         color: black;
         font-size: 1.2rem;
         opacity: .6;
+        width: 100%;
     }
 
     &.active {
         background: rgba(var(--principal-rgb) .15);
 
-        &:hover{
+        &:hover {
             background: rgba(var(--principal-rgb) .15);
         }
 
@@ -80,7 +83,7 @@
             opacity: 1;
         }
 
-        .numbering{
+        .numbering {
             color: var(--principal);
             opacity: 1;
         }
@@ -140,10 +143,10 @@
 }
 
 .numbering {
+    display: inline-block;
     color: black;
     opacity: .8;
     font-weight: var(--bold);
-    margin-right: 0.5em;
     font-size: 1.2rem;
 }
 
@@ -160,22 +163,20 @@
 
 .subTopic {
     display: flex;
-    gap: 1rem;
-    text-align: left;
-    white-space: normal;
-    word-break: break-word;
     border: none;
     padding: 1.5rem 2rem;
     overflow: hidden;
 
     .numbering {
         opacity: .7;
-        word-break: keep-all;
         color: var(--principal);
+        font-weight: var(--medium) !important;
+        width: 50px;
     }
 
     p {
         font-size: 1.2rem;
         hyphens: auto;
+        width: 100%;
     }
 }

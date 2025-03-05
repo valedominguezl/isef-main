@@ -96,7 +96,7 @@ const Intro = () => {
                         <h4>(San Luís)</h4>
                         <h3>Secretaría administrativa</h3>
                         <div className="linea-svg"></div>
-                        <p>Por temas como: asistenicas, calificaciones, cuotas, certificaciones, etc, en la sede de San Luís</p>
+                        <p>Por temas como: asistencias, calificaciones, cuotas, certificaciones, etc, en la sede de San Luís</p>
                         <p><a href="https://wa.me/5492664304739" target='_blank'>+54 9 2664 30-4739</a></p>
                         <p><a href="https://wa.me/5492664611345" target='_blank'>+54 9 2664 61-1345</a></p>
                         <p><a href="https://wa.me/5492664577972" target='_blank'>+54 9 2664 57-7972</a></p>
@@ -111,7 +111,7 @@ const Intro = () => {
                         <h4>(Villa Mercedes)</h4>
                         <h3>Secretaría administrativa</h3>
                         <div className="linea-svg"></div>
-                        <p>Por temas como: asistenicas, calificaciones, cuotas, certificaciones, etc, en la sede de Villa Mercedes</p>
+                        <p>Por temas como: asistencias, calificaciones, cuotas, certificaciones, etc, en la sede de Villa Mercedes</p>
                         <p><a href="https://wa.me/5492657210254" target='_blank'>+54 9 2657 21-0254</a></p>
                     </div>
                 </div>

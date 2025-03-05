@@ -20,9 +20,9 @@ const neurociencias = {
   condiciones: null,
   temario: [
     {
-      tema: "El cerebro ineficiente: Cómo los errores del cerebro logran que los humanos seamos creativos",
+      tema: "El cerebro ineficiente: cómo los errores del cerebro logran que los humanos seamos creativos",
       subtemas: [
-        { tema: "Olvidando: Por qué no recordará los contenidos de este artículo, y así de esta manera recordará la información más importante" },
+        { tema: "Olvidando: por qué no recordará los contenidos de este artículo, y así de esta manera recordará la información más importante" },
         { tema: "Un probador de memorias" },
         { tema: "El síndrome del probador" },
         { tema: "Un mordisco en la manzana: ¿A la derecha o a la izquierda?" },
@@ -36,7 +36,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Aprender: Por qué somos malos para aprender de memoria pero somos mejores para entender el mundo",
+      tema: "Aprender: por qué somos malos para aprender de memoria pero somos mejores para entender el mundo",
       subtemas: [
         { tema: "Aprender no es todo" },
         { tema: "La neurona orquesta" },
@@ -50,7 +50,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Memoria: Por qué una falsa memoria es mejor que nada",
+      tema: "Memoria: por qué una falsa memoria es mejor que nada",
       subtemas: [
         { tema: "La capilla de la memoria" },
         { tema: "La vulnerabilidad de la memoria" },
@@ -63,20 +63,20 @@ const neurociencias = {
       ],
     },
     {
-      tema: "El apagón: Por qué nos ahogamos bajo presión y la fórmula secreta para esquivar el pánico escénico",
+      tema: "El apagón: por qué nos ahogamos bajo presión y la fórmula secreta para esquivar el pánico escénico",
       subtemas: [
         { tema: "La trampa del paso a paso" },
-        { tema: "Falla mental #1: La trampa del paso a paso" },
+        { tema: "Falla mental #1: la trampa del paso a paso" },
         { tema: "Haga lo que haga, ¡no se imagine un conejo rojo de felpa!" },
-        { tema: "Falla mental #2: La trampa de la distracción" },
+        { tema: "Falla mental #2: la trampa de la distracción" },
         { tema: "El control es bueno, la confianza es mejor" },
-        { tema: "Falla mental #3: La trampa de la sobreexcitación" },
+        { tema: "Falla mental #3: la trampa de la sobreexcitación" },
         { tema: "La paradoja de la recompensa" },
         { tema: "Conquistando el miedo de hablar en público" },
       ],
     },
     {
-      tema: "El tiempo: Por qué siempre lo calculamos erróneamente y así forjamos memorias valiosas",
+      tema: "El tiempo: por qué siempre lo calculamos erróneamente y así forjamos memorias valiosas",
       subtemas: [
         { tema: "La trampa de la planificación" },
         { tema: "Sin sentido del tiempo" },
@@ -89,7 +89,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Aburrimiento: Por qué tenemos problemas para desconectarnos y cómo soñar despierto evoca a las musas",
+      tema: "Aburrimiento: por qué tenemos problemas para desconectarnos y cómo soñar despierto evoca a las musas",
       subtemas: [
         { tema: "Nuestro marco mental básico" },
         { tema: "Mejor recibir un shock eléctrico que tener que esperar" },
@@ -101,7 +101,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Distracción: Por qué somos tan inconstantes y qué distracciones pueden llevarnos a una mayor creatividad",
+      tema: "Distracción: por qué somos tan inconstantes y qué distracciones pueden llevarnos a una mayor creatividad",
       subtemas: [
         { tema: "Un filtro antispam para el cerebro" },
         { tema: "El portal del cerebro" },
@@ -117,7 +117,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Matemáticas: Por qué el cerebro calcula mejor sin números",
+      tema: "Matemáticas: por qué el cerebro calcula mejor sin números",
       subtemas: [
         { tema: "¿Números? ¡No gracias!" },
         { tema: "¡Números por favor!" },
@@ -128,7 +128,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Decisiones: Por qué nos arriesgamos mucho y aún así tomamos buenas decisiones",
+      tema: "Decisiones: por qué nos arriesgamos mucho y aún así tomamos buenas decisiones",
       subtemas: [
         { tema: "Las decisiones no son cálculos" },
         { tema: "La decisión está hecha un lío" },
@@ -141,7 +141,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Elegir: Por qué elegir es tan angustiante y cómo hacemos para elegir la mejor opción",
+      tema: "Elegir: por qué elegir es tan angustiante y cómo hacemos para elegir la mejor opción",
       subtemas: [
         { tema: "Nuestra fortaleza para decidir" },
         { tema: "Nuestra debilidad para elegir" },
@@ -150,15 +150,15 @@ const neurociencias = {
         { tema: "Eligiendo por otros" },
         { tema: "La presión del precio también existe en el cerebro" },
         { tema: "Evitando la agonía de la elección" },
-        { tema: "Truco #1: Reduzca su objetivo" },
-        { tema: "Truco #2: Esté satisfecho" },
-        { tema: "Truco #3: Decida las cosas importantes con sus instintos" },
-        { tema: "Truco #4: Resístase al exceso" },
-        { tema: "Truco #5: Elevar la presión" },
+        { tema: "Truco #1: reduzca su objetivo" },
+        { tema: "Truco #2: esté satisfecho" },
+        { tema: "Truco #3: decida las cosas importantes con sus instintos" },
+        { tema: "Truco #4: resístase al exceso" },
+        { tema: "Truco #5: elevar la presión" },
       ],
     },
     {
-      tema: "Motivación: Cómo nuestra vagancia nos detiene y cómo podemos inspirar a los otros",
+      tema: "Motivación: cómo nuestra vagancia nos detiene y cómo podemos inspirar a los otros",
       subtemas: [
         { tema: "El problema de ser Papá Noel" },
         { tema: "El error de predicción" },
@@ -170,7 +170,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Creatividad: Por qué no podemos ser innovadores con solo apretar un botón pero siempre tenemos nuevas ideas",
+      tema: "Creatividad: por qué no podemos ser innovadores con solo apretar un botón pero siempre tenemos nuevas ideas",
       subtemas: [
         { tema: "Midiendo ideas" },
         { tema: "Inteligencia versus creatividad" },
@@ -184,7 +184,7 @@ const neurociencias = {
       ],
     },
     {
-      tema: "Perfeccionismo: Por qué necesitamos a los errores para mejorar",
+      tema: "Perfeccionismo: por qué necesitamos a los errores para mejorar",
       subtemas: [
         { tema: "Cometiendo errores por doquier" },
         { tema: "La competición de errores en las profundidades del cerebro" },
@@ -202,8 +202,8 @@ const neurociencias = {
       tema: "Adicciones",
       subtemas: [
         { tema: "La corteza prefrontal es el área donde están nuestros superpoderes" },
-        { tema: "El sistema emocional: El “Tigre”" },
-        { tema: "La corteza prefrontal: El superhéroe" },
+        { tema: "El sistema emocional: el “Tigre”" },
+        { tema: "La corteza prefrontal: el superhéroe" },
         { tema: "Neurotransmisores" },
         { tema: "Drogas" },
         { tema: "Alcohol" },

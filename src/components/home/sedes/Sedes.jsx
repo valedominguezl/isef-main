@@ -47,7 +47,6 @@ const Sedes = () => {
     <div id='homeSedes' ref={containerRef} className={styles.container}>
 
       <div className={styles.titulo}>
-        <h4>I.S.E.F. San Luís | Dónde encontrarnos</h4>
         <h2>Conocé <span className="color1">nuestras sedes</span></h2>
         <div className="linea-svg"></div>
         <p>
