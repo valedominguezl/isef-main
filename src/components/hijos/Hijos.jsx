@@ -49,23 +49,25 @@ export default function Hijos() {
 
             {/* Contenedor general de las conferencias */}
             <div className={styles.conferences}>
-                {/* Mapear los videos filtrados */}
                 {filteredVideos.length > 0 ? (
                     filteredVideos.map((conference) => (
-                        <div key={conference.id || conference.title} className={styles.titulo}> {/* Asignamos una key única */}
-                            <h3 className={styles.title}>{conference.title}</h3>
+                        <div key={conference.id || conference.title} className={styles.titulo}>
+                            <h4>{conference.subTitle}</h4>
+                            <h3>{conference.title}</h3>
                             <div className="linea-svg"></div>
-                            {conference.links.map((video) => (
-                                <p key={video.id || video.name} className={styles.link}> {/* Asignamos key única también a los enlaces */}
-                                    <a href={video.url} target="_blank" rel="noopener noreferrer">
-                                        {video.name}
-                                    </a>
-                                </p>
-                            ))}
+                            <div className={styles.links}>
+                                {conference.links.map((video) => (
+                                    <p key={video.id || video.name} className={styles.link}>
+                                        <a href={video.url} target="_blank" rel="noopener noreferrer">
+                                            {video.name}
+                                        </a>
+                                    </p>
+                                ))}
+                            </div>
                         </div>
                     ))
                 ) : (
-                    <p>No se encontraron grabaciones.</p>  // Mensaje si no hay resultados
+                    <p>No se encontraron grabaciones.</p>
                 )}
             </div>
         </div>
