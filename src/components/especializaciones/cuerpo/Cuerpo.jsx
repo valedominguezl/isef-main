@@ -26,11 +26,11 @@ const profesionales = [
     cvLink: 'https://docs.google.com/document/d/1QtxtySVFjnpRzB1e1UXTJjKsCeSrCmff/edit?usp=sharing&ouid=104941986694218560787&rtpof=true&sd=true'
   },
   {
-    nombre: 'Lic. Jorge Roig',
+    nombre: 'Dr. Jorge Roig',
     img: roig,
     descripcion: [
+      'Doctor en ciencias del ejercicio',
       'Licenciado en educación física',
-      'Doctorado en ciencias del ejercicio',
       'Egresado de la UNLP',
       'Revisor científico',
       'Conferencista',
