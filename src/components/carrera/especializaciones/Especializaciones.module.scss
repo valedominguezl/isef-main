@@ -1,155 +1,159 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 45vh;
-    position: relative;
-    overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 45vh;
+  position: relative;
+  overflow-x: hidden;
 
-    @media (max-width: 1300px) {
-        height: 48vh;
-    }
+  @media (max-width: 1300px) {
+    height: 48vh;
+  }
 }
 
 .sliderContainer {
-    position: relative;
+  position: relative;
 }
 
 .slide {
+  display: flex;
+  position: absolute;
+  align-items: stretch;
+  justify-content: space-around;
+  padding: 0 2rem;
+  width: 100%;
+  top: 0;
+  left: 0;
+
+  & > div {
     display: flex;
-    position: absolute;
-    align-items: stretch;
-    justify-content: space-around;
-    padding: 0 2rem;
-    width: 100%;
-    top: 0;
-    left: 0;
+    box-shadow: var(--shadow-out);
+    height: 31vh;
+    width: 45vw;
+    gap: 1.3rem;
+    text-align: center;
+    align-items: center;
+    border-radius: 3rem;
+    background: transparent !important;
+    border: 1px solid var(--principal);
 
-    &>div {
-        display: flex;
-        box-shadow: var(--shadow-out);
-        height: 31vh;
-        width: 45vw;
-        gap: .3rem;
-        text-align: center;
-        align-items: center;
-        border-radius: 3rem;
-        background: transparent !important;
-        border: 1px solid var(--principal);
-
-        strong {
-            font-weight: var(--medium);
-        }
-
-        h3 {
-            color: var(--principal);
-        }
-
-        h3,
-        p,
-        button {
-            scale: .8;
-        }
-
-        button {
-            width: 5rem;
-            position: relative;
-            border-radius: 300rem;
-            height: 5rem;
-            border: 1px solid var(--principal) !important;
-
-            &:hover{
-                color: var(--principal) !important;
-                background-color: var(--principal) !important;
-               
-                &::after{
-                    background-image: url('@/assets/simbols/click.webp') !important;
-                    filter: none;
-                }
-            }
-
-            &::after {
-                position: absolute;
-                content: '';
-                top: 50%;
-                right: 50%;
-                transform: translate(50%, -50%);
-                width: 50%;
-                height: 50%;
-                background-image: url('@/assets/simbols/click.webp');
-                background-size: contain;
-                background-position: center;
-                filter: invert(1);
-            }
-        }
-
-        @media (max-width: 1300px) {
-            width: 100%;
-            gap: .5rem;
-            height: 34vh;
-        }
+    :global(.linea-svg) {
+      filter: invert(1);
     }
+
+    strong {
+      font-weight: var(--medium);
+    }
+
+    h3 {
+      color: var(--principal);
+    }
+
+    h3,
+    p,
+    button {
+      scale: 0.8;
+    }
+
+    button {
+      width: 5rem;
+      position: relative;
+      border-radius: 300rem;
+      height: 5rem;
+      border: 1px solid var(--principal) !important;
+
+      &:hover {
+        color: var(--principal) !important;
+        background-color: var(--principal) !important;
+
+        &::after {
+          background-image: url("@/assets/simbols/click.webp") !important;
+          filter: none;
+        }
+      }
+
+      &::after {
+        position: absolute;
+        content: "";
+        top: 50%;
+        right: 50%;
+        transform: translate(50%, -50%);
+        width: 50%;
+        height: 50%;
+        background-image: url("@/assets/simbols/click.webp");
+        background-size: contain;
+        background-position: center;
+        filter: invert(1);
+      }
+    }
+
+    @media (max-width: 1300px) {
+      width: 100%;
+      gap: 0.5rem;
+      height: 34vh;
+    }
+  }
 }
 
 .slideExit {
-    animation: slideOut 1s forwards;
+  animation: slideOut 1s forwards;
 }
 
 .slideEnter {
-    animation: slideIn 1s forwards;
+  animation: slideIn 1s forwards;
 }
 
 @keyframes slideOut {
-    from {
-        transform: translateX(0);
-    }
+  from {
+    transform: translateX(0);
+  }
 
-    to {
-        transform: translateX(100%);
-    }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes slideIn {
-    from {
-        transform: translateX(-100%);
-    }
+  from {
+    transform: translateX(-100%);
+  }
 
-    to {
-        transform: translateX(0);
-    }
+  to {
+    transform: translateX(0);
+  }
 }
 
 .pagination {
-    position: absolute;
-    bottom: 26px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
 
-    @media (max-width: 1300px) {
-        bottom: 25px;
-    }
+  @media (max-width: 1300px) {
+    bottom: 25px;
+  }
 
-    @media (min-width: 1600px) {
-        bottom: 34px;
-    }
+  @media (min-width: 1600px) {
+    bottom: 34px;
+  }
 }
 
 .bullet {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: rgba(var(--principal-rgb) .5);
-    cursor: pointer;
-    transition: 0.5s;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgba(var(--principal-rgb) 0.5);
+  cursor: pointer;
+  transition: 0.5s;
 
-    &:hover:not(.activeBullet) {
-        background-color: rgba(var(--principal-rgb) .8);
-    }
+  &:hover:not(.activeBullet) {
+    background-color: rgba(var(--principal-rgb) 0.8);
+  }
 }
 
 .activeBullet {
-    background-color: rgba(var(--principal-rgb) 1);
+  background-color: rgba(var(--principal-rgb) 1);
 }
