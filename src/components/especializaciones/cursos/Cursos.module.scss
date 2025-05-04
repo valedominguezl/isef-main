@@ -32,6 +32,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     padding: 2em;
     border-radius: 3em;
     gap: 1.5em;
@@ -166,8 +167,4 @@
         width: 100%;
     }
     
-}
-
-@media (max-width: 1024px) {
-
 }
