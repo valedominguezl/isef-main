@@ -384,7 +384,6 @@ nav {
     }
 
     .menuBar {
-        gap: 2rem;
         padding: .5rem 0;
 
         h4 {
@@ -489,5 +488,11 @@ nav {
                 }
             }
         }
+    }
+}
+
+@media (max-width: 450px) {
+    .navBar {
+        gap: 2rem;
     }
 }
