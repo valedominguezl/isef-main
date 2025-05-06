@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const investigacion = {
+  estado: "¡Nuevo!",
   name: "investigacion",
   title: "Metodología de la investigación",
   subTitle: "Fundamentos y técnicas de investigación científica",

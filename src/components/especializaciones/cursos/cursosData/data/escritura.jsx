@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const escritura = {
+    estado: "¡Nuevo!",
     name: "escritura",
     title: "Taller de escritura científica",
     subTitle: "Apoyo en la realización de la primera investigación",

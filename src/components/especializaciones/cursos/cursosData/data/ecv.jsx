@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const ecv = {
+  estado: "¡Nuevo!",
   name: "ecv",
   title: "Enfermedad Cardiovascular",
   subTitle: "Nutrición, suplementación de micronutrientes y ejercicio",

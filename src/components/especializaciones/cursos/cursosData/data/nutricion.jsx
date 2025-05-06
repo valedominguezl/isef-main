@@ -2,6 +2,7 @@ import getCourseImage from '../getCourseImage'
 
 const nutricion = {
   name: "nutricion",
+  estado: "¡Nuevo!",
   title: "Nutrición deportiva",
   subTitle: "Fundamentos y optimización de la performance deportiva",
   bgImage: getCourseImage("nutricion.webp"),

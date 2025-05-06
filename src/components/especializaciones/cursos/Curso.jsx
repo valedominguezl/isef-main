@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Cursos.module.scss";
 import TagManager from "react-gtm-module";
 
-const Curso = ({ title, subTitle, bgImage, onVerMas }) => {
+const Curso = ({estado, title, subTitle, bgImage, onVerMas }) => {
   const handleClick = () => {
     TagManager.dataLayer({
       dataLayer: {
@@ -10,7 +10,7 @@ const Curso = ({ title, subTitle, bgImage, onVerMas }) => {
         curso: title,
       },
     });
-    onVerMas(); 
+    onVerMas();
   };
 
   return (
@@ -21,6 +21,8 @@ const Curso = ({ title, subTitle, bgImage, onVerMas }) => {
         backgroundPosition: "center",
       }}
     >
+      {estado && <div className={styles.cursoEstado}>{estado}</div>}
+
       <h3>
         <strong>{title}</strong>
       </h3>

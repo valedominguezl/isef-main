@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const neurocienciasJuvenil = {
+  estado: "¡Nuevo!",
   name: "neurocienciasJuvenil",
   title: "Neurociencia y salud mental infantojuvenil",
   subTitle: "Comprendiendo el cerebro joven para potenciar su bienestar",
