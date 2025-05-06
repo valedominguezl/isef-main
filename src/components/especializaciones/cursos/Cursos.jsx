@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import styles from "./Cursos.module.scss";
 import Curso from "./Curso.jsx";
 import Skeleton from "./skeleton/Skeleton";
@@ -19,7 +19,6 @@ const Cursos = () => {
   const [selectedCurso, setSelectedCurso] = useState(null);
   const [placeholder, setPlaceholder] = useState("Buscar cursos...");
   const [isLoading, setIsLoading] = useState(false);
-  const [minLoadingTime, setMinLoadingTime] = useState(false);
   const [showCursos, setShowCursos] = useState(false);
 
   // Refs
@@ -50,12 +49,13 @@ const Cursos = () => {
   };
 
   // Función para obtener el nombre del expositor
-  const getExpositorText = (expositor) => {
-    if (expositor === 1) return "Dr. Nelio Bazán";
-    if (expositor === 2) return "Lic. Jorge Roig";
-    if (expositor === 3) return "Dr. Roberto Rosler";
-    return "";
+  const expositores = {
+    1: "Dr. Nelio Bazán",
+    2: "Lic. Jorge Roig",
+    3: "Dr. Roberto Rosler",
   };
+
+  const getExpositorText = (expositor) => expositores[expositor] || "";
 
   // Función para concatenar TODO el contenido textual del curso:
   // título, subtítulo, descripción, datos y temario (incluyendo subtemas)
@@ -84,18 +84,26 @@ const Cursos = () => {
     }
 
     return normalizeText(text);
-
   };
 
   // Filtrar cursos usando debouncedSearch sobre TODO el texto del curso
   const filteredCursos = cursosData.filter((curso) => {
-    const aggregatedText = normalizeText(getCourseSearchText(curso)).toLowerCase();
+    const aggregatedText = normalizeText(
+      getCourseSearchText(curso)
+    ).toLowerCase();
     const search = normalizeText(debouncedSearch.trim()).toLowerCase();
     return aggregatedText.includes(search);
   });
 
-  // Si hay búsqueda se muestran todos; si no, se limita a visibleCount
-  const cursosToDisplay = debouncedSearch ? filteredCursos : filteredCursos.slice(0, visibleCount);
+  const cursosToDisplay = useMemo(() => {
+    const ordenados = [...filteredCursos].sort((a, b) => {
+      if (a.estado && !b.estado) return -1;
+      if (!a.estado && b.estado) return 1;
+      return 0;
+    });
+
+    return debouncedSearch ? ordenados : ordenados.slice(0, visibleCount);
+  }, [filteredCursos, debouncedSearch, visibleCount]);
 
   // Manejador para el botón "Mostrar más"
   const handleShowMore = () => {
@@ -208,7 +216,7 @@ const Cursos = () => {
       {showCursos && (
         <div ref={cursosRef} className={`${styles.cursos} bl`}>
           {isLoading ? (
-            [...Array(visibleCount)].map((_, index) => <Skeleton key={index} />)
+            [...Array(4)].map((_, index) => <Skeleton key={index} />)
           ) : cursosToDisplay.length > 0 ? (
             cursosToDisplay.map((curso, index) => (
               <Curso
@@ -219,29 +227,33 @@ const Cursos = () => {
               />
             ))
           ) : (
-            <h3 style={{ color: 'var(--h4-bcolor)' }}>
+            <h3 style={{ color: "var(--h4-bcolor)" }}>
               ¡Disculpá!, no se encontraron cursos sobre eso...
             </h3>
           )}
         </div>
       )}
 
-
-
       {/* Mostrar más solo si no hay búsqueda activa */}
-      {!debouncedSearch && visibleCount < filteredCursos.length && !isLoading && (
-        <div
-          className={styles.showMore}
-          onClick={handleShowMore}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          style={{
-            backgroundColor: hover ? "var(--principal)" : "white",
-          }}
-        >
-          <img src={hover ? flecha : flechaHover} alt="Mostrar más" className={styles.flecha} />
-        </div>
-      )}
+      {!debouncedSearch &&
+        visibleCount < filteredCursos.length &&
+        !isLoading && (
+          <div
+            className={styles.showMore}
+            onClick={handleShowMore}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+            style={{
+              backgroundColor: hover ? "var(--principal)" : "white",
+            }}
+          >
+            <img
+              src={hover ? flecha : flechaHover}
+              alt="Mostrar más"
+              className={styles.flecha}
+            />
+          </div>
+        )}
 
       {selectedCurso && (
         <Detalle curso={selectedCurso} onClose={() => setSelectedCurso(null)} />
