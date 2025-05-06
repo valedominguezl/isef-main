@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const salud = {
+  estado: "¡Nuevo!",
   name: "salud",
   title: "Actividad física y salud",
   subTitle: "Fisiopatología de las intervenciones en salud",

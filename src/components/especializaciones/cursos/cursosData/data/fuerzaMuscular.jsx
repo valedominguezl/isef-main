@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const fuerzaMuscular = {
+  estado: "¡Nuevo!",
   name: "fuerzaMuscular",
   title: "Fuerza muscular",
   subTitle: "Entrenamiento, nutrición y suplementación de nutrientes",

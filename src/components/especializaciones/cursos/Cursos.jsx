@@ -35,7 +35,7 @@ const Cursos = () => {
     return () => clearTimeout(handler);
   }, [searchText]);
 
-  // Helper para extraer texto de elementos (similar a Faq.jsx)
+  // Helper para extraer texto de elementos
   const getText = (node) => {
     if (typeof node === "string" || typeof node === "number") {
       return node;
@@ -214,6 +214,7 @@ const Cursos = () => {
               <Curso
                 key={index}
                 {...curso}
+                estado={curso.estado}
                 onVerMas={() => setSelectedCurso(curso)}
               />
             ))

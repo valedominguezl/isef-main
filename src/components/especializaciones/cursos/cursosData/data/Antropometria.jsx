@@ -1,6 +1,7 @@
 import getCourseImage from '../getCourseImage'
 
 const antropometria = {
+  estado: "¡Nuevo!",
   name: "antropometria",
   title: "Antropometría",
   subTitle: "Técnicas y aplicaciones básicas",
