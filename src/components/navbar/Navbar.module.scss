@@ -185,31 +185,30 @@ nav {
         }
     }
 
-    li:first-of-type {
-        border: 1px solid white;
-        border-radius: 10rem;
-        padding: 4px 20px;
-        margin-left: -20px;
-        transition: .2s;
-        cursor: pointer;
+    // li:first-of-type {
+    //     border: 1px solid white;
+    //     border-radius: 10rem;
+    //     padding: 4px 20px;
+    //     margin-left: -20px;
+    //     transition: .2s;
+    //     cursor: pointer;
 
-        a {
-            font-weight: var(--light);
-        }
+    //     a {
+    //         font-weight: var(--light);
+    //     }
 
-        @media (max-width: 1024px) {
-            background: white;
-            color: black;
+    //     @media (max-width: 1024px) {
+    //         background: white;
+    //         color: black;
+    //     }
 
-        }
-
-        @media (min-width: 1025px) {
-            &:hover {
-                background: white;
-                color: black;
-            }
-        }
-    }
+    //     @media (min-width: 1025px) {
+    //         &:hover {
+    //             background: white;
+    //             color: black;
+    //         }
+    //     }
+    // }
 }
 
 .navLink:not(:nth-child(2)) {
@@ -406,6 +405,10 @@ nav {
 
         .menuIcon {
             padding-right: 2rem;
+        }
+
+        > :first-child {
+            display: none;
         }
     }
 

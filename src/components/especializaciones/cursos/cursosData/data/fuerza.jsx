@@ -5,7 +5,7 @@ const fuerza = {
   title: "Entrenamiento de la fuerza",
   subTitle: "Las aplicaciones en el gimnasio y su suplementación",
   bgImage: getCourseImage("fuerza.webp"),
-  expositor: "Jorge Roig",
+  expositor: 2,
   descripcion: <p>
     Verás técnicas y metodologías avanzadas del entrenamiento de la fuerza, con un enfoque en su <strong>aplicación práctica en el gimnasio</strong>. Se abordarán temas como la anamnesis inicial del practicante, la composición corporal, y las adaptaciones al entrenamiento de la fuerza. También se explorará la determinación de la <strong>fuerza máxima (1RM)</strong>, la entrada en calor, la progresión de las cargas, y los tiempos metabólicos del ejercicio.
     <br /><br />

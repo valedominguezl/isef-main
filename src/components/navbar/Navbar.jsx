@@ -144,10 +144,10 @@ const Navbar = () => {
           </div>
           <li className={styles.navLink}>
             <Link
-              to="/Inscripciones"
+              to="https://campus.isefsanluis.net/"
               onClick={handleSidebarClick(toggleSidebar)}
             >
-              Inscripciones
+              Campus
             </Link>
           </li>
           <li className={styles.navLink}>

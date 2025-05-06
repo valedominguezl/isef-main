@@ -33,7 +33,7 @@ const Detalle = ({ curso, onClose }) => {
 
     const getExpositorText = (expositor) => {
         if (expositor === 1) return "Dr. Nelio Bazán";
-        if (expositor === 2) return "Lic. Jorge Roig";
+        if (expositor === 2) return "Dr. Jorge Roig";
         if (expositor === 3) return "Dr. Roberto Rosler";
         return expositor || "Modalidad no especificada";
     };

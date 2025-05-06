@@ -1,16 +1,12 @@
 .container {
     position: relative;
-    padding: var(--padding-up) 0;
-    background: var(--grad-img), url('@/assets/media/home/sanLuis.webp');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+    padding: 2rem 0;
 
     .titulo {
         display: flex;
         flex-direction: column;
         text-align: center;
-        gap: 1rem;
+        gap: 1.5em;
         padding: 0 var(--padding-100);
     }
 }
@@ -18,7 +14,7 @@
 .swiper {
     user-select: none;
     --swiper-theme-color: white;
-    padding: var(--padding-up) var(--padding-100);
+    padding: 3rem var(--padding-100) var(--padding-up) var(--padding-100);
 
     :global(.swiper-button-prev) {
         height: 70px;
@@ -41,8 +37,7 @@
         margin-bottom: 3px;
         left: 50%;
         transform: translate(-50%);
-        width: fit-content;
-        background: rgba(black, .5);
+        background: transparent;
 
     }
 
@@ -50,11 +45,11 @@
         height: 15px;
         width: 15px;
         margin: 0 10px !important;
-        background: rgba(white, .9);
+        background: black;
     }
 
     :global(.swiper-pagination-bullet-active) {
-        background: white;
+        background: var(--principal);
     }
 }
 
@@ -81,7 +76,7 @@
     gap: 1rem;
     border-radius: 3rem;
     width: 100%;
-    overflow-y: auto;
+    overflow-y: hidden;
     box-shadow: var(--shadow-out);
     padding: var(--padding-up) var(--padding-100);
 
@@ -153,12 +148,5 @@
 @media (min-width: 500px) {
     .swiper {
         height: 80vh;
-    }
-}
-
-@media (max-width: 1500px) {
-
-    .swiper {
-        padding: var(--padding-up) var(--padding-100);
     }
 }

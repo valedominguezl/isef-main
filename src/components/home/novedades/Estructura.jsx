@@ -1,14 +1,21 @@
-import React, { useEffect, useRef } from 'react';
-import styles from './Novedades.module.scss';
-import ScrollToSection from '@/components/funciones/scroll/ScrollToSection';
+import React, { useEffect, useRef } from "react";
+import styles from "./Novedades.module.scss";
+import ScrollToSection from "@/components/funciones/scroll/ScrollToSection";
 
-const Estructura = ({ title, description, page, id, imagePath }) => {
+const Estructura = ({ title, type = 1, description, page, id, imagePath }) => {
   const overlayStyle = {
-    background: `linear-gradient(to bottom, transparent, black), url(${imagePath})`,
-    backgroundPosition: 'center',
+    background: `linear-gradient(rgba(0,0,0,0.9), rgba(var(--principal-rgb) 0.4)), url(${imagePath})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
   };
 
   const containerRef = useRef(null);
+
+  // Diccionario de tipos
+  const typeTxt = {
+    1: "Novedades",
+    2: "Nuevo curso",
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -20,7 +27,7 @@ const Estructura = ({ title, description, page, id, imagePath }) => {
     // IntersectionObserver
     const observer = new IntersectionObserver(
       (entries, obs) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add(styles.visible);
             obs.unobserve(entry.target);
@@ -30,22 +37,26 @@ const Estructura = ({ title, description, page, id, imagePath }) => {
       { threshold: 0.1 }
     );
 
-    animatedElements.forEach(el => observer.observe(el));
+    animatedElements.forEach((el) => observer.observe(el));
 
     // Cleanup
     return () => {
-      animatedElements.forEach(el => observer.unobserve(el));
+      animatedElements.forEach((el) => observer.unobserve(el));
     };
   }, []);
 
   return (
     <div ref={containerRef} className={styles.swiperSlide}>
       <div className={styles.overlay} style={overlayStyle}>
-        <h4 className={styles.info}>Últimas novedades</h4>
+        <h4 className={styles.info}>{typeTxt[type] || ""}</h4>
         <h2 className={styles.info}>{title}</h2>
         <div className={`${styles.info} linea-svg bl`}></div>
         <p className={styles.info}>{description}</p>
-        <ScrollToSection className={`${styles.info} btn-cta grad3`} page={page} id={id}>
+        <ScrollToSection
+          className={`${styles.info} btn-cta grad3`}
+          page={page}
+          id={id}
+        >
           Ver más
         </ScrollToSection>
       </div>
