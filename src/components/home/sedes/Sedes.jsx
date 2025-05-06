@@ -17,10 +17,10 @@ const Sedes = () => {
     if (!container) return;
 
     // Seleccion elementos a animar:
-    const titulos = container.querySelector(`.${styles.titulos}`);
+    const titulo = container.querySelector(`.${styles.titulo}`);
 
     // Array
-    const animatedElements = [titulos].filter(Boolean);
+    const animatedElements = [titulo].filter(Boolean);
 
     // IntersectionObserver
     const observer = new IntersectionObserver(

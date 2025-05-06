@@ -12,12 +12,12 @@ const nutricion = {
     Los participantes aprenderán sobre la <strong>importancia de los macronutrientes</strong> —carbohidratos, proteínas y lípidos— y cómo éstos influyen en el metabolismo energético y la síntesis proteica. También se discutirá la relevancia de los micronutrientes, la hidratación adecuada, y la <strong>suplementación</strong>, así como las normativas y prácticas relacionadas con el dopaje. <strong>Este curso es ideal para profesionales y entusiastas del deporte que buscan mejorar su conocimiento y práctica en nutrición deportiva</strong>.
   </p>
   ,
-  duracion: null,
-  modalidad: null,
+  duracion: "6 meses. 1 clase por mes, días jueves de 19 a 21 horas",
+  modalidad: "Online por Meet",
   costo: null,
-  inicio: null,
-  importante: null,
-  condiciones: null,
+  inicio: "08/05/2025",
+  importante: "Este es un curso que tiene un encuentro mensual. El contenido es muy específico para cada clase y supone un esfuerzo de lectura que cada alumno debe realizar. Así es que esperamos que los estudiantes puedan tener leído el tema antes de cada clase.",
+  condiciones: "80% de asistencia, participación en clase y entrega de trabajo práctico final.",
   temario: [
     {
       tema: "Alimentación y Nutrición",
@@ -26,34 +26,23 @@ const nutricion = {
         { tema: "Etapas de la alimentación / nutrición." },
         { tema: "Guía Alimentaria para la Población Argentina." },
         { tema: "Clasificación NOVA." },
-      ],
-    },
-    {
-      tema: "Valoración del Estado Nutricional",
-      subtemas: [
-        { tema: "Anamnesis." },
+        { tema: "Valoración del Estado Nutricional." },
         { tema: "Métodos para estimar la composición corporal." },
-        { tema: "Gasto Energético Basal." },
-        { tema: "Requerimientos nutricionales de diferentes deportes." },
       ],
     },
     {
-      tema: "Macronutrientes: Carbohidratos",
+      tema: "Macronutrientes",
       subtemas: [
+        { tema: "Carbohidratos." },
         { tema: "Clasificación." },
         { tema: "Metabolismo energético." },
         { tema: "Glucógeno muscular." },
         { tema: "Alimentos fuentes." },
         { tema: "Periodización." },
-      ],
-    },
-    {
-      tema: "Macronutrientes: Proteínas y Lípidos",
-      subtemas: [
+        { tema: "Proteínas." },
         { tema: "Síntesis proteica." },
         { tema: "Valor biológico de los alimentos." },
         { tema: "Proteínas vegetales y proteínas animales." },
-        { tema: "Los lípidos en la alimentación." },
       ],
     },
     {

@@ -20,10 +20,10 @@ const Novedades = () => {
   }, []);
 
   return (
-    <div className={`${styles.container} bl`}>
+    <div className={`${styles.container}`}>
       <div className={styles.titulo}>
-        <h2>Las <span>últimas noticias</span></h2>
-        <div className="linea-svg bl"></div>
+        <h2>Las <span className='color1'>últimas noticias</span></h2>
+        <div className="linea-svg"></div>
         <p>Enterate qué hay de nuevo en el profesorado: especializaciones, cambios institucionales y más</p>
       </div>
       {novedades.length > 0 && (
