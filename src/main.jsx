@@ -52,7 +52,7 @@ const AppContent = () => {
         initializeGtag(consent);
       };
 
-      script.onerror = () => console.error('Error al cargar gtag.js');
+      script.onerror = () => console.error('Errorr al cargar gtag.js');
       document.head.appendChild(script);
     }
   }, []);
