@@ -35,16 +35,7 @@ const Novedades = () => {
           centeredSlides={true}
           spaceBetween={50}
           loop={false}
-          navigation={{ enabled: true }}
           pagination={{ clickable: true }}
-          breakpoints={{
-            0: {
-              navigation: { enabled: false },
-            },
-            1400: {
-              navigation: { enabled: true },
-            },
-          }}
         >
           {novedades.map((news, index) => (
              <SwiperSlide key={index} className={styles.swiperSlide}>
