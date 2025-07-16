@@ -1,9 +1,9 @@
 import videoData from './videos';
-import styles from "./Hijos.module.scss";
+import styles from "./Conferencias.module.scss";
 import searchIcon from '@/assets/simbols/search.webp';
 import { useState, useEffect } from 'react';
 
-export default function Hijos() {
+export default function Conferencias() {
     const [searchText, setSearchText] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
 

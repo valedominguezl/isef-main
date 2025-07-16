@@ -1,8 +1,8 @@
 import React from 'react'
-import Todo from '@/components/hijos/Hijos.jsx'
+import Todo from '@/components/conferencias/Conferencias.jsx'
 import Intros from '@/components/reutilizables/intros/Intros.jsx'
 
-const Hijos = () => {
+const Conferencias = () => {
   return (
     <div className='mainComponent'>
       <Intros
@@ -16,4 +16,4 @@ const Hijos = () => {
   )
 }
 
-export default Hijos
+export default Conferencias
