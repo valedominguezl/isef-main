@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./Especializaciones.module.scss";
 import Curso from "@/components/especializaciones/cursos/Curso.jsx";
@@ -7,60 +7,59 @@ import cursosData from "@/components/especializaciones/cursos/cursosData/cursosD
 const Especializaciones = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const sliderRef = useRef(null);
+  const touchStartX = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [animating, setAnimating] = useState(false);
+  const [nextSlide, setNextSlide] = useState(null);
+  const [itemsPerSlide, setItemsPerSlide] = useState(() => window.innerWidth > 1300 ? 2 : 1);
+  const inactivityTimer = useRef(null);
+  const autoSlideTimer = useRef(null);
 
-  // Nombres de los componentes de los cursos que deseas mostrar en el orden deseado
   const selectedCourseNames = [
+    "intArtificial",
     "nutricion",
     "antropometria",
-    "escritura",
     "investigacion",
     "intermitente",
     "neurociencias",
   ];
 
-  // Crear un objeto para acceso rápido a los cursos por nombre
   const cursosDataByName = cursosData.reduce((acc, curso) => {
     acc[curso.name] = curso;
     return acc;
   }, {});
 
-  // Obtener los cursos en el orden especificado
   const selectedEspecializaciones = selectedCourseNames.map((name) => cursosDataByName[name]).filter(Boolean);
 
-  // Determina cuántos cursos mostrar por slide según el ancho de la ventana
-  const getItemsPerSlide = () => (window.innerWidth > 1300 ? 2 : 1);
-  const [itemsPerSlide, setItemsPerSlide] = useState(getItemsPerSlide());
+  const buildSlides = () => {
+    const result = [];
+    for (let i = 0; i < selectedEspecializaciones.length; i += itemsPerSlide) {
+      result.push(selectedEspecializaciones.slice(i, i + itemsPerSlide));
+    }
+    return result;
+  };
+
+  const [slides, setSlides] = useState(buildSlides);
 
   useEffect(() => {
     const handleResize = () => {
-      setItemsPerSlide(getItemsPerSlide());
+      const newItems = window.innerWidth > 1300 ? 2 : 1;
+      setItemsPerSlide(newItems);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Divide los cursos en slides según itemsPerSlide
-  const slides = [];
-  for (let i = 0; i < selectedEspecializaciones.length; i += itemsPerSlide) {
-    slides.push(selectedEspecializaciones.slice(i, i + itemsPerSlide));
-  }
-
-  const [currentSlide, setCurrentSlide] = useState(0);
   useEffect(() => {
+    setSlides(buildSlides());
     setCurrentSlide(0);
   }, [itemsPerSlide]);
 
-  // Estados para controlar la animación del slider
-  const [nextSlide, setNextSlide] = useState(null);
-  const [animating, setAnimating] = useState(false);
-
-  // Función para manejar 'Ver Más'
   const handleVerMas = () => {
     const targetPage = "/Especializaciones";
     const targetId = "especializacionesCursos";
-
     navigate(targetPage);
-
     const checkExist = setInterval(() => {
       const section = document.getElementById(targetId);
       if (section) {
@@ -68,33 +67,69 @@ const Especializaciones = () => {
         clearInterval(checkExist);
       }
     }, 300);
-
-    setTimeout(() => {
-      clearInterval(checkExist);
-    }, 5000);
+    setTimeout(() => clearInterval(checkExist), 5000);
   };
 
-  // Lógica para la animación automática del slider
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const startAutoSlide = () => {
+    clearInterval(autoSlideTimer.current);
+    autoSlideTimer.current = setInterval(() => {
       const newNext = (currentSlide + 1) % slides.length;
       setNextSlide(newNext);
       setAnimating(true);
-
       setTimeout(() => {
         setCurrentSlide(newNext);
         setNextSlide(null);
         setAnimating(false);
-      }, 1000); // Duración de la animación
+      }, 1000);
+    }, 8000);
+  };
 
-    }, 8000); // Intervalo entre slides
+  const pauseAutoSlide = () => {
+    clearInterval(autoSlideTimer.current);
+    clearTimeout(inactivityTimer.current);
+    inactivityTimer.current = setTimeout(() => {
+      startAutoSlide();
+    }, 5000);
+  };
 
-    return () => clearInterval(interval);
+  useEffect(() => {
+    startAutoSlide();
+    return () => {
+      clearInterval(autoSlideTimer.current);
+      clearTimeout(inactivityTimer.current);
+    };
   }, [currentSlide, slides.length]);
 
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    pauseAutoSlide();
+  };
+
+  const handleTouchEnd = (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = endX - touchStartX.current;
+    if (Math.abs(deltaX) > 50 && !animating) {
+      const direction = deltaX > 0 ? -1 : 1;
+      const newIndex = (currentSlide + direction + slides.length) % slides.length;
+      setNextSlide(newIndex);
+      setAnimating(true);
+      setTimeout(() => {
+        setCurrentSlide(newIndex);
+        setNextSlide(null);
+        setAnimating(false);
+      }, 1000);
+    }
+  };
+
   return (
-    <div id="especializacionesCarrera" className={styles.container}>
-      <div className={`${styles.sliderContainer}`}>
+    <div
+      id="especializacionesCarrera"
+      className={styles.container}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      ref={sliderRef}
+    >
+      <div className={styles.sliderContainer}>
         {slides.length > 0 && (
           <>
             {!animating && (
@@ -121,14 +156,16 @@ const Especializaciones = () => {
           </>
         )}
       </div>
-      {/* Paginación */}
       {slides.length > 0 && (
         <div className={styles.pagination}>
           {slides.map((_, index) => (
             <span
               key={index}
               className={`${styles.bullet} ${currentSlide === index ? styles.activeBullet : ""}`}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => {
+                pauseAutoSlide();
+                setCurrentSlide(index);
+              }}
             ></span>
           ))}
         </div>
