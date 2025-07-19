@@ -97,9 +97,12 @@ const Cursos = () => {
 
   const cursosToDisplay = useMemo(() => {
     const ordenados = [...filteredCursos].sort((a, b) => {
-      if (a.estado && !b.estado) return -1;
-      if (!a.estado && b.estado) return 1;
-      return 0;
+      const prioridad = (curso) => {
+        if (curso.destacado) return 0;
+        if (curso.estado) return 1;
+        return 2;
+      };
+      return prioridad(a) - prioridad(b);
     });
 
     return debouncedSearch ? ordenados : ordenados.slice(0, visibleCount);
@@ -227,7 +230,7 @@ const Cursos = () => {
               />
             ))
           ) : (
-            <h3 style={{ color: "var(--h4-bcolor)" }}>
+            <h3 style={{ color: "var(--h4-bcolor)", width: "100%", textAlign: "center" }}>
               ¡Disculpá!, no se encontraron cursos sobre eso...
             </h3>
           )}

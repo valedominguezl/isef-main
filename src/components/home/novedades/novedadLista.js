@@ -3,6 +3,16 @@ import { getImage } from "@/components/funciones/utils/getImages.js";
 const novedad = async () => {
   return [
     {
+      title: "IA Aplicada al deporte",
+      description:
+        "A partir de la consideración de los nuevos escenarios en los que las tecnologías, medios digitales, la inteligencia artificial generativa y las redes sociales se encuentran en expansión, es fundamental para los futuros docentes desarrollar a lo largo de su formación competencias digitales que les permitan desempeñarse profesionalmente.",
+      type: 2,
+      page: "/Especializaciones",
+      id: "especializacionesCursos",
+      imagePath: await getImage("especializaciones/cursos/intArtificial.webp"),
+    },
+
+    {
       title: "Laboratorio de investigación",
       description:
         "En este 2025 comenzará la primera etapa de nuestro laboratorio de anatomía funcional, fisiología del ejercicio y nutrición a cargo del Dr. Nelio Bazán. Será una nueva etapa en la historia de nuestra institución, que nos permitirá seguir creciendo y aportando al conocimiento científico.",
