@@ -68,7 +68,7 @@ const profesionales = [
       "Docente e investigador",
     ],
     cvLink:
-      "https://docs.google.com/document/d/11ZTbfKO9EX_wrErNIL0ux8G9sIs97G_g/edit?usp=sharing&ouid=104941986694218560787&rtpof=true&sd=true",
+      "https://docs.google.com/document/d/1mLVtcBEoEj83_hyjJW-Ek-KFTfXYsDe-/edit?usp=sharing&ouid=101394837957796627452&rtpof=true&sd=true",
   },
 ];
 
