@@ -7,7 +7,7 @@ const intArtificial = {
   title: "Inteligencia artificial",
   subTitle: "Su aplicación en el deporte",
   bgImage: getCourseImage("intArtificial.webp"),
-  expositor: "Walter Agüero",
+  expositor: "Dr. Walter Agüero",
   descripcion: (
     <p>
       Las competencias digitales transversales en la Formación Docente Inicial

@@ -145,16 +145,8 @@ const Navbar = () => {
             <img src={closeIcon} alt="" />
           </div>
           <li className={styles.navLink}>
-            <Link
-              to="https://campus.isefsanluis.net/"
-              onClick={handleSidebarClick(toggleSidebar)}
-            >
-              Campus
-            </Link>
-          </li>
-          <li className={styles.navLink}>
             <Link to="/Carrera" onClick={handleSidebarClick(toggleSidebar)}>
-              Carrera
+              La carrera
             </Link>
           </li>
           <li className={styles.navLink}>
@@ -165,14 +157,14 @@ const Navbar = () => {
               Especializaciones
             </Link>
           </li>
-          <li className={styles.navLink}>
+          {/* <li className={styles.navLink}>
             <Link
               to="/Noticias"
               onClick={handleSidebarClick(toggleSidebar)}
             >
               Noticias
             </Link>
-          </li>
+          </li> */}
           <li className={styles.navLink}>
             <Link to="/Aranceles" onClick={handleSidebarClick(toggleSidebar)}>
               Aranceles

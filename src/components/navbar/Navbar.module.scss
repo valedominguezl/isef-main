@@ -185,34 +185,21 @@ nav {
       font-weight: var(--light);
     }
   }
-
-  // li:first-of-type {
-  //     border: 1px solid white;
-  //     border-radius: 10rem;
-  //     padding: 4px 20px;
-  //     margin-left: -20px;
-  //     transition: .2s;
-  //     cursor: pointer;
-
-  //     a {
-  //         font-weight: var(--light);
-  //     }
-
-  //     @media (max-width: 1024px) {
-  //         background: white;
-  //         color: black;
-  //     }
-
-  //     @media (min-width: 1025px) {
-  //         &:hover {
-  //             background: white;
-  //             color: black;
-  //         }
-  //     }
-  // }
 }
 
-.navLink {
+.sideBar li:first-of-type {
+
+  a {
+    font-weight: var(--bold);
+    opacity: 1;
+
+    &::after {
+      background: white;
+    }
+  }
+}
+
+.navLink{
   position: relative;
   display: inline-block;
 
