@@ -145,6 +145,11 @@ const Navbar = () => {
             <img src={closeIcon} alt="" />
           </div>
           <li className={styles.navLink}>
+            <Link to="https://campus.isefsanluis.net/" onClick={handleSidebarClick(toggleSidebar)}>
+              Campus
+            </Link>
+          </li>
+          <li className={styles.navLink}>
             <Link to="/Carrera" onClick={handleSidebarClick(toggleSidebar)}>
               La carrera
             </Link>
