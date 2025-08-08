@@ -119,14 +119,16 @@ const Navbar = () => {
                         </div>
 
                     </div> */}
-          {/* <a
-            className={styles.menuIcon}
-            href="https://campus.isefsanluis.net/"
-            onClick={handleSidebarClick()}
-          >
-            <img src={campusIcon} alt="" />
-            <h4>Campus</h4>
-          </a> */}
+          {
+            // <a
+            //   className={styles.menuIcon}
+            //   href="https://campus.isefsanluis.net/"
+            //   onClick={handleSidebarClick()}
+            // >
+            //   <img src={campusIcon} alt="" />
+            //   <h4>Campus</h4>
+            // </a>
+          }
 
           <div className={styles.menuIcon} onClick={toggleSidebar}>
             <img src={hamburgerIcon} alt="" />
@@ -145,7 +147,10 @@ const Navbar = () => {
             <img src={closeIcon} alt="" />
           </div>
           <li className={styles.navLink}>
-            <Link to="https://campus.isefsanluis.net/" onClick={handleSidebarClick(toggleSidebar)}>
+            <Link
+              to="https://campus.isefsanluis.net/"
+              onClick={handleSidebarClick(toggleSidebar)}
+            >
               Campus
             </Link>
           </li>

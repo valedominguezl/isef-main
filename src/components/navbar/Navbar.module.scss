@@ -191,10 +191,9 @@ nav {
 
   a {
     font-weight: var(--bold);
-    opacity: 1;
 
-    &::after {
-      background: white;
+    &:hover {
+      opacity: 1;
     }
   }
 }
@@ -396,9 +395,9 @@ nav {
       padding-right: 2rem;
     }
 
-    > :first-child {
-      display: none;
-    }
+    // > :first-child {
+    //   display: none;
+    // }
   }
 
   .searchBar {
