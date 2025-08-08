@@ -119,14 +119,14 @@ const Navbar = () => {
                         </div>
 
                     </div> */}
-          <a
+          {/* <a
             className={styles.menuIcon}
             href="https://campus.isefsanluis.net/"
             onClick={handleSidebarClick()}
           >
             <img src={campusIcon} alt="" />
             <h4>Campus</h4>
-          </a>
+          </a> */}
 
           <div className={styles.menuIcon} onClick={toggleSidebar}>
             <img src={hamburgerIcon} alt="" />
