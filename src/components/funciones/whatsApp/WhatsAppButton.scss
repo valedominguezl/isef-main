@@ -9,8 +9,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-out-img);
   z-index: 9;
+  opacity: 0.8;
+  transition: .5s;
+
+  &:hover {
+    opacity: 1;
+  }
 
   @media (max-width: 768px) {
     bottom: 2em;
