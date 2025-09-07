@@ -13,6 +13,16 @@ const novedad = async () => {
     },
 
     {
+      title: "Liderazgo",
+      description:
+        "Las instituciones educativas y deportivas requieren transformaciones profundas, por eso es clave formar profesionales capaces de liderar. Este curso brinda herramientas para enfrentar el cambio con liderazgo, fortalecer la cultura institucional y aplicar metodologías que generen impacto real y duradero en la sociedad.",
+      type: 2,
+      page: "/Especializaciones",
+      id: "especializacionesCursos",
+      imagePath: await getImage("especializaciones/cursos/liderazgo.webp"),
+    },
+
+    {
       title: "Laboratorio de investigación",
       description:
         "En este 2025 comenzará la primera etapa de nuestro laboratorio de anatomía funcional, fisiología del ejercicio y nutrición a cargo del Dr. Nelio Bazán. Será una nueva etapa en la historia de nuestra institución, que nos permitirá seguir creciendo y aportando al conocimiento científico.",
