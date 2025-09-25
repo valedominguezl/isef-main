@@ -54,9 +54,9 @@ const Cuota = () => {
 
       </div>
 
-      <LoadingAnchor className='btn-cta grad3' href='/Aranceles'>
+      {/* <LoadingAnchor className='btn-cta grad3' href='/Aranceles'>
         Aranceles
-      </LoadingAnchor>
+      </LoadingAnchor> */}
 
     </div>
   )

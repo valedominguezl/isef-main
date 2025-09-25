@@ -146,6 +146,22 @@ const Navbar = () => {
           <div className={styles.closeSidebar} onClick={toggleSidebar}>
             <img src={closeIcon} alt="" />
           </div>
+
+          <li className={styles.navLink}>
+            <Link
+              to="/Inscripciones"
+              onClick={handleSidebarClick(toggleSidebar)}
+            >
+              🚀 Inscribite ya!
+            </Link>
+          </li>
+
+          <li className={styles.navLink}>
+            <Link to="/Carrera" onClick={handleSidebarClick(toggleSidebar)}>
+              La carrera
+            </Link>
+          </li>
+
           <li className={styles.navLink}>
             <Link
               to="https://campus.isefsanluis.net/"
@@ -154,11 +170,7 @@ const Navbar = () => {
               Campus
             </Link>
           </li>
-          <li className={styles.navLink}>
-            <Link to="/Carrera" onClick={handleSidebarClick(toggleSidebar)}>
-              La carrera
-            </Link>
-          </li>
+
           <li className={styles.navLink}>
             <Link
               to="/Especializaciones"
@@ -175,11 +187,11 @@ const Navbar = () => {
               Noticias
             </Link>
           </li> */}
-          <li className={styles.navLink}>
+          {/* <li className={styles.navLink}>
             <Link to="/Aranceles" onClick={handleSidebarClick(toggleSidebar)}>
               Aranceles
             </Link>
-          </li>
+          </li> */}
           <li className={styles.navLink}>
             <Link
               to="/Institucional/Contacto"

@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       // TEMPORAL
       { path: "hijos.htm", element: <Conferencias /> },
 
-      { path: "Aranceles", element: <Aranceles /> },
+      // { path: "Aranceles", element: <Aranceles /> },
       { path: "Inscripciones", element: <Inscripciones /> },
       { path: "Carrera", element: <Carrera /> },
       { path: "Especializaciones", element: <Especializaciones /> },
