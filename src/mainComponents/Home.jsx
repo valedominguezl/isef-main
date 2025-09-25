@@ -24,9 +24,9 @@ const Home = () => {
 
       <Novedades />
 
-      <Suspense fallback={<div>Loading...</div>}>
-        {/* <Instagram /> */}
-      </Suspense>
+      {/* <Suspense fallback={<div>Loading...</div>}>
+        <Instagram />
+      </Suspense> */}
 
       <Especializaciones />
 

@@ -75,9 +75,9 @@ html {
     overflow-anchor: none;
 }
 
-// .mainComponent > *:nth-child(even) {
-//     box-shadow: var(--shadow-in);
-// }
+.mainComponent > *:nth-child(even) {
+    background-color: rgba(var(--principal-rgb) .05);
+}
 
 // Estilos de texto
 

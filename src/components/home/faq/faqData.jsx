@@ -17,10 +17,7 @@ const faqData = [
             <LoadingAnchor href="/Inscripciones" target="_blank">
                 inscripciones
             </LoadingAnchor>.
-            Además, deberás <strong>abonar la inscripción</strong> (Consultá los {' '}
-            <LoadingAnchor href="/Aranceles" target="_blank">
-                aranceles de este año
-            </LoadingAnchor>).
+            Además, deberás <strong>abonar la inscripción</strong>
         </>
     },
 
@@ -52,20 +49,20 @@ const faqData = [
     },
 
     // Cuota
-    {
-        question: '¿Qué valor tiene la cuota? ¿Hay gastos adicionales?',
-        answer: <>
-            La <strong>cuota actualizada</strong> podés verla{' '}
-            <LoadingAnchor href="/Aranceles" target="_blank">
-                <strong>acá</strong>
-            </LoadingAnchor>
-            . En el I.S.E.F. San Luís no te cobramos gastos adicionales, sean constancias, certificaciones, cuotas aguinaldo, matricula o pileta de natación. <br /> <br />
-            Por otro lado, <strong>el uniforme sí se paga a parte</strong> y es obligatorio. Te recomendamos comprarlo en {' '}
-            <LoadingAnchor href="https://wa.me/+5492664554121" target="_blank">
-                <strong>UNIFOR Indumentaria</strong>.
-            </LoadingAnchor>
-        </>
-    },
+    // {
+    //     question: '¿Qué valor tiene la cuota? ¿Hay gastos adicionales?',
+    //     answer: <>
+    //         La <strong>cuota actualizada</strong> podés verla{' '}
+    //         <LoadingAnchor href="/Aranceles" target="_blank">
+    //             <strong>acá</strong>
+    //         </LoadingAnchor>
+    //         . En el I.S.E.F. San Luís no te cobramos gastos adicionales, sean constancias, certificaciones, cuotas aguinaldo, matricula o pileta de natación. <br /> <br />
+    //         Por otro lado, <strong>el uniforme sí se paga a parte</strong> y es obligatorio. Te recomendamos comprarlo en {' '}
+    //         <LoadingAnchor href="https://wa.me/+5492664554121" target="_blank">
+    //             <strong>UNIFOR Indumentaria</strong>.
+    //         </LoadingAnchor>
+    //     </>
+    // },
 
     // Horarios
     {

@@ -113,11 +113,11 @@ const Requisitos = () => {
             <div className={styles.txt}>
               <h3>Reservar <span>banco</span></h3>
               <div className="linea-svg"></div>
-              <p>La inscripción tiene el mismo valor que la cuota: <strong>$50.000</strong>. Los cupos están limitados al <strong>espacio disponible en nuestras aulas</strong>, por esto, solo reservamos vacantes con el abono matrícula.</p>
+              <p>Los cupos están limitados al <strong>espacio disponible en nuestras aulas</strong>, por esto, solo reservamos vacantes con el abono matrícula.</p>
             </div>
-            <LoadingAnchor href="/Aranceles" target='_blank' className="btn-cta grad4">
+            {/* <LoadingAnchor href="/Aranceles" target='_blank' className="btn-cta grad4">
               Aranceles
-            </LoadingAnchor>
+            </LoadingAnchor> */}
           </div>
 
           <div className={styles.imgCont}>
