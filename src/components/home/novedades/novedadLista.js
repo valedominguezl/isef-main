@@ -3,6 +3,16 @@ import { getImage } from "@/components/funciones/utils/getImages.js";
 const novedad = async () => {
   return [
     {
+      title: "Responsabilidad civil",
+      description:
+        "La responsabilidad civil de los docentes afecta su accionar cotidiano y el ejercicio de su rol como garantes de la seguridad de los alumnos. Para profundizar en el tema invitamos a una especialista para brindarles herramientas que permitan prever situaciones perjudiciales para nuestra carrera tan expuesta a daños sufridos por nuestros niños.",
+      type: 2,
+      page: "/Especializaciones",
+      id: "especializacionesCursos",
+      imagePath: await getImage("especializaciones/cursos/responsabilidad.webp"),
+    },
+
+    {
       title: "IA Aplicada al deporte",
       description:
         "A partir de la consideración de los nuevos escenarios en los que las tecnologías, medios digitales, la inteligencia artificial generativa y las redes sociales se encuentran en expansión, es fundamental para los futuros docentes desarrollar a lo largo de su formación competencias digitales que les permitan desempeñarse profesionalmente.",

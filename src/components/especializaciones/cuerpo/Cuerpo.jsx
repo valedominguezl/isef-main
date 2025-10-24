@@ -6,6 +6,7 @@ import roig from "@/assets/media/especializaciones/profesionales/roigLogo.webp";
 import rosler from "@/assets/media/especializaciones/profesionales/roslerLogo.webp";
 import walter from "@/assets/media/especializaciones/profesionales/walter.webp";
 import hernan from "@/assets/media/especializaciones/profesionales/hernan.webp";
+import gatto from "@/assets/media/especializaciones/profesionales/gatto.webp";
 
 import LoadingAnchor from "@/components/funciones/loadingBar/LoadingAnchor";
 
@@ -89,6 +90,20 @@ const profesionales = [
     ],
     cvLink:
       "https://docs.google.com/document/d/1a7zzJu-dT0TkrlEZ-uyFc8kDflUwT7o8/edit?usp=sharing&ouid=101394837957796627452&rtpof=true&sd=true",
+  },
+
+  {
+    nombre: "Dra. Agustina Gatto",
+    img: gatto,
+    descripcion: [
+      "Abogada",
+      "Mediadora en redes alternativas",
+      "Egresada de la UCCUYO",
+      "Conferencista",
+      "Gestión en políticas públicas",
+    ],
+    cvLink:
+      "/cvGatto.pdf",
   },
 ];
 
