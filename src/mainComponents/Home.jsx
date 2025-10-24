@@ -9,10 +9,6 @@ import Cuota from '@/components/home/cuota/Cuota.jsx'
 import Sedes from '@/components/home/sedes/Sedes.jsx'
 import FAQ from '@/components/home/faq/Faq.jsx'
 
-
-// Importación perezosa de componentes
-const Instagram = React.lazy(() => import('@/components/home/instagram/Instagram.jsx'));
-
 const Home = () => {
   return (
     <div className="mainComponent">
@@ -23,10 +19,6 @@ const Home = () => {
       <Intro />
 
       <Novedades />
-
-      {/* <Suspense fallback={<div>Loading...</div>}>
-        <Instagram />
-      </Suspense> */}
 
       <Especializaciones />
 
