@@ -7,20 +7,19 @@ import Secundario from '@/components/inscripciones/secundario/Secundario.jsx'
 import Veinte from '@/components/inscripciones/veinte/Veinte.jsx'
 
 const Inscripciones = () => {
+  const currentYear = new Date().getFullYear()
+
   return (
     <div className='mainComponent'>
       <Intros
         bgImage={fondo}
         heading="Inscripciones"
-        subHeading="Ciclo lectivo 2025"
         showButton={false}
-        showLine={true}
+        showLine={false}
       />
 
       <Requisitos />
-
       <Secundario />
-
       <Veinte />
     </div>
   )
