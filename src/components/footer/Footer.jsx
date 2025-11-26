@@ -1,13 +1,13 @@
-import React from 'react'
-import './Footer.scss'
-import fbFooter from '@/assets/simbols/fbFooter.webp'
-import igFooter from '@/assets/simbols/igFooter.webp'
-import { useCookies } from '@/components/funciones/context/CookiesContext'
-import LoadingAnchor from '@/components/funciones/loadingBar/LoadingAnchor'
-
+import React from "react";
+import "./Footer.scss";
+import fbFooter from "@/assets/simbols/fbFooter.webp";
+import igFooter from "@/assets/simbols/igFooter.webp";
+import { useCookies } from "@/components/funciones/context/CookiesContext";
+import LoadingAnchor from "@/components/funciones/loadingBar/LoadingAnchor";
 
 const Footer = () => {
   const { openCookieSettings } = useCookies();
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="footer bl">
@@ -15,11 +15,23 @@ const Footer = () => {
         <div className="footer-telefonos">
           <h4>Teléfonos de contacto</h4>
           <div className="footer-telefonos-txt">
-            <p><span>General</span>: +54 9 2664 56-4435</p>
-            <p><span>Rectoría</span>: +54 9 2604 50-8428</p>
-            <p><span>Secretaría académica</span>: +54 9 2664 57-0570</p>
-            <p><span>Secretaría administrativa (San Luís)</span>: +54 9 2664 30-4739 | +54 9 2664 61-1345 | +54 9 2664 57-7972</p>
-            <p><span>Secretaría administrativa (Villa Mercedes)</span>: +54 9 2657 21-0254</p>
+            <p>
+              <span>General</span>: +54 9 2664 56-4435
+            </p>
+            <p>
+              <span>Rectoría</span>: +54 9 2604 50-8428
+            </p>
+            <p>
+              <span>Secretaría académica</span>: +54 9 2664 57-0570
+            </p>
+            <p>
+              <span>Secretaría administrativa (San Luís)</span>: +54 9 2664
+              30-4739 | +54 9 2664 61-1345 | +54 9 2664 57-7972
+            </p>
+            <p>
+              <span>Secretaría administrativa (Villa Mercedes)</span>: +54 9
+              2657 21-0254
+            </p>
           </div>
         </div>
         <div className="footer-redes">
@@ -35,7 +47,12 @@ const Footer = () => {
                 <img src={fbFooter} alt="Facebook Información General" />
               </div>
               <div className="footer-red-txt">
-                <p><span>Información <br />General</span></p>
+                <p>
+                  <span>
+                    Información <br />
+                    General
+                  </span>
+                </p>
               </div>
             </a>
             <a
@@ -48,7 +65,12 @@ const Footer = () => {
                 <img src={igFooter} alt="Instagram San Luis" />
               </div>
               <div className="footer-red-txt">
-                <p><span>Información <br />General</span></p>
+                <p>
+                  <span>
+                    Información <br />
+                    General
+                  </span>
+                </p>
               </div>
             </a>
             <a
@@ -61,7 +83,9 @@ const Footer = () => {
                 <img src={fbFooter} alt="Facebook San Luís" />
               </div>
               <div className="footer-red-txt">
-                <p><span>San Luís</span></p>
+                <p>
+                  <span>San Luís</span>
+                </p>
               </div>
             </a>
             <a
@@ -74,7 +98,12 @@ const Footer = () => {
                 <img src={fbFooter} alt="Facebook Villa Mercedes" />
               </div>
               <div className="footer-red-txt">
-                <p><span>Villa <br />Mercedes</span></p>
+                <p>
+                  <span>
+                    Villa <br />
+                    Mercedes
+                  </span>
+                </p>
               </div>
             </a>
           </div>
@@ -82,28 +111,20 @@ const Footer = () => {
       </div>
 
       <div className="footer-copy">
-        <a>I.S.E.F. San Luis 2025 © Todos los derechos reservados</a>
+        <a>I.S.E.F. San Luis {currentYear} © Todos los derechos reservados</a>
         <a
-          href='https://maps.app.goo.gl/mAtAF9dEStP8UWdK7'
-          target='_blank'
+          href="https://maps.app.goo.gl/mAtAF9dEStP8UWdK7"
+          target="_blank"
           rel="noopener noreferrer"
         >
           Colón 1138, Ciudad de San Luís, San Luís, Argentina
         </a>
-        <a
-          onClick={openCookieSettings}
-        >
-          Configuración de cookies
-        </a>
+        <a onClick={openCookieSettings}>Configuración de cookies</a>
 
-        <LoadingAnchor href="/Cookies">
-          Política de privacidad
-        </LoadingAnchor>
-
-
+        <LoadingAnchor href="/Cookies">Política de privacidad</LoadingAnchor>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
