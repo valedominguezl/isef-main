@@ -32,22 +32,27 @@ jobs:
           echo "$PRIVATE_KEY" > key.pem
           chmod 600 key.pem
 
-          # Crear la carpeta de la versión con el timestamp actual
+          # 1. Definir nombre de la versión
           BUILD_DIR=$(date +%Y%m%d%H%M%S)
+
+          # 2. Crear la carpeta en el VPS antes de subir
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST "mkdir -p /var/www/builds/$BUILD_DIR"
 
-          # Subir solo los archivos compilados (lo único que Nginx necesita)
+          # 3. Subir los archivos compilados (asegúrate de que './dist/' sea la ruta correcta)
           rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$BUILD_DIR/
 
-          # Actualización atómica del link simbólico
+          # 4. Actualizar el link simbólico
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-            # Buscamos la carpeta más reciente por fecha de creación
             LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
-            
-            # Forzamos la creación del link a la raíz de Nginx
-            ln -sfn "$LATEST_BUILD" /var/www/html
-            
-            echo "🚀 Despliegue completado: $LATEST_BUILD"
+            if [ -n "$LATEST_BUILD" ]; then
+              rm -rf /var/www/html
+              ln -sfn "$LATEST_BUILD" /var/www/html
+              sudo chown -R www-data:www-data /var/www/builds
+              sudo chmod -R 755 /var/www/builds
+              echo "🚀 Despliegue completado: $LATEST_BUILD"
+            else
+              echo "❌ Error: No se encontró ninguna carpeta en /var/www/builds"
+              exit 1
+            fi
           EOF
-
           rm -f key.pem
