@@ -32,25 +32,22 @@ jobs:
           echo "$PRIVATE_KEY" > key.pem
           chmod 600 key.pem
 
-          ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-           mkdir -p /var/www/builds
-           cd /var/www/isef
-           git fetch origin main
-           git checkout main
-           git reset --hard origin/main
-           git clean -fd
-           git pull origin main
-          EOF
-
+          # Crear la carpeta de la versión con el timestamp actual
           BUILD_DIR=$(date +%Y%m%d%H%M%S)
+          ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST "mkdir -p /var/www/builds/$BUILD_DIR"
 
+          # Subir solo los archivos compilados (lo único que Nginx necesita)
           rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$BUILD_DIR/
 
+          # Actualización atómica del link simbólico
           ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-           rm -rf /var/www/html
-           LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
-           ln -sfn "$LATEST_BUILD" /var/www/html
-           echo "🚀 Deploy completado. Nueva versión activa en /var/www/html"
+            # Buscamos la carpeta más reciente por fecha de creación
+            LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
+            
+            # Forzamos la creación del link a la raíz de Nginx
+            ln -sfn "$LATEST_BUILD" /var/www/html
+            
+            echo "🚀 Despliegue completado: $LATEST_BUILD"
           EOF
 
           rm -f key.pem
