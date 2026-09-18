@@ -10,6 +10,7 @@ import Institucional from "@/mainComponents/Institucional.jsx";
 import Contacto from "@/mainComponents/institucional/Contacto.jsx";
 import Historia from "@/mainComponents/institucional/Historia.jsx";
 import Noticias from "@/mainComponents/Noticias.jsx";
+import TestHiit from "@/mainComponents/TestHiit.jsx";
 
 import Conferencias from "@/mainComponents/Conferencias.jsx";
 
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
         ],
       },
       { path: "Noticias", element: <Noticias /> },
+      { path: "TestHiit", element: <TestHiit /> },
     ],
   },
   {

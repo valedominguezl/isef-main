@@ -206,6 +206,12 @@ const Navbar = () => {
               Inicio
             </Link>
           </li>
+
+          <li className={styles.navLink}>
+            <Link to="/TestHiit" onClick={handleSidebarClick(toggleSidebar)}>
+              Test HIIT
+            </Link>
+          </li>
         </ul>
       )}
     </div>
