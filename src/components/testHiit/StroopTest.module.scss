@@ -41,12 +41,15 @@
   transition: background-color 0.15s ease;
 }
 
+// Colores del feedback de práctica: evitan reutilizar el rojo o el verde, que son 2 de los 4
+// colores de respuesta del test, para no dejar una posible imagen remanente que contamine el
+// próximo ensayo. El error ya queda claramente señalizado por el shake, no depende del color.
 .card.flashGood {
-  background-color: #bbf7d0;
+  background-color: #e3e0ff;
 }
 
 .card.flashBad {
-  background-color: #fecaca;
+  background-color: #e5e7eb;
 }
 
 .card.shake {
@@ -453,6 +456,12 @@
   font-family: var(--tl-font);
 }
 
+.fixationCross {
+  font-size: 2.2rem;
+  font-weight: var(--light);
+  color: rgba(black, 0.35);
+}
+
 .grid4 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -462,7 +471,10 @@
 .colorbtn {
   padding: 1.3em 0.6em;
   border-radius: 1em;
-  border: none;
+  // Borde neutro uniforme: el amarillo tiene mucho menos contraste que el resto contra el fondo
+  // blanco de la tarjeta, así que sin esto su límite se percibe menos nítido que el de los otros
+  // 3 botones. El borde iguala la definición del borde entre los 4, sin depender del matiz.
+  border: 1.5px solid rgba(black, 0.1);
   color: white;
   font-weight: var(--bold);
   font-size: 1.05rem;
@@ -479,6 +491,11 @@
   &:active {
     transform: scale(0.96);
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
 }
 
 .cbRed {
@@ -494,8 +511,10 @@
 }
 
 .cbYellow {
-  background: #ffd400;
-  color: #1a1400;
+  // Amarillo oscurecido (dorado) para igualar el contraste contra el blanco con los otros 3
+  // colores (ver comentario en el array COLORS de StroopTest.jsx).
+  background: #b8860b;
+  color: white;
 }
 
 .countdownArea {
