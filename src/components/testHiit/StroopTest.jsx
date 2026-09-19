@@ -10,10 +10,6 @@ const CONFIG = {
   maxConsecutiveSameAnswer: 2, // evita repetición excesiva de la misma respuesta correcta
   practiceFeedbackMs: 600, // pausa entre ensayos durante la práctica (con corrección visual)
   countdownSeconds: 3, // cuenta regresiva antes de arrancar cada bloque de ensayos
-  // Tiempo máximo para responder cada ensayo; si no responde, cuenta como error. Es un parámetro
-  // propio de este protocolo, NO un estándar del Stroop clásico (que suele ser autopautado, sin
-  // límite de tiempo). Se documenta también en el Excel exportado (hoja "Protocolo").
-  responseDeadlineMs: 1500,
   // Cruz de fijación ("+") mostrada antes de cada estímulo (incluido el primero de cada
   // bloque): resetea la atención visual al centro de la pantalla y evita que la respuesta
   // anterior contamine el TR del siguiente ensayo. 500ms es la duración típica en protocolos
@@ -215,8 +211,7 @@ function sessionsToExcelXML(sessions) {
   const row = (values) => `<Row>${values.map(cell).join('')}</Row>`;
 
   // Hoja aparte con los parámetros del protocolo, para que quede documentado junto con los
-  // datos qué configuración se usó (en particular, que el límite de 1500ms es un parámetro
-  // propio de este protocolo y no un estándar del Stroop clásico, que suele ser autopautado).
+  // datos qué configuración se usó.
   const protocolRows = [
     ['Parámetro', 'Valor', 'Nota'],
     ['Ensayos de práctica', CONFIG.practiceTrials, 'Con corrección visual'],
@@ -226,11 +221,7 @@ function sessionsToExcelXML(sessions) {
       `${CONFIG.trialsPerCondition} por condición (congruente/incongruente/neutra) × 3`,
     ],
     ['Cuenta regresiva antes de cada bloque', `${CONFIG.countdownSeconds} s`, ''],
-    [
-      'Límite de tiempo por respuesta',
-      `${CONFIG.responseDeadlineMs} ms`,
-      'Parámetro propio de este protocolo, NO un estándar del Stroop clásico (que suele ser autopautado, sin límite de tiempo)',
-    ],
+    ['Límite de tiempo por respuesta', 'Ninguno (autopautado)', 'Como en el Stroop clásico: cada ensayo espera la respuesta sin un plazo máximo'],
     ['Cruz de fijación antes de cada estímulo', `${CONFIG.fixationMs} ms`, 'Incluido el primer ensayo de cada bloque'],
     ['TR mínimo válido para el promedio', `${MIN_VALID_RT_MS} ms`, 'Respuestas más rápidas se consideran anticipatorias y se excluyen solo del cálculo de TR'],
   ];
@@ -393,27 +384,23 @@ const StroopTest = () => {
   // reacción recién cuando el navegador ya pintó el estímulo en pantalla (doble
   // requestAnimationFrame: el primero corre antes del próximo pintado, el segundo ya después),
   // en vez de medir desde que React confirma el render (que puede ir unos ms antes del pintado real).
+  // El ensayo es autopautado (sin límite de tiempo por respuesta), como el Stroop clásico.
   useEffect(() => {
     if (screen !== 'stimulus') return;
     answeredRef.current = false;
     setFeedback(null);
 
     let rafId2 = null;
-    let deadlineTimer = null;
 
     const rafId1 = requestAnimationFrame(() => {
       rafId2 = requestAnimationFrame(() => {
         t0Ref.current = performance.now();
-        deadlineTimer = setTimeout(() => {
-          if (!answeredRef.current) onAnswer(null);
-        }, CONFIG.responseDeadlineMs);
       });
     });
 
     return () => {
       cancelAnimationFrame(rafId1);
       if (rafId2 != null) cancelAnimationFrame(rafId2);
-      if (deadlineTimer != null) clearTimeout(deadlineTimer);
     };
   }, [screen, idx]);
 
@@ -659,7 +646,6 @@ const StroopTest = () => {
               Toque el botón del color correspondiente lo más rápido y preciso que pueda. Primero hay <strong> {CONFIG.practiceTrials}{' '}
               ensayos de práctica</strong> donde se le dirá si eligió correctamente o no. Después empieza la evaluación real, sin corrección.
             </p>
-            <div className={styles.text}><strong>⏱ Tiene un segundo y medio</strong> para elegir cada color. Si no llega a responder a tiempo, cuenta como error.</div>
             <div className={styles.spacer} />
             <button
               className={styles.btnPrimary}
