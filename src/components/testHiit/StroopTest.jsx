@@ -665,7 +665,7 @@ const StroopTest = () => {
             <ScreenHeader onBack={() => setScreen('instructions-2')} counter="3/3" progressPct={100} />
             <p className={styles.text}>
               Antes de empezar, probemos con un ejemplo. Tocá el botón <strong>del color de la tinta</strong> con la que está
-              escrita esta palabra (acá no hay límite de tiempo).
+              escrita esta palabra.
             </p>
             <div className={styles.stimzone}>
               <div className={styles.stimword} style={{ color: DEMO_TRIAL.hex }}>

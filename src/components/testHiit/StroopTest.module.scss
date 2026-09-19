@@ -8,6 +8,12 @@
   padding: 12rem var(--padding-100) var(--padding-up);
   background: white;
   overflow: hidden;
+  // Evita que el navegador/SO reinterprete la página con su modo oscuro automático o con el
+  // modo de alto contraste ("forced colors") de Windows. Sin esto, algunos sistemas repintan el
+  // texto de la palabra (propiedad "color") con una heurística distinta a la del relleno de los
+  // botones ("background-color"), y terminan sin coincidir entre sí — justo el color es lo que
+  // se está midiendo, así que no puede quedar a criterio del sistema operativo del participante.
+  color-scheme: light only;
 }
 
 .dimLayer {
@@ -454,6 +460,10 @@
   text-transform: uppercase;
   letter-spacing: -0.01em;
   font-family: var(--tl-font);
+  // El color de esta palabra es el estímulo real del test, no una decoración: si el modo de alto
+  // contraste del sistema operativo lo reemplaza por un color del sistema, deja de coincidir con
+  // el de los botones (que si soportan ese modo, tomarían otro color del sistema por separado).
+  forced-color-adjust: none;
 }
 
 .fixationCross {
@@ -483,6 +493,9 @@
   cursor: pointer;
   box-shadow: var(--shadow-out);
   transition: transform 0.15s ease, opacity 0.15s ease;
+  // Igual que en .stimword: el color de fondo es la respuesta que el participante debe
+  // identificar, no un adorno, así que no puede quedar sujeto al modo de alto contraste del SO.
+  forced-color-adjust: none;
 
   &:hover {
     opacity: 0.95;
