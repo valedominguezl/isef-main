@@ -10,18 +10,31 @@ const CONFIG = {
   maxConsecutiveSameAnswer: 2, // evita repetición excesiva de la misma respuesta correcta
   practiceFeedbackMs: 600, // pausa entre ensayos durante la práctica (con corrección visual)
   countdownSeconds: 3, // cuenta regresiva antes de arrancar cada bloque de ensayos
-  responseDeadlineMs: 1500, // tiempo máximo para responder cada ensayo; si no responde, cuenta como error
+  // Tiempo máximo para responder cada ensayo; si no responde, cuenta como error. Es un parámetro
+  // propio de este protocolo, NO un estándar del Stroop clásico (que suele ser autopautado, sin
+  // límite de tiempo). Se documenta también en el Excel exportado (hoja "Protocolo").
+  responseDeadlineMs: 1500,
+  // Cruz de fijación ("+") mostrada antes de cada estímulo (incluido el primero de cada
+  // bloque): resetea la atención visual al centro de la pantalla y evita que la respuesta
+  // anterior contamine el TR del siguiente ensayo. 500ms es la duración típica en protocolos
+  // Stroop estandarizados (PsyToolkit, literatura clásica).
+  fixationMs: 500,
 };
 /* =================================================================================== */
 
 const UNDO_WINDOW_MS = 5000;
 const TOAST_CLOSE_MS = 300; // duración de la animación de salida del toast de deshacer
 
+// El amarillo puro (#ffd400) tiene un contraste de ~1.4:1 contra el fondo blanco de la tarjeta
+// (los otros tres colores están entre 3:1 y 6:1) — hacía que la palabra/botón amarillo fueran
+// mucho más difíciles de percibir que los demás, un sesgo perceptual ajeno al Stroop en sí que
+// distorsionaría el TR de esa condición. Se usa un amarillo más oscuro (dorado) con contraste
+// equivalente al resto para que ninguna condición esté en desventaja por el diseño de la página.
 const COLORS = [
   { key: 'rojo', label: 'ROJO', hex: '#e6161d', cls: styles.cbRed },
   { key: 'azul', label: 'AZUL', hex: '#1257e6', cls: styles.cbBlue },
   { key: 'verde', label: 'VERDE', hex: '#0eab48', cls: styles.cbGreen },
-  { key: 'amarillo', label: 'AMARILLO', hex: '#ffd400', cls: styles.cbYellow },
+  { key: 'amarillo', label: 'AMARILLO', hex: '#b8860b', cls: styles.cbYellow },
 ];
 
 // Ensayo de ejemplo para la slide 3 del tutorial: la palabra dice "VERDE" pero está
@@ -111,11 +124,16 @@ function buildPracticeSet() {
       list.push({ condition: cond, word: w.label, colorKey: c.key });
     } else list.push({ condition: cond, word: 'XXXX', colorKey: c.key });
   }
-  return shuffle(list);
+  return enforceNoRepeatRun(shuffle(list));
 }
 
+// Por debajo de esto, una respuesta es demasiado rápida para reflejar un procesamiento real
+// del estímulo (probablemente anticipatoria o un toque accidental) y se excluye del promedio
+// de TR — sigue contando para la precisión y los errores, solo no distorsiona el TR.
+const MIN_VALID_RT_MS = 150;
+
 function meanRT(arr) {
-  const c = arr.filter((r) => r.correct);
+  const c = arr.filter((r) => r.correct && r.rt >= MIN_VALID_RT_MS);
   return c.length ? Math.round(c.reduce((a, b) => a + b.rt, 0) / c.length) : null;
 }
 function accuracy(arr) {
@@ -196,6 +214,27 @@ function sessionsToExcelXML(sessions) {
   };
   const row = (values) => `<Row>${values.map(cell).join('')}</Row>`;
 
+  // Hoja aparte con los parámetros del protocolo, para que quede documentado junto con los
+  // datos qué configuración se usó (en particular, que el límite de 1500ms es un parámetro
+  // propio de este protocolo y no un estándar del Stroop clásico, que suele ser autopautado).
+  const protocolRows = [
+    ['Parámetro', 'Valor', 'Nota'],
+    ['Ensayos de práctica', CONFIG.practiceTrials, 'Con corrección visual'],
+    [
+      'Ensayos de evaluación real',
+      CONFIG.trialsPerCondition * 3,
+      `${CONFIG.trialsPerCondition} por condición (congruente/incongruente/neutra) × 3`,
+    ],
+    ['Cuenta regresiva antes de cada bloque', `${CONFIG.countdownSeconds} s`, ''],
+    [
+      'Límite de tiempo por respuesta',
+      `${CONFIG.responseDeadlineMs} ms`,
+      'Parámetro propio de este protocolo, NO un estándar del Stroop clásico (que suele ser autopautado, sin límite de tiempo)',
+    ],
+    ['Cruz de fijación antes de cada estímulo', `${CONFIG.fixationMs} ms`, 'Incluido el primer ensayo de cada bloque'],
+    ['TR mínimo válido para el promedio', `${MIN_VALID_RT_MS} ms`, 'Respuestas más rápidas se consideran anticipatorias y se excluyen solo del cálculo de TR'],
+  ];
+
   return `<?xml version="1.0"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
@@ -203,6 +242,11 @@ function sessionsToExcelXML(sessions) {
 <Table>
 ${row(headers)}
 ${rows.map(row).join('\n')}
+</Table>
+</Worksheet>
+<Worksheet ss:Name="Protocolo">
+<Table>
+${protocolRows.map(row).join('\n')}
 </Table>
 </Worksheet>
 </Workbook>`;
@@ -286,6 +330,9 @@ const StroopTest = () => {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(null);
   const [countdownNum, setCountdownNum] = useState(CONFIG.countdownSeconds);
+  // true solo cuando se llega a la evaluación real habiendo pasado por la práctica (block-done).
+  // Si se entró directo con "Empezar la prueba" no hay pantalla previa a la que volver.
+  const [mainFromPractice, setMainFromPractice] = useState(false);
   const [demoFlash, setDemoFlash] = useState(null);
   const [demoSolved, setDemoSolved] = useState(false);
 
@@ -331,22 +378,43 @@ const StroopTest = () => {
     for (let s = CONFIG.countdownSeconds - 1; s >= 1; s--) {
       timers.push(setTimeout(() => setCountdownNum(s), (CONFIG.countdownSeconds - s) * 1000));
     }
-    timers.push(setTimeout(() => setScreen('stimulus'), CONFIG.countdownSeconds * 1000));
+    timers.push(setTimeout(() => setScreen('fixation'), CONFIG.countdownSeconds * 1000));
     return () => timers.forEach(clearTimeout);
   }, [screen]);
 
-  // Al mostrar un nuevo estímulo, arrancar el cronómetro de reacción, limpiar el feedback
-  // anterior y armar el límite de tiempo por respuesta (si no responde a tiempo, cuenta error)
+  // Cruz de fijación antes de cada estímulo (incluido el primero de cada bloque).
   useEffect(() => {
-    if (screen === 'stimulus') {
-      t0Ref.current = performance.now();
-      answeredRef.current = false;
-      setFeedback(null);
-      const deadline = setTimeout(() => {
-        if (!answeredRef.current) onAnswer(null);
-      }, CONFIG.responseDeadlineMs);
-      return () => clearTimeout(deadline);
-    }
+    if (screen !== 'fixation') return;
+    const t = setTimeout(() => setScreen('stimulus'), CONFIG.fixationMs);
+    return () => clearTimeout(t);
+  }, [screen, idx]);
+
+  // Al mostrar un nuevo estímulo, limpiar el feedback anterior y arrancar el cronómetro de
+  // reacción recién cuando el navegador ya pintó el estímulo en pantalla (doble
+  // requestAnimationFrame: el primero corre antes del próximo pintado, el segundo ya después),
+  // en vez de medir desde que React confirma el render (que puede ir unos ms antes del pintado real).
+  useEffect(() => {
+    if (screen !== 'stimulus') return;
+    answeredRef.current = false;
+    setFeedback(null);
+
+    let rafId2 = null;
+    let deadlineTimer = null;
+
+    const rafId1 = requestAnimationFrame(() => {
+      rafId2 = requestAnimationFrame(() => {
+        t0Ref.current = performance.now();
+        deadlineTimer = setTimeout(() => {
+          if (!answeredRef.current) onAnswer(null);
+        }, CONFIG.responseDeadlineMs);
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(rafId1);
+      if (rafId2 != null) cancelAnimationFrame(rafId2);
+      if (deadlineTimer != null) clearTimeout(deadlineTimer);
+    };
   }, [screen, idx]);
 
   const resetToStart = () => {
@@ -358,6 +426,7 @@ const StroopTest = () => {
     setShowCancelConfirm(false);
     setDemoSolved(false);
     setDemoFlash(null);
+    setMainFromPractice(false);
     resultsRef.current = [];
   };
 
@@ -393,6 +462,7 @@ const StroopTest = () => {
   // Salta el tutorial y la práctica, y va directo a la evaluación real
   const skipToRealTest = () => {
     if (!requireCode()) return;
+    setMainFromPractice(false);
     startMainEvaluation();
   };
 
@@ -411,6 +481,7 @@ const StroopTest = () => {
       }
     } else {
       setIdx(nextIdx);
+      setScreen('fixation');
     }
   };
 
@@ -483,7 +554,7 @@ const StroopTest = () => {
 
   const counterLabel = trials.length ? `${idx + 1}/${trials.length}` : '';
   const trialProgressPct = trials.length ? Math.min(100, (idx / trials.length) * 100) : 0;
-  const isDimmed = screen === 'countdown' || screen === 'stimulus';
+  const isDimmed = screen === 'countdown' || screen === 'stimulus' || screen === 'fixation';
   const currentColor = trials[idx] ? COLORS.find((c) => c.key === trials[idx].colorKey) : null;
 
   const activeFlash = screen === 'instructions-3' ? demoFlash : feedback;
@@ -621,7 +692,7 @@ const StroopTest = () => {
                   key={c.key}
                   className={`${styles.colorbtn} ${c.cls}`}
                   aria-label={c.label}
-                  onClick={() => handleDemoAnswer(c.key)}
+                  onPointerDown={() => handleDemoAnswer(c.key)}
                 />
               ))}
             </div>
@@ -639,7 +710,13 @@ const StroopTest = () => {
         {screen === 'countdown' && (
           <>
             <ScreenHeader
-              onBack={() => setScreen(practice ? 'instructions-3' : 'block-done')}
+              onBack={
+                practice
+                  ? () => setScreen('instructions-3')
+                  : mainFromPractice
+                  ? () => setScreen('block-done')
+                  : undefined
+              }
               onClose={() => setShowCancelConfirm(true)}
             />
             <div className={styles.countdownArea}>
@@ -648,14 +725,18 @@ const StroopTest = () => {
           </>
         )}
 
-        {screen === 'stimulus' && trials[idx] && (
+        {(screen === 'stimulus' || screen === 'fixation') && trials[idx] && (
           <div className={styles.testArea}>
             <ScreenHeader counter={counterLabel} onClose={() => setShowCancelConfirm(true)} progressPct={trialProgressPct} />
 
             <div className={styles.stimzone}>
-              <div className={styles.stimword} style={{ color: currentColor.hex }}>
-                {trials[idx].word}
-              </div>
+              {screen === 'stimulus' ? (
+                <div className={styles.stimword} style={{ color: currentColor.hex }}>
+                  {trials[idx].word}
+                </div>
+              ) : (
+                <div className={styles.fixationCross}>+</div>
+              )}
             </div>
 
             <div className={styles.grid4}>
@@ -664,7 +745,8 @@ const StroopTest = () => {
                   key={c.key}
                   className={`${styles.colorbtn} ${c.cls}`}
                   aria-label={c.label}
-                  onClick={() => onAnswer(c.key)}
+                  disabled={screen !== 'stimulus'}
+                  onPointerDown={() => onAnswer(c.key)}
                 />
               ))}
             </div>
@@ -680,7 +762,13 @@ const StroopTest = () => {
               preciso posible</strong>.
             </p>
             <div className={styles.spacer} />
-            <button className={styles.btnPrimary} onClick={startMainEvaluation}>
+            <button
+              className={styles.btnPrimary}
+              onClick={() => {
+                setMainFromPractice(true);
+                startMainEvaluation();
+              }}
+            >
               Comenzar evaluación
             </button>
           </>
