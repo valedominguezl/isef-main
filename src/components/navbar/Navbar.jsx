@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import styles from "./Navbar.module.scss";
 import useLoadingA from "@/components/funciones/loadingBar/useLoadingA";
@@ -20,6 +20,13 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const navigate = useNavigate();
+  // El navbar (barra colapsada) está pensado para flotar sobre una imagen/hero oscuro, por eso
+  // el logo y el ícono son blancos. En el Test HIIT el fondo es blanco desde el principio, así
+  // que ahí se oscurecen a un gris (el mismo que usan los párrafos del sitio) para que se vean.
+  // El menú desplegado NO se toca: su fondo siempre es el gradiente de color, así que su texto
+  // debe seguir blanco sin importar desde qué página se abrió.
+  const { pathname } = useLocation();
+  const isOnLightPage = pathname === "/TestHiit";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,7 +95,11 @@ const Navbar = () => {
           isVisible ? styles.visible : styles.hidden
         }`}
       >
-        <Link to="/" onClick={handleLoadingClick} className={styles.logo}>
+        <Link
+          to="/"
+          onClick={handleLoadingClick}
+          className={`${styles.logo} ${isOnLightPage ? styles.logoDark : ""}`}
+        >
           <img src={logo} alt="Logo" />
           <span>I.S.E.F. San Luís</span>
         </Link>
@@ -130,7 +141,7 @@ const Navbar = () => {
             // </a>
           }
 
-          <div className={styles.menuIcon} onClick={toggleSidebar}>
+          <div className={`${styles.menuIcon} ${isOnLightPage ? styles.menuIconDark : ""}`} onClick={toggleSidebar}>
             <img src={hamburgerIcon} alt="" />
             <h4>Menú</h4>
           </div>

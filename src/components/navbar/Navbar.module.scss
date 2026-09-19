@@ -75,6 +75,12 @@ nav {
     span {
       font-weight: var(--medium);
     }
+
+    // Mismo gris que usan los párrafos del sitio (--txt-bcolor), en vez del blanco por defecto,
+    // para páginas de fondo blanco como el Test HIIT.
+    &.logoDark span {
+      color: var(--txt-bcolor);
+    }
   }
 }
 
@@ -84,6 +90,24 @@ nav {
 
   h4 {
     font-weight: var(--medium);
+  }
+
+  // El ícono es blanco por defecto (pensado para flotar sobre un fondo oscuro); en páginas de
+  // fondo blanco como el Test HIIT se oscurece al mismo gris que el resto del texto del sitio
+  // (invert(1) lo pasa a negro puro; opacity lo mezcla con el fondo blanco de atrás y da el
+  // mismo gris que --txt-bcolor).
+  // Selector calificado con .menuIcon a propósito: la regla "h4 { color: white }" de desktop
+  // (más abajo, dentro del media query) tiene la misma especificidad, así que sin esto ganaría
+  // por orden de aparición en el archivo.
+  .menuIcon.menuIconDark {
+    img {
+      filter: invert(1);
+      opacity: 0.5;
+    }
+
+    h4 {
+      color: var(--txt-bcolor);
+    }
   }
 
   .menuIcon,
