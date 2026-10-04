@@ -1,0 +1,24 @@
+{
+  "audits": {
+    "codigo": {
+      "date": "2026-10-04",
+      "commit": "3963eec"
+    },
+    "seguridad": {
+      "date": "2026-10-04",
+      "commit": "3963eec"
+    },
+    "diseno": {
+      "date": "2026-10-04",
+      "commit": "3963eec"
+    },
+    "contenido": {
+      "date": "2026-10-04",
+      "commit": "3963eec"
+    },
+    "tokens": {
+      "date": "2026-10-04",
+      "commit": "3963eec"
+    }
+  }
+}

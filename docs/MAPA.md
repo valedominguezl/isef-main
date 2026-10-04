@@ -1,13 +1,13 @@
 # Mapa de salud del proyecto
 
-> Generado por `npm run health` el 2026-10-04 (commit `5e80907`). No editar a mano.
+> Generado por `npm run health` el 2026-10-04 (commit `3963eec`). No editar a mano.
 
 ```mermaid
 flowchart LR
   ISEF((I.S.E.F.<br/>sitio)):::core
-  ISEF --> COD[🟡 Código<br/>chequeos OK]:::warn
+  ISEF --> COD[🟢 Código<br/>chequeos OK]:::ok
   ISEF --> SEG[🟢 Seguridad<br/>sin datos]:::ok
-  ISEF --> DIS[🟡 Diseño / QA<br/>última: 2026-10-04]:::warn
+  ISEF --> DIS[🟢 Diseño / QA<br/>última: 2026-10-04]:::ok
   ISEF --> CON[🟡 Contenido<br/>16 cursos · 7 novedades]:::warn
   ISEF --> DEP[🟢 Dependencias<br/>0 majors pendientes]:::ok
   ISEF --> TOK[🟢 Contexto IA<br/>CLAUDE.md 2KB]:::ok
@@ -19,9 +19,7 @@ flowchart LR
 ```
 
 ## Qué hacer ahora
-1. **[codigo]** Auditoría de código (347 archivos cambiados desde la última)
-2. **[contenido]** 8 alerta(s) de contenido
-3. **[diseno]** Auditoría de diseño/QA visual (183 archivos de UI cambiados)
+1. **[contenido]** 8 alerta(s) de contenido
 
 ## Detalle
 | Área | Estado | Dato |
@@ -35,8 +33,8 @@ flowchart LR
 | Archivos pesados (tokens) | 🟢 | package-lock.json (171KB), content/cv/nelio-bazan.json (79KB), src/features/test-hiit/StroopTest.tsx (34KB) |
 
 ## Últimas auditorías
-- **codigo**: 2026-10-04 (`aaff98d`)
-- **seguridad**: 2026-10-04 (`aaff98d`)
-- **diseno**: 2026-10-04 (`aaff98d`)
-- **contenido**: 2026-10-04 (`aaff98d`)
-- **tokens**: 2026-10-04 (`aaff98d`)
+- **codigo**: 2026-10-04 (`3963eec`)
+- **seguridad**: 2026-10-04 (`3963eec`)
+- **diseno**: 2026-10-04 (`3963eec`)
+- **contenido**: 2026-10-04 (`3963eec`)
+- **tokens**: 2026-10-04 (`3963eec`)
