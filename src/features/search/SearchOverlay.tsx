@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AnimatePresence, m } from 'motion/react';
 import { ArrowRight, CornerDownLeft, Search, X } from 'lucide-react';
 import { track } from '@/lib/analytics';
 import { loadIndex, search, snippet, type Hit } from './engine';
@@ -93,29 +92,18 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
   let idx = -1;
 
   return (
-    <AnimatePresence>
-      {open && (
-        <m.div
+    open && (
+        <div
           className={styles.overlay}
           role="dialog"
           aria-modal="true"
           aria-label="Buscar en el sitio"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
           onKeyDown={onKeyDown}
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) onClose();
           }}
         >
-          <m.div
-            className={styles.panel}
-            initial={{ y: -24, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -12, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div className={styles.panel}>
             <div className={styles.bar}>
               <Search className={styles.barIcon} size={26} aria-hidden />
               <input
@@ -219,9 +207,8 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
                 Ver todos los resultados ({hits.length}) para “{q.trim()}” <ArrowRight size={18} aria-hidden />
               </button>
             )}
-          </m.div>
-        </m.div>
-      )}
-    </AnimatePresence>
+          </div>
+        </div>
+      )
   );
 }

@@ -19,8 +19,8 @@ export default function Reveal({ children, delay = 0, y = 24, as = 'div', ...res
   const Comp = m[as] as typeof m.div;
   return (
     <Comp
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, transform: `translateY(${y}px)` }}
+      whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
       transition={{ duration: 0.7, ease, delay }}
       {...rest}
@@ -51,7 +51,10 @@ export function RevealItem({ children, className, as = 'div' }: { children: Reac
   return (
     <Comp
       className={className}
-      variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease } } }}
+      variants={{
+        hidden: { opacity: 0, transform: 'translateY(24px)' },
+        show: { opacity: 1, transform: 'translateY(0px)', transition: { duration: 0.6, ease } },
+      }}
     >
       {children}
     </Comp>

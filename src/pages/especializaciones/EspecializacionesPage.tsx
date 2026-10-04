@@ -135,9 +135,9 @@ export function Component() {
         </p>
 
         {list.length ? (
-          <ul className={styles.grid} role="list">
-            {list.map((c) => (
-              <li key={c.slug}>
+          <ul className={styles.grid} role="list" key={dis ?? "todos"}>
+            {list.map((c, i) => (
+              <li key={c.slug} style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}>
                 <CourseCard curso={c} />
               </li>
             ))}

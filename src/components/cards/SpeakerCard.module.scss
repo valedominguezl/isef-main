@@ -17,12 +17,16 @@
     outline-offset: 3px;
   }
 
-  &:hover .photo img {
-    transform: scale(1.04);
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    &:hover .photo img {
+      transform: scale(1.04);
+    }
   }
 
-  &:hover .cta svg {
-    transform: translateX(4px);
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    &:hover .cta svg {
+      transform: translateX(4px);
+    }
   }
 }
 

@@ -61,7 +61,7 @@ function Galeria() {
               if (e.key === 'ArrowLeft') step(-1);
             }}
           >
-            <img src={current.imagen} alt={current.lugar} />
+            <img key={current.imagen} className={styles.swap} src={current.imagen} alt={current.lugar} />
             <div className={`${styles.lightboxBar} on-dark`}>
               <button type="button" onClick={() => step(-1)} aria-label="Foto anterior">
                 <ChevronLeft />

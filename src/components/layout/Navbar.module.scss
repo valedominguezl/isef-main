@@ -7,7 +7,7 @@
   height: var(--nav-height);
   padding-inline: var(--gutter);
   transition:
-    transform var(--duration-slow) var(--ease-emphasized),
+    transform 250ms var(--ease-out),
     background-color var(--duration-base) var(--ease-standard),
     box-shadow var(--duration-base),
     color var(--duration-base);

@@ -68,7 +68,7 @@
     font-weight: var(--weight-medium);
     color: var(--ink-700);
     background: var(--color-surface);
-    transition: all var(--duration-base);
+    transition: background-color var(--duration-base), border-color var(--duration-base), color var(--duration-base);
     @include focus-ring;
 
     &:hover {
@@ -118,10 +118,18 @@
 
   li {
     display: flex;
+    // Al filtrar, los resultados aparecen escalonados (solo opacidad, no bloquea la interacción)
+    animation: gridIn 240ms var(--ease-out) both;
 
     > * {
       flex: 1;
     }
+  }
+}
+
+@keyframes gridIn {
+  from {
+    opacity: 0;
   }
 }
 

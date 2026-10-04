@@ -128,7 +128,7 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
               variants={{ show: { transition: { staggerChildren: 0.05, delayChildren: 0.15 } } }}
             >
               {[{ label: 'Inicio', to: '/' }, ...MAIN_NAV].map((item) => (
-                <m.li key={item.to} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
+                <m.li key={item.to} variants={{ hidden: { opacity: 0, transform: 'translateY(20px)' }, show: { opacity: 1, transform: 'translateY(0px)' } }}>
                   <NavLink to={item.to} end={item.to === '/'} className={({ isActive }) => (isActive ? styles.menuActive : undefined)}>
                     {item.label}
                   </NavLink>

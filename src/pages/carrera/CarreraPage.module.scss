@@ -144,8 +144,10 @@
     transition: transform 1s var(--ease-emphasized);
   }
 
-  &:hover img {
-    transform: scale(1.05);
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    &:hover img {
+      transform: scale(1.05);
+    }
   }
 
   figcaption {
@@ -229,6 +231,30 @@
 
     &:hover {
       background: rgb(255 255 255 / 0.2);
+    }
+  }
+}
+
+/* Cambio de foto en el lightbox: crossfade corto; el blur disimula el doble estado */
+.swap {
+  animation: swapIn 200ms var(--ease-out);
+}
+
+@keyframes swapIn {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swap {
+    animation-name: fadeOnly;
+  }
+
+  @keyframes fadeOnly {
+    from {
+      opacity: 0;
     }
   }
 }

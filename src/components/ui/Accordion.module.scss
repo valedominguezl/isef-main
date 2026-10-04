@@ -53,7 +53,7 @@
   width: 32px;
   height: 32px;
   border-radius: var(--radius-pill);
-  transition: transform var(--duration-slow) var(--ease-emphasized), background-color var(--duration-base);
+  transition: transform 300ms var(--ease-emphasized), background-color var(--duration-base);
 }
 
 .open .chevron {
