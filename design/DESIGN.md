@@ -3,6 +3,7 @@
 > **Editorial-atlético.** La jerarquía tipográfica serena de una publicación universitaria,
 > con la energía de una marca deportiva. Fuente de verdad de tokens: [`tokens.json`](./tokens.json)
 > (formato W3C Design Tokens) ↔ [`src/styles/tokens.scss`](../src/styles/tokens.scss).
+> Versión navegable en Claude Design (para piezas gráficas): https://claude.ai/artifact/WcYLpGEcF82J9umHgokVwS
 
 ---
 
