@@ -77,7 +77,7 @@ export function Component() {
       <Seo
         title={`${nombre} — Currículum`}
         description={cv?.resumen ?? `${nombre}: ${d.destacados.join(', ')}. Disertante de las especializaciones del ${sitio.nombre}.`}
-        image={d.foto}
+        image={`/og/disertantes/${slug}.jpg`}
         type="profile"
         jsonLd={[
           {

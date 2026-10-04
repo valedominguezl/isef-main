@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { sitio } from '@/content';
+import { excerpt } from '@/lib/markdown';
 
 type JsonLd = Record<string, unknown>;
 
@@ -27,8 +28,10 @@ export function absoluteUrl(path: string) {
 export default function Seo({ title, description, image, type = 'website', noindex, jsonLd, path }: SeoProps) {
   const { pathname } = useLocation();
   const canonical = absoluteUrl(path ?? (pathname === '/' ? '/' : pathname.replace(/\/$/, '').toLowerCase()));
-  const fullTitle = title ? `${title} | ${sitio.nombre}` : `${sitio.nombre} | Profesorado de Educación Física`;
-  const desc = description ?? sitio.descripcion;
+  // Google corta los títulos cerca de 60 caracteres: si el sufijo no entra, va solo el título.
+  const withSuffix = title ? `${title} | ${sitio.nombre}` : `${sitio.nombre} | Profesorado de Educación Física`;
+  const fullTitle = title && withSuffix.length > 60 ? title : withSuffix;
+  const desc = excerpt(description ?? sitio.descripcion, 158);
   const img = absoluteUrl(image ?? DEFAULT_IMAGE);
   const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
@@ -82,6 +85,9 @@ export function organizationJsonLd(): JsonLd {
     location: sitio.sedes.map((s) => ({
       '@type': 'Place',
       name: `${sitio.nombre} — ${s.nombre}`,
+      description: `${s.tipo}. ${s.horario}.`,
+      telephone: `+${s.telefono}`,
+      hasMap: s.mapaUrl,
       address: { '@type': 'PostalAddress', streetAddress: s.direccion, addressLocality: s.ciudad, addressCountry: 'AR' },
       geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
     })),

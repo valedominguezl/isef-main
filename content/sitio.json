@@ -1,7 +1,7 @@
 {
   "nombre": "I.S.E.F. San Luis",
   "nombreLargo": "Instituto Superior de Educación Física San Luis",
-  "descripcion": "Profesorado de Educación Física en San Luis y Villa Mercedes. Título oficial de validez nacional, la cuota más baja del país y especializaciones gratuitas con científicos de renombre internacional.",
+  "descripcion": "Profesorado de Educación Física en San Luis y Villa Mercedes: título oficial de validez nacional, la cuota más baja del país y especializaciones gratuitas.",
   "url": "https://isefsanluis.net",
   "fundacion": "1993",
   "campusUrl": "https://campus.isefsanluis.net/",
@@ -12,37 +12,61 @@
     "texto": "Inscripciones abiertas"
   },
   "estadisticas": [
-    { "valor": 30, "prefijo": "+", "etiqueta": "años formando" },
-    { "valor": 2, "prefijo": "", "etiqueta": "sedes" },
-    { "valor": 5000, "prefijo": "+", "etiqueta": "egresados" }
+    {
+      "valor": 30,
+      "prefijo": "+",
+      "etiqueta": "años formando"
+    },
+    {
+      "valor": 2,
+      "prefijo": "",
+      "etiqueta": "sedes"
+    },
+    {
+      "valor": 5000,
+      "prefijo": "+",
+      "etiqueta": "egresados"
+    }
   ],
   "telefonos": [
     {
       "area": "Información general",
       "descripcion": "Tu primera opción si tenés consultas generales o no sabés con qué número contactarte.",
-      "numeros": ["5492664564435"]
+      "numeros": [
+        "5492664564435"
+      ]
     },
     {
       "area": "Rectoría",
       "descripcion": "Oficina del rector. Para quejas, sugerencias o asuntos institucionales importantes.",
-      "numeros": ["5492604508428"]
+      "numeros": [
+        "5492604508428"
+      ]
     },
     {
       "area": "Secretaría académica",
       "descripcion": "Temas pedagógicos, consultas sobre docentes o información del gabinete de apoyo psicopedagógico.",
-      "numeros": ["5492664570570"]
+      "numeros": [
+        "5492664570570"
+      ]
     },
     {
       "area": "Secretaría administrativa",
       "sede": "San Luis",
       "descripcion": "Asistencias, calificaciones, cuotas, certificaciones y trámites en la sede de San Luis.",
-      "numeros": ["5492664304739", "5492664611345", "5492664577972"]
+      "numeros": [
+        "5492664304739",
+        "5492664611345",
+        "5492664577972"
+      ]
     },
     {
       "area": "Secretaría administrativa",
       "sede": "Villa Mercedes",
       "descripcion": "Asistencias, calificaciones, cuotas, certificaciones y trámites en la sede de Villa Mercedes.",
-      "numeros": ["5492657210254"]
+      "numeros": [
+        "5492657210254"
+      ]
     }
   ],
   "sedes": [
@@ -74,10 +98,26 @@
     }
   ],
   "redes": [
-    { "red": "facebook", "etiqueta": "Información general", "url": "https://www.facebook.com/Isefsanluis.info/" },
-    { "red": "instagram", "etiqueta": "Información general", "url": "https://www.instagram.com/Isefsanluis.info/" },
-    { "red": "facebook", "etiqueta": "San Luis", "url": "https://www.facebook.com/isef.sanluis" },
-    { "red": "facebook", "etiqueta": "Villa Mercedes", "url": "https://www.facebook.com/isef.villamercedes/" }
+    {
+      "red": "facebook",
+      "etiqueta": "Información general",
+      "url": "https://www.facebook.com/Isefsanluis.info/"
+    },
+    {
+      "red": "instagram",
+      "etiqueta": "Información general",
+      "url": "https://www.instagram.com/Isefsanluis.info/"
+    },
+    {
+      "red": "facebook",
+      "etiqueta": "San Luis",
+      "url": "https://www.facebook.com/isef.sanluis"
+    },
+    {
+      "red": "facebook",
+      "etiqueta": "Villa Mercedes",
+      "url": "https://www.facebook.com/isef.villamercedes/"
+    }
   ],
   "analytics": {
     "ga4": "G-L4QFYTY1XM",

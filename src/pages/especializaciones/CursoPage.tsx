@@ -41,7 +41,7 @@ export function Component() {
       <Seo
         title={curso.titulo}
         description={excerpt(`${curso.subtitulo}. ${toPlainText(curso.descripcion)}`, 158)}
-        image={curso.imagen}
+        image={`/og/especializaciones/${curso.slug}.jpg`}
         jsonLd={[
           {
             '@type': 'Course',

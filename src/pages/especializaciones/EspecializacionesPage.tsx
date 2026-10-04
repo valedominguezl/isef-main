@@ -36,7 +36,7 @@ export function Component() {
     <>
       <Seo
         title="Especializaciones y cursos"
-        description="Cursos y talleres gratuitos para alumnos del profesorado, dictados por científicos de renombre: neurociencias, nutrición deportiva, fuerza, salud, inteligencia artificial y más."
+        description="Cursos y talleres gratuitos para alumnos con científicos de renombre: neurociencias, nutrición deportiva, fuerza, salud e inteligencia artificial."
         image={heroImg}
         jsonLd={[
           {

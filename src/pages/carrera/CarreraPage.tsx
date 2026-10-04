@@ -90,7 +90,7 @@ export function Component() {
     <>
       <Seo
         title="La carrera: Profesorado de Educación Física"
-        description={`Profesorado de Educación Física de ${plan.duracion}, presencial, con título oficial de validez nacional (${plan.resolucion}). Plan de estudios, salida laboral y especializaciones gratuitas.`}
+        description={`Profesorado de Educación Física de ${plan.duracion}, presencial y con título oficial de validez nacional. Plan de estudios, salida laboral y especializaciones.`}
         image={heroImg}
         jsonLd={[
           {

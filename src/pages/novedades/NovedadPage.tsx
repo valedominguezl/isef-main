@@ -24,9 +24,9 @@ export function Component() {
   return (
     <>
       <Seo
-        title={n.titulo}
-        description={n.resumen.slice(0, 158)}
-        image={n.imagen}
+        title={`${n.titulo}: ${NOVEDAD_CATEGORIAS[n.categoria].toLowerCase()}`}
+        description={n.resumen}
+        image={`/og/novedades/${n.slug}.jpg`}
         type="article"
         jsonLd={[
           {
