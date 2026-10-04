@@ -1,0 +1,33 @@
+{
+  "titulo": "Enfermedad Cardiovascular",
+  "subtitulo": "Nutrición, suplementación de micronutrientes y ejercicio",
+  "imagen": "/media/cursos/enfermedad-cardiovascular.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "disertantes": [
+    "jorge-roig"
+  ],
+  "fechaInicio": "2025-05-06",
+  "descripcion": "En este curso descubrirás los mecanismos clave de la **enfermedad cardiovascular** desde la perspectiva de la **falla mitocondrial** y el **déficit de colágeno**. Analizaremos cómo la disfunción en las mitocondrias cardíacas y vasculares contribuye a la patología, y exploraremos el papel fundamental de la vitamina C y la glucosa en la prevención de la **insuficiencia coronaria**. Se desmontarán las creencias en torno a la **hipótesis lipídica** y su relación con las placas aterogénicas.\n\nAbordaremos la **alimentación que enferma, la que da salud y la que sana**, diseñando planes nutricionales centrados en la salud vascular. Profundizaremos en la suplementación de **micronutrientes esenciales** —vitaminas, minerales y antioxidantes— para reforzar la función mitocondrial y prevenir la ateromatosis.\n\nFinalmente, implementaremos **protocolos de ejercicio adaptados a pacientes con ECV**, enfocados en ejercicios de fuerza y cardio oxígeno-dependiente que estimulan la **biorrenovación mitocondrial** y mejoran la capacidad funcional. A lo largo del curso, obtendrás herramientas prácticas para intervenciones seguras y efectivas.",
+  "temario": [
+    {
+      "tema": "Temario general",
+      "subtemas": [
+        "Corazón estructural y funcional.",
+        "Mitocondrias en la salud cardíaca y en la vascular.",
+        "Causa primaria de la Enfermedad Cardiovascular.",
+        "Rol del colágeno en la enfermedad vascular.",
+        "La ateromatosis.",
+        "Glucosa y Vitamina C como factores incidentes de la ECV.",
+        "La hipótesis lipídica de la enfermedad cardíaca y vascular.",
+        "La alimentación que enferma, la que da salud cardiovascular, y la que sana.",
+        "La intensidad, el volumen y la densidad del estímulo en la planificación según objetivos.",
+        "Micronutrientes: Vitaminas y Minerales. La suplementación al músculo y a sus mitocondrias.",
+        "Los tipos de entrenamiento en pacientes con ECV.",
+        "El rol protagónico de la fuerza y de las mitocondrias."
+      ]
+    }
+  ]
+}

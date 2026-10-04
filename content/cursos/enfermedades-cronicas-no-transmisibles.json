@@ -1,0 +1,79 @@
+{
+  "titulo": "Enfermedades crónicas no transmisibles",
+  "subtitulo": "Prevención y manejo de las enfermedades hipocinéticas",
+  "imagen": "/media/cursos/enfermedades-cronicas-no-transmisibles.webp",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "disertantes": [
+    "nelio-bazan"
+  ],
+  "descripcion": "Se ofrece una visión integral sobre las **enfermedades asociadas al sedentarismo** y las estrategias para su prevención y manejo. A lo largo de diversas clases, se abordan aspectos fundamentales como la relación entre actividad física y sedentarismo, la obesidad, la diabetes, las enfermedades cardiovasculares, la salud ósea y la sarcopenia.\n\nEl curso se enfoca en entender los **mecanismos fisiopatológicos subyacentes**, la epidemiología, y las distintas opciones de tratamiento, incluyendo la nutrición, la farmacología y la cirugía. Además, se pone un énfasis especial en la **prescripción del ejercicio** como herramienta clave para mejorar la salud y la calidad de vida. **Este curso es esencial para profesionales de la salud, la educación física y cualquier persona interesada en la promoción de un estilo de vida activo y saludable**.",
+  "temario": [
+    {
+      "tema": "Clase 1: Enfermedades hipocinéticas",
+      "subtemas": [
+        "Actividad física, sedentarismo y enfermedad.",
+        "Aspectos históricos.",
+        "Mecanismos fisiopatológicos comunes.",
+        "Epidemiología de las enfermedades hipocinéticas en nuestro país y el mundo.",
+        "Encuesta Nacional de Factores de Riesgo."
+      ]
+    },
+    {
+      "tema": "Clase 2: Obesidad y actividad física.",
+      "subtemas": [
+        "Diagnóstico de la obesidad.",
+        "Fisiopatología.",
+        "Tratamientos: nutrición, farmacología y cirugía.",
+        "Ejercicio en el tratamiento de la obesidad.",
+        "Obesidad infantil, características, fisiopatología, valoración funcional y prescripción del ejercicio."
+      ]
+    },
+    {
+      "tema": "Clase 3: Diabetes y actividad física.",
+      "subtemas": [
+        "Clasificación de la diabetes.",
+        "Mecanismos fisiopatológicos.",
+        "Vías metabólicas involucradas.",
+        "Tratamiento nutricional y farmacológico.",
+        "Respuesta al ejercicio.",
+        "Adaptaciones fisiológicas inducidas por el ejercicio.",
+        "Prescripción del ejercicio.",
+        "Precauciones con el paciente diabético."
+      ]
+    },
+    {
+      "tema": "Clase 4: Enfermedad cardiovascular y actividad física.",
+      "subtemas": [
+        "Cardiopatía isquémica.",
+        "Insuficiencia cardíaca.",
+        "Respuestas hemodinámicas durante el ejercicio en la insuficiencia cardíaca.",
+        "Efectos del entrenamiento físico en la insuficiencia cardíaca.",
+        "Recomendaciones generales para programas de ejercicio en la rehabilitación cardíaca.",
+        "Entrenamiento de la fuerza en rehabilitación cardíaca.",
+        "Hipertensión arterial y ejercicio."
+      ]
+    },
+    {
+      "tema": "Clase 5: Salud ósea y actividad física.",
+      "subtemas": [
+        "Características generales del tejido óseo y remodelado óseo.",
+        "Mecanostato de Frost.",
+        "Factores asociados a la osteopenia y osteoporosis: actividad física, nutrición y hormonas.",
+        "Indicación de ejercicio en osteoporosis."
+      ]
+    },
+    {
+      "tema": "Clase 6: Sarcopenia, dinapenia y actividad física.",
+      "subtemas": [
+        "El músculo como tejido metabólicamente activo.",
+        "Caracterización de la sarcopenia.",
+        "Fisiopatología.",
+        "Cambios en el músculo relacionado con la edad.",
+        "Evaluación de la fuerza en población general.",
+        "Prescripción del ejercicio."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "disertante": "walter-aguero",
+  "resumen": "Doctor en Ingeniería Informática y Magíster en Ingeniería del Software (UNSL), Cybersecurity Specialist (Korea University). Docente e investigador en ciberseguridad e inteligencia artificial en universidades de Argentina.",
+  "secciones": [
+    {
+      "tipo": "formacion",
+      "items": [
+        {
+          "periodo": "2019",
+          "titulo": "Doctorado en Ingeniería Informática",
+          "institucion": "Universidad Nacional de San Luis (UNSL)",
+          "detalle": "Resolución 430/19 · En finalización"
+        },
+        {
+          "periodo": "2016",
+          "titulo": "Magíster en Ingeniería del Software",
+          "institucion": "Universidad Nacional de San Luis (UNSL)",
+          "detalle": "Resolución 041/17"
+        },
+        {
+          "periodo": "2016",
+          "titulo": "Cybersecurity Specialist",
+          "institucion": "Korea University",
+          "detalle": "Programa Bec.Ar, Ministerio de Educación de la Nación"
+        },
+        {
+          "periodo": "1996",
+          "titulo": "Licenciatura en Ciencias de la Computación",
+          "institucion": "Universidad Nacional de San Luis (UNSL)",
+          "detalle": "Título 3758/3"
+        }
+      ]
+    },
+    {
+      "tipo": "docencia",
+      "items": [
+        {
+          "periodo": "Actualidad",
+          "titulo": "Docente e investigador",
+          "institucion": "Universidad Nacional de Villa Mercedes"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Docente e investigador",
+          "institucion": "Universidad Nacional de Río Negro"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Docente e investigador",
+          "institucion": "Universidad Siglo 21"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Docente, Maestría en Ciberseguridad y Ciberdefensa",
+          "institucion": "Universidad de Buenos Aires (UBA)"
+        }
+      ]
+    },
+    {
+      "tipo": "experiencia",
+      "items": [
+        {
+          "periodo": "Actualidad",
+          "titulo": "Director de Ciberseguridad",
+          "institucion": "Lisboa Cybersecurity"
+        },
+        {
+          "periodo": "2023 – 2024",
+          "titulo": "Subdirector de Tecnología y Seguridad",
+          "institucion": "Gobierno de San Luis"
+        },
+        {
+          "titulo": "Asesor en Fiscalía de Estado",
+          "institucion": "Gobierno de San Luis"
+        },
+        {
+          "titulo": "Asesor del Ministerio de Educación",
+          "institucion": "Gobierno de San Luis"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Pericias informáticas en ciberseguridad",
+          "detalle": "CABA, La Rioja y República Dominicana (confidencial)"
+        }
+      ]
+    },
+    {
+      "tipo": "investigacion",
+      "items": [
+        {
+          "periodo": "2023 – 2024",
+          "titulo": "Detección de ciberataques de denegación de servicio mediante inteligencia artificial en redes definidas por software",
+          "institucion": "Universidad Nacional de Villa Mercedes y Universidad Siglo 21",
+          "detalle": "Director del proyecto"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Intelligence for Sustainable Futures: A Journey Towards Society 5.0",
+          "institucion": "DIFCON 2024 – ICTIM 2024, Malasia",
+          "detalle": "Integrante del proyecto"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Enhanced Performance in Coupled Simulation Models via High-Performance Evolutionary Computing",
+          "institucion": "SADIO",
+          "detalle": "Integrante del proyecto"
+        },
+        {
+          "periodo": "2022",
+          "titulo": "Development of a Computer Application to Estimate the Risk of Zinc Deficiency",
+          "institucion": "Sociedad de Biología de Cuyo",
+          "detalle": "Integrante del proyecto"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Sistema de denuncias unificadas",
+          "institucion": "Ministerio de Seguridad, San Luis"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Protocolo de Violencia Digital",
+          "institucion": "Ministerios de Educación y de Seguridad, San Luis"
+        }
+      ]
+    },
+    {
+      "tipo": "eventos",
+      "items": [
+        {
+          "periodo": "2024",
+          "titulo": "Conferencista: “El uso ético de la Inteligencia Artificial”",
+          "institucion": "Jornada Mundial de las Comunicaciones, Ciudad del Vaticano"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Track Chair, The OAS Summit of Engineering for the Americas",
+          "institucion": "Costa Rica"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Evaluador externo de OEA (LACCEI)",
+          "institucion": "Costa Rica"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Expositor, Congreso Internacional de Ciberseguridad",
+          "institucion": "Universidad Siglo 21, Córdoba"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Ponente: Software forense",
+          "institucion": "Gendarmería Nacional Argentina"
+        },
+        {
+          "periodo": "2024",
+          "titulo": "Intelligent Computational Ecosystems for Digital Transformation",
+          "institucion": "DIFCON 2024, Malasia"
+        },
+        {
+          "periodo": "2023",
+          "titulo": "Conferencista: “Nuevo paradigma educativo y el quiebre de la educación mundial”",
+          "institucion": "UNRN, UNViMe y Universidad Siglo 21"
+        },
+        {
+          "periodo": "2023",
+          "titulo": "Evaluador de tesis, Maestría en Ciberdefensa y Ciberseguridad",
+          "institucion": "Universidad de Buenos Aires (UBA)"
+        }
+      ]
+    },
+    {
+      "tipo": "capacitacion",
+      "items": [
+        {
+          "periodo": "2024",
+          "titulo": "Certificación CCSA",
+          "institucion": "Check Point, Israel"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+{
+  "disertante": "hernan-araujo",
+  "resumen": "Licenciado en Administración (UNSJ) y Magíster en Economía y Administración Estratégica de Negocios. Especialista en sistemas de gestión de la calidad IRAM-ISO 9001, con amplia trayectoria en gestión pública en salud y educación en la provincia de San Luis.",
+  "secciones": [
+    {
+      "tipo": "formacion",
+      "items": [
+        {
+          "periodo": "2010",
+          "titulo": "Magíster en Economía y Administración Estratégica de Negocios",
+          "institucion": "Universidad Católica de Cuyo, sede San Luis"
+        },
+        {
+          "periodo": "1999",
+          "titulo": "Licenciado en Administración",
+          "institucion": "Universidad Nacional de San Juan (UNSJ)"
+        },
+        {
+          "periodo": "2016",
+          "titulo": "Programa “Gobernabilidad, Gerencia Política y Gestión Pública. Formación de Líderes Locales”",
+          "institucion": "CAF, The George Washington University, Universidad Católica de Córdoba y FISAL",
+          "detalle": "116 h · Trabajo final aprobado"
+        }
+      ]
+    },
+    {
+      "tipo": "docencia",
+      "items": [
+        {
+          "periodo": "2004 – Actualidad",
+          "titulo": "Profesor titular",
+          "institucion": "I.N.S.P. “Cnel. Juan Pascual Pringles”",
+          "detalle": "Decreto P.E.P. Nº 3297-MP-2004"
+        },
+        {
+          "periodo": "2022",
+          "titulo": "Co-director del ciclo de Postítulos “Transformando la educación para un futuro más inclusivo”",
+          "institucion": "Universidad Siglo 21, San Luis"
+        },
+        {
+          "periodo": "2016 – 2017",
+          "titulo": "Gestión y Planificación Estratégica, Administración de Recursos Humanos y Administración Estratégica",
+          "institucion": "Escuela Superior para Personal Jerárquico de Seguridad, San Luis"
+        },
+        {
+          "periodo": "2015 – 2017",
+          "titulo": "Director del Instituto Parque Informático de La Punta",
+          "institucion": "Universidad de La Punta"
+        },
+        {
+          "periodo": "2006",
+          "titulo": "Curso de Conducción Estratégica (Cátedra Planificación y Gestión Estratégica)",
+          "institucion": "Instituto Superior de Formación Policial, San Luis"
+        },
+        {
+          "periodo": "2021",
+          "titulo": "Cursos “Actualización en DDHH y DESC” y “Actualización en Seguridad”",
+          "institucion": "Policía de la Provincia de San Luis"
+        },
+        {
+          "periodo": "2020",
+          "titulo": "Curso “Lucha contra el narcotráfico y lavado de activos”",
+          "institucion": "I.N.S.P. “Cnel. Juan Pascual Pringles”"
+        }
+      ]
+    },
+    {
+      "tipo": "gestion",
+      "items": [
+        {
+          "periodo": "2023",
+          "titulo": "Coordinador Ministerial",
+          "institucion": "Ministerio de Salud, San Luis"
+        },
+        {
+          "periodo": "2022 – 2023",
+          "titulo": "Jefe de Programa Investigación y Desarrollo de la Calidad Educativa",
+          "institucion": "Ministerio de Educación, San Luis"
+        },
+        {
+          "periodo": "2021 – 2022",
+          "titulo": "Jefe de Programa Educación Superior No Universitaria",
+          "institucion": "Ministerio de Educación, San Luis"
+        },
+        {
+          "periodo": "2019 – 2021",
+          "titulo": "Jefe de Programa Educación Superior",
+          "institucion": "Ministerio de Educación, San Luis"
+        },
+        {
+          "periodo": "2019",
+          "titulo": "Jefe de Programa Medicina del Interior",
+          "institucion": "Ministerio de Salud, San Luis"
+        },
+        {
+          "periodo": "2017 – 2019",
+          "titulo": "Director Administrativo",
+          "institucion": "Hospital San Luis",
+          "detalle": "Certificación IRAM-ISO 9001:2015 de los servicios de Banco de Sangre y de Estadísticas y Atención al Ciudadano"
+        },
+        {
+          "periodo": "2017",
+          "titulo": "Jefe de Subprograma Contable y Registro de Emprendedores y Empresas Sanluiseñas",
+          "institucion": "Ministerio de Hacienda Pública, San Luis"
+        },
+        {
+          "periodo": "2011 – 2015",
+          "titulo": "Jefe de Oficina de Gestión de Calidad de Atención a los Ciudadanos",
+          "institucion": "Ministerio de Salud, San Luis",
+          "detalle": "Certificación IRAM-ISO 9001:2008 del SGC del Ministerio (2014)"
+        },
+        {
+          "periodo": "2008 – 2011",
+          "titulo": "Jefe de Programa de Recursos Financieros y Control de Gastos del Sistema de Salud",
+          "institucion": "Ministerio de Salud, San Luis"
+        },
+        {
+          "periodo": "2007 – 2008",
+          "titulo": "Jefe de Subprograma Gestión Contable",
+          "institucion": "Ministerio de Turismo, Cultura y Deporte, San Luis"
+        },
+        {
+          "periodo": "2005 – 2007",
+          "titulo": "Jefe de Área Autogestión, Programa Salud",
+          "institucion": "Gobierno de San Luis"
+        },
+        {
+          "periodo": "2000 – 2005",
+          "titulo": "Asesor (Autogestión Hospitalaria, PROFE y Laboratorios Puntanos)",
+          "institucion": "Ministerio de Desarrollo Humano y Social, San Luis"
+        }
+      ]
+    },
+    {
+      "tipo": "investigacion",
+      "items": [
+        {
+          "periodo": "2016 – 2017",
+          "titulo": "Inclusión de los adolescentes entre 16 y 18 años en la vida del Estado: su participación en el presupuesto de la Municipalidad de El Trapiche",
+          "detalle": "Coautor"
+        },
+        {
+          "periodo": "2015",
+          "titulo": "Autopercepción de la salud de los adultos mayores en la Provincia de San Luis",
+          "detalle": "Coautor: Dr. Cristian Cano"
+        },
+        {
+          "periodo": "2012",
+          "titulo": "Participación social y empoderamiento de los ciudadanos de la Provincia de San Luis en materia de salud",
+          "institucion": "X Jornadas Nacionales de la Sociedad Argentina para la Calidad en Atención de la Salud",
+          "detalle": "Coautora: Mg. CP. Ivana Picca"
+        }
+      ]
+    },
+    {
+      "tipo": "capacitacion",
+      "items": [
+        {
+          "periodo": "2014 – 2018",
+          "titulo": "Cursos de Sistemas de Gestión de la Calidad IRAM-ISO 9001, auditoría interna, gestión de riesgos y liderazgo",
+          "institucion": "IRAM Argentina"
+        },
+        {
+          "periodo": "2022",
+          "titulo": "Ley Micaela y Ley Yolanda",
+          "institucion": "Gobierno de la Provincia de San Luis"
+        },
+        {
+          "periodo": "2019",
+          "titulo": "La dimensión axiológica como eje transversal en la formación",
+          "institucion": "IFDC San Luis"
+        },
+        {
+          "periodo": "2016",
+          "titulo": "Introducción al coaching político",
+          "institucion": "Centro Certificador de Coaching Dialéctico"
+        }
+      ]
+    },
+    {
+      "tipo": "comunidad",
+      "items": [
+        {
+          "periodo": "2017 – Actualidad",
+          "titulo": "Adherente activo del Comité de Refugiados de la Provincia de San Luis"
+        },
+        {
+          "periodo": "2015",
+          "titulo": "Director Académico del Centro Regional de Estudios e Investigación",
+          "institucion": "Asociación Civil Jóvenes Profesionales del Sector Público"
+        },
+        {
+          "periodo": "2004 – 2006",
+          "titulo": "Vicepresidente",
+          "institucion": "Asociación Civil Jóvenes Profesionales del Sector Público de San Luis"
+        }
+      ]
+    },
+    {
+      "tipo": "distinciones",
+      "items": [
+        {
+          "periodo": "2005",
+          "titulo": "Huésped de Honor de Potrero de los Funes",
+          "detalle": "Por la organización del 1er Encuentro Provincial de Jóvenes Profesionales"
+        }
+      ]
+    }
+  ]
+}

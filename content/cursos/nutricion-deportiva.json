@@ -1,0 +1,84 @@
+{
+  "titulo": "Nutrición deportiva",
+  "subtitulo": "Fundamentos y optimización de la performance deportiva",
+  "imagen": "/media/cursos/nutricion-deportiva.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": true,
+  "disertantes": [
+    "nelio-bazan"
+  ],
+  "fechaInicio": "2025-05-08",
+  "modalidad": "Online por Meet",
+  "duracion": "6 meses. 1 clase por mes, días jueves de 19 a 21 horas",
+  "descripcion": "Nelio va a ofrecerte una comprensión exhaustiva de la nutrición deportiva, enfocándose en los fundamentos y la optimización del rendimiento deportivo. Se explorarán temas esenciales como la diferenciación entre alimentos y nutrientes, las etapas de la alimentación, y las **guías alimentarias vigentes**. Además, se abordará la valoración del estado nutricional, incluyendo **métodos para estimar la composición corporal y el gasto energético basal**.\n\nLos participantes aprenderán sobre la **importancia de los macronutrientes** —carbohidratos, proteínas y lípidos— y cómo éstos influyen en el metabolismo energético y la síntesis proteica. También se discutirá la relevancia de los micronutrientes, la hidratación adecuada, y la **suplementación**, así como las normativas y prácticas relacionadas con el dopaje. **Este curso es ideal para profesionales y entusiastas del deporte que buscan mejorar su conocimiento y práctica en nutrición deportiva**.",
+  "importante": "Este es un curso que tiene un encuentro mensual. El contenido es muy específico para cada clase y supone un esfuerzo de lectura que cada alumno debe realizar. Así es que esperamos que los estudiantes puedan tener leído el tema antes de cada clase.",
+  "condiciones": "80% de asistencia, participación en clase y entrega de trabajo práctico final.",
+  "temario": [
+    {
+      "tema": "Alimentación y Nutrición",
+      "subtemas": [
+        "Alimento y nutriente.",
+        "Etapas de la alimentación / nutrición.",
+        "Guía Alimentaria para la Población Argentina.",
+        "Clasificación NOVA.",
+        "Valoración del Estado Nutricional.",
+        "Métodos para estimar la composición corporal."
+      ]
+    },
+    {
+      "tema": "Macronutrientes",
+      "subtemas": [
+        "Carbohidratos.",
+        "Clasificación.",
+        "Metabolismo energético.",
+        "Glucógeno muscular.",
+        "Alimentos fuentes.",
+        "Periodización.",
+        "Proteínas.",
+        "Síntesis proteica.",
+        "Valor biológico de los alimentos.",
+        "Proteínas vegetales y proteínas animales."
+      ]
+    },
+    {
+      "tema": "Micronutrientes: Minerales y Vitaminas",
+      "subtemas": [
+        "Sodio.",
+        "Calcio.",
+        "Hierro.",
+        "Clasificación de vitaminas.",
+        "Hipervitaminosis."
+      ]
+    },
+    {
+      "tema": "Hidratación",
+      "subtemas": [
+        "Los líquidos corporales.",
+        "Termorregulación.",
+        "Tasa de sudoración.",
+        "Bebidas deportivas.",
+        "Diseño y practicidad.",
+        "Re hidratación."
+      ]
+    },
+    {
+      "tema": "Suplementación",
+      "subtemas": [
+        "Clasificaciones internacionales.",
+        "Suplementos nutricionales.",
+        "Suplementos ergogénicos."
+      ]
+    },
+    {
+      "tema": "Doping",
+      "subtemas": [
+        "La creación de la Agencia Mundial Antidopaje.",
+        "Código WADA-AMA.",
+        "Listado de sustancias y métodos prohibidos.",
+        "La autorización de uso terapéutico."
+      ]
+    }
+  ]
+}

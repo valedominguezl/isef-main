@@ -1,0 +1,36 @@
+{
+  "titulo": "Neurociencia y salud mental infantojuvenil",
+  "subtitulo": "Comprendiendo el cerebro joven para potenciar su bienestar",
+  "imagen": "/media/cursos/neurociencia-y-salud-mental-infantojuvenil.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "disertantes": [
+    "roberto-rosler"
+  ],
+  "fechaInicio": "2025-05-07",
+  "duracion": "8 meses. 1 clase por mes, de 19 a 20.30 horas",
+  "descripcion": "Este curso ofrece una inmersión en los fundamentos de la neurociencia aplicada al desarrollo emocional y cognitivo en niños y adolescentes. Exploraremos cómo **las redes neuronales maduran**, cómo gestionar las reacciones al estrés y **cómo promover hábitos saludables de sueño y atención.**\n\nAprenderás a detectar señales tempranas de trastornos mentales y a diseñar estrategias pedagógicas basadas en el funcionamiento cerebral: desde la plasticidad neuronal hasta el impacto de la motivación y el **refuerzo positivo en el aprendizaje**.\n\nSe abordarán casos clínicos de **ansiedad, autismo y trastornos de la alimentación,** combinando teoría y prácticas para implementar intervenciones creativas y adaptadas a cada etapa del desarrollo. Al finalizar, contarás con herramientas para mejorar el bienestar y el aprendizaje de tus estudiantes.",
+  "temario": [
+    {
+      "tema": "Temario general",
+      "subtemas": [
+        "Prevención: las raíces de los trastornos mentales severos están en la niñez y la adolescencia.",
+        "Neurociencia de la condición del espectro autista. Las limitaciones están afuera.",
+        "Trastornos de ansiedad: cuando tu amígdala se preocupa sin motivo.",
+        "Trastorno obsesivo-compulsivo: cuando tu corteza cingulada anterior descarga sin razón.",
+        "Neurociencia del trastorno atencional con o sin hiperactividad: cuando el cerebro va a mil kilómetros por hora, pero el día sigue teniendo 24 horas.",
+        "Adicciones: El lado Dark Vader de la neuroplasticidad.",
+        "Psicosis: una sintomatología que aparece en diversos trastornos.",
+        "Trastornos del sueño en niños y adolescentes: el problema de relojes biológicos modulables por estímulos culturales.",
+        "Trastornos de alimentación en niños y adolescentes: autoestima, paradigmas culturales y alimentación.",
+        "Trastornos de la comunicación y del aprendizaje: proporcionando atención y recursos personalizados para cada estudiante.",
+        "Trastornos depresivos: el niño irritable que duerme bien.",
+        "Trastorno bipolar: definitivamente, un niño no es un adulto pequeño.",
+        "Suicidio y autolesiones: cuando conocer los factores de riesgo es la diferencia entre la vida y la muerte.",
+        "Salud mental infanto-juvenil durante la pandemia: neuropsiquiatría y resiliencia."
+      ]
+    }
+  ]
+}

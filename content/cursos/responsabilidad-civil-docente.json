@@ -1,0 +1,58 @@
+{
+  "titulo": "Responsabilidad civil de los profesores",
+  "subtitulo": "Educación física en las escuelas",
+  "imagen": "/media/cursos/responsabilidad-civil-docente.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": true,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "disertantes": [
+    "agustina-gatto"
+  ],
+  "fechaInicio": "2025-10-28",
+  "modalidad": "Zoom",
+  "duracion": "28/10 y 30/10 de 20:15 a 21:30 horas",
+  "descripcion": "“El titular de un establecimiento educativo responde por el daño causado o sufrido por sus alumnos menores de edad cuando se hallen o deban hallarse bajo el control de la autoridad escolar. La responsabilidad es objetiva y se exime sólo con la prueba del caso fortuito. El establecimiento educativo debe contratar un seguro de responsabilidad civil, de acuerdo a los requisitos que fije la autoridad en materia aseguradora. Esta norma no se aplica a los establecimientos de educación superior o universitaria.” — **Artículo 1767. Responsabilidad de los establecimientos educativos. Código Civil y Comercial de la Nación.**\n\nLa responsabilidad civil de los docentes en la escuela es un tema importante y con **implicancias legales, éticas y profesionales**. Afecta directamente su accionar cotidiano, su relación con estudiantes, colegas y autoridades, y el ejercicio de su rol como garantes del bienestar y la seguridad de los alumnos. Para profundizar en el tema invitamos a una especialista para brindarles herramientas y estrategias que permitan prever **situaciones perjudiciales** para nuestra carrera,**tan expuesta a daños sufridos por nuestros niños**.",
+  "temario": [
+    {
+      "tema": "Módulo I: Introducción al Derecho y la Responsabilidad",
+      "subtemas": [
+        "Conceptos básicos del Derecho",
+        "Ramas del Derecho: público y privado",
+        "Principios constitucionales",
+        "Concepto general de responsabilidad",
+        "Elementos de la responsabilidad civil"
+      ]
+    },
+    {
+      "tema": "Módulo II: La Responsabilidad Civil en el Ámbito Educativo",
+      "subtemas": [
+        "Marco normativo del sistema educativo argentino",
+        "Relaciones jurídicas en la escuela",
+        "Responsabilidad civil docente",
+        "Factores de atribución: culpa, dolo y riesgo",
+        "Análisis de casos prácticos"
+      ]
+    },
+    {
+      "tema": "Módulo III: El Daño, la Prevención y el Seguro Educativo",
+      "subtemas": [
+        "Concepto de daño en el ámbito escolar",
+        "Prevención y seguridad en la práctica docente",
+        "Seguros escolares y docentes",
+        "Responsabilidad compartida",
+        "Protocolos de actuación ante accidentes"
+      ]
+    },
+    {
+      "tema": "Módulo IV: Ética, Responsabilidad y Práctica Profesional",
+      "subtemas": [
+        "Ética y derecho en la función docente",
+        "Ejercicio responsable de la autoridad",
+        "Responsabilidad penal y administrativa (nociones)",
+        "Responsabilidad digital y cuidado de la imagen",
+        "Síntesis y reflexión final sobre el rol docente"
+      ]
+    }
+  ]
+}

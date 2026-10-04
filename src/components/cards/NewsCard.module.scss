@@ -1,0 +1,121 @@
+@use '@/styles/mixins' as *;
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  isolation: isolate;
+  @include card-hover;
+
+  &:focus-within {
+    outline: 2px solid var(--violet-400);
+    outline-offset: 3px;
+  }
+}
+
+.link {
+  color: inherit;
+  text-decoration: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+
+  time {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    opacity: 0.8;
+  }
+}
+
+.title {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-medium);
+}
+
+.summary {
+  @include line-clamp(4);
+}
+
+.more {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-sm);
+  color: var(--color-link);
+}
+
+/* Overlay: imagen de fondo a sangre (estilo del slider original de novedades) */
+.overlay {
+  min-height: 420px;
+  justify-content: flex-end;
+  background: var(--ink-950);
+  box-shadow: var(--shadow-md);
+
+  .media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgb(13 12 18 / 0.35), rgb(13 12 18 / 0.75) 45%, rgb(58 34 168 / 0.92));
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 1.2s var(--ease-emphasized);
+    }
+  }
+
+  &:hover .media img {
+    transform: scale(1.05);
+  }
+
+  .more {
+    color: white;
+  }
+}
+
+/* Plana: tarjeta blanca con imagen arriba */
+.plain {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
+
+  .media img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .title {
+    color: var(--color-text);
+  }
+}

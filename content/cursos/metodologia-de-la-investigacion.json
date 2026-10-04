@@ -1,0 +1,28 @@
+{
+  "titulo": "Metodología de la investigación",
+  "subtitulo": "Fundamentos y técnicas de investigación científica",
+  "imagen": "/media/cursos/metodologia-de-la-investigacion.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": true,
+  "disertantes": [
+    "nelio-bazan"
+  ],
+  "descripcion": "Se cubrirán los fundamentos y técnicas esenciales de la investigación científica. Los participantes explorarán las diversas **corrientes de pensamiento en la ciencia** y se familiarizarán con el método científico. Se detallarán los **pasos necesarios para llevar a cabo una investigación**, los distintos niveles de investigación y la escritura científica.\n\nAdemás, se abordarán las normas de citación y la **elaboración de artículos científicos utilizando el sistema IMRDC**. El curso también incluye orientación sobre las normas de publicación en revistas científicas, proporcionando a los investigadores una guía completa para publicar sus trabajos. **Ideal para aquellos que desean fortalecer sus habilidades en investigación y publicación científica**.",
+  "temario": [
+    {
+      "tema": "Temario general",
+      "subtemas": [
+        "Ciencia y corrientes de pensamiento",
+        "Método científico",
+        "Pasos para realizar una investigación.",
+        "Niveles de investigación.",
+        "Escritura científica",
+        "Bibliografía y normas de citación",
+        "El artículo científico. Sistema IMRDC",
+        "Normas de publicación. Revistas científicas"
+      ]
+    }
+  ]
+}

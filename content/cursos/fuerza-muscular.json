@@ -1,0 +1,27 @@
+{
+  "titulo": "Fuerza muscular",
+  "subtitulo": "Entrenamiento, nutrición y suplementación de nutrientes",
+  "imagen": "/media/cursos/fuerza-muscular.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "disertantes": [
+    "jorge-roig"
+  ],
+  "fechaInicio": "2025-05-20",
+  "descripcion": "Este curso invita a repensar el **entrenamiento de la fuerza muscular** desde una perspectiva integral y crítica. A lo largo del cursado, se abordarán los **objetivos realistas y alcanzables** del entrenamiento según la evaluación inicial del practicante, considerando su **composición corporal** y sus posibilidades reales de cambio. Se discutirá la ineficacia de aplicar **programas genéricos** o de “talle único” sin contemplar los propósitos individuales, ya sea con fines estéticos o de rendimiento.\n\nSe profundizará en el conocimiento de la **bioquímica energética** implicada en las distintas manifestaciones de la fuerza, desmontando prácticas habituales como las **pausas intuitivas** y destacando la necesidad de adaptar los métodos al metabolismo energético dominante en cada objetivo. Comprender **qué sistema energético se activa** en cada tipo de estímulo es clave para evitar frustraciones y maximizar los resultados.\n\nPor último, se subraya la importancia de integrar el entrenamiento con una **nutrición adecuada** y una **suplementación específica de micronutrientes**. Se trabajará sobre cómo articular estos factores con el estímulo físico para lograr adaptaciones reales y sostenibles. Este curso está diseñado para quienes buscan **criterios de aplicación práctica y profesional**, más allá de lo que puede encontrarse en rutinas estándar o en redes sociales.",
+  "temario": [
+    {
+      "tema": "Temario general",
+      "subtemas": [
+        "Objetivos procurados y posibles de alcanzar.",
+        "Programas de entrenamiento (¿Talle único?).",
+        "Ejercitaciones sin conocimiento de la bioquímica energética que actúa.",
+        "Pausas \"intuitivas\".",
+        "Búsqueda de mejoras sin aptitudes para esos cambios.",
+        "Entrenamiento sin orientación nutricional y suplementación específica."
+      ]
+    }
+  ]
+}

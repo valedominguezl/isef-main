@@ -1,0 +1,29 @@
+.page {
+  min-height: 80svh;
+  display: flex;
+  align-items: center;
+  padding-top: calc(var(--nav-height) + var(--space-12));
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+}
+
+.code {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(5rem, 14vw, 9rem) !important;
+  font-weight: var(--weight-semibold) !important;
+  line-height: 1 !important;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}

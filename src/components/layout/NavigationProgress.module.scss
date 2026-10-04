@@ -1,0 +1,18 @@
+.bar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--z-toast);
+  height: 3px;
+  background: var(--gradient-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  transition: opacity 300ms 200ms, transform 300ms;
+  pointer-events: none;
+}
+
+.active {
+  opacity: 1;
+  transform: scaleX(0.8);
+  transition: transform 8s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 100ms;
+}

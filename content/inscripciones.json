@@ -1,0 +1,31 @@
+{
+  "intro": "Para inscribirte en el profesorado tenés que **descargar** la siguiente documentación, **completarla** y **presentarla** en la sede correspondiente del I.S.E.F. San Luis.",
+  "pasos": [
+    {
+      "titulo": "Ficha de inscripción",
+      "descripcion": "Completala con tus datos personales y llevala personalmente a nuestras oficinas en una **carpeta colgante color marrón**.",
+      "archivo": "/docs/solicitud-de-inscripcion.doc",
+      "archivoTexto": "Descargar ficha"
+    },
+    {
+      "titulo": "Exámenes médicos",
+      "descripcion": "Imprimí la planilla y presentala en **centros de salud, médicos particulares u hospitales públicos** para realizarte los estudios que figuran en ella. Consta de tres hojas en **formato A4**.",
+      "archivo": "/docs/examenes-medicos.doc",
+      "archivoTexto": "Descargar planilla"
+    },
+    {
+      "titulo": "Reservar tu banco",
+      "descripcion": "Los cupos están limitados al **espacio disponible en nuestras aulas**, por eso solo reservamos vacantes con el abono de la inscripción."
+    }
+  ],
+  "fechaLimiteRequisitos": "30 de marzo",
+  "fechaLimiteSecundario": { "dia": 30, "mes": "Julio" },
+  "secundario": "Si recién terminás el secundario y adeudás materias, tenés hasta el **30 de julio** para aprobarlas. **Después de esa fecha ya no podrás seguir cursando.**",
+  "mayores25": {
+    "descripcion": "Las personas mayores de 25 años sin título secundario también pueden inscribirse luego de aprobar un **examen de conocimientos generales**.",
+    "archivos": [
+      { "texto": "Resolución", "url": "/docs/resolucion-mayores-de-25.docx" },
+      { "texto": "Material de estudio", "url": "/docs/material-mayores-de-25.docx" }
+    ]
+  }
+}

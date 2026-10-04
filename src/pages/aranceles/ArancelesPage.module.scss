@@ -1,0 +1,86 @@
+@use '@/styles/mixins' as *;
+
+.wrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+
+  caption {
+    text-align: left;
+    padding-bottom: var(--space-4);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  th,
+  td {
+    padding: var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    font-weight: var(--weight-regular);
+  }
+
+  thead th {
+    background: var(--ink-950);
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+
+    &:first-child {
+      border-top-left-radius: var(--radius-md);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-md);
+    }
+  }
+
+  tbody th small {
+    display: block;
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+
+  strong {
+    color: var(--violet-600);
+  }
+}
+
+.group th {
+  background: var(--violet-50);
+  color: var(--violet-700);
+  font-weight: var(--weight-semibold) !important;
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.note {
+  margin-top: var(--space-6);
+}
+
+@include down($bp-md) {
+  .table thead {
+    @include visually-hidden;
+  }
+
+  .table tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .table tbody th {
+    grid-column: 1 / -1;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+}

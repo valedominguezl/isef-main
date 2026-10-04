@@ -1,0 +1,15 @@
+{
+  "nombre": "Hernán Araujo",
+  "titulo": "Lic.",
+  "especialidad": "Administración y gestión pública",
+  "destacados": [
+    "Lic. en administración",
+    "Magíster en economía y administración",
+    "Egresado de la UNSJ",
+    "Conferencista",
+    "Docente e investigador"
+  ],
+  "orden": 5,
+  "foto": "/media/disertantes/hernan-araujo.webp",
+  "publicado": true
+}

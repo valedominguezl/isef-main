@@ -1,0 +1,15 @@
+{
+  "nombre": "Agustina Gatto",
+  "titulo": "Dra.",
+  "especialidad": "Derecho y responsabilidad civil",
+  "destacados": [
+    "Abogada",
+    "Mediadora en Redes Alternativas",
+    "Egresada de la UCCuyo",
+    "Conferencista",
+    "Gestión en políticas públicas"
+  ],
+  "orden": 6,
+  "foto": "/media/disertantes/agustina-gatto.webp",
+  "publicado": true
+}

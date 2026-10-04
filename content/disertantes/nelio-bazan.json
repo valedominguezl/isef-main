@@ -1,0 +1,16 @@
+{
+  "nombre": "Nelio Bazán",
+  "titulo": "Dr.",
+  "especialidad": "Medicina del deporte y nutrición",
+  "destacados": [
+    "Médico",
+    "Especializado en medicina del deporte",
+    "Egresado de la UBA",
+    "Docente en la UNR",
+    "Co-director en French Clay Tenis",
+    "Conferencista"
+  ],
+  "orden": 1,
+  "foto": "/media/disertantes/nelio-bazan.webp",
+  "publicado": true
+}

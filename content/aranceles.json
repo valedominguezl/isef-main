@@ -1,0 +1,36 @@
+{
+  "visible": false,
+  "nota": "Pagos solo en efectivo. Precio con descuento abonando antes del día 10 de cada mes.",
+  "actualizado": "2025-03-01",
+  "grupos": [
+    {
+      "nombre": "Pagos únicos",
+      "items": [
+        { "concepto": "Inscripción", "caracter": "Pago único", "precio": "$50.000" },
+        { "concepto": "Título", "detalle": "Luego de las 48 cuotas", "caracter": "Pago único", "precio": "$50.000" }
+      ]
+    },
+    {
+      "nombre": "Cuotas",
+      "items": [
+        { "concepto": "Cuota general", "caracter": "Mensual", "cuotas": "48", "precio": "$55.000", "precioDescuento": "$50.000" },
+        { "concepto": "Cuota hermano", "caracter": "Mensual", "cuotas": "48", "precio": "$55.000", "precioDescuento": "$47.000" },
+        { "concepto": "Cuota policial", "caracter": "Mensual", "cuotas": "48", "precio": "$55.000", "precioDescuento": "$47.000" },
+        { "concepto": "Cuota residencia", "detalle": "Recursantes", "caracter": "Mensual", "cuotas": "12", "precio": "$55.000", "precioDescuento": "$38.000" },
+        { "concepto": "Cuota por materia", "detalle": "Por materia a recursar", "caracter": "Mensual", "cuotas": "12", "precio": "$35.000", "precioDescuento": "$28.000" }
+      ]
+    },
+    {
+      "nombre": "Sin costo",
+      "items": [
+        { "concepto": "Matrícula anual", "caracter": "Gratis" },
+        { "concepto": "Permisos de examen", "caracter": "Gratis" },
+        { "concepto": "Pileta de natación", "caracter": "Gratis" },
+        { "concepto": "Especializaciones", "caracter": "Gratis" },
+        { "concepto": "Certificaciones", "caracter": "Gratis" },
+        { "concepto": "Cuota aguinaldo", "caracter": "Gratis" }
+      ]
+    }
+  ],
+  "uniforme": "El uniforme es obligatorio y se adquiere aparte. Consultá en [UNIFOR Indumentaria](https://wa.me/5492664554121)."
+}

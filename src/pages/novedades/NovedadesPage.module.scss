@@ -1,0 +1,51 @@
+@use '@/styles/mixins' as *;
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+
+  button {
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-strong);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    @include focus-ring;
+
+    &[aria-pressed='true'] {
+      background: var(--violet-600);
+      border-color: var(--violet-600);
+      color: white;
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-6);
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up($bp-xl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  > * {
+    display: flex;
+
+    > * {
+      flex: 1;
+    }
+  }
+}
+
+.first {
+  @include up($bp-md) {
+    grid-column: 1 / -1;
+  }
+}

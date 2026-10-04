@@ -1,0 +1,44 @@
+{
+  "imagenes": [
+    {
+      "imagen": "/media/galeria/condores.webp",
+      "lugar": "Mirador de los Cóndores, Villa de Merlo",
+      "credito": "Foto: Turismo Nación"
+    },
+    {
+      "imagen": "/media/galeria/comechingones.webp",
+      "lugar": "Sierras de los Comechingones, Villa de Merlo",
+      "credito": "Foto: Prensa Secretaría de Turismo"
+    },
+    {
+      "imagen": "/media/galeria/potrero.webp",
+      "lugar": "Lago Potrero de los Funes, Potrero de los Funes",
+      "credito": "Foto: Potrero encanta"
+    },
+    {
+      "imagen": "/media/galeria/moneda.webp",
+      "lugar": "Salto de la Moneda, Potrero de los Funes",
+      "credito": "Foto: Judith Junkers, Flickr"
+    },
+    {
+      "imagen": "/media/galeria/negra-libre.webp",
+      "lugar": "Salto de la Negra Libre, Valle de Pancanta",
+      "credito": "Foto: Damián Álvarez, Wikiloc"
+    },
+    {
+      "imagen": "/media/galeria/corredor.webp",
+      "lugar": "Corredor de los Comechingones, Villa de Merlo",
+      "credito": "Foto: La Ruta Natural | Turismo Nación"
+    },
+    {
+      "imagen": "/media/galeria/aguila.webp",
+      "lugar": "Mirador del Águila, Villa de Merlo",
+      "credito": "Foto: Portal Argentina"
+    },
+    {
+      "imagen": "/media/galeria/xk-race.webp",
+      "lugar": "XK Race, Sierras de los Comechingones",
+      "credito": "Foto: Prensa Secretaría de Turismo"
+    }
+  ]
+}

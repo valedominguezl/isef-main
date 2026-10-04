@@ -1,0 +1,44 @@
+{
+  "preguntas": [
+    {
+      "pregunta": "¿Qué duración tiene la carrera?",
+      "respuesta": "La carrera tiene una **duración estimada de 4 años**, expresados en **2.976 horas reloj** o **4.446 horas cátedra**. Podés ver el [plan de estudios completo](/carrera#plan)."
+    },
+    {
+      "pregunta": "¿Qué requisitos se necesitan para inscribirse?",
+      "respuesta": "Tenés que completar la **ficha de inscripción** y la **planilla de exámenes médicos**, que podés descargar en la sección [inscripciones](/inscripciones). Además, deberás **abonar la inscripción**."
+    },
+    {
+      "pregunta": "¿Dónde se encuentra el I.S.E.F. San Luis?",
+      "respuesta": "**Ciudad de San Luis:** Colón 1138, Club Sociedad Española.\n\n**Villa Mercedes:** Pedernera 635, Fundación Eva Perón.\n\nMás información sobre las sedes en [contacto](/contacto#sedes)."
+    },
+    {
+      "pregunta": "¿Se puede cursar de forma virtual?",
+      "respuesta": "No, la carrera es **únicamente presencial** ([ver sedes](/contacto#sedes)), aunque muchas de las [especializaciones](/especializaciones) que ofrecemos a nuestros alumnos son virtuales."
+    },
+    {
+      "pregunta": "¿En qué horarios se cursa?",
+      "respuesta": "Tanto en San Luis como en Villa Mercedes se cursa **de lunes a viernes, de 07:30 a 13:30 h**. Mirá más información sobre [la carrera](/carrera)."
+    },
+    {
+      "pregunta": "¿Qué pasa si todavía adeudo materias del secundario?",
+      "respuesta": "Vas a tener hasta el **30 de julio para aprobar todas las materias**. Si después de esa fecha no las aprobaste, no vas a poder seguir cursando el profesorado."
+    },
+    {
+      "pregunta": "¿Hasta cuándo tengo tiempo de presentar los requisitos de inscripción?",
+      "respuesta": "Tenés **hasta el 30 de marzo** para presentar los requisitos en secretaría. Si no los presentaste para esa fecha, **no vas a poder seguir cursando** el profesorado."
+    },
+    {
+      "pregunta": "¿Cuándo se paga la primera cuota?",
+      "respuesta": "La primera de las 48 cuotas **se empieza a pagar en marzo**."
+    },
+    {
+      "pregunta": "¿Hay gastos adicionales además de la cuota?",
+      "respuesta": "No cobramos gastos adicionales: constancias, certificaciones, cuota aguinaldo, matrícula, pileta de natación y especializaciones son **gratuitas**. El **uniforme es obligatorio** y se abona aparte."
+    },
+    {
+      "pregunta": "¿Las especializaciones tienen costo para los alumnos?",
+      "respuesta": "No. Los talleres de especialización con nuestros disertantes son **gratuitos para los alumnos** del profesorado. Conocé la [oferta actual](/especializaciones)."
+    }
+  ]
+}

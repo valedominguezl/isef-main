@@ -1,0 +1,109 @@
+{
+  "disertante": "roberto-rosler",
+  "resumen": "Médico neurocirujano egresado con Diploma de Honor de la UBA. Director del Laboratorio de Neurociencias y Educación de Asociación Educar, disertante en congresos de 16 países y autor o coautor de más de 40 publicaciones científicas.",
+  "secciones": [
+    {
+      "tipo": "formacion",
+      "items": [
+        {
+          "titulo": "Médico Neurocirujano, Diploma de Honor",
+          "institucion": "Universidad de Buenos Aires (UBA)"
+        }
+      ]
+    },
+    {
+      "tipo": "experiencia",
+      "items": [
+        {
+          "periodo": "Actualidad",
+          "titulo": "Coordinador del área teórica en Neurociencias"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Director del Laboratorio de Neurociencias y Educación",
+          "institucion": "Asociación Educar"
+        },
+        {
+          "titulo": "Médico Asistente Extranjero",
+          "institucion": "Hospitales de París, Francia"
+        },
+        {
+          "titulo": "Médico Neurocirujano del Servicio de Neurocirugía",
+          "institucion": "Hospital Británico de Buenos Aires"
+        }
+      ]
+    },
+    {
+      "tipo": "docencia",
+      "items": [
+        {
+          "periodo": "Actualidad",
+          "titulo": "Profesor Asociado, Departamento de Neurocirugía",
+          "institucion": "Facultad de Medicina, Universidad de Buenos Aires"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Profesor de Neurofisiología",
+          "institucion": "Escuela de Medicina, Hospital Italiano de Buenos Aires"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Profesor Titular de Neurociencias I y II (Carrera de Psicología)",
+          "institucion": "Pontificia Universidad Católica Argentina"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Profesor Titular de Neurofisiología (Carrera de Psicopedagogía)",
+          "institucion": "Pontificia Universidad Católica Argentina"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Coordinador y Profesor de Neuroanatomía, Maestría en Neuropsicología",
+          "institucion": "Instituto de Medicina del Hospital Italiano de Buenos Aires"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Profesor de Neurofisiología (Carrera de Bioingeniería)",
+          "institucion": "Instituto Tecnológico de Buenos Aires (ITBA)"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Profesor Adjunto de Neurología y Neurocirugía I",
+          "institucion": "Facultad de Ciencias Médicas, Pontificia Universidad Católica Argentina"
+        },
+        {
+          "periodo": "Actualidad",
+          "titulo": "Profesor de Management del contexto emocional, Maestría en Coaching Organizacional",
+          "institucion": "Universidad del Salvador"
+        }
+      ]
+    },
+    {
+      "tipo": "investigacion",
+      "items": [
+        {
+          "titulo": "Autor y coautor de más de 40 publicaciones científicas"
+        }
+      ]
+    },
+    {
+      "tipo": "eventos",
+      "items": [
+        {
+          "titulo": "Disertante en congresos internacionales",
+          "detalle": "Argentina, Brasil, Canadá, Chile, Colombia, Ecuador, Estados Unidos, Francia, Hungría, India, Italia, Panamá, Paraguay, Puerto Rico, Suecia y Uruguay"
+        }
+      ]
+    },
+    {
+      "tipo": "distinciones",
+      "items": [
+        {
+          "periodo": "1988",
+          "titulo": "Premio Neurocirugía",
+          "institucion": "Sociedad Argentina de Neurociencias"
+        }
+      ]
+    }
+  ]
+}

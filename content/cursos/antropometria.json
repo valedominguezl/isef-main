@@ -1,0 +1,28 @@
+{
+  "titulo": "Antropometría",
+  "subtitulo": "Técnicas y aplicaciones básicas",
+  "imagen": "/media/cursos/antropometria.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": true,
+  "disertantes": [
+    "nelio-bazan"
+  ],
+  "descripcion": "Se proporciona una comprensión básica de las **técnicas de medición del cuerpo humano** y sus aplicaciones prácticas. A lo largo del curso, se cubrirán aspectos como la **anatomía y los puntos de referencia anatómicos**, así como las medidas básicas de peso, talla y envergadura.\n\nTambién se enseñarán las técnicas para medir longitudes, diámetros, perímetros y pliegues cutáneos. Es clave la **interpretación de las mediciones antropométricas**, que permitirá a los participantes aplicar este conocimiento en diversos campos, como la salud, el deporte y la investigación científica. **Ideal para profesionales y estudiantes que buscan adquirir habilidades prácticas en la evaluación y análisis del cuerpo humano**.",
+  "temario": [
+    {
+      "tema": "Temario General",
+      "subtemas": [
+        "Anatomía y reparos anatómicos",
+        "Medidas básicas: peso",
+        "Medidas básicas: talla y envergadura",
+        "Longitudes",
+        "Diámetros",
+        "Perímetros",
+        "Pliegues",
+        "Interpretación de una antropometría"
+      ]
+    }
+  ]
+}

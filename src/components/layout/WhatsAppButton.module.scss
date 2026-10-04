@@ -1,0 +1,42 @@
+@use '@/styles/mixins' as *;
+
+.btn {
+  position: fixed;
+  right: max(var(--space-4), env(safe-area-inset-right));
+  bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  z-index: calc(var(--z-nav) - 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  height: 56px;
+  padding: 0 13px;
+  border-radius: var(--radius-pill);
+  background: #25d366;
+  color: white;
+  text-decoration: none;
+  box-shadow: 0 10px 24px -6px rgb(37 211 102 / 0.6);
+  transition: gap var(--duration-slow) var(--ease-emphasized), padding var(--duration-slow) var(--ease-emphasized), transform var(--duration-base);
+  @include focus-ring;
+
+  &:hover {
+    color: white;
+    gap: var(--space-2);
+    padding-right: var(--space-5);
+    transform: translateY(-2px);
+
+    .label {
+      max-width: 120px;
+      opacity: 1;
+    }
+  }
+}
+
+.label {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  transition: max-width var(--duration-slow) var(--ease-emphasized), opacity var(--duration-base);
+}

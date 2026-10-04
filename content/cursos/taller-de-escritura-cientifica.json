@@ -1,0 +1,26 @@
+{
+  "titulo": "Taller de escritura científica",
+  "subtitulo": "Apoyo en la realización de la primera investigación",
+  "imagen": "/media/cursos/taller-de-escritura-cientifica.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "disertantes": [
+    "nelio-bazan"
+  ],
+  "descripcion": "Este Taller de Escritura Científica **(TEC)** tiene como principal tarea la de apoyar al estudiante y profesional en la **realización concreta de su primera investigación**. Se brindan las bases teóricas y fundamentalmente su operacionalización para que desarrolle un trabajo de investigación simple, sencillo, de nivel observacional o correlacional, pero con correctas bases metodológicas.\n\nSe brindan los elementos para que el cursante pueda realizar un trabajo científico de investigación original, preferentemente de características territoriales, es decir ligado a su propio entorno de trabajo, dentro de las líneas de investigación que promueve la institución, y con un **nivel apto para ser publicado en una revista** con revisión por pares. **Este curso está diseñado para apoyar a los investigadores noveles en la publicación de sus primeros trabajos.**",
+  "temario": [
+    {
+      "tema": "Temario general",
+      "subtemas": [
+        "Material y métodos.",
+        "Población y muestra.",
+        "Variables e indicadores.",
+        "Bioética",
+        "Estadística. Resultados.",
+        "Discusión y conclusiones"
+      ]
+    }
+  ]
+}

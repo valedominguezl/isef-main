@@ -1,0 +1,217 @@
+{
+  "titulo": "Neurociencias de la didáctica y la pedagogía",
+  "subtitulo": "Exploración de la creatividad y el aprendizaje",
+  "imagen": "/media/cursos/neurociencias-didactica-y-pedagogia.webp",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": true,
+  "disertantes": [
+    "roberto-rosler"
+  ],
+  "descripcion": "Rosler abordará la relación entre la neurociencia y la pedagogía, explorando **cómo los errores del cerebro pueden fomentar la creatividad**, y por qué somos mejores entendiendo el mundo que memorizando. Se analizarán conceptos como la memoria falsa, las respuestas del cerebro bajo presión, y **cómo el manejo del tiempo y el aburrimiento pueden influir en el aprendizaje**.\n\nTambién se discutirán las distracciones productivas, **la capacidad del cerebro para tomar decisiones**, y la importancia del error en el proceso de mejora. Se examinará la relación entre motivación y vagancia, y se explorará **cómo fomentar la creatividad**. Finalmente, se estudiarán las adicciones y cómo el cerebro maneja diferentes sustancias y comportamientos adictivos, brindando una **visión completa de los procesos neurocognitivos implicados en el aprendizaje y la enseñanza**.",
+  "temario": [
+    {
+      "tema": "El cerebro ineficiente: cómo los errores del cerebro logran que los humanos seamos creativos",
+      "subtemas": [
+        "Olvidando: por qué no recordará los contenidos de este artículo, y así de esta manera recordará la información más importante",
+        "Un probador de memorias",
+        "El síndrome del probador",
+        "Un mordisco en la manzana: ¿A la derecha o a la izquierda?",
+        "El olvido activo",
+        "Un señalador de libro intelectual",
+        "La declaración de impuestos intelectual",
+        "El beneficio de las memorias 'temblorosas'",
+        "Digestión mental",
+        "Olvidar con el fin de retener",
+        "Y ahora: ¡Un descanso!"
+      ]
+    },
+    {
+      "tema": "Aprender: por qué somos malos para aprender de memoria pero somos mejores para entender el mundo",
+      "subtemas": [
+        "Aprender no es todo",
+        "La neurona orquesta",
+        "Aprendiendo entre neuronas",
+        "La debilidad de estudiar de memoria",
+        "Aprendizaje masivo",
+        "La regla de aprendizaje de la lasaña",
+        "¡No aprenda, comprenda!",
+        "Comprensión profunda",
+        "Aprendizaje recargado de fuerza"
+      ]
+    },
+    {
+      "tema": "Memoria: por qué una falsa memoria es mejor que nada",
+      "subtemas": [
+        "La capilla de la memoria",
+        "La vulnerabilidad de la memoria",
+        "Las trampas emocionales",
+        "El crimen perfecto de la memoria",
+        "Imaginar es también aprender",
+        "Falsificación de la memoria por presión de los pares",
+        "Por qué a veces lo falso es lo mejor",
+        "No es verdad, pero 'suena' como verdadero"
+      ]
+    },
+    {
+      "tema": "El apagón: por qué nos ahogamos bajo presión y la fórmula secreta para esquivar el pánico escénico",
+      "subtemas": [
+        "La trampa del paso a paso",
+        "Falla mental #1: la trampa del paso a paso",
+        "Haga lo que haga, ¡no se imagine un conejo rojo de felpa!",
+        "Falla mental #2: la trampa de la distracción",
+        "El control es bueno, la confianza es mejor",
+        "Falla mental #3: la trampa de la sobreexcitación",
+        "La paradoja de la recompensa",
+        "Conquistando el miedo de hablar en público"
+      ]
+    },
+    {
+      "tema": "El tiempo: por qué siempre lo calculamos erróneamente y así forjamos memorias valiosas",
+      "subtemas": [
+        "La trampa de la planificación",
+        "Sin sentido del tiempo",
+        "Error de tiempo 'en vivo'",
+        "El retraso del doblaje de la película",
+        "Una línea temporal mental",
+        "Por qué parece que el tiempo vuela cuando envejecemos",
+        "La ventaja de las distorsiones temporales",
+        "Felicitaciones, ha ganado algo de tiempo"
+      ]
+    },
+    {
+      "tema": "Aburrimiento: por qué tenemos problemas para desconectarnos y cómo soñar despierto evoca a las musas",
+      "subtemas": [
+        "Nuestro marco mental básico",
+        "Mejor recibir un shock eléctrico que tener que esperar",
+        "¿Aburrido? ¡Es por su culpa!",
+        "La ociosidad puede ser la raíz de todas las ideas",
+        "Sacando el mejor provecho de nuestra incapacidad de apagar nuestros pensamientos",
+        "Ensoñaciones productivas",
+        "El arte de la interacción entre la tensión y la relajación"
+      ]
+    },
+    {
+      "tema": "Distracción: por qué somos tan inconstantes y qué distracciones pueden llevarnos a una mayor creatividad",
+      "subtemas": [
+        "Un filtro antispam para el cerebro",
+        "El portal del cerebro",
+        "Cuando el filtro se rebalsa",
+        "¡No escuche a su corazón!",
+        "Gorilas en los pulmones",
+        "La carga de trabajo que ciega",
+        "Las trampas de la distracción",
+        "Entrenando su portal",
+        "Distracción productiva",
+        "Una dieta mental",
+        "Distracciones inspiradoras"
+      ]
+    },
+    {
+      "tema": "Matemáticas: por qué el cerebro calcula mejor sin números",
+      "subtemas": [
+        "¿Números? ¡No gracias!",
+        "¡Números por favor!",
+        "Nuestro equipamiento matemático básico",
+        "Votar democráticamente por los números",
+        "Regiones cerebrales usadas incorrectamente",
+        "El lenguaje del cerebro"
+      ]
+    },
+    {
+      "tema": "Decisiones: por qué nos arriesgamos mucho y aún así tomamos buenas decisiones",
+      "subtemas": [
+        "Las decisiones no son cálculos",
+        "La decisión está hecha un lío",
+        "El criterio de apostar",
+        "Del miedo al riesgo",
+        "La firma característica del éxito del mercado de valores",
+        "Un 50% de posibilidades de recibir un shock eléctrico te pone de mal humor",
+        "El mundo pertenece al valiente",
+        "Siempre somos más inteligentes en forma retrospectiva"
+      ]
+    },
+    {
+      "tema": "Elegir: por qué elegir es tan angustiante y cómo hacemos para elegir la mejor opción",
+      "subtemas": [
+        "Nuestra fortaleza para decidir",
+        "Nuestra debilidad para elegir",
+        "Nuestro tendón de Aquiles de la elección",
+        "Demasiado chocolate no brinda la felicidad",
+        "Eligiendo por otros",
+        "La presión del precio también existe en el cerebro",
+        "Evitando la agonía de la elección",
+        "Truco #1: reduzca su objetivo",
+        "Truco #2: esté satisfecho",
+        "Truco #3: decida las cosas importantes con sus instintos",
+        "Truco #4: resístase al exceso",
+        "Truco #5: elevar la presión"
+      ]
+    },
+    {
+      "tema": "Motivación: cómo nuestra vagancia nos detiene y cómo podemos inspirar a los otros",
+      "subtemas": [
+        "El problema de ser Papá Noel",
+        "El error de predicción",
+        "Motivación intrínseca",
+        "Cuando no nos preocupamos por nosotros mismos",
+        "Donde pasa el tiempo nuestra vagancia",
+        "Nuestros omnipresentes sistemas de desmotivación y cómo luchar contra ellos",
+        "La paradoja de la recompensa"
+      ]
+    },
+    {
+      "tema": "Creatividad: por qué no podemos ser innovadores con solo apretar un botón pero siempre tenemos nuevas ideas",
+      "subtemas": [
+        "Midiendo ideas",
+        "Inteligencia versus creatividad",
+        "Pensar dos veces dura más tiempo",
+        "El arte de no pensar",
+        "El estrés, un regulador de contraste en el cerebro",
+        "Anteojeras bioquímicas",
+        "El buen humor logra buenas ideas",
+        "El precio que debemos pagar para ser originales",
+        "No existe lo correcto o lo equivocado, solamente existe crear"
+      ]
+    },
+    {
+      "tema": "Perfeccionismo: por qué necesitamos a los errores para mejorar",
+      "subtemas": [
+        "Cometiendo errores por doquier",
+        "La competición de errores en las profundidades del cerebro",
+        "El principio del programa de entrevistas",
+        "El moderador debe meterse",
+        "El cerebro ha gritado “¡Error!”",
+        "El beneficio del caos",
+        "Errores sistemáticos",
+        "Mejor hecho que perfecto",
+        "¡Adelante, siempre adelante!",
+        "Manténgase falible"
+      ]
+    },
+    {
+      "tema": "Adicciones",
+      "subtemas": [
+        "La corteza prefrontal es el área donde están nuestros superpoderes",
+        "El sistema emocional: el “Tigre”",
+        "La corteza prefrontal: el superhéroe",
+        "Neurotransmisores",
+        "Drogas",
+        "Alcohol",
+        "Benzodiacepinas",
+        "Opiáceos",
+        "Estimulantes",
+        "Inhalantes",
+        "Alucinógenos",
+        "Marihuana",
+        "Nicotina",
+        "Cafeína",
+        "Azúcar",
+        "Adicciones sin drogas",
+        "Tranquilizando al sistema emocional",
+        "Construyendo la corteza prefrontal",
+        "La corteza prefrontal va al gimnasio"
+      ]
+    }
+  ]
+}

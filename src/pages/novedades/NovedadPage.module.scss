@@ -1,0 +1,39 @@
+@use '@/styles/mixins' as *;
+
+.article {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.lead {
+  font-size: var(--text-lg);
+  color: var(--color-text);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.curso {
+  margin-top: var(--space-12);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-6);
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  > * {
+    display: flex;
+
+    > * {
+      flex: 1;
+    }
+  }
+}

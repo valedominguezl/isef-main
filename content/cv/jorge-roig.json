@@ -1,0 +1,81 @@
+{
+  "disertante": "jorge-roig",
+  "resumen": "Profesor universitario en Educación Física, Especialista en Fisiología del Ejercicio, Máster en Nutrición Deportiva y Doctor en Ciencias del Ejercicio. Catedrático en universidades de Argentina, Perú y España y co-autor de 15 libros de la especialidad.",
+  "secciones": [
+    {
+      "tipo": "formacion",
+      "items": [
+        {
+          "titulo": "Doctor en Ciencias del Ejercicio"
+        },
+        {
+          "titulo": "Máster en Nutrición Deportiva"
+        },
+        {
+          "titulo": "Especialista Universitario en Fisiología del Ejercicio"
+        },
+        {
+          "titulo": "Profesor Universitario en Educación Física"
+        }
+      ]
+    },
+    {
+      "tipo": "docencia",
+      "items": [
+        {
+          "titulo": "Catedrático de Fisiología Aplicada al Entrenamiento Deportivo",
+          "institucion": "Universidad Nacional de La Plata, Argentina"
+        },
+        {
+          "titulo": "Profesor Asociado de Introducción a la Medicina del Deporte",
+          "institucion": "Universidad Católica de La Plata, Argentina"
+        },
+        {
+          "titulo": "Catedrático de Fisiología del Ejercicio y Bioquímica Aplicada al Ejercicio (especialidad Nutrición Deportiva)",
+          "institucion": "Universidad Norbert Wiener, Lima, Perú"
+        },
+        {
+          "titulo": "Catedrático en la especialidad Terapia Nutricional en Enfermedades Cardiovasculares",
+          "institucion": "Universidad Norbert Wiener, Lima, Perú"
+        },
+        {
+          "titulo": "Catedrático en la Maestría en Nutrición: Patologías endocrino-metabólicas (obesidad y síndrome metabólico) y biología molecular aplicada a la nutrición deportiva",
+          "institucion": "Universidad Alfonso X, Madrid, España"
+        },
+        {
+          "titulo": "Catedrático en el Máster de Nutrición Deportiva: Bases bioquímicas y fisiológicas de la nutrición",
+          "institucion": "Universidad Científica del Sur, Lima, Perú"
+        },
+        {
+          "titulo": "Co-director de la especialidad en Fisiología del Ejercicio",
+          "institucion": "Fundación Favaloro (Universidad Dr. René Favaloro), Buenos Aires"
+        }
+      ]
+    },
+    {
+      "tipo": "investigacion",
+      "items": [
+        {
+          "titulo": "Revisor científico de Fisiología del Ejercicio y Bioquímica del Ejercicio",
+          "institucion": "Revista Andaluza de Medicina del Deporte"
+        },
+        {
+          "titulo": "Co-autor de 15 libros de la especialidad"
+        }
+      ]
+    },
+    {
+      "tipo": "distinciones",
+      "items": [
+        {
+          "titulo": "Miembro de Honor",
+          "institucion": "Instituto Internacional de Ciencias del Ejercicio y la Salud (IICES)"
+        },
+        {
+          "titulo": "Miembro del Consejo Consultivo de la Licenciatura en Ciencias de la Actividad Física y el Deporte",
+          "institucion": "Universidad San Ignacio de Loyola (USIL), Lima, Perú"
+        }
+      ]
+    }
+  ]
+}

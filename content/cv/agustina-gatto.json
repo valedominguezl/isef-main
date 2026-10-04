@@ -1,0 +1,200 @@
+{
+  "disertante": "agustina-gatto",
+  "resumen": "Abogada (Universidad Católica de Cuyo, Medalla de Honor al primer promedio) y mediadora. Profesora adjunta de Derechos Reales, con formación de posgrado en políticas públicas, liderazgo y derecho procesal civil, y Concejal de la Ciudad de San Luis.",
+  "secciones": [
+    {
+      "tipo": "formacion",
+      "items": [
+        {
+          "periodo": "2012",
+          "titulo": "Abogada",
+          "institucion": "Universidad Católica de Cuyo",
+          "detalle": "Medalla de Honor por primer promedio y rendimiento académico"
+        },
+        {
+          "periodo": "2021",
+          "titulo": "Mediadora",
+          "institucion": "Redes Alternativas, Centro de Mediación y Capacitación (Mendoza)"
+        },
+        {
+          "periodo": "2017",
+          "titulo": "Diplomatura en Derecho Procesal Civil",
+          "institucion": "Universidad Católica de Cuyo"
+        },
+        {
+          "periodo": "2015",
+          "titulo": "Coaching y Liderazgo Estratégico",
+          "institucion": "Universidad Católica de Cuyo – CEPID"
+        },
+        {
+          "periodo": "2014",
+          "titulo": "Gestión en Políticas Públicas",
+          "institucion": "FISAL – Universidad Austral"
+        },
+        {
+          "periodo": "En curso",
+          "titulo": "Escribanía",
+          "institucion": "Universidad Católica de Cuyo – CEPID"
+        },
+        {
+          "periodo": "En curso",
+          "titulo": "Especialización en Derecho de Familia",
+          "institucion": "Club del Derecho"
+        }
+      ]
+    },
+    {
+      "tipo": "docencia",
+      "items": [
+        {
+          "periodo": "2012 – Actualidad",
+          "titulo": "Profesora Adjunta en Civil IV, Cátedra Derechos Reales",
+          "institucion": "Universidad Católica de Cuyo"
+        },
+        {
+          "periodo": "2012 – 2018",
+          "titulo": "Profesora Adjunta en Ética Jurídica",
+          "institucion": "Universidad Católica de Cuyo, sede San Luis"
+        },
+        {
+          "periodo": "2015 – 2018",
+          "titulo": "Profesora a cargo de comisión del convenio de patrocinio gratuito con estudiantes avanzados",
+          "institucion": "Universidad Católica de Cuyo – Poder Judicial de San Luis"
+        },
+        {
+          "periodo": "2016",
+          "titulo": "Profesora de la cátedra “Legislación turística aplicada”",
+          "institucion": "Universidad de La Punta"
+        },
+        {
+          "periodo": "2016",
+          "titulo": "Profesora de Derecho (5º año) y Derecho Económico (6º año)",
+          "institucion": "Instituto Privado San Marino"
+        },
+        {
+          "periodo": "2013 – 2015",
+          "titulo": "Profesora de Historia, Geografía y Ética (modalidad a distancia)",
+          "institucion": "Asociación para el Crecimiento Educativo"
+        }
+      ]
+    },
+    {
+      "tipo": "experiencia",
+      "items": [
+        {
+          "periodo": "2021 – Actualidad",
+          "titulo": "Concejal de la Ciudad de San Luis (segundo mandato)"
+        },
+        {
+          "periodo": "2019 – 2021",
+          "titulo": "Concejal de la Ciudad de San Luis (primer mandato)"
+        },
+        {
+          "periodo": "2019",
+          "titulo": "Jefa de Subprograma Formación e Interrelación",
+          "institucion": "Ministerio de Seguridad de San Luis",
+          "detalle": "Organizó capacitaciones para más de 800 efectivos policiales y del servicio penitenciario"
+        },
+        {
+          "periodo": "2017 – 2018",
+          "titulo": "Jefa de Área Incumbencia de Títulos",
+          "institucion": "Ministerio de Educación de San Luis"
+        },
+        {
+          "periodo": "2016",
+          "titulo": "Asesora legal",
+          "institucion": "Dirección de Control de Rutas, Ministerio de Infraestructura y Obras Públicas"
+        },
+        {
+          "periodo": "2013 – Actualidad",
+          "titulo": "Ejercicio de la profesión en estudio jurídico propio"
+        }
+      ]
+    },
+    {
+      "tipo": "eventos",
+      "items": [
+        {
+          "periodo": "2024",
+          "titulo": "Masterclass Neuroeducación y Emociones",
+          "institucion": "Fundación Universitaria"
+        },
+        {
+          "periodo": "2023",
+          "titulo": "Talleres sobre el proceso de usucapión",
+          "institucion": "CAPSL – UCCuyo"
+        },
+        {
+          "periodo": "2017",
+          "titulo": "Miembro del Consejo Editor de la revista jurídica “Tomás Moro”, área Derechos Reales",
+          "institucion": "Universidad Católica de Cuyo"
+        },
+        {
+          "periodo": "2015 – 2017",
+          "titulo": "Coordinadora y moderadora de las Jornadas Europeo-Latinoamericanas de Salud y Derecho",
+          "institucion": "Universidad Católica de Cuyo"
+        },
+        {
+          "periodo": "2016",
+          "titulo": "Calificación recomendable en el Concurso para Juez de Primera Instancia en lo Civil, Comercial y de Minas",
+          "institucion": "Primera Circunscripción de San Luis"
+        },
+        {
+          "periodo": "2015",
+          "titulo": "Disertante: Reforma del Código Civil y Comercial – Derechos Reales",
+          "institucion": "Universidad Católica de Cuyo"
+        },
+        {
+          "periodo": "2013",
+          "titulo": "Colaboración en el libro “Construyendo Democracia”",
+          "institucion": "FISAL"
+        }
+      ]
+    },
+    {
+      "tipo": "comunidad",
+      "items": [
+        {
+          "periodo": "2020 – 2023",
+          "titulo": "Organizadora de los proyectos “Los Jóvenes al Concejo”, “Los Jóvenes y la República”, “Los Jóvenes y los Sueños” y “Yo Quiero”",
+          "institucion": "Concejo Deliberante de San Luis",
+          "detalle": "Con la participación de hasta 30 escuelas de la ciudad"
+        },
+        {
+          "periodo": "2021 – 2023",
+          "titulo": "Organizadora de los talleres “Dos manos salvan vidas” (RCP y maniobra de Heimlich)",
+          "institucion": "Bomberos de la Policía de San Luis"
+        },
+        {
+          "periodo": "2022 – 2023",
+          "titulo": "Co-organizadora de las Jornadas de Salud Mental en adolescentes “Te Escucho”",
+          "institucion": "FaPsi UNSL – HCD"
+        },
+        {
+          "periodo": "2022 – 2023",
+          "titulo": "Organizadora de las Jornadas “Conectate con tus Derechos”",
+          "institucion": "Escuela de Especialización para Magistrados Juan Crisóstomo Lafinur"
+        },
+        {
+          "periodo": "2023",
+          "titulo": "Organizadora de las Jornadas “Salud y Deporte”",
+          "institucion": "FaPsi – Alin – Sociedad Cardiológica de San Luis – HCD"
+        },
+        {
+          "periodo": "2013 – 2015",
+          "titulo": "Colaboración ad honorem",
+          "institucion": "Asamblea Permanente por los Derechos Humanos, sede San Luis"
+        }
+      ]
+    },
+    {
+      "tipo": "idiomas",
+      "items": [
+        {
+          "titulo": "Inglés británico",
+          "detalle": "Gramática y conversación"
+        }
+      ]
+    }
+  ]
+}

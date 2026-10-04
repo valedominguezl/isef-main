@@ -1,0 +1,131 @@
+@use '@/styles/mixins' as *;
+
+.speakers {
+  display: grid;
+  gap: var(--space-5);
+
+  @include up($bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up($bp-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(100%, 640px);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  color: var(--ink-500);
+  transition: border-color var(--duration-base), box-shadow var(--duration-base);
+
+  &:focus-within {
+    border-color: var(--violet-400);
+    box-shadow: 0 0 0 4px var(--violet-100);
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    min-height: 52px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    color: var(--color-text);
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+
+  button {
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-strong);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--ink-700);
+    background: var(--color-surface);
+    transition: all var(--duration-base);
+    @include focus-ring;
+
+    &:hover {
+      border-color: var(--violet-400);
+      color: var(--violet-700);
+    }
+
+    &[aria-pressed='true'] {
+      background: var(--violet-600);
+      border-color: var(--violet-600);
+      color: white;
+    }
+  }
+}
+
+.count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-link);
+    font-weight: var(--weight-medium);
+  }
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-5);
+  list-style: none;
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up($bp-xl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  li {
+    display: flex;
+
+    > * {
+      flex: 1;
+    }
+  }
+}
+
+.empty {
+  text-align: center;
+  padding: var(--space-12) 0;
+}

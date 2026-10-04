@@ -1,35 +1,28 @@
 <!doctype html>
-<html lang="es">
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="icon" type="image/svg+xml" href="/favIcon.ico">
-  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-  <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;500;600&family=Merriweather:ital,wght@0,300;0,700;1,300;1,700&display=swap"
-    rel="stylesheet">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#ffffff">
-
-  <meta name="description"
-    content="ISEF San Luís, el mejor profesorado de educación física de Argentina, con la cuota más baja del país y especializaciones con científicos de renombre mundial" />
-
-  <title>ISEF San Luís | Profesorado de educación física</title>
-</head>
-
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
-
+<html lang="es-AR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#7761ff" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!--app-head-->
+    <noscript>
+      <style>
+        /* Sin JS, el contenido animado debe verse igual */
+        [style*='opacity:0'],
+        [style*='opacity: 0'] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/entry-client.tsx"></script>
+  </body>
 </html>

@@ -1,0 +1,10 @@
+# Finales de línea LF en todo el repo (evita diferencias Windows/Linux)
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.doc binary
+*.docx binary
+*.woff2 binary

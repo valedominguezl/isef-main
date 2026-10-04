@@ -1,0 +1,14 @@
+{
+  "name": "I.S.E.F. San Luis",
+  "short_name": "I.S.E.F.",
+  "description": "Profesorado de Educación Física en San Luis y Villa Mercedes",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7761ff",
+  "lang": "es-AR",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

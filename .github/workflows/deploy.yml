@@ -1,29 +1,37 @@
-name: Deploy to VPS
+name: Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+
+# Si el panel publica varios cambios seguidos, solo se despliega el último.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 20
+          cache: npm
 
-      - name: Install dependencies
-        run: npm install
+      - name: Instalar dependencias
+        run: npm ci
 
-      - name: Build app
-        run: npm run build 
+      - name: Chequeos (tipos, lint, contenido, mayúsculas en imports)
+        run: npm run check
 
-      - name: Upload build to VPS
+      - name: Build + prerender
+        run: npm run build
+
+      - name: Subir al VPS
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           VPS_USER: ${{ secrets.VPS_USER }}
@@ -31,28 +39,21 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > key.pem
           chmod 600 key.pem
-
-          # 1. Definir nombre de la versión
+          SSH="ssh -i key.pem -o StrictHostKeyChecking=accept-new"
           BUILD_DIR=$(date +%Y%m%d%H%M%S)
 
-          # 2. Crear la carpeta en el VPS antes de subir
-          ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST "mkdir -p /var/www/builds/$BUILD_DIR"
+          $SSH $VPS_USER@$VPS_HOST "mkdir -p /var/www/builds/$BUILD_DIR"
+          rsync -az --delete -e "$SSH" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$BUILD_DIR/
 
-          # 3. Subir los archivos compilados (asegúrate de que './dist/' sea la ruta correcta)
-          rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$BUILD_DIR/
-
-          # 4. Actualizar el link simbólico
-          ssh -i key.pem -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-            LATEST_BUILD=$(ls -td /var/www/builds/* | head -1)
-            if [ -n "$LATEST_BUILD" ]; then
-              rm -rf /var/www/html
-              ln -sfn "$LATEST_BUILD" /var/www/html
-              sudo chown -R www-data:www-data /var/www/builds
-              sudo chmod -R 755 /var/www/builds
-              echo "🚀 Despliegue completado: $LATEST_BUILD"
-            else
-              echo "❌ Error: No se encontró ninguna carpeta en /var/www/builds"
-              exit 1
-            fi
+          # Activar la versión nueva (cambio atómico del symlink) y conservar las últimas 5
+          $SSH $VPS_USER@$VPS_HOST << EOF
+            set -e
+            ln -sfn /var/www/builds/$BUILD_DIR /var/www/html.tmp
+            [ -L /var/www/html ] || rm -rf /var/www/html
+            mv -T /var/www/html.tmp /var/www/html
+            sudo chown -R www-data:www-data /var/www/builds/$BUILD_DIR
+            sudo chmod -R 755 /var/www/builds/$BUILD_DIR
+            ls -1dt /var/www/builds/*/ | tail -n +6 | xargs -r rm -rf
+            echo "Despliegue completado: $BUILD_DIR"
           EOF
           rm -f key.pem

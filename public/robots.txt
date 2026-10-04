@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /conferencias/
-Allow: /
-Sitemap: https://isefsanluis.net/sitemap.xml

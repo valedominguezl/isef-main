@@ -1,0 +1,16 @@
+{
+  "nombre": "Walter Agüero",
+  "titulo": "Dr.",
+  "especialidad": "Inteligencia artificial y ciberseguridad",
+  "destacados": [
+    "Dr. en ingeniería informática",
+    "Magíster en ingeniería del software",
+    "Egresado de la UNSL",
+    "Cybersecurity Specialist",
+    "Conferencista",
+    "Docente e investigador"
+  ],
+  "orden": 4,
+  "foto": "/media/disertantes/walter-aguero.webp",
+  "publicado": true
+}

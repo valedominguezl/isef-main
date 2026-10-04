@@ -1,0 +1,7 @@
+#!/bin/sh
+# Evita subir cambios que rompan el build en Linux (CI/servidor).
+echo "→ Chequeando antes de subir (tipos, lint, contenido, mayúsculas en imports)…"
+npm run check --silent || {
+  echo "✗ Hay errores. Corregilos antes de hacer push (o usá --no-verify si es una emergencia)."
+  exit 1
+}

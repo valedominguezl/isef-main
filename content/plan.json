@@ -1,0 +1,274 @@
+{
+  "titulo": "Profesor/a de Educación Física",
+  "resolucion": "Resolución Nº 442 ME 2016",
+  "duracion": "4 años",
+  "horasReloj": 2976,
+  "horasCatedra": 4446,
+  "anios": [
+    {
+      "anio": "1° año",
+      "horasReloj": 752,
+      "horasCatedra": 1128,
+      "materias": [
+        {
+          "nombre": "Anatomía funcional",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Gimnasia",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Prácticas acuáticas y su didáctica",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Didáctica general",
+          "tipo": "Materia",
+          "horas": 48
+        },
+        {
+          "nombre": "Alfabetización académica",
+          "tipo": "Taller",
+          "horas": 32
+        },
+        {
+          "nombre": "Alfabetización digital",
+          "tipo": "Taller",
+          "horas": 32
+        },
+        {
+          "nombre": "Sociología de la educación",
+          "tipo": "Taller",
+          "horas": 48
+        },
+        {
+          "nombre": "Prácticas ludomotrices y recreativas",
+          "tipo": "Taller",
+          "horas": 64
+        },
+        {
+          "nombre": "Expresión y comunicación motriz",
+          "tipo": "Taller",
+          "horas": 64
+        },
+        {
+          "nombre": "Introducción a las prácticas deportivas",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Práctica docente I",
+          "tipo": "Práctica docente",
+          "horas": 80
+        },
+        {
+          "nombre": "Pedagogía",
+          "tipo": "Materia",
+          "horas": 64
+        }
+      ]
+    },
+    {
+      "anio": "2° año",
+      "horasReloj": 848,
+      "horasCatedra": 1272,
+      "materias": [
+        {
+          "nombre": "Psicología educacional",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Voley y su didáctica",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Atletismo y su didáctica",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Desarrollo y aprendizaje motor",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Fisiología humana y de la motricidad",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Didáctica de la educación física del nivel inicial y primario",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Historia y política de la educación argentina",
+          "tipo": "Materia",
+          "horas": 48
+        },
+        {
+          "nombre": "Sujeto de la educación física I",
+          "tipo": "Materia",
+          "horas": 32
+        },
+        {
+          "nombre": "Sujeto de la educación física II",
+          "tipo": "Materia",
+          "horas": 32
+        },
+        {
+          "nombre": "Filosofía de la educación",
+          "tipo": "Materia",
+          "horas": 48
+        },
+        {
+          "nombre": "Formación ética y deontología",
+          "tipo": "Materia",
+          "horas": 64
+        },
+        {
+          "nombre": "Epistemología de la educación física",
+          "tipo": "Taller",
+          "horas": 48
+        },
+        {
+          "nombre": "Práctica docente II",
+          "tipo": "Práctica docente",
+          "horas": 96
+        }
+      ]
+    },
+    {
+      "anio": "3° año",
+      "horasReloj": 672,
+      "horasCatedra": 1008,
+      "materias": [
+        {
+          "nombre": "Handball y su didáctica",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Fútbol y su didáctica",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Básquet y su didáctica",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Didáctica de la educación física del nivel secundario",
+          "tipo": "Materia",
+          "horas": 48
+        },
+        {
+          "nombre": "Didáctica de la educación física para la atención de necesidades educativas especiales",
+          "tipo": "Materia",
+          "horas": 48
+        },
+        {
+          "nombre": "Inglés técnico",
+          "tipo": "Materia",
+          "horas": 48
+        },
+        {
+          "nombre": "Educación sexual integral",
+          "tipo": "Taller",
+          "horas": 48
+        },
+        {
+          "nombre": "Lengua de señas argentina",
+          "tipo": "Taller",
+          "horas": 32
+        },
+        {
+          "nombre": "Expresiones culturales de la identidad provincial",
+          "tipo": "Taller",
+          "horas": 64
+        },
+        {
+          "nombre": "Educación física para la social recreación",
+          "tipo": "Taller",
+          "horas": 32
+        },
+        {
+          "nombre": "Práctica de la enseñanza",
+          "tipo": "Práctica docente",
+          "horas": 112
+        },
+        {
+          "nombre": "Práctica nivel inicial"
+        },
+        {
+          "nombre": "Práctica nivel primario"
+        }
+      ]
+    },
+    {
+      "anio": "4° año",
+      "horasReloj": 704,
+      "horasCatedra": 1056,
+      "materias": [
+        {
+          "nombre": "Metodología de la investigación",
+          "tipo": "Materia",
+          "horas": 64
+        },
+        {
+          "nombre": "Entrenamiento y evaluaciones deportivas",
+          "tipo": "Materia",
+          "horas": 64
+        },
+        {
+          "nombre": "Hockey y su didáctica",
+          "tipo": "Materia",
+          "horas": 80
+        },
+        {
+          "nombre": "Actividad física en medios naturales",
+          "tipo": "Materia",
+          "horas": 64
+        },
+        {
+          "nombre": "Softbol y su didáctica",
+          "tipo": "Materia",
+          "horas": 48
+        },
+        {
+          "nombre": "Rugby y su didáctica",
+          "tipo": "Materia",
+          "horas": 48
+        },
+        {
+          "nombre": "Actividades físicas para la salud",
+          "tipo": "Taller",
+          "horas": 48
+        },
+        {
+          "nombre": "Administración y gestión en el ámbito de la educación física",
+          "tipo": "Taller",
+          "horas": 48
+        },
+        {
+          "nombre": "Residencia pedagógica",
+          "tipo": "Práctica docente",
+          "horas": 240
+        },
+        {
+          "nombre": "Práctica nivel secundario"
+        },
+        {
+          "nombre": "Práctica ámbito no formal"
+        }
+      ]
+    }
+  ]
+}

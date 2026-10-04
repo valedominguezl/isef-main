@@ -1,0 +1,86 @@
+{
+  "nombre": "I.S.E.F. San Luis",
+  "nombreLargo": "Instituto Superior de Educación Física San Luis",
+  "descripcion": "Profesorado de Educación Física en San Luis y Villa Mercedes. Título oficial de validez nacional, la cuota más baja del país y especializaciones gratuitas con científicos de renombre internacional.",
+  "url": "https://isefsanluis.net",
+  "fundacion": "1993",
+  "campusUrl": "https://campus.isefsanluis.net/",
+  "whatsapp": "5492664564435",
+  "email": "esef4@hotmail.com",
+  "inscripciones": {
+    "abiertas": true,
+    "texto": "Inscripciones abiertas"
+  },
+  "estadisticas": [
+    { "valor": 30, "prefijo": "+", "etiqueta": "años formando" },
+    { "valor": 2, "prefijo": "", "etiqueta": "sedes" },
+    { "valor": 5000, "prefijo": "+", "etiqueta": "egresados" }
+  ],
+  "telefonos": [
+    {
+      "area": "Información general",
+      "descripcion": "Tu primera opción si tenés consultas generales o no sabés con qué número contactarte.",
+      "numeros": ["5492664564435"]
+    },
+    {
+      "area": "Rectoría",
+      "descripcion": "Oficina del rector. Para quejas, sugerencias o asuntos institucionales importantes.",
+      "numeros": ["5492604508428"]
+    },
+    {
+      "area": "Secretaría académica",
+      "descripcion": "Temas pedagógicos, consultas sobre docentes o información del gabinete de apoyo psicopedagógico.",
+      "numeros": ["5492664570570"]
+    },
+    {
+      "area": "Secretaría administrativa",
+      "sede": "San Luis",
+      "descripcion": "Asistencias, calificaciones, cuotas, certificaciones y trámites en la sede de San Luis.",
+      "numeros": ["5492664304739", "5492664611345", "5492664577972"]
+    },
+    {
+      "area": "Secretaría administrativa",
+      "sede": "Villa Mercedes",
+      "descripcion": "Asistencias, calificaciones, cuotas, certificaciones y trámites en la sede de Villa Mercedes.",
+      "numeros": ["5492657210254"]
+    }
+  ],
+  "sedes": [
+    {
+      "nombre": "Ciudad de San Luis",
+      "tipo": "Sede principal",
+      "direccion": "Colón 1138, Club Sociedad Española",
+      "ciudad": "San Luis",
+      "mapaUrl": "https://maps.app.goo.gl/mAtAF9dEStP8UWdK7",
+      "mapaEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3334.8390831599!2d-66.33809122342238!3d-33.296872589664964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95d439525ae507d1%3A0xd9a7144dcb2cc7f0!2sIsef%20San%20Luis!5e0!3m2!1ses-419!2sar!4v1740328985501!5m2!1ses-419!2sar",
+      "lat": -33.296872,
+      "lng": -66.335516,
+      "telefono": "5492664564435",
+      "facebook": "https://www.facebook.com/isefsanluis.info",
+      "horario": "Atención de 9 a 13 h"
+    },
+    {
+      "nombre": "Villa Mercedes",
+      "tipo": "Extensión áulica",
+      "direccion": "Pedernera 635, Fundación Eva Perón",
+      "ciudad": "Villa Mercedes",
+      "mapaUrl": "https://www.google.com/maps/search/?api=1&query=Isef+Villa+Mercedes+Pedernera+635",
+      "mapaEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.06246869656!2d-65.46731352340814!3d-33.68144660938069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95d16a850fefe5db%3A0x46fe5509d3b440f8!2sIsef%20Villa%20Mercedes!5e0!3m2!1ses-419!2sar!4v1740329416737!5m2!1ses-419!2sar",
+      "lat": -33.681446,
+      "lng": -65.464738,
+      "telefono": "5492664564435",
+      "facebook": "https://www.facebook.com/isef.villamercedes/",
+      "horario": "Atención de 9 a 13 h"
+    }
+  ],
+  "redes": [
+    { "red": "facebook", "etiqueta": "Información general", "url": "https://www.facebook.com/Isefsanluis.info/" },
+    { "red": "instagram", "etiqueta": "Información general", "url": "https://www.instagram.com/Isefsanluis.info/" },
+    { "red": "facebook", "etiqueta": "San Luis", "url": "https://www.facebook.com/isef.sanluis" },
+    { "red": "facebook", "etiqueta": "Villa Mercedes", "url": "https://www.facebook.com/isef.villamercedes/" }
+  ],
+  "analytics": {
+    "ga4": "G-L4QFYTY1XM",
+    "gtm": "GTM-KFMMQ36H"
+  }
+}

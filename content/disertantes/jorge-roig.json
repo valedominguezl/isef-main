@@ -1,0 +1,16 @@
+{
+  "nombre": "Jorge Roig",
+  "titulo": "Dr.",
+  "especialidad": "Fisiología y bioquímica del ejercicio",
+  "destacados": [
+    "Doctor en ciencias del ejercicio",
+    "Licenciado en educación física",
+    "Egresado de la UNLP",
+    "Revisor científico",
+    "Conferencista",
+    "Catedrático"
+  ],
+  "orden": 2,
+  "foto": "/media/disertantes/jorge-roig.webp",
+  "publicado": true
+}

@@ -1,0 +1,130 @@
+{
+  "titulo": "Actividad física y salud",
+  "subtitulo": "Fisiopatología de las intervenciones en salud",
+  "imagen": "/media/cursos/actividad-fisica-y-salud.webp",
+  "etiqueta": "¡Nuevo!",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "disertantes": [
+    "nelio-bazan"
+  ],
+  "descripcion": "Este curso analizará la relación entre la actividad física y la salud, explorando las bases fisiopatológicas de diversas intervenciones en salud. Se estudiará la **fisiología del sedentarismo y sus efectos metabólicos**, así como el **crecimiento y desarrollo del tejido óseo y muscular**. Se abordarán las implicancias del balance energético y el gasto energético en la obesidad, así como el metabolismo de los carbohidratos en la diabetes.\n\nTambién se discutirá la homeostasis muscular y la resistencia anabólica en la sarcopenia y dinapenia, y la microarquitectura del tejido óseo en la osteopenia y osteoporosis. Además, se tratarán las **enfermedades cardiovasculares, la hipertensión arterial, y la hipercolesterolemia**, junto con las alteraciones neurobiológicas y moleculares en la depresión. Este curso proporcionará una **comprensión integral de cómo la actividad física puede intervenir en la mejora de la salud y el manejo de diversas patologías**.",
+  "temario": [
+    {
+      "tema": "Sedentarismo",
+      "subtemas": [
+        "Fisiología de la inactividad física.",
+        "Disfunción metabólica.",
+        "Aumento de triglicéridos (lipoproteína lipasa).",
+        "Disminución del HDL.",
+        "Cambios en la sensibilidad a la insulina (transportadores de membrana).",
+        "Densidad mineral ósea y salud ósea."
+      ]
+    },
+    {
+      "tema": "Crecimiento y Desarrollo",
+      "subtemas": [
+        "Tejido óseo y muscular.",
+        "Factores de crecimiento inducidos por el ejercicio.",
+        "Estatura.",
+        "Composición corporal.",
+        "Respuestas hormonales.",
+        "Maduración somática y maduración sexual."
+      ]
+    },
+    {
+      "tema": "Obesidad",
+      "subtemas": [
+        "Balance energético.",
+        "Gasto energético por ejercicio.",
+        "Aumento de masa muscular como tejido metabólicamente activo.",
+        "Metabolismo lipídico.",
+        "Ácidos grasos y triacilgliceroles.",
+        "Síntesis y degradación de lípidos.",
+        "Beta oxidación.",
+        "Metabolismo de los lípidos y ejercicio."
+      ]
+    },
+    {
+      "tema": "Diabetes",
+      "subtemas": [
+        "Metabolismo de los carbohidratos.",
+        "Glucosa.",
+        "Fructosa.",
+        "Almidón.",
+        "Glucógeno.",
+        "Digestión, absorción intestinal, captación tisular, rutas metabólicas de la glucosa.",
+        "Metabolismo de la glucosa en músculo esquelético."
+      ]
+    },
+    {
+      "tema": "Sarcopenia y dinapenia",
+      "subtemas": [
+        "Homeostasis muscular y resistencia anabólica.",
+        "Miostatina y baja de la Akt/mTOR.",
+        "Mioesteatosis.",
+        "Disfunción mitocondrial.",
+        "Disfunción neuromuscular.",
+        "Aleraciones endócrinas."
+      ]
+    },
+    {
+      "tema": "Osteopenia y osteoporosis",
+      "subtemas": [
+        "Microarquitectura del tejido óseo.",
+        "Estirpes celulares.",
+        "Formación y resorción ósea.",
+        "Mineralización y densidad ósea.",
+        "Hueso cortical y trabecular.",
+        "El sistema endocrino y la salud ósea.",
+        "Estímulo óseo por ejercicio con carga."
+      ]
+    },
+    {
+      "tema": "Enfermedad cardiovascular",
+      "subtemas": [
+        "Enfermedades cardiovasculares.",
+        "Cardiopatía coronaria.",
+        "Enfermedad cerebro vascular.",
+        "Arteriopatía periférica.",
+        "Arterioesclerosis.",
+        "Fisiopatología de la circulación coronaria.",
+        "Colesterol y triglicéridos sanguíneos.",
+        "El accidente de placa."
+      ]
+    },
+    {
+      "tema": "Hipertensión arterial",
+      "subtemas": [
+        "Fisiopatología de la hipertensión arterial.",
+        "Mecanismos nerviosos.",
+        "Mecanismos hormonales.",
+        "Sistema renina angiotensina aldosterona.",
+        "Hormona anti diurética.",
+        "Estrés hemodinámico y ejercicio."
+      ]
+    },
+    {
+      "tema": "Hipercolesterolemia",
+      "subtemas": [
+        "Colesterol: absorción intestinal, síntesis endógena, captación tisular, metabolismo lipoproteico, excreción biliar.",
+        "Hipercolesterolemia primaria y secundaria.",
+        "Actividad física y disminución de LDL y TG y aumento de HDL."
+      ]
+    },
+    {
+      "tema": "Depresión",
+      "subtemas": [
+        "Alteraciones neurobiológicas.",
+        "Alteraciones celulares y moleculares.",
+        "Eje hipotalámico-hipofisario-suprarrenal.",
+        "Monoaminas.",
+        "Neurotrofinas.",
+        "Citoquinas.",
+        "Factores epigenéticos.",
+        "Efecto de diferentes tipo de ejercicio."
+      ]
+    }
+  ]
+}

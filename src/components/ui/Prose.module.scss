@@ -1,0 +1,27 @@
+/* Estilos para texto largo / Markdown renderizado */
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: var(--container-prose);
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-left: 1.25em;
+  }
+
+  li::marker {
+    color: var(--color-primary);
+  }
+
+  blockquote {
+    border-left: 3px solid var(--violet-300);
+    padding-left: var(--space-4);
+  }
+}
+
+.lead p {
+  font-size: var(--text-lg);
+}

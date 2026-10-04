@@ -1,0 +1,16 @@
+{
+  "nombre": "Roberto Rosler",
+  "titulo": "Dr.",
+  "especialidad": "Neurociencias y educación",
+  "destacados": [
+    "Médico",
+    "Neurocientífico",
+    "Egresado de la UBA",
+    "Miembro de Asociación Educar",
+    "Conferencista",
+    "Capacitador docente"
+  ],
+  "orden": 3,
+  "foto": "/media/disertantes/roberto-rosler.webp",
+  "publicado": true
+}

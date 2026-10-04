@@ -1,0 +1,44 @@
+import { StrictMode } from 'react';
+import { createRoot, hydrateRoot } from 'react-dom/client';
+import { createBrowserRouter, matchRoutes, RouterProvider } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { routes } from '@/app/routes';
+import '@fontsource-variable/libre-franklin';
+import '@fontsource/merriweather/300.css';
+import '@fontsource/merriweather/300-italic.css';
+import '@fontsource/merriweather/700.css';
+import '@/styles/global.scss';
+
+async function start() {
+  const container = document.getElementById('root')!;
+  const prerendered = Boolean(container.firstElementChild) && !container.dataset.shell;
+
+  // Resolver las rutas lazy de la URL actual antes de hidratar (evita parpadeos/mismatch)
+  const matches = matchRoutes(routes, window.location)?.filter((m) => m.route.lazy);
+  if (matches?.length) {
+    await Promise.all(
+      matches.map(async (m) => {
+        const mod = await m.route.lazy!();
+        Object.assign(m.route, { ...mod, lazy: undefined });
+      }),
+    );
+  }
+
+  const router = createBrowserRouter(routes, {
+    hydrationData: prerendered ? (window as unknown as { __staticRouterHydrationData?: never }).__staticRouterHydrationData : undefined,
+    future: { v7_relativeSplatPath: true },
+  });
+
+  const app = (
+    <StrictMode>
+      <HelmetProvider>
+        <RouterProvider router={router} future={{ v7_startTransition: true }} />
+      </HelmetProvider>
+    </StrictMode>
+  );
+
+  if (prerendered) hydrateRoot(container, app);
+  else createRoot(container).render(app);
+}
+
+start();

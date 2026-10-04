@@ -1,0 +1,42 @@
+{
+  "titulo": "Entrenamiento de la fuerza",
+  "subtitulo": "Las aplicaciones en el gimnasio y su suplementación",
+  "imagen": "/media/cursos/entrenamiento-de-la-fuerza.webp",
+  "destacado": false,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "disertantes": [
+    "jorge-roig"
+  ],
+  "descripcion": "Verás técnicas y metodologías avanzadas del entrenamiento de la fuerza, con un enfoque en su **aplicación práctica en el gimnasio**. Se abordarán temas como la anamnesis inicial del practicante, la composición corporal, y las adaptaciones al entrenamiento de la fuerza. También se explorará la determinación de la **fuerza máxima (1RM)**, la entrada en calor, la progresión de las cargas, y los tiempos metabólicos del ejercicio.\n\nEn la sección de **suplementación**, se discutirán los diferentes **tipos de suplementos y su uso según los objetivos del entrenamiento**, así como la planificación de la dosificación de estos suplementos para optimizar la recuperación y el rendimiento muscular. **Este curso es ideal para entrenadores, fisioterapeutas y entusiastas del fitness que buscan una comprensión detallada y práctica del entrenamiento de la fuerza y su suplementación**.",
+  "temario": [
+    {
+      "tema": "Entrenamiento de la fuerza",
+      "subtemas": [
+        "La anamnesis del primer día de quien entrenará musculación.",
+        "Composición corporal como eje de la planificación en el entrenamiento de la fuerza.",
+        "Adaptaciones al entrenamiento de la fuerza.",
+        "Determinación del tipo de fuerza a entrenar según porcentajes de la fuerza máxima. Cómo determinar 1RM.",
+        "La entrada en calor y la vuelta a la calma.",
+        "La elongación y la flexibilidad. Cuál, cuándo y por qué.",
+        "La progresión y planificación de las cargas.",
+        "Tiempos metabólicos del ejercicio y de su pausa según el objetivo.",
+        "La intensidad, el volumen y la densidad del estímulo en la planificación según objetivos.",
+        "Las distintas manifestaciones de la fuerza.",
+        "Los pesos libres, resistencias elásticas y las máquinas de fuerza.",
+        "Entrenamiento de la fuerza en las diferentes edades.",
+        "Combinaciones de diferentes estímulos de entrenamiento con la fuerza."
+      ]
+    },
+    {
+      "tema": "Suplementación de la fuerza",
+      "subtemas": [
+        "Suplementos según objetivos del entrenamiento.",
+        "Proteínas, aminoácidos, carbohidratos y metabolitos. Los ergogénicos y los restauradores musculares.",
+        "La alimentación en el entrenamiento de la fuerza. Qué ingerir y por qué.",
+        "Las ventanas metabólicas posteriores al entrenamiento que rigen la recuperación orgánica y muscular.",
+        "Planificación de la dosificación de los suplementos según tipo de entrenamiento a ejercitar."
+      ]
+    }
+  ]
+}

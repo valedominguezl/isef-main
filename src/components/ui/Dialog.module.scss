@@ -1,0 +1,133 @@
+@use '@/styles/mixins' as *;
+
+.dialog {
+  width: min(calc(100% - 2 * var(--space-4)), 560px);
+  max-height: min(90svh, 900px);
+  margin: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+
+  &::backdrop {
+    background: rgb(13 12 18 / 0.6);
+    backdrop-filter: blur(6px);
+  }
+
+  &[open] {
+    animation: dialogIn var(--duration-slow) var(--ease-emphasized);
+  }
+
+  &[open]::backdrop {
+    animation: fadeIn var(--duration-slow) var(--ease-standard);
+  }
+}
+
+@keyframes dialogIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.sm {
+  width: min(calc(100% - 2 * var(--space-4)), 420px);
+}
+
+.lg {
+  width: min(calc(100% - 2 * var(--space-4)), 880px);
+}
+
+.full {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  border-radius: 0;
+}
+
+.dark {
+  background: var(--ink-950);
+  color: white;
+
+  .close {
+    color: white;
+    background: rgb(255 255 255 / 0.1);
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.headerFloating {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  border: none;
+  padding: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-h4);
+  font-weight: var(--weight-medium);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--ink-50);
+  color: var(--ink-800);
+  transition: background-color var(--duration-base);
+  @include focus-ring;
+
+  &:hover {
+    background: var(--ink-100);
+  }
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-6);
+}
+
+.full .body {
+  padding: 0;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
