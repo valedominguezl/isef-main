@@ -5,38 +5,52 @@
   right: max(var(--space-4), env(safe-area-inset-right));
   bottom: max(var(--space-4), env(safe-area-inset-bottom));
   z-index: calc(var(--z-nav) - 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
+  display: grid;
+  place-items: center;
+  width: 56px;
   height: 56px;
-  padding: 0 13px;
   border-radius: var(--radius-pill);
-  background: #25d366;
+  background: #25d366; /* verde oficial de WhatsApp */
   color: white;
   text-decoration: none;
   box-shadow: 0 10px 24px -6px rgb(37 211 102 / 0.6);
-  transition: gap var(--duration-slow) var(--ease-emphasized), padding var(--duration-slow) var(--ease-emphasized), transform var(--duration-base);
+  transition: transform var(--duration-base) var(--ease-emphasized);
   @include focus-ring;
 
   &:hover {
     color: white;
-    gap: var(--space-2);
-    padding-right: var(--space-5);
     transform: translateY(-2px);
+  }
 
-    .label {
-      max-width: 120px;
-      opacity: 1;
-    }
+  &:hover .label,
+  &:focus-visible .label {
+    opacity: 1;
+    transform: translate(0, -50%);
   }
 }
 
+/* Etiqueta que aparece a la izquierda (solo transform + opacity) */
 .label {
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  opacity: 0;
+  position: absolute;
+  right: calc(100% + var(--space-3));
+  top: 50%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--ink-950);
+  color: white;
   font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  transition: max-width var(--duration-slow) var(--ease-emphasized), opacity var(--duration-base);
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  transform: translate(8px, -50%);
+  pointer-events: none;
+  transition:
+    opacity var(--duration-base) var(--ease-standard),
+    transform var(--duration-slow) var(--ease-emphasized);
+
+  @media (hover: none) {
+    display: none;
+  }
 }

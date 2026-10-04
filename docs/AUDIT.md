@@ -100,6 +100,11 @@ Referencias: ✅ aplicado · ⏳ pendiente / para decidir · ❌ descartado (con
 
 ---
 
+## 11. Auditoría impeccable (segunda pasada)
+Puntaje inicial **15/20 (Bueno)**: a11y 3 · rendimiento 3 · responsive 3 · theming 3 · integridad 3.
+✅ Texto al 200 % ya no rompe navbar ni títulos (WCAG 1.4.4) · ✅ sin texto con gradiente · ✅ animaciones solo con `transform`/`opacity`/`clip-path` (carrusel, WhatsApp, menú, CTA) · ✅ fondos de sección en `<img loading="lazy">` · ✅ áreas táctiles de 44 px en navbar, diálogos y botones chicos en pantallas táctiles · ✅ cursor, scrollbar y controles nativos con los colores de la marca · ✅ ISSN mal interpretados como período en el CV de Nelio Bazán.
+⏳ Decisión de diseño: impeccable considera clichés los antetítulos sobre cada título y la banda de números grandes. Vienen del sitio original; propuesta: dejar antetítulos solo donde aportan dato y quitar el "I.S.E.F. San Luis ·" repetido.
+
 ## Pendientes recomendados (por prioridad)
 1. ⏳ Purgar `cvGatto.pdf` del historial de git (datos personales en repo público).
 2. ⏳ Revisar etiquetas "¡Nuevo!" y fechas de novedades desde el panel.
@@ -107,3 +112,4 @@ Referencias: ✅ aplicado · ⏳ pendiente / para decidir · ❌ descartado (con
 4. ⏳ Confirmar si el VPS usa Apache o nginx (ver `docs/DEPLOY.md`) y que los videos de `/hijos.htm` sigan sirviéndose.
 5. ⏳ Crear tokens del panel para cada editor.
 6. ⏳ Node 22 en Windows y actualizar `sharp`.
+7. ⏳ Antetítulos y banda de números (ver sección 11).

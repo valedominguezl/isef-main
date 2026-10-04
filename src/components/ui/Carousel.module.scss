@@ -53,20 +53,29 @@
 .dots {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: 0;
 }
 
 .dot {
-  width: 10px;
+  position: relative;
+  width: 28px;
   height: 10px;
   padding: 0;
   border-radius: var(--radius-pill);
-  background: var(--violet-200);
-  transition: width var(--duration-base) var(--ease-emphasized), background-color var(--duration-base);
   @include focus-ring(2px);
 
+  // Visual: una píldora de 28px recortada a un punto de 10px; el activo se abre con clip-path (sin reflow)
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--violet-200);
+    clip-path: inset(0 9px round 999px);
+    transition: clip-path var(--duration-slow) var(--ease-emphasized), background-color var(--duration-base);
+  }
+
   // Área táctil mínima sin agrandar el punto
-  position: relative;
 
   &::after {
     content: '';
@@ -75,8 +84,8 @@
   }
 }
 
-.dotActive {
-  width: 28px;
+.dotActive::before {
+  clip-path: inset(0 0 round 999px);
   background: var(--violet-500);
 }
 
@@ -111,11 +120,11 @@
 }
 
 .dark {
-  .dot {
+  .dot::before {
     background: rgb(255 255 255 / 0.3);
   }
 
-  .dotActive {
+  .dotActive::before {
     background: white;
   }
 

@@ -18,10 +18,11 @@ Leé **solo** `docs/MAPA.md` → sección "Qué hacer ahora". No leas el código
 |---|---|---|
 | 🔴 chequeos fallan | Arreglar tipos/lint/contenido/imports | `npm run check` |
 | 🔴 vulnerabilidades altas/críticas | `npm audit`, `npm audit fix`; majors: evaluar y avisar | skill `security-review` si hubo cambios de código |
-| `[codigo]` (≥25 archivos o ≥30 commits desde la última) | Revisar SOLO lo cambiado: `git diff <commit-de-la-última> --stat` | skills `code-review`, `simplify` |
+| `[codigo]` (≥25 archivos o ≥30 commits desde la última) | Revisar SOLO lo cambiado: `git diff <commit-de-la-última> --stat` | skills `code-review`, `simplify`; arquitectura: `improve-codebase-architecture` |
 | `[seguridad]` (>60 días) | Revisar: tokens/secretos en el repo, `.htaccess`, datos personales en `content/` y `public/`, dependencias | skill `security-review` |
 | `[contenido]` | Avisar al usuario las alertas (cursos con etiqueta vieja, CVs vacíos, novedades viejas). Editar `content/*.json` solo si lo pide | — |
-| `[diseno]` (≥15 archivos de UI o >120 días) | QA visual: build + `npm run preview` + capturas desktop/móvil con Playwright + axe-core; comparar con `design/DESIGN.md` | Playwright, axe-core |
+| `[diseno]` (≥15 archivos de UI o >120 días) | `/impeccable audit` (incluye su detector: `impeccable detect --json src/...`) + capturas desktop/móvil + axe-core; animaciones: `review-animations`; comparar con `design/DESIGN.md` | skills `impeccable`, `review-animations`, `web-design-guidelines`; Playwright, axe-core |
+| SEO (cada ~3 meses o tras cambiar rutas/contenido masivo) | `seo-audit` sobre el build (`npm run preview`); datos estructurados: `seo-schema`; local: `seo-local` | skills `seo-*` |
 | `[tokens]` | CLAUDE.md < 3 KB y vigente; sin archivos de texto enormes versionados; `.claude/settings.json` niega lecturas de builds/lockfiles/medios | — |
 | `[dependencias]` | Listar majors; actualizar de a una con build + preview | — |
 
@@ -43,3 +44,4 @@ npm run health -- --quick               # regenera el mapa
 - No tocar la lógica de `src/features/test-hiit/` (protocolo de investigación congelado).
 - No hacer push ni deploy sin confirmación.
 - Cambios visuales: respetar tokens y componentes de `src/components/ui`.
+- Falsos positivos conocidos del detector de impeccable (no "arreglar"): línea de marca del footer (`Footer.module.scss` ::before), franja de la foto en `SpeakerCard`, borde del `blockquote` en `Prose`.

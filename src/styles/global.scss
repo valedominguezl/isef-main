@@ -75,6 +75,8 @@ h4 {
   letter-spacing: var(--tracking-tight);
   color: inherit;
   text-wrap: balance;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 h1 {
@@ -122,6 +124,12 @@ a {
   &:hover {
     color: var(--violet-800);
   }
+}
+
+html {
+  caret-color: var(--violet-600);
+  scrollbar-color: var(--ink-300) var(--ink-50);
+  accent-color: var(--violet-600);
 }
 
 ::selection {

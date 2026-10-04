@@ -16,10 +16,7 @@
   font-size: clamp(5rem, 14vw, 9rem) !important;
   font-weight: var(--weight-semibold) !important;
   line-height: 1 !important;
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
+  color: var(--violet-500) !important;
 }
 
 .actions {

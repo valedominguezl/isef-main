@@ -20,7 +20,7 @@
   font-weight: var(--weight-medium);
   line-height: 1.2;
   text-decoration: none;
-  white-space: nowrap;
+  text-align: center;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
   transition:
@@ -121,6 +121,12 @@
   font-size: var(--text-sm);
 }
 
+@media (pointer: coarse) {
+  .sm {
+    min-height: 44px;
+  }
+}
+
 .lg {
   min-height: 52px;
   padding: var(--space-4) var(--space-6);
@@ -129,6 +135,12 @@
 
 .block {
   width: 100%;
+}
+
+@include up($bp-sm) {
+  .btn {
+    white-space: nowrap;
+  }
 }
 
 @include down($bp-sm) {

@@ -21,8 +21,8 @@
     transform: scale(1.04);
   }
 
-  &:hover .cta {
-    gap: var(--space-3);
+  &:hover .cta svg {
+    transform: translateX(4px);
   }
 }
 
@@ -118,5 +118,8 @@
   font-family: var(--font-sans);
   font-weight: var(--weight-medium);
   color: var(--color-link);
-  transition: gap var(--duration-base) var(--ease-emphasized);
+
+  svg {
+    transition: transform var(--duration-base) var(--ease-emphasized);
+  }
 }

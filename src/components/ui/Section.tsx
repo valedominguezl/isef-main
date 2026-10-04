@@ -1,4 +1,4 @@
-import type { CSSProperties, ElementType, ReactNode } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import styles from './Section.module.scss';
 
 export type Tone = 'default' | 'tint' | 'subtle' | 'dark' | 'brand' | 'ink';
@@ -7,7 +7,7 @@ interface SectionProps {
   id?: string;
   tone?: Tone;
   width?: 'prose' | 'default' | 'wide' | 'full';
-  /** Imagen de fondo con overlay oscuro de marca (fuerza tono oscuro). */
+  /** Imagen de fondo con overlay oscuro de marca (fuerza tono oscuro). Se carga en diferido. */
   image?: string;
   spacing?: 'sm' | 'md' | 'lg';
   as?: ElementType;
@@ -31,16 +31,15 @@ export default function Section({
   children,
 }: SectionProps) {
   const dark = tone === 'dark' || tone === 'brand' || tone === 'ink' || Boolean(image);
-  const style: CSSProperties | undefined = image ? ({ '--section-image': `url("${image}")` } as CSSProperties) : undefined;
   return (
     <Tag
       id={id}
       aria-labelledby={labelledBy}
-      style={style}
       className={[styles.section, styles[tone], image && styles.image, styles[`sp-${spacing}`], dark && 'on-dark', className]
         .filter(Boolean)
         .join(' ')}
     >
+      {image && <img className={styles.bgImage} src={image} alt="" loading="lazy" decoding="async" />}
       <div className={[styles.inner, styles[`w-${width}`], innerClassName].filter(Boolean).join(' ')}>{children}</div>
     </Tag>
   );
