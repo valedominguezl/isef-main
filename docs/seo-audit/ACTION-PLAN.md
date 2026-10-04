@@ -14,7 +14,7 @@
 |---|---|---|
 | Alta | Google Business Profile para cada sede (categoría, horario, fotos, link a /contacto) | ⏳ |
 | Media | Sumar texto propio (`cuerpo`) a cada novedad desde el panel | ⏳ |
-| Media | Página institucional / historia (confirmar año de fundación 1993 vs 1999) | ⏳ |
+| Media | Página institucional / historia (fundación: 1993, confirmado) | ⏳ |
 | ✅ | Títulos ≤ 60, descripciones ≤ 158, títulos únicos | Hecho |
 | ✅ | Imágenes para compartir por página, `llms.txt`, datos de sede en el schema | Hecho |
 

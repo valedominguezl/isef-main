@@ -33,7 +33,7 @@ Tipo de sitio: **institución educativa local con dos sedes** (San Luis y Villa 
 ## Contenido
 - ✅ Páginas de curso (185–470 palabras con temario) y CVs de disertantes (hasta 6.700 palabras): fuerte señal de **experiencia y autoridad** (E-E-A-T).
 - ⚠️ **Novedades delgadas** (~60 palabras propias; el resto es el resumen repetido del curso). Riesgo de contenido poco útil. Sumar `cuerpo` con información propia (qué, cuándo, para quién, cómo anotarse).
-- ⚠️ **Falta una página institucional / historia** (había texto en el sitio viejo, comentado). Ayuda a la autoridad de la marca y a las respuestas de buscadores con IA. Ojo: el texto viejo dice "inscripto el 30/06/1999" y el sitio dice "desde 1993": confirmar el dato.
+- ⚠️ **Falta una página institucional / historia** (había texto en el sitio viejo, comentado). Ayuda a la autoridad de la marca y a las respuestas de buscadores con IA. Fundación confirmada: 1993 (el texto viejo con "1999" está desactualizado).
 - ℹ️ Inscripciones (197 palabras) y Contacto (147) son utilitarias: está bien que sean cortas.
 
 ## Datos estructurados
