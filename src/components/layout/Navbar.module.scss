@@ -203,9 +203,21 @@
 .cta {
   display: none !important;
 
-  @include up($bp-lg) {
+  @media (min-width: 340px) {
     display: inline-flex !important;
   }
+}
+
+// En pantallas angostas el escudo identifica la marca; el texto cede lugar al CTA
+@media (max-width: 419px) {
+  .brand span {
+    @include visually-hidden;
+  }
+}
+
+.menuCta {
+  align-self: flex-start;
+  margin-bottom: var(--space-8);
 }
 
 .menuBtn {

@@ -140,6 +140,27 @@
   }
 }
 
+.brandCol .contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  li {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+  }
+
+  a {
+    color: var(--color-on-dark-body) !important;
+    text-decoration: none;
+
+    &:hover {
+      color: white !important;
+      text-decoration: underline;
+    }
+  }
+}
+
 .contact li {
   display: flex;
   align-items: flex-start;

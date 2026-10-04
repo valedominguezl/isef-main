@@ -3,8 +3,14 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 import { localContentApi } from './scripts/vite-content-api';
 
+// Fecha del build: la usan el servidor y el cliente para las reglas por fecha
+// (cursos próximos, etiquetas vencidas) sin desajustes de hidratación.
+const BUILD_DATE = process.env.BUILD_DATE ?? new Date().toISOString().slice(0, 10);
+process.env.BUILD_DATE = BUILD_DATE;
+
 export default defineConfig({
   plugins: [react(), localContentApi()],
+  define: { __BUILD_DATE__: JSON.stringify(BUILD_DATE) },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

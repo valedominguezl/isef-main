@@ -56,6 +56,9 @@
 
 .brand {
   background: var(--gradient-brand-ink);
+  /* Sobre el tramo coral el blanco translúcido no llega a AA: texto casi pleno */
+  --color-on-dark-body: rgb(255 255 255 / 0.96);
+  --color-on-dark-muted: rgb(255 255 255 / 0.86);
 }
 
 .image {

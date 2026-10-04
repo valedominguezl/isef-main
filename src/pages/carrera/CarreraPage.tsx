@@ -120,7 +120,7 @@ export function Component() {
 
       <Section>
         <Feature
-          eyebrow="I.S.E.F. San Luis · Sobre la salida laboral"
+          eyebrow="Sobre la salida laboral"
           title="Te necesitan, *profe*"
           image={introImg}
           imageAlt="Profesor de educación física trabajando con alumnos"
@@ -170,7 +170,7 @@ export function Component() {
         <div className={styles.validez}>
           <SectionHeader
             id="validez-title"
-            eyebrow={`I.S.E.F. San Luis · ${plan.resolucion}`}
+            eyebrow={plan.resolucion}
             title="Validez *nacional e internacional*"
             lead={
               <p>
@@ -235,7 +235,7 @@ export function Component() {
         <SectionHeader
           id="gabinete-title"
           align="center"
-          eyebrow="I.S.E.F. San Luis · Nuestro compromiso institucional"
+          eyebrow="Nuestro compromiso institucional"
           title="Gabinete de *apoyo psicopedagógico*"
           lead={
             <p>
@@ -250,7 +250,7 @@ export function Component() {
       <Section width="wide" labelledBy="explora-title">
         <SectionHeader
           id="explora-title"
-          eyebrow="I.S.E.F. San Luis · Actividades y deportes regionales"
+          eyebrow="Actividades y deportes regionales"
           title="Exploramos *lo lindo que es San Luis*"
           lead={
             <p>

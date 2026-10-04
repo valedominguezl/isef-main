@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Rebuild semanal: actualiza reglas por fecha (cursos próximos, etiquetas vencidas)
+  schedule:
+    - cron: '0 9 * * 1'
 
 # Si el panel publica varios cambios seguidos, solo se despliega el último.
 concurrency:

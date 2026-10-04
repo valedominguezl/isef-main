@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays } from 'lucide-react';
 import type { Curso } from '@/content/schema';
-import type { WithSlug } from '@/content';
+import { esProximo, etiquetaVigente, type WithSlug } from '@/content';
 import { formatDate } from '@/lib/format';
 import { track } from '@/lib/analytics';
 import Badge from '../ui/Badge';
@@ -20,7 +20,7 @@ export default function CourseCard({ curso, headingLevel = 3, size = 'md' }: Pro
     <article className={[styles.card, styles[size], 'on-dark'].join(' ')}>
       {curso.imagen && <img className={styles.img} src={curso.imagen} alt="" loading="lazy" decoding="async" />}
       <div className={styles.top}>
-        {curso.etiqueta && <Badge tone="coral">{curso.etiqueta}</Badge>}
+        {etiquetaVigente(curso) && <Badge tone="coral">{etiquetaVigente(curso)}</Badge>}
         {curso.modalidad && <Badge tone="light">{curso.modalidad}</Badge>}
       </div>
       <div className={styles.content}>
@@ -36,9 +36,9 @@ export default function CourseCard({ curso, headingLevel = 3, size = 'md' }: Pro
         <span className={styles.line} aria-hidden />
         <p className={styles.subtitle}>{curso.subtitulo}</p>
         <div className={styles.footer}>
-          {curso.fechaInicio ? (
+          {esProximo(curso) ? (
             <span className={styles.date}>
-              <CalendarDays size={16} aria-hidden /> Inicio: {formatDate(curso.fechaInicio, { year: false })}
+              <CalendarDays size={16} aria-hidden /> Inicia el {formatDate(curso.fechaInicio)}
             </span>
           ) : (
             <span />

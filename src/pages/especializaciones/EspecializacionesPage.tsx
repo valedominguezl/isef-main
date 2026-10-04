@@ -60,7 +60,7 @@ export function Component() {
       />
 
       <Section>
-        <Feature eyebrow="I.S.E.F. San Luis · Te hacemos destacar" title="Siempre con las *últimas novedades*" image={introImg} imageAlt="Clase de especialización">
+        <Feature eyebrow="Te hacemos destacar" title="Siempre con las *últimas novedades*" image={introImg} imageAlt="Clase de especialización">
           <p>
             La <strong>intervención sobre las enfermedades debe empezar en la niñez</strong>: la obesidad se relaciona con un mayor riesgo de
             desarrollar trece tipos de cáncer, entre ellos el <strong>cáncer de mama</strong> en mujeres posmenopáusicas, de colon, de páncreas o

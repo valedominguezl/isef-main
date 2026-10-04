@@ -1,25 +1,7 @@
 @use '@/styles/mixins' as *;
 
-.heroSocial {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-6);
-  margin-top: var(--space-10);
-
-  a {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    color: var(--color-on-dark-body);
-    text-decoration: none;
-
-    &:hover {
-      color: white;
-      text-decoration: underline;
-    }
-  }
+.heroStatus {
+  order: -1;
 }
 
 .stats {
@@ -210,4 +192,108 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
+}
+
+/* ── Inscribite en 3 pasos ── */
+.enroll {
+  display: grid;
+  gap: var(--space-10);
+
+  @include up($bp-lg) {
+    grid-template-columns: 1fr 1.1fr;
+    gap: var(--space-16);
+    align-items: start;
+  }
+}
+
+.enrollIntro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  > :first-child {
+    margin-bottom: var(--space-6);
+  }
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+
+  div {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    column-gap: var(--space-4);
+    align-items: start;
+  }
+
+  svg {
+    grid-row: span 2;
+    width: 40px;
+    height: 40px;
+    padding: 9px;
+    border-radius: var(--radius-md);
+    background: var(--violet-50);
+    color: var(--violet-600);
+  }
+
+  dt {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+  }
+
+  dd {
+    font-family: var(--font-serif);
+    font-weight: var(--weight-light);
+    font-size: var(--text-base);
+    color: var(--color-text-body);
+  }
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  border-left: 1px solid var(--color-border-strong);
+  margin-left: 20px;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  gap: var(--space-5);
+  padding: 0 0 var(--space-8) var(--space-8);
+
+  h3 {
+    font-size: var(--text-h4);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-2);
+  }
+}
+
+.stepNum {
+  position: absolute;
+  left: -20px;
+  top: -4px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--violet-600);
+  color: white;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  box-shadow: 0 0 0 6px var(--color-bg);
+}
+
+.stepCta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding-left: var(--space-8);
 }

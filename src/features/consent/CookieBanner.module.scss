@@ -13,8 +13,7 @@
   padding: var(--space-5);
   border-radius: var(--radius-xl);
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgb(24 22 31 / 0.04);
   animation: up var(--duration-slow) var(--ease-emphasized);
 
   @include up($bp-lg) {

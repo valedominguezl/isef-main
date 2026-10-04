@@ -76,8 +76,8 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
               <span className={styles.searchLabel}>Buscar</span>
               <kbd className={styles.kbd}>/</kbd>
             </button>
-            <a href={sitio.campusUrl} className={styles.campus} target="_blank" rel="noopener noreferrer">
-              Campus
+            <a href={sitio.campusUrl} className={styles.campus} target="_blank" rel="noopener noreferrer" title="Aula virtual para alumnos">
+              Campus virtual
             </a>
             {sitio.inscripciones.abiertas && (
               <Button to="/inscripciones" size="sm" icon="none" className={styles.cta}>
@@ -135,6 +135,11 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
                 </m.li>
               ))}
             </m.ul>
+            {sitio.inscripciones.abiertas && (
+              <Button to="/inscripciones" variant="light" size="lg" className={styles.menuCta}>
+                Inscribite
+              </Button>
+            )}
             <div className={styles.menuFooter}>
               <ul className={styles.menuSecondary} role="list">
                 {SECONDARY_NAV.map((item) => (

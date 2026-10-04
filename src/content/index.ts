@@ -13,6 +13,11 @@ import galeriaJson from '@content/galeria.json';
 
 export type WithSlug<T> = T & { slug: string };
 
+/** "Hoy" a efectos del sitio: la fecha del build (se reconstruye todas las semanas). */
+export const TODAY: string = typeof __BUILD_DATE__ !== 'undefined' ? __BUILD_DATE__ : new Date().toISOString().slice(0, 10);
+
+const daysBetween = (a: string, b: string) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
+
 const slugOf = (path: string) => path.split('/').pop()!.replace(/\.json$/, '');
 
 function collection<T>(modules: Record<string, unknown>): WithSlug<T>[] {
@@ -27,7 +32,17 @@ export const aranceles = arancelesJson as Aranceles;
 export const conferencias = conferenciasJson as Conferencias;
 export const galeria = galeriaJson as Galeria;
 
+/** Próximo: tiene fecha de inicio hoy o más adelante. */
+export const esProximo = (c: Pick<Curso, 'fechaInicio'>) => Boolean(c.fechaInicio && c.fechaInicio >= TODAY);
+/** Ya comenzó: tenía fecha y pasó. */
+export const yaComenzo = (c: Pick<Curso, 'fechaInicio'>) => Boolean(c.fechaInicio && c.fechaInicio < TODAY);
+/** La etiqueta ("¡Nuevo!") se oculta sola cuando el curso ya empezó. */
+export const etiquetaVigente = (c: Pick<Curso, 'fechaInicio' | 'etiqueta'>) => (yaComenzo(c) ? undefined : c.etiqueta);
+
 const byFeatured = (a: WithSlug<Curso>, b: WithSlug<Curso>) =>
+  Number(esProximo(b)) - Number(esProximo(a)) ||
+  (esProximo(a) && esProximo(b) ? a.fechaInicio!.localeCompare(b.fechaInicio!) : 0) ||
+  Number(yaComenzo(a)) - Number(yaComenzo(b)) ||
   Number(b.destacado) - Number(a.destacado) ||
   Number(Boolean(b.etiqueta)) - Number(Boolean(a.etiqueta)) ||
   (b.fechaInicio ?? '').localeCompare(a.fechaInicio ?? '') ||
@@ -57,6 +72,9 @@ export async function loadCv(slug: string): Promise<Cv | null> {
   const loader = cvLoaders[`/content/cv/${slug}.json`];
   return loader ? loader() : null;
 }
+
+/** Novedades recientes (últimos 90 días) para la home; si no hay, la sección no se muestra. */
+export const novedadesRecientes = () => novedades.filter((n) => daysBetween(n.fecha, TODAY) <= 90);
 
 export const getCurso = (slug: string) => cursos.find((c) => c.slug === slug);
 export const getDisertante = (slug: string) => disertantes.find((d) => d.slug === slug);

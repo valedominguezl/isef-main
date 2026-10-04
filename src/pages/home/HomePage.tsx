@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, Mail, MapPin, Phone, Search } from 'lucide-react';
+import { CalendarClock, Clock, MapPin, Search, Wallet } from 'lucide-react';
 import heroImg from '@/assets/media/home/hero.webp';
 import heroSm from '@/assets/media/home/hero-800.webp';
 import introImg from '@/assets/media/home/intro.webp';
 import especImg from '@/assets/media/home/especializaciones.webp';
 import fondoImg from '@/assets/media/fx/fondo.webp';
-import { aranceles, cursos, faq, novedades, sitio } from '@/content';
+import { aranceles, cursos, faq, inscripciones, novedadesRecientes, plan, sitio } from '@/content';
 import { formatPhone, normalize, whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import Seo from '@/components/seo/Seo';
@@ -19,7 +19,8 @@ import Carousel from '@/components/ui/Carousel';
 import Accordion from '@/components/ui/Accordion';
 import CountUp from '@/components/ui/CountUp';
 import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
-import { socialIcon } from '@/components/ui/Icons';
+import { WhatsAppIcon } from '@/components/ui/Icons';
+import Badge from '@/components/ui/Badge';
 import NewsCard from '@/components/cards/NewsCard';
 import CourseCard from '@/components/cards/CourseCard';
 import styles from './HomePage.module.scss';
@@ -45,7 +46,7 @@ function Faq() {
       {visible.length ? (
         <Accordion
           className={styles.faqList}
-          variant="brand"
+          variant="card"
           items={visible.map((p) => ({ id: `faq-${p.i}`, title: p.pregunta, content: <Markdown text={p.respuesta} /> }))}
         />
       ) : (
@@ -53,10 +54,10 @@ function Faq() {
           No encontramos preguntas sobre eso. <a href={whatsappUrl(sitio.whatsapp)}>Escribinos por WhatsApp</a> y te respondemos.
         </p>
       )}
-      {!q && !showAll && items.length > 6 && (
+      {!q && items.length > 6 && (
         <div className={styles.center}>
-          <Button variant="outline" icon="none" onClick={() => setShowAll(true)}>
-            Ver todas las preguntas ({items.length})
+          <Button variant="outline" icon="none" onClick={() => setShowAll((v) => !v)} aria-expanded={showAll}>
+            {showAll ? 'Ver menos preguntas' : `Ver todas las preguntas (${items.length})`}
           </Button>
         </div>
       )}
@@ -66,7 +67,8 @@ function Faq() {
 
 export function Component() {
   const destacados = cursos.slice(0, 3);
-  const ultimas = novedades.slice(0, 6);
+  const recientes = novedadesRecientes().slice(0, 6);
+  const consultaCuota = whatsappUrl(sitio.whatsapp, 'Hola! Quisiera saber el valor de la cuota.');
 
   return (
     <>
@@ -82,38 +84,31 @@ export function Component() {
       />
 
       <PageHero
-        imageSmall={heroSm}
         size="full"
         align="start"
         image={heroImg}
+        imageSmall={heroSm}
         eyebrow="Profesorado de Educación Física · San Luis y Villa Mercedes"
         title={`Desde ${sitio.fundacion}, *abriendo caminos*`}
         subtitle="Título oficial con validez nacional, especializaciones gratuitas con científicos de renombre internacional y la cuota más baja del país."
         actions={
           <>
-            {sitio.inscripciones.abiertas && (
-              <Button to="/inscripciones" variant="primary" size="lg">
-                {sitio.inscripciones.texto}
-              </Button>
-            )}
+            <Button to="/inscripciones" variant="primary" size="lg">
+              Inscribite
+            </Button>
             <Button to="/carrera" variant="outline-light" size="lg">
               Conocé la carrera
             </Button>
           </>
         }
       >
-        <ul className={styles.heroSocial} role="list" aria-label="Redes sociales">
-          {sitio.redes.map((r) => {
-            const Icon = socialIcon[r.red];
-            return (
-              <li key={r.url}>
-                <a href={r.url} target="_blank" rel="noopener noreferrer">
-                  <Icon size={18} /> {r.etiqueta}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+        {sitio.inscripciones.abiertas && (
+          <div className={styles.heroStatus}>
+            <Badge tone="light">
+              {sitio.inscripciones.texto} · requisitos hasta el {inscripciones.fechaLimiteRequisitos}
+            </Badge>
+          </div>
+        )}
       </PageHero>
 
       {/* Datos */}
@@ -133,45 +128,83 @@ export function Component() {
         </RevealGroup>
       </Section>
 
+      {/* Inscripción: lo que la persona viene a buscar */}
+      <Section id="inscribite" labelledBy="insc-title">
+        <div className={styles.enroll}>
+          <div className={styles.enrollIntro}>
+            <SectionHeader id="insc-title" title="Inscribite en *3 pasos*" lead="Todo lo que necesitás para empezar a cursar el profesorado." />
+            <dl className={styles.facts}>
+              <div>
+                <CalendarClock aria-hidden />
+                <dt>Plazo para presentar requisitos</dt>
+                <dd>Hasta el {inscripciones.fechaLimiteRequisitos}</dd>
+              </div>
+              <div>
+                <Clock aria-hidden />
+                <dt>Cursado</dt>
+                <dd>{plan.duracion}, presencial · lunes a viernes de 07:30 a 13:30 h</dd>
+              </div>
+              <div>
+                <Wallet aria-hidden />
+                <dt>Cuota</dt>
+                <dd>
+                  Sin matrícula ni gastos extra ·{' '}
+                  <a href={consultaCuota} target="_blank" rel="noopener noreferrer">
+                    consultá el valor por WhatsApp
+                  </a>
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <RevealGroup className={styles.steps} as="ol">
+            {inscripciones.pasos.map((p, i) => (
+              <RevealItem key={p.titulo} as="li" className={styles.step}>
+                <span className={styles.stepNum} aria-hidden>
+                  {i + 1}
+                </span>
+                <div>
+                  <h3>{p.titulo}</h3>
+                  <Markdown text={p.descripcion} />
+                </div>
+              </RevealItem>
+            ))}
+            <RevealItem as="li" className={styles.stepCta}>
+              <Button to="/inscripciones">Inscribite</Button>
+              <Button href={whatsappUrl(sitio.whatsapp, 'Hola! Quiero información para inscribirme.')} variant="ghost" icon="external" leading={<WhatsAppIcon size={18} />}>
+                Consultar por WhatsApp
+              </Button>
+            </RevealItem>
+          </RevealGroup>
+        </div>
+      </Section>
+
       {/* Bienvenida */}
-      <Section>
+      <Section tone="tint">
         <Feature
-          eyebrow="I.S.E.F. San Luis · Profesorado de educación física"
-          title="Bienvenido al *I.S.E.F.*"
+          title="Te damos la bienvenida al *I.S.E.F.*"
           image={introImg}
-          imageAlt="Estudiantes del profesorado en clase"
-          actions={<Button to="/carrera">Enterate más</Button>}
+          imageAlt="Vista aérea del predio del profesorado con las sierras de San Luis"
+          actions={<Button to="/carrera">Conocé la carrera</Button>}
         >
           <p>
-            En un pueblo con educación reina la armonía, los afectos, la contención. En un pueblo con educación, construir un futuro exitoso es
-            posible. En el I.S.E.F. San Luis, con un equipo de excelentes docentes, te damos las herramientas para lograrlo:{' '}
-            <strong>30 años educando con amor</strong> y preparándote para una <strong>gran cantidad de campos laborales</strong> dentro y fuera
-            del sistema educativo.
-          </p>
-          <p>
-            No tenés que irte a otra provincia, lejos de tu familia y de quienes pueden acompañarte. Se trata de{' '}
-            <strong>ser feliz mientras estudiás junto a los tuyos</strong>, formándote con las mejores herramientas para{' '}
-            <strong>ejercer en la provincia, en el país, en Latinoamérica o en el resto del mundo</strong>.
+            Hace más de 30 años que formamos profes en San Luis. Estudiás cerca de los tuyos, con docentes que te acompañan y con herramientas
+            para trabajar <strong>dentro y fuera de la escuela</strong>: clubes, gimnasios, centros de salud y alto rendimiento.
           </p>
         </Feature>
       </Section>
 
-      {/* Novedades */}
-      {ultimas.length > 0 && (
-        <Section tone="tint" width="wide" labelledBy="novedades-title">
+      {/* Novedades: solo si hay algo de los últimos 90 días */}
+      {recientes.length > 0 && (
+        <Section width="wide" labelledBy="novedades-title">
           <div className={styles.headRow}>
-            <SectionHeader
-              id="novedades-title"
-              title="Las *últimas noticias*"
-              lead="Enterate qué hay de nuevo en el profesorado: especializaciones, novedades institucionales y más."
-            />
+            <SectionHeader id="novedades-title" title="Las *últimas noticias*" lead="Cursos nuevos, eventos y novedades del profesorado." />
             <Button to="/novedades" variant="outline" className={styles.headAction}>
               Ver todas
             </Button>
           </div>
           <Reveal>
             <Carousel label="Últimas novedades">
-              {ultimas.map((n) => (
+              {recientes.map((n) => (
                 <NewsCard key={n.slug} novedad={n} />
               ))}
             </Carousel>
@@ -183,20 +216,16 @@ export function Component() {
       <Section width="wide">
         <Feature
           reverse
-          eyebrow="I.S.E.F. San Luis · Lo que nos hace distintos"
+          eyebrow="Lo que nos hace distintos"
           title="Las *especializaciones*"
           image={especImg}
-          imageAlt="Clase práctica de especialización"
+          imageAlt="Clase práctica de entrenamiento de la fuerza"
           actions={<Button to="/especializaciones">Ver todas las especializaciones</Button>}
         >
           <p>
-            Te formamos en <strong>neurociencias</strong>, actividad física en enfermedades crónicas no transmisibles, adulto mayor, menopausia,
-            nutrición deportiva y muchas áreas más, de la mano de <strong>científicos de renombre internacional</strong>. Herramientas para
-            aplicar en el sistema educativo como prevención, pero también en clubes, gimnasios y centros de salud.
-          </p>
-          <p>
-            Las neurociencias vinculan la salud mental con la salud física. En este campo, el profesor de educación física puede{' '}
-            <strong>trabajar en equipos interdisciplinarios</strong> con psicólogos, psiquiatras, neurólogos, gerontólogos y más.
+            Cursos <strong>gratuitos para alumnos</strong> con científicos de renombre internacional: neurociencias, nutrición deportiva, adulto
+            mayor, enfermedades crónicas, inteligencia artificial y más. Te preparan para trabajar en equipos interdisciplinarios con médicos,
+            psicólogos y kinesiólogos.
           </p>
         </Feature>
         <RevealGroup className={styles.courses}>
@@ -213,12 +242,12 @@ export function Component() {
         <SectionHeader
           id="cuota-title"
           align="center"
-          eyebrow="I.S.E.F. San Luis · Pensamos en vos"
+          eyebrow="Pensamos en vos"
           title="La cuota más *competitiva*"
           lead={
             <p>
-              En el I.S.E.F. San Luis <strong>no te cobramos gastos adicionales</strong>: constancias, certificaciones, cuota aguinaldo,
-              matrícula y pileta de natación no tienen costo. Por eso tenemos <strong>la cuota más baja de todo el país</strong>.
+              <strong>No te cobramos gastos adicionales</strong>: constancias, certificaciones, cuota aguinaldo, matrícula y pileta de natación no
+              tienen costo. Por eso tenemos <strong>la cuota más baja de todo el país</strong>.
             </p>
           }
         >
@@ -228,8 +257,8 @@ export function Component() {
                 Ver aranceles
               </Button>
             ) : (
-              <Button href={whatsappUrl(sitio.whatsapp, 'Hola! Quisiera saber el valor de la cuota.')} variant="outline-light" icon="external">
-                Consultar valores
+              <Button href={consultaCuota} variant="outline-light" icon="external">
+                Consultar por WhatsApp
               </Button>
             )}
           </div>
@@ -244,8 +273,8 @@ export function Component() {
           title="Conocé *nuestras sedes*"
           lead={
             <p>
-              Encontranos en la <strong>sede principal</strong> de la Ciudad de San Luis y en la <strong>extensión áulica</strong> de Villa Mercedes.
-              Todos los teléfonos están en <Link to="/contacto">contacto</Link>.
+              Cursá en la <strong>Ciudad de San Luis</strong> o en <strong>Villa Mercedes</strong>. Todos los teléfonos por área están en{' '}
+              <Link to="/contacto">contacto</Link>.
             </p>
           }
         />
@@ -264,18 +293,14 @@ export function Component() {
                   </a>
                 </li>
                 <li>
-                  <Phone aria-hidden />
+                  <WhatsAppIcon aria-hidden />
                   <a href={whatsappUrl(s.telefono)} target="_blank" rel="noopener noreferrer">
-                    {formatPhone(s.telefono)}
+                    WhatsApp {formatPhone(s.telefono)}
                   </a>
                 </li>
                 <li>
-                  <Mail aria-hidden />
-                  <a href={`mailto:${sitio.email}`}>{sitio.email}</a>
-                </li>
-                <li>
                   <Clock aria-hidden />
-                  <strong>{s.horario}</strong>
+                  <span>{s.horario}</span>
                 </li>
               </ul>
             </RevealItem>
@@ -296,7 +321,7 @@ export function Component() {
           </div>
           <div className={styles.ctaActions}>
             <Button to="/inscripciones" variant="light">
-              Cómo inscribirme
+              Inscribite
             </Button>
             <Button href={whatsappUrl(sitio.whatsapp, 'Hola! Quiero información para inscribirme.')} variant="outline-light" icon="external">
               WhatsApp

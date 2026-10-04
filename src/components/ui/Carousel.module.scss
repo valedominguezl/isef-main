@@ -89,10 +89,15 @@
   background: var(--violet-500);
 }
 
+.dots {
+  margin-left: auto;
+}
+
+/* Flechas a la izquierda: a la derecha quedarían debajo del botón flotante de WhatsApp */
 .arrows {
+  order: -1;
   display: flex;
   gap: var(--space-2);
-  margin-left: auto;
 }
 
 .arrow {

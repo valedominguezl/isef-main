@@ -23,6 +23,16 @@ export default function Footer() {
               <small>Profesorado de Educación Física · Desde {sitio.fundacion}</small>
             </span>
           </Link>
+          <ul role="list" className={styles.contact}>
+            <li>
+              <Mail size={16} aria-hidden />
+              <a href={`mailto:${sitio.email}`}>{sitio.email}</a>
+            </li>
+            <li>
+              <Clock size={16} aria-hidden />
+              <span>{sitio.sedes[0]?.horario} en ambas sedes</span>
+            </li>
+          </ul>
           <ul className={styles.social} role="list" aria-label="Redes sociales">
             {sitio.redes.map((r) => {
               const Icon = socialIcon[r.red];
@@ -74,16 +84,8 @@ export default function Footer() {
               <li>
                 <Phone size={16} aria-hidden />
                 <a href={whatsappUrl(s.telefono)} target="_blank" rel="noopener noreferrer">
-                  {formatPhone(s.telefono)}
+                  WhatsApp {formatPhone(s.telefono)}
                 </a>
-              </li>
-              <li>
-                <Mail size={16} aria-hidden />
-                <a href={`mailto:${sitio.email}`}>{sitio.email}</a>
-              </li>
-              <li>
-                <Clock size={16} aria-hidden />
-                <span>{s.horario}</span>
               </li>
             </ul>
           </address>

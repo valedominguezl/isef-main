@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { AlertTriangle, CalendarDays, CircleDollarSign, ClipboardCheck, Clock, MonitorPlay } from 'lucide-react';
-import { cursos, disertantes, getCurso, nombreCompleto, sitio } from '@/content';
+import { cursos, disertantes, etiquetaVigente, getCurso, nombreCompleto, sitio, yaComenzo } from '@/content';
 import { formatDate, whatsappUrl } from '@/lib/format';
 import { excerpt, toPlainText } from '@/lib/markdown';
 import { track } from '@/lib/analytics';
@@ -30,7 +30,7 @@ export function Component() {
   const consulta = whatsappUrl(sitio.whatsapp, `Hola! Quiero consultar por el curso "${curso.titulo}".`);
 
   const datos = [
-    curso.fechaInicio && { icon: CalendarDays, label: 'Inicio', value: formatDate(curso.fechaInicio) },
+    curso.fechaInicio && { icon: CalendarDays, label: yaComenzo(curso) ? 'Última edición' : 'Inicio', value: `${formatDate(curso.fechaInicio)}${yaComenzo(curso) ? ' (ya comenzó: consultá la próxima)' : ''}` },
     curso.modalidad && { icon: MonitorPlay, label: 'Modalidad', value: curso.modalidad },
     curso.duracion && { icon: Clock, label: 'Duración y horario', value: curso.duracion },
     curso.costo && { icon: CircleDollarSign, label: 'Costo', value: curso.costo },
@@ -91,7 +91,7 @@ export function Component() {
         }
       >
         <div className={styles.badges}>
-          {curso.etiqueta && <Badge tone="coral">{curso.etiqueta}</Badge>}
+          {etiquetaVigente(curso) && <Badge tone="coral">{etiquetaVigente(curso)}</Badge>}
           {dis.length > 0 && <Badge tone="light">Con {dis.map(nombreCompleto).join(' y ')}</Badge>}
         </div>
       </PageHero>
