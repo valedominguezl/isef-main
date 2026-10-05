@@ -1,7 +1,6 @@
 // Cloudflare Workers: sirve dist/ con las reglas de public/_redirects y _headers.
-// Solo /api/* pasa por worker/index.ts (funciones del panel: IA y fotos de stock); el resto son archivos estáticos.
+// Solo /api/* pasa por worker/index.ts (búsqueda de fotos gratis del panel); el resto son archivos estáticos.
 // Build en Cloudflare: npm run check && npm run build · Deploy: npx wrangler deploy
-// Secretos (no van en el repo): ANTHROPIC_API_KEY, PEXELS_API_KEY (opcional) → Settings → Variables and secrets
 {
   "name": "isef-sanluis",
   "main": "worker/index.ts",

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, LoaderCircle, Pencil, Plus, RotateCcw, ScanSearch, Trash2, X } from 'lucide-react';
 import { Markdown } from '@/lib/markdown';
 import { useAdmin } from '../AdminContext';
@@ -101,24 +101,12 @@ function MarkdownEditor({ id, value, onChange, rows = 6, placeholder }: { id: st
   );
 }
 
-/**
- * Abre el buscador de fotos de un campo de imagen apenas se muestra el formulario, ya buscando `q`
- * (curso armado con IA: la IA sugiere qué foto buscar). `usar` lo apaga para que no se vuelva a abrir.
- */
-export const FotoSugerida = createContext<{ path: string; q: string; usar: () => void } | null>(null);
-
-function ImageField({ field, value, onChange, entrySlug, path: fieldPath }: { field: Extract<Field, { type: 'image' }>; value: string | undefined; onChange: (v: unknown) => void; entrySlug: string; path: string }) {
+function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Field, { type: 'image' }>; value: string | undefined; onChange: (v: unknown) => void; entrySlug: string }) {
   const { stage, mediaUrl } = useAdmin();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   // Buscador de fotos de stock: null = cerrado; si no, la búsqueda con la que abre
   const [buscar, setBuscar] = useState<string | null>(null);
-  const sugerida = useContext(FotoSugerida);
-  useEffect(() => {
-    if (sugerida?.path !== fieldPath) return;
-    setBuscar(sugerida.q);
-    sugerida.usar();
-  }, [sugerida, fieldPath]);
   const input = useRef<HTMLInputElement>(null);
   /** Mismo camino para una foto subida o una de stock: recorte/redimensión → WebP → cambio pendiente. */
   const procesar = async (foto: Blob, nombre: string) => {
@@ -396,7 +384,7 @@ export function FieldRenderer(props: FieldProps) {
     case 'image':
       return (
         <Wrapper field={field} error={error}>
-          <ImageField field={field} value={value as string | undefined} onChange={onChange} entrySlug={entrySlug} path={path} />
+          <ImageField field={field} value={value as string | undefined} onChange={onChange} entrySlug={entrySlug} />
         </Wrapper>
       );
     case 'file':

@@ -1,27 +1,8 @@
 /**
- * Cliente de las funciones del panel en el Worker (/api/*): IA para cursos y currículums, y fotos de stock.
+ * Cliente de las funciones del panel en el Worker (/api/*): búsqueda y descarga de fotos de stock gratis.
  * Solo existen en el sitio publicado; en `npm run dev` o sin contraseña fallan con un mensaje claro.
  * La contraseña la pone AdminContext (se crea con `createApi(getToken)`): la interfaz nunca la ve.
  */
-
-export interface CursoIa {
-  titulo: string;
-  subtitulo: string;
-  descripcion: string;
-  modalidad: string;
-  duracion: string;
-  costo: string;
-  fechaInicio: string;
-  condiciones: string;
-  importante: string;
-  temario: { tema: string; subtemas: string[] }[];
-  busquedaFoto: string;
-}
-
-export interface CvIa {
-  resumen: string;
-  secciones: { tipo: string; items: { periodo: string; titulo: string; institucion: string; detalle: string }[] }[];
-}
 
 export interface FotoStock {
   miniatura: string;
@@ -32,8 +13,6 @@ export interface FotoStock {
 }
 
 export interface AdminApi {
-  iaCurso: (texto: string, signal?: AbortSignal) => Promise<CursoIa>;
-  iaCv: (texto: string, signal?: AbortSignal) => Promise<CvIa>;
   buscarFotos: (q: string, signal?: AbortSignal) => Promise<FotoStock[]>;
   descargarFoto: (url: string, signal?: AbortSignal) => Promise<Blob>;
 }
@@ -51,7 +30,7 @@ export function createApi(getToken: () => string | null): AdminApi {
     try {
       r = await fetch(path, {
         ...init,
-        headers: { authorization: `Bearer ${token}`, ...(init.body ? { 'content-type': 'application/json' } : {}) },
+        headers: { authorization: `Bearer ${token}` },
         cache: 'no-store',
       });
     } catch (e) {
@@ -65,12 +44,7 @@ export function createApi(getToken: () => string | null): AdminApi {
     const { error } = (await r.json().catch(() => ({}))) as { error?: string };
     throw new Error(error || 'No se pudo completar el pedido. Probá de nuevo.');
   };
-  const post = async <T>(path: string, texto: string, signal?: AbortSignal) =>
-    (await (await call(path, { method: 'POST', body: JSON.stringify({ texto }), signal })).json()) as T;
-
   return {
-    iaCurso: (texto, signal) => post<CursoIa>('/api/ia/curso', texto, signal),
-    iaCv: (texto, signal) => post<CvIa>('/api/ia/cv', texto, signal),
     buscarFotos: async (q, signal) => ((await (await call(`/api/fotos?q=${encodeURIComponent(q)}`, { signal })).json()) as { fotos: FotoStock[] }).fotos ?? [],
     descargarFoto: async (url, signal) => (await call(`/api/fotos/descargar?url=${encodeURIComponent(url)}`, { signal })).blob(),
   };

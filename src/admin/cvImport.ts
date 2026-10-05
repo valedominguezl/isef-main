@@ -1,10 +1,9 @@
 /**
- * Importación de currículum (PDF o texto pegado): descarta datos personales y reparte el resto en las
- * secciones normalizadas del sitio, con IA si está disponible (Worker) o con reglas si no.
- * pdf.js se carga solo al usarla. El resultado es un borrador: se revisa en el formulario antes de guardar.
+ * Importación de currículum desde PDF: extrae el texto (pdf.js, se carga solo al usarla),
+ * lo reparte en las secciones normalizadas del sitio y descarta datos personales.
+ * El resultado es un borrador: el editor lo revisa en el formulario antes de guardar.
  */
 import { CV_SECCIONES, type CvSeccionTipo } from '@/content/constants';
-import { isAbort, type CvIa } from './api';
 
 export interface CvItemDraft {
   periodo?: string;
@@ -161,8 +160,8 @@ function itemsOf(lines: string[]): CvItemDraft[] {
   return groups.map((g) => toItem(g.join(' ')));
 }
 
-/** Ordenamiento por reglas (sin IA), a partir de las líneas del CV. */
-export function cvFromLines(lines: string[]): { cv: CvDraft; descartadas: number } {
+export async function importCvFromPdf(file: File): Promise<{ cv: CvDraft; descartadas: number }> {
+  const lines = await pdfLines(file);
   const secciones = new Map<CvSeccionTipo, string[][]>();
   const intro: string[] = [];
   let current: CvSeccionTipo | null = null;
@@ -202,52 +201,4 @@ export function cvFromLines(lines: string[]): { cv: CvDraft; descartadas: number
       .map((tipo) => ({ tipo, items: itemsOf(secciones.get(tipo)!.map((g) => g[0])).filter((i) => i.titulo.length > 2) })),
   };
   return { cv, descartadas };
-}
-
-const TIPOS = Object.keys(CV_SECCIONES) as CvSeccionTipo[];
-
-/** Respuesta de la IA → borrador del currículum: sin textos vacíos, sin secciones vacías y sin datos personales. */
-export function cvDesdeIa(r: CvIa): CvDraft {
-  const porTipo = new Map<CvSeccionTipo, CvItemDraft[]>();
-  for (const s of r.secciones ?? []) {
-    const tipo = s.tipo as CvSeccionTipo;
-    if (!TIPOS.includes(tipo)) continue;
-    for (const it of s.items ?? []) {
-      const t = (v?: string) => (typeof v === 'string' ? v.trim() : '');
-      const item: CvItemDraft = { titulo: t(it.titulo) };
-      if (!item.titulo) continue;
-      if (t(it.periodo)) item.periodo = t(it.periodo);
-      if (t(it.institucion)) item.institucion = t(it.institucion);
-      if (t(it.detalle)) item.detalle = t(it.detalle);
-      if (Object.values(item).some((v) => PERSONAL.test(v))) continue;
-      porTipo.set(tipo, [...(porTipo.get(tipo) ?? []), item]);
-    }
-  }
-  const resumen = typeof r.resumen === 'string' ? r.resumen.trim() : '';
-  return {
-    ...(resumen ? { resumen } : {}),
-    secciones: TIPOS.filter((t) => porTipo.has(t)).map((tipo) => ({ tipo, items: porTipo.get(tipo)! })),
-  };
-}
-
-/** Líneas de un texto pegado (sin renglones vacíos). */
-export const textLines = (texto: string) =>
-  texto
-    .split(/\r?\n/)
-    .map((l) => l.replace(/\s+/g, ' ').trim())
-    .filter(Boolean);
-
-/**
- * Ordena un CV: primero con IA (sin las líneas con datos personales, que nunca salen del navegador);
- * si la IA no está disponible o falla, con las reglas de siempre. Solo una cancelación corta el proceso.
- */
-export async function ordenarCv(lines: string[], ia: (texto: string) => Promise<CvIa>): Promise<{ cv: CvDraft; descartadas: number; conIa: boolean }> {
-  const limpias = lines.filter((l) => !PERSONAL.test(l));
-  try {
-    const cv = cvDesdeIa(await ia(limpias.join('\n')));
-    if (cv.secciones.length) return { cv, descartadas: lines.length - limpias.length, conIa: true };
-  } catch (e) {
-    if (isAbort(e)) throw e;
-  }
-  return { ...cvFromLines(lines), conIa: false };
 }
