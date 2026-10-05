@@ -3,29 +3,9 @@
 .footer {
   position: relative;
   padding: var(--space-20) var(--gutter) var(--space-8);
-  background: var(--ink-950);
+  background: var(--color-footer); /* índigo del sitio original */
   overflow: hidden;
   isolation: isolate;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto;
-    height: 4px;
-    background: var(--gradient-brand);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    width: 640px;
-    height: 640px;
-    right: -240px;
-    top: -320px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgb(119 97 255 / 0.28), transparent 65%);
-  }
 }
 
 .inner {
@@ -183,7 +163,6 @@
   max-width: var(--container-wide);
   margin: var(--space-16) auto 0;
   padding-top: var(--space-6);
-  border-top: 1px solid rgb(255 255 255 / 0.12);
 
   p {
     font-family: var(--font-sans);

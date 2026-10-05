@@ -18,6 +18,8 @@ const ACCESOS = [
 export default function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [q, setQ] = useState('');
   const [hits, setHits] = useState<Hit[]>([]);
+  /** Consulta ya resuelta: los resultados cambian cuando se deja de escribir, no con cada letra. */
+  const [settled, setSettled] = useState('');
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -41,9 +43,10 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
       const r = await search(q);
       if (!cancel) {
         setHits(r);
+        setSettled(q);
         setActive(0);
       }
-    }, 80);
+    }, q.trim() ? 280 : 0);
     return () => {
       cancel = true;
       clearTimeout(t);
@@ -56,7 +59,8 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
     return () => clearTimeout(t);
   }, [q]);
 
-  const terms = useMemo(() => q.trim().split(/\s+/), [q]);
+  const terms = useMemo(() => settled.trim().split(/\s+/), [settled]);
+  const pending = q.trim() !== settled.trim();
   const groups = useMemo(() => {
     const g = TYPE_ORDER.map((type) => ({ type, items: hits.filter((h) => h.type === type).slice(0, 4) })).filter((x) => x.items.length);
     return g;
@@ -125,8 +129,24 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
               </button>
             </div>
 
-            <div className={styles.results} id="search-results" ref={listRef} role="listbox" aria-label="Resultados">
-              {!q.trim() && (
+            <div
+              className={[styles.results, pending && styles.pending].filter(Boolean).join(' ')}
+              id="search-results"
+              ref={listRef}
+              role="listbox"
+              aria-label="Resultados"
+              aria-busy={pending}
+            >
+              {/* Primera búsqueda: esqueleto mientras llegan los resultados */}
+              {pending && !settled.trim() && (
+                <div className={styles.skeleton} aria-hidden>
+                  {[0, 1, 2].map((i) => (
+                    <span key={i} />
+                  ))}
+                </div>
+              )}
+
+              {!q.trim() && !settled.trim() && (
                 <div className={styles.empty}>
                   <div>
                     <p className={styles.groupTitle}>Búsquedas frecuentes</p>
@@ -153,14 +173,14 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
                 </div>
               )}
 
-              {q.trim() && !flat.length && (
+              {settled.trim() && !pending && !flat.length && (
                 <p className={styles.none}>
-                  No encontramos resultados para <strong>“{q}”</strong>. Probá con otras palabras o escribinos por WhatsApp.
+                  No encontramos resultados para <strong>“{settled}”</strong>. Probá con otras palabras o escribinos por WhatsApp.
                 </p>
               )}
 
-              {groups.map((g) => (
-                <div key={g.type} className={styles.group}>
+              {settled.trim() && groups.map((g) => (
+                <div key={g.type + settled} className={styles.group}>
                   <p className={styles.groupTitle}>{TYPE_LABELS[g.type]}</p>
                   <ul role="list">
                     {g.items.map((h) => {
@@ -197,14 +217,14 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
               ))}
             </div>
 
-            {q.trim() && (
+            {settled.trim() && (
               <button
                 type="button"
                 className={styles.all}
                 data-active={active === flat.length}
                 onClick={() => go(`/buscar?q=${encodeURIComponent(q.trim())}`)}
               >
-                Ver todos los resultados ({hits.length}) para “{q.trim()}” <ArrowRight size={18} aria-hidden />
+                Ver todos los resultados ({hits.length}) para “{settled.trim()}” <ArrowRight size={18} aria-hidden />
               </button>
             )}
           </div>

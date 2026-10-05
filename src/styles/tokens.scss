@@ -52,23 +52,25 @@
   --color-border-strong: var(--ink-200);
   --color-text: var(--ink-900);
   --color-text-body: var(--ink-700);
-  --color-text-muted: var(--ink-500);
+  --color-text-muted: var(--ink-600);
   --color-primary: var(--violet-500);
   --color-primary-strong: var(--violet-600);
   --color-accent: var(--coral-500);
   --color-link: var(--violet-600);
   --color-focus: var(--violet-500);
   --color-on-dark: #ffffff;
-  --color-on-dark-body: rgb(255 255 255 / 0.78);
-  --color-on-dark-muted: rgb(255 255 255 / 0.6);
+  --color-on-dark-body: rgb(255 255 255 / 0.9);
+  --color-on-dark-muted: rgb(255 255 255 / 0.75);
 
   /* ── Gradientes firma ────────────────────────────────────── */
   --gradient-brand: linear-gradient(120deg, var(--violet-500), var(--coral-500));
   --gradient-brand-soft: linear-gradient(120deg, rgb(119 97 255 / 0.9), rgb(255 85 78 / 0.9));
-  --gradient-primary: linear-gradient(90deg, #6650fa 0%, var(--violet-700) 100%); /* AA con texto blanco */
+  --gradient-primary: linear-gradient(90deg, var(--violet-500) 0%, var(--violet-600) 45%, #4b2eff 100%); /* botón del sitio original; el texto cae sobre violet-600 (AA) */
   --gradient-accent: linear-gradient(90deg, #d92d26 0%, var(--coral-700) 100%); /* AA con texto blanco */
   --gradient-brand-ink: linear-gradient(rgb(13 12 18 / 0.22), rgb(13 12 18 / 0.22)), var(--gradient-brand); /* banda de marca con texto */
-  --gradient-ink: linear-gradient(120deg, var(--ink-950), var(--ink-800));
+  --gradient-ink: linear-gradient(120deg, var(--ink-950), var(--ink-800)); /* solo detalles chicos: las bandas usan --surface-fx */
+  --surface-fx: linear-gradient(rgb(0 0 0 / 0.2), rgb(0 0 0 / 0.2)), url('@/assets/media/fx/fondo.webp') center / cover; /* banda violeta del sitio original */
+  --color-footer: #3c3182; /* índigo del sitio original */
   --overlay-image: linear-gradient(135deg, rgb(13 12 18 / 0.86), rgb(119 97 255 / 0.62));
   --overlay-image-bottom: linear-gradient(180deg, rgb(13 12 18 / 0.1) 30%, rgb(13 12 18 / 0.85));
 
@@ -95,7 +97,7 @@
 
   --leading-tight: 1.1;
   --leading-snug: 1.3;
-  --leading-body: 1.75;
+  --leading-body: 1.7;
   --tracking-tight: -0.02em;
   --tracking-eyebrow: 0.12em;
 
@@ -114,7 +116,7 @@
   --space-24: 6rem;
 
   --gutter: clamp(1rem, 4vw, 3rem);
-  --section-y: clamp(4rem, 8vw, 7.5rem);
+  --section-y: clamp(3.5rem, 7vw, 6.5rem);
   --container: 1200px;
   --container-wide: 1400px;
   --container-prose: 72ch;
@@ -134,14 +136,14 @@
   --shadow-brand: 0 14px 32px -10px rgb(119 97 255 / 0.55);
 
   /* ── Movimiento ──────────────────────────────────────────── */
-  --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1); /* ease: hovers y cambios de color */
+  --ease-emphasized: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* suave, sin arranque brusco: entradas y desplazamientos */
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* ease-out fuerte para UI (presión, navbar) */
   --duration-fast: 150ms;
-  --duration-base: 250ms;
-  --duration-slow: 450ms;
-  --duration-reveal: 700ms;
+  --duration-base: 300ms;
+  --duration-slow: 500ms;
+  --duration-reveal: 1100ms;
 
   /* ── Capas ───────────────────────────────────────────────── */
   --z-nav: 50;

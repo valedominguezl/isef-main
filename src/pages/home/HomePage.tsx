@@ -5,7 +5,7 @@ import heroImg from '@/assets/media/home/hero.webp';
 import heroSm from '@/assets/media/home/hero-800.webp';
 import introImg from '@/assets/media/home/intro.webp';
 import especImg from '@/assets/media/home/especializaciones.webp';
-import fondoImg from '@/assets/media/fx/fondo.webp';
+import cuotaImg from '@/assets/media/aranceles/main.webp';
 import { aranceles, cursos, faq, inscripciones, novedadesRecientes, plan, sitio } from '@/content';
 import { formatPhone, normalize, whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
@@ -20,7 +20,6 @@ import Accordion from '@/components/ui/Accordion';
 import CountUp from '@/components/ui/CountUp';
 import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
 import { WhatsAppIcon } from '@/components/ui/Icons';
-import Badge from '@/components/ui/Badge';
 import NewsCard from '@/components/cards/NewsCard';
 import CourseCard from '@/components/cards/CourseCard';
 import styles from './HomePage.module.scss';
@@ -88,28 +87,20 @@ export function Component() {
         align="start"
         image={heroImg}
         imageSmall={heroSm}
-        eyebrow="Profesorado de Educación Física · San Luis y Villa Mercedes"
         title={`Desde ${sitio.fundacion}, *abriendo caminos*`}
         subtitle="Título oficial con validez nacional, especializaciones gratuitas con científicos de renombre internacional y la cuota más baja del país."
         actions={
-          <>
-            <Button to="/inscripciones" variant="primary" size="lg">
-              Inscribite
+          sitio.inscripciones.abiertas ? (
+            <Button to="/inscripciones" variant="outline-light" size="lg">
+              {sitio.inscripciones.texto}
             </Button>
+          ) : (
             <Button to="/carrera" variant="outline-light" size="lg">
               Conocé la carrera
             </Button>
-          </>
+          )
         }
-      >
-        {sitio.inscripciones.abiertas && (
-          <div className={styles.heroStatus}>
-            <Badge tone="light">
-              {sitio.inscripciones.texto} · requisitos hasta el {inscripciones.fechaLimiteRequisitos}
-            </Badge>
-          </div>
-        )}
-      </PageHero>
+      />
 
       {/* Datos */}
       <Section tone="brand" spacing="sm" width="wide" labelledBy="datos-title">
@@ -216,7 +207,6 @@ export function Component() {
       <Section width="wide">
         <Feature
           reverse
-          eyebrow="Lo que nos hace distintos"
           title="Las *especializaciones*"
           image={especImg}
           imageAlt="Clase práctica de entrenamiento de la fuerza"
@@ -238,11 +228,10 @@ export function Component() {
       </Section>
 
       {/* Cuota */}
-      <Section image={fondoImg} width="prose" labelledBy="cuota-title" spacing="lg">
+      <Section image={cuotaImg} width="prose" labelledBy="cuota-title" spacing="lg">
         <SectionHeader
           id="cuota-title"
           align="center"
-          eyebrow="Pensamos en vos"
           title="La cuota más *competitiva*"
           lead={
             <p>

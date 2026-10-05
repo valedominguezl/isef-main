@@ -42,20 +42,21 @@ $bp-xl: 1280px;
   overflow: hidden;
 }
 
+/* Solo para tarjetas que son enlaces: un hover en algo no clickeable promete una acción que no existe */
 @mixin card-hover {
   transition:
-    transform var(--duration-base) var(--ease-standard),
-    box-shadow var(--duration-base) var(--ease-standard);
+    transform var(--duration-slow) var(--ease-emphasized),
+    box-shadow var(--duration-slow) var(--ease-standard);
 
   @media (hover: hover) {
     &:hover {
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-md);
     }
   }
 
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     &:hover {
-      transform: translateY(-4px);
+      transform: translateY(-2px);
     }
   }
 }

@@ -3,20 +3,42 @@
 .header {
   position: relative;
   padding: calc(var(--nav-height) + var(--space-10)) var(--gutter) var(--space-16);
-  background: var(--gradient-ink);
+  background: var(--surface-fx);
   overflow: hidden;
   isolation: isolate;
+}
 
-  &::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    width: 720px;
-    height: 720px;
-    right: -200px;
-    top: -260px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgb(119 97 255 / 0.45), transparent 65%);
+/* Entrada escalonada, igual que las cabeceras del resto del sitio */
+.headerInner > :not(.profile),
+.photo,
+.identity > * {
+  animation: headIn 1.2s var(--ease-emphasized) both;
+}
+
+@for $i from 1 through 6 {
+  .identity > :nth-child(#{$i}) {
+    animation-delay: #{0.15 + $i * 0.12}s;
+  }
+}
+
+@keyframes headIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .headerInner > :not(.profile),
+  .photo,
+  .identity > * {
+    animation-name: headFade;
+  }
+}
+
+@keyframes headFade {
+  from {
+    opacity: 0;
   }
 }
 
@@ -71,10 +93,8 @@
 
 .area {
   font-family: var(--font-sans);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
   color: var(--violet-200) !important;
 }
 
@@ -121,9 +141,6 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding-bottom: var(--space-3);
-  border-bottom: 2px solid transparent;
-  border-image: var(--gradient-brand) 1;
   font-size: var(--text-h3);
   font-weight: var(--weight-semibold);
 
@@ -145,8 +162,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-1);
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-3) 0;
 
     @include up($bp-md) {
       grid-template-columns: 9.5rem 1fr;

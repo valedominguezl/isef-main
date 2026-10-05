@@ -31,23 +31,26 @@
 | `violet-500` · **Primario** | `#7761FF` | Palabra destacada en títulos grandes, íconos, decoración, gradientes |
 | `violet-600` | `#5B42F5` | Texto/enlaces sobre blanco y fondos con texto blanco chico (contraste 6:1) |
 | `violet-700` | `#4A2FDB` | Hover, final de gradientes |
-| `coral-500` · **Acento** | `#FF554E` | Detalles, final del gradiente de marca, subrayado activo del menú |
-| `coral-700` | `#C0221C` | Fondo de badges con texto blanco (AA) |
-| `ink-950` | `#0D0C12` | Fondos oscuros, footer, sidebar del admin |
+| `coral-500` · **Acento** | `#FF554E` | Solo dentro del gradiente de marca (menú móvil). No como color suelto |
+| `color-footer` | `#3C3182` | Footer (índigo del sitio original) |
+| `ink-950` | `#0D0C12` | Solo visor de fotos y sidebar del admin. **Nada de secciones negras** |
 | `ink-700` | `#403D52` | Texto de párrafos (10:1 sobre blanco) |
-| `ink-500` | `#6F6B85` | Texto secundario / antetítulos (4.7:1) |
+| `ink-600` | `#57536B` | Texto secundario (`color-text-muted`) |
 
 Escalas completas (50→950) en `tokens.json`. Neutros con un leve tinte violeta (nunca gris puro).
 
+**Paleta corta, sitio claro** (como el sitio original): blanco + tinte violeta suave, violeta de marca y la textura violeta `fx/fondo.webp`. Las bandas de color (`Section tone="dark"|"brand"`) usan `--surface-fx`, no negro. No sumar colores nuevos (rojos, dorados, grises oscuros).
+
 ### Gradientes firma
-- **Marca**: `linear-gradient(120deg, #7761FF, #FF554E)` → bandas de datos, menú móvil, línea superior del footer.
-- **Primario (botones)**: `linear-gradient(90deg, #6650FA, #4A2FDB)` → cumple AA con texto blanco.
+- **Marca**: `linear-gradient(120deg, #7761FF, #FF554E)` → menú móvil (translúcido, con desenfoque).
+- **Primario (botones)**: `linear-gradient(90deg, #7761FF, #5B42F5 45%, #4B2EFF)` → el del sitio original; el texto cae sobre `violet-600` (AA).
+- **Textura violeta** (`--surface-fx`): `fx/fondo.webp` con 20 % de negro → bandas de datos, validez, CTA final, cabecera de disertantes.
 - **Overlay de imagen**: `linear-gradient(135deg, rgba(13,12,18,.86), rgba(119,97,255,.62))` → toda foto con texto encima.
 
 ### Reglas de contraste (WCAG 2.2 AA)
 - `#7761FF` **solo** en texto ≥ 24 px (o 19 px bold) o decorativo. Para texto chico usar `violet-600`.
 - Texto blanco sobre coral: usar `coral-700` o el gradiente de acento.
-- Párrafos: `ink-700` sobre blanco; en fondos oscuros, blanco al 78 %.
+- Párrafos: `ink-700` sobre blanco; en fondos oscuros, blanco al 90 % (secundario 75 %). Sin transparencias más fuertes.
 
 ---
 
@@ -56,34 +59,41 @@ Escalas completas (50→950) en `tokens.json`. Neutros con un leve tinte violeta
 | Rol | Familia | Peso | Notas |
 |---|---|---|---|
 | Títulos, UI, botones | **Libre Franklin** (variable) | 300 títulos · 500 UI · 600 énfasis | Tracking −2 % en títulos |
-| Lectura | **Merriweather** | 300 cuerpo · 700 negrita | Interlineado 1.75 |
+| Lectura | **Merriweather** | 300 cuerpo · 700 negrita | Interlineado 1.7 |
 | Datos/código | sistema monoespaciado | 400 | Numeración de temario, URLs |
 
 **Firma tipográfica:** título liviano (300) con **una** palabra en semibold violeta → «Bienvenido al **I.S.E.F.**», «Las **últimas noticias**». En código: `title="Bienvenido al *I.S.E.F.*"`.
 
-**Antetítulo (eyebrow):** 12 px, MAYÚSCULAS, tracking 12 %, `ink-500` → «I.S.E.F. SAN LUIS · PROFESORADO DE EDUCACIÓN FÍSICA».
+**Sin antetítulos decorativos.** Nada de etiquetas chicas en MAYÚSCULAS espaciadas arriba del título. El prop `eyebrow` queda solo para un dato real (resolución ministerial, fecha de una novedad) y se ve como texto chico normal.
+
+**Sin líneas separadoras.** Se separa con espacio y fondos alternados (tinte violeta), no con `hr`/bordes.
+
+**Nombre en el navbar:** semibold en blanco sobre la foto; regular cuando el navbar es claro.
 
 Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20→28 · body 16→17 · small 14 · xs 12.
 
 ---
 
 ## 4. Espaciado, grilla y forma
-- Base 4 px: `space-1…24` (4 → 96 px). Secciones: padding vertical 64→120 px fluido.
+- Base 4 px: `space-1…24` (4 → 96 px). Secciones: padding vertical 56→104 px fluido.
 - Contenedor 1200 px (texto 72ch, ancho 1400 px). Gutter 16→48 px.
 - Radios: 6 · 10 (botones, inputs) · 16 · **24 (tarjetas)** · pill.
-- Sombras suaves con tinte tinta; `shadow-brand` (violeta difuso) solo en hover de CTA primario.
+- Sombras suaves; botones con la sombra del original (`0 10px 15px rgb(0 0 0/.1)`).
+- **Hover solo en lo clickeable.** Tarjetas informativas sin sombra ni elevación al pasar el mouse.
+- Fotos de `Feature`: lado de afuera en píldora (radio 10rem), como el original.
 
 ---
 
 ## 5. Movimiento
 | Token | Valor | Uso |
 |---|---|---|
-| `ease-emphasized` | `cubic-bezier(.16,1,.3,1)` | Entradas, reveal, menú |
-| `ease-standard` | `cubic-bezier(.2,.7,.2,1)` | Hover, transiciones de color |
-| `duration-reveal` | 700 ms | Aparición al hacer scroll (sube 24 px + fade) |
-| stagger | 80 ms | Grillas de tarjetas |
+| `ease-emphasized` | `cubic-bezier(.25,.46,.45,.94)` | Entradas y desplazamientos: arranque suave, sin tirón |
+| `ease-standard` | `cubic-bezier(.25,.1,.25,1)` (ease) | Hover, transiciones de color |
+| `duration-base` / `slow` | 300 / 500 ms | Hover y cambios de estado (sin saltos) |
+| `duration-reveal` | 1100 ms | Aparición al hacer scroll (sube 24 px + fade) |
+| stagger | 120 ms | Grillas de tarjetas, cabeceras |
 
-Patrones: reveal al entrar en pantalla (`<Reveal>`), zoom lento 1.06 en imágenes de tarjetas, flecha del botón que avanza 3 px, menú móvil que se abre en círculo desde el botón, contador de números (easeOutExpo). Todo respeta `prefers-reduced-motion`. Librería: **Motion** (motion.dev) con `LazyMotion`.
+Es una web institucional: las **entradas son lentas y elegantes** (como el sitio original), las respuestas a una acción son cortas. Patrones: cabecera de cada página con entrada escalonada (en la home el título entra desde la izquierda), reveal al entrar en pantalla (`<Reveal>`), fundido de 600 ms al cambiar de página, fotos de bandas fijas al desplazarse (parallax, solo escritorio), menú móvil que baja como cortina, hover de botones por opacidad + flecha que avanza 4 px, buscador que espera a que se deje de escribir (280 ms) y atenúa los resultados viejos, brillo de esqueleto en fotos que cargan. Todo respeta `prefers-reduced-motion`. Librería: **Motion** (motion.dev) con `LazyMotion`.
 
 ---
 
@@ -92,12 +102,12 @@ Patrones: reveal al entrar en pantalla (`<Reveal>`), zoom lento 1.06 en imágene
 |---|---|---|
 | `Button` | primary · accent · dark · light · outline · outline-light · ghost · sm/md/lg | Ícono de flecha por defecto; `download`, `external`, `none` |
 | `Section` | tone: default · tint · subtle · dark · ink · brand · image | Fondo + padding + contenedor |
-| `SectionHeader` | align start/center | Antetítulo + título con énfasis + línea + bajada |
+| `SectionHeader` | align start/center | Título con énfasis + bajada |
 | `PageHero` | md · lg · full; start/center | Imagen + overlay; breadcrumbs |
-| `Feature` | normal · reverse | Texto + imagen con bloque de gradiente detrás |
+| `Feature` | normal · reverse | Texto + imagen con el lado de afuera en píldora |
 | `Accordion` | card · brand · plain | Accesible, animación de altura |
 | `Carousel` | light · dark | Scroll-snap nativo (sin librerías) |
-| `Badge` | violet · coral · neutral · light · success | |
+| `Badge` | violet · white · neutral · light · success | `white` para «¡Nuevo!» sobre fotos |
 | `Dialog` | sm · md · lg · full; default · dark | `<dialog>` nativo |
 | Tarjetas | `CourseCard` · `NewsCard` (overlay/plain) · `SpeakerCard` | Toda la tarjeta es clickeable |
 

@@ -11,12 +11,11 @@ interface SectionHeaderProps {
   align?: 'start' | 'center';
   level?: 1 | 2 | 3;
   id?: string;
-  divider?: boolean;
   className?: string;
   children?: ReactNode;
 }
 
-/** Encabezado estándar de sección: antetítulo + título con énfasis + línea + bajada. */
+/** Encabezado estándar de sección: título con énfasis + bajada (antetítulo opcional, usar poco). */
 export default function SectionHeader({
   eyebrow,
   title,
@@ -24,7 +23,6 @@ export default function SectionHeader({
   align = 'start',
   level = 2,
   id,
-  divider = true,
   className,
   children,
 }: SectionHeaderProps) {
@@ -35,7 +33,6 @@ export default function SectionHeader({
       <H id={id} className={styles.title}>
         {rich(title)}
       </H>
-      {divider && <span className={styles.divider} aria-hidden />}
       {lead && (typeof lead === 'string' ? <p className={styles.lead}>{lead}</p> : <div className={styles.lead}>{lead}</div>)}
       {children}
     </Reveal>

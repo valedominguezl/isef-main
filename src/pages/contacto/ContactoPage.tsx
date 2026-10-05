@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Clock, ExternalLink, MapPin, MessageCircle } from 'lucide-react';
+import { Clock, ExternalLink, MapPin } from 'lucide-react';
 import { sitio } from '@/content';
 import { formatPhone, whatsappUrl } from '@/lib/format';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
@@ -37,17 +37,19 @@ export function Component() {
       />
       <PageHero title="Contacto" subtitle="Toda la información de nuestras sedes" breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Contacto' }]} />
 
-      <Section labelledBy="tel-title" width="wide">
+      <Section labelledBy="tel-title">
         <SectionHeader id="tel-title" title="Teléfonos *de contacto*" lead="Todos los números funcionan por WhatsApp." />
-        <RevealGroup className={styles.grid}>
+        {/* Directorio: una fila por área, los números a la derecha */}
+        <RevealGroup as="ul" className={styles.directory}>
           {sitio.telefonos.map((t) => (
-            <RevealItem key={t.area + (t.sede ?? '')} as="article" className={styles.card}>
-              <MessageCircle className={styles.icon} aria-hidden />
-              <div>
-                {t.sede && <p className={styles.sede}>{t.sede}</p>}
-                <h3>{t.area}</h3>
+            <RevealItem key={t.area + (t.sede ?? '')} as="li" className={styles.row}>
+              <div className={styles.area}>
+                <h3>
+                  {t.area}
+                  {t.sede && <span className={styles.sede}> · {t.sede}</span>}
+                </h3>
+                <p className={styles.desc}>{t.descripcion}</p>
               </div>
-              <p className={styles.desc}>{t.descripcion}</p>
               <ul role="list" className={styles.nums}>
                 {t.numeros.map((n) => (
                   <li key={n}>

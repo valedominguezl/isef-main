@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet, ScrollRestoration, useLocation, useMatches } from 'react-router-dom';
 import { domAnimation, LazyMotion, MotionConfig } from 'motion/react';
 import Navbar, { type NavTheme } from '@/components/layout/Navbar';
@@ -40,6 +40,10 @@ export default function Layout() {
   const handle = (matches[matches.length - 1]?.handle ?? {}) as RouteHandle;
   const { pathname } = useLocation();
   useHashScroll();
+  // La primera página llega prerenderizada y visible; el fundido es solo al navegar dentro del sitio
+  const firstPath = useRef<string | null>(pathname);
+  if (firstPath.current !== null && pathname !== firstPath.current) firstPath.current = null;
+  const navigated = firstPath.current === null;
 
   useEffect(() => {
     // Espera a que Helmet actualice el <title>
@@ -62,7 +66,9 @@ export default function Layout() {
           <NavigationProgress />
           {!handle.bare && <Navbar theme={handle.nav ?? 'overlay'} />}
           <main id="contenido" tabIndex={-1}>
-            <Outlet />
+            <div key={pathname} className={navigated ? 'page-enter' : undefined}>
+              <Outlet />
+            </div>
           </main>
           {!handle.bare && <Footer />}
           {!handle.bare && !handle.hideWhatsApp && <WhatsAppButton />}

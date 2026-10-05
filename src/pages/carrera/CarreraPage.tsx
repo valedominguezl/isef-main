@@ -38,7 +38,7 @@ function Galeria() {
 
   return (
     <>
-      <Carousel label="Galería de lugares de práctica">
+      <Carousel label="Galería de lugares de práctica" className={styles.gallery}>
         {imgs.map((g, i) => (
           <figure key={g.imagen} className={styles.photo}>
             <button type="button" onClick={() => setIndex(i)} aria-label={`Ampliar foto: ${g.lugar}`}>
@@ -61,7 +61,10 @@ function Galeria() {
               if (e.key === 'ArrowLeft') step(-1);
             }}
           >
-            <img key={current.imagen} className={styles.swap} src={current.imagen} alt={current.lugar} />
+            {/* Marco de proporción fija: el visor no cambia de tamaño entre fotos verticales y horizontales */}
+            <div className={styles.frame}>
+              <img key={current.imagen} className={styles.swap} src={current.imagen} alt={current.lugar} />
+            </div>
             <div className={`${styles.lightboxBar} on-dark`}>
               <button type="button" onClick={() => step(-1)} aria-label="Foto anterior">
                 <ChevronLeft />
@@ -120,7 +123,6 @@ export function Component() {
 
       <Section>
         <Feature
-          eyebrow="Sobre la salida laboral"
           title="Te necesitan, *profe*"
           image={introImg}
           imageAlt="Profesor de educación física trabajando con alumnos"
@@ -235,7 +237,6 @@ export function Component() {
         <SectionHeader
           id="gabinete-title"
           align="center"
-          eyebrow="Nuestro compromiso institucional"
           title="Gabinete de *apoyo psicopedagógico*"
           lead={
             <p>
@@ -250,7 +251,6 @@ export function Component() {
       <Section width="wide" labelledBy="explora-title">
         <SectionHeader
           id="explora-title"
-          eyebrow="Actividades y deportes regionales"
           title="Exploramos *lo lindo que es San Luis*"
           lead={
             <p>

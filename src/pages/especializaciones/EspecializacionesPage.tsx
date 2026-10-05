@@ -60,7 +60,7 @@ export function Component() {
       />
 
       <Section>
-        <Feature eyebrow="Te hacemos destacar" title="Siempre con las *últimas novedades*" image={introImg} imageAlt="Clase de especialización">
+        <Feature title="Siempre con las *últimas novedades*" image={introImg} imageAlt="Clase de especialización">
           <p>
             La <strong>intervención sobre las enfermedades debe empezar en la niñez</strong>: la obesidad se relaciona con un mayor riesgo de
             desarrollar trece tipos de cáncer, entre ellos el <strong>cáncer de mama</strong> en mujeres posmenopáusicas, de colon, de páncreas o
@@ -137,7 +137,7 @@ export function Component() {
         {list.length ? (
           <ul className={styles.grid} role="list" key={dis ?? "todos"}>
             {list.map((c, i) => (
-              <li key={c.slug} style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}>
+              <li key={c.slug} style={{ animationDelay: `${Math.min(i, 8) * 70}ms` }}>
                 <CourseCard curso={c} />
               </li>
             ))}

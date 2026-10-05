@@ -82,7 +82,6 @@ export function Component() {
             <h2 id="sec-title">
               ¿Recién terminás el <strong>secundario</strong>?
             </h2>
-            <span className={styles.line} aria-hidden />
             <Markdown text={inscripciones.secundario} className={styles.secText} />
           </Reveal>
           <Reveal className={styles.calendar} delay={0.15} aria-hidden>

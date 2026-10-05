@@ -21,8 +21,10 @@
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  padding-block: var(--space-2) var(--space-6);
-  margin-block: calc(var(--space-2) * -1) 0;
+  /* Margen interno a los costados y arriba/abajo para que sombras y foco no queden cortados por el overflow */
+  padding: var(--space-4) var(--space-4) var(--space-8);
+  margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) calc(var(--space-4) * -1);
+  scroll-padding-inline: var(--space-4);
   border-radius: var(--radius-lg);
   @include focus-ring(4px);
 

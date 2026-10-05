@@ -119,7 +119,7 @@
   li {
     display: flex;
     // Al filtrar, los resultados aparecen escalonados (solo opacidad, no bloquea la interacción)
-    animation: gridIn 240ms var(--ease-out) both;
+    animation: gridIn 700ms var(--ease-emphasized) both;
 
     > * {
       flex: 1;
@@ -128,6 +128,19 @@
 }
 
 @keyframes gridIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid li {
+    animation-name: gridFade;
+  }
+}
+
+@keyframes gridFade {
   from {
     opacity: 0;
   }

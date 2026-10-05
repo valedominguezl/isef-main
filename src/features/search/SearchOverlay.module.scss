@@ -259,3 +259,70 @@
     background: var(--violet-50);
   }
 }
+
+/* ── Transiciones del buscador ── */
+.overlay {
+  animation: searchFade 220ms var(--ease-out);
+}
+
+.panel {
+  animation: searchIn 260ms var(--ease-out);
+}
+
+@keyframes searchFade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes searchIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99);
+  }
+}
+
+/* Mientras se escribe, los resultados anteriores quedan atenuados en vez de saltar letra por letra */
+.results {
+  transition: opacity var(--duration-base) var(--ease-standard);
+}
+
+.pending {
+  opacity: 0.55;
+}
+
+/* Cada tanda nueva de resultados entra con un fundido corto */
+.group {
+  animation: searchFade 280ms var(--ease-standard);
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-2);
+
+  span {
+    display: block;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(90deg, var(--ink-50) 25%, var(--ink-100) 50%, var(--ink-50) 75%) 0 0 / 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation-name: searchFade;
+  }
+
+  .skeleton span {
+    animation: none;
+  }
+}

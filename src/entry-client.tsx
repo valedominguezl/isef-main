@@ -39,6 +39,20 @@ async function start() {
 
   if (prerendered) hydrateRoot(container, app);
   else createRoot(container).render(app);
+
+  markLoadedImages();
+}
+
+/**
+ * Esqueleto de imágenes: las fotos diferidas muestran un brillo suave hasta cargar (ver global.scss).
+ * Se marca data-loaded al terminar para cortar la animación (después de hidratar, para no tocar el HTML prerenderizado antes).
+ */
+function markLoadedImages() {
+  const mark = (img: HTMLImageElement) => img.setAttribute('data-loaded', '');
+  const onDone = (e: Event) => e.target instanceof HTMLImageElement && mark(e.target);
+  document.addEventListener('load', onDone, true);
+  document.addEventListener('error', onDone, true);
+  setTimeout(() => document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => img.complete && mark(img)), 0);
 }
 
 start();

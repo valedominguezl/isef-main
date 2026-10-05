@@ -91,7 +91,7 @@ export function Component() {
         }
       >
         <div className={styles.badges}>
-          {etiquetaVigente(curso) && <Badge tone="coral">{etiquetaVigente(curso)}</Badge>}
+          {etiquetaVigente(curso) && <Badge tone="white">{etiquetaVigente(curso)}</Badge>}
           {dis.length > 0 && <Badge tone="light">Con {dis.map(nombreCompleto).join(' y ')}</Badge>}
         </div>
       </PageHero>

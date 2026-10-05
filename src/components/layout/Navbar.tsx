@@ -56,7 +56,7 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
       >
         <nav className={styles.nav} aria-label="Principal">
           <Link to="/" className={styles.brand} aria-label={`${sitio.nombre} — Inicio`}>
-            <img src={logo} alt="" width={40} height={40} />
+            <img src={logo} alt="" width={48} height={48} />
             <span>{sitio.nombre}</span>
           </Link>
 
@@ -106,14 +106,14 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
             role="dialog"
             aria-modal="true"
             aria-label="Menú"
-            initial={{ clipPath: 'circle(0% at calc(100% - 48px) 36px)' }}
-            animate={{ clipPath: 'circle(150% at calc(100% - 48px) 36px)' }}
-            exit={{ clipPath: 'circle(0% at calc(100% - 48px) 36px)' }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            // Cortina desde el borde superior (como el sitio original); cierra más rápido de lo que abre
+            initial={{ clipPath: 'inset(0% 0% 100% 0%)', opacity: 0.6 }}
+            animate={{ clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, transition: { duration: 0.6, ease: [0.32, 0.72, 0, 1] } }}
+            exit={{ clipPath: 'inset(0% 0% 100% 0%)', opacity: 0.6, transition: { duration: 0.4, ease: [0.32, 0.72, 0, 1] } }}
           >
             <div className={styles.menuTop}>
               <Link to="/" className={styles.brand}>
-                <img src={logo} alt="" width={40} height={40} />
+                <img src={logo} alt="" width={48} height={48} />
                 <span>{sitio.nombre}</span>
               </Link>
               <button type="button" className={styles.closeBtn} onClick={() => setMenuOpen(false)} aria-label="Cerrar menú" autoFocus>
@@ -125,10 +125,16 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
               role="list"
               initial="hidden"
               animate="show"
-              variants={{ show: { transition: { staggerChildren: 0.05, delayChildren: 0.15 } } }}
+              variants={{ show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } } }}
             >
               {[{ label: 'Inicio', to: '/' }, ...MAIN_NAV].map((item) => (
-                <m.li key={item.to} variants={{ hidden: { opacity: 0, transform: 'translateY(20px)' }, show: { opacity: 1, transform: 'translateY(0px)' } }}>
+                <m.li
+                  key={item.to}
+                  variants={{
+                    hidden: { opacity: 0, transform: 'translateY(16px)' },
+                    show: { opacity: 1, transform: 'translateY(0px)', transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
+                  }}
+                >
                   <NavLink to={item.to} end={item.to === '/'} className={({ isActive }) => (isActive ? styles.menuActive : undefined)}>
                     {item.label}
                   </NavLink>

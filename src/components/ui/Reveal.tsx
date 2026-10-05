@@ -9,7 +9,9 @@ interface RevealProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   as?: 'div' | 'li' | 'article' | 'section' | 'header';
 }
 
-const ease = [0.16, 1, 0.3, 1] as const;
+/** Curva suave del sitio original (sin arranque brusco). Entradas lentas: es una web institucional, no una herramienta. */
+const ease = [0.25, 0.46, 0.45, 0.94] as const;
+const duration = 1.1;
 
 /**
  * Aparición al entrar en pantalla (reemplaza los ~20 IntersectionObserver duplicados).
@@ -22,7 +24,7 @@ export default function Reveal({ children, delay = 0, y = 24, as = 'div', ...res
       initial={{ opacity: 0, transform: `translateY(${y}px)` }}
       whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-      transition={{ duration: 0.7, ease, delay }}
+      transition={{ duration, ease, delay }}
       {...rest}
     >
       {children}
@@ -31,7 +33,7 @@ export default function Reveal({ children, delay = 0, y = 24, as = 'div', ...res
 }
 
 /** Contenedor que escalona la aparición de sus hijos <RevealItem>. */
-export function RevealGroup({ children, className, stagger = 0.08, as = 'div' }: { children: ReactNode; className?: string; stagger?: number; as?: 'div' | 'ul' | 'ol' }) {
+export function RevealGroup({ children, className, stagger = 0.12, as = 'div' }: { children: ReactNode; className?: string; stagger?: number; as?: 'div' | 'ul' | 'ol' }) {
   const Comp = m[as] as typeof m.div;
   return (
     <Comp
@@ -53,7 +55,7 @@ export function RevealItem({ children, className, as = 'div' }: { children: Reac
       className={className}
       variants={{
         hidden: { opacity: 0, transform: 'translateY(24px)' },
-        show: { opacity: 1, transform: 'translateY(0px)', transition: { duration: 0.6, ease } },
+        show: { opacity: 1, transform: 'translateY(0px)', transition: { duration, ease } },
       }}
     >
       {children}

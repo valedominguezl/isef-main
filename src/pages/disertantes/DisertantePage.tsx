@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useLoaderData, useParams, type LoaderFunctionArgs } from 'react-router-dom';
-import { Printer } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { cursosDe, getDisertante, loadCv, nombreCompleto, sitio } from '@/content';
 import { CV_SECCIONES } from '@/content/constants';
@@ -120,16 +119,13 @@ export function Component() {
                   <li key={t}>{t}</li>
                 ))}
               </ul>
-              <div className={`${styles.actions} no-print`}>
-                <Button variant="light" icon="none" leading={<Printer size={18} aria-hidden />} onClick={() => window.print()}>
-                  Descargar / imprimir PDF
-                </Button>
-                {cursos.length > 0 && (
+              {cursos.length > 0 && (
+                <div className={`${styles.actions} no-print`}>
                   <Button href="#cursos" variant="outline-light" icon="none">
                     Cursos que dicta ({cursos.length})
                   </Button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

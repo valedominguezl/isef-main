@@ -68,11 +68,8 @@
   }
 }
 
-.line {
-  display: block;
-  height: 1px;
-  margin: var(--space-5) 0;
-  background: rgb(255 255 255 / 0.3);
+.secText {
+  margin-top: var(--space-5);
 }
 
 .secText p {
@@ -93,12 +90,10 @@
 
   span {
     padding: var(--space-3);
-    background: var(--ink-950);
+    background: var(--gradient-primary);
     color: white;
     font-family: var(--font-sans);
     font-weight: var(--weight-semibold);
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
   }
 
   strong {

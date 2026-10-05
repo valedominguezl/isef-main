@@ -38,7 +38,6 @@ export default function PageHero({ title, subtitle, eyebrow, image, imageSmall, 
         {breadcrumbs && <Breadcrumbs items={breadcrumbs} light />}
         {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
         <h1 className={styles.title}>{rich(title)}</h1>
-        {subtitle && <span className={styles.line} aria-hidden />}
         {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
         {actions && <div className={styles.actions}>{actions}</div>}
         {children}

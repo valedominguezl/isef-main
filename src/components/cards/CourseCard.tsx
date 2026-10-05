@@ -20,7 +20,7 @@ export default function CourseCard({ curso, headingLevel = 3, size = 'md' }: Pro
     <article className={[styles.card, styles[size], 'on-dark'].join(' ')}>
       {curso.imagen && <img className={styles.img} src={curso.imagen} alt="" loading="lazy" decoding="async" />}
       <div className={styles.top}>
-        {etiquetaVigente(curso) && <Badge tone="coral">{etiquetaVigente(curso)}</Badge>}
+        {etiquetaVigente(curso) && <Badge tone="white">{etiquetaVigente(curso)}</Badge>}
         {curso.modalidad && <Badge tone="light">{curso.modalidad}</Badge>}
       </div>
       <div className={styles.content}>
@@ -33,7 +33,6 @@ export default function CourseCard({ curso, headingLevel = 3, size = 'md' }: Pro
             {curso.titulo}
           </Link>
         </H>
-        <span className={styles.line} aria-hidden />
         <p className={styles.subtitle}>{curso.subtitulo}</p>
         <div className={styles.footer}>
           {esProximo(curso) ? (
