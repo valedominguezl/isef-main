@@ -5,7 +5,7 @@ import { ExternalLink, Menu, Search, X } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { sitio, inscripcionesVigentes } from '@/content';
 import { useSearch } from '@/features/search/SearchContext';
-import { socialIcon } from '../ui/Icons';
+import { socialIcon, socialLabel } from '../ui/Icons';
 import Button from '../ui/Button';
 import { MAIN_NAV, SECONDARY_NAV } from './nav';
 import InscripcionesAviso from './InscripcionesAviso';
@@ -27,6 +27,16 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
   const { open: openSearch } = useSearch();
 
   useEffect(() => setMenuOpen(false), [pathname]);
+
+  // Al cerrar el menú (sin cambiar de página) el foco vuelve al botón "Menú"
+  const menuBtn = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    // (el foco estaba adentro del menú, que se desmonta al terminar la animación de salida)
+    const enMenu = document.activeElement === document.body || document.getElementById('menu-movil')?.contains(document.activeElement);
+    if (wasOpen.current && !menuOpen && enMenu) menuBtn.current?.focus();
+    wasOpen.current = menuOpen;
+  }, [menuOpen]);
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -119,6 +129,7 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
               Campus virtual
             </Button>
             <button
+              ref={menuBtn}
               type="button"
               className={styles.menuBtn}
               onClick={() => setMenuOpen(true)}
@@ -162,7 +173,8 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
               animate="show"
               variants={{ show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } } }}
             >
-              {[{ label: 'Inicio', to: '/' }, ...MAIN_NAV].map((item) => (
+              {/* Con inscripciones abiertas, «Inscribite ya» (abajo) reemplaza al link */}
+              {[{ label: 'Inicio', to: '/' }, ...MAIN_NAV.filter((item) => !(item.to === '/inscripciones' && inscripcionesVigentes()))].map((item) => (
                 <m.li
                   key={item.to}
                   variants={{
@@ -205,7 +217,7 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
                   const Icon = socialIcon[r.red];
                   return (
                     <li key={r.url}>
-                      <a href={r.url} target="_blank" rel="noopener noreferrer" aria-label={`${r.red} ${r.etiqueta}`}>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" aria-label={`${socialLabel[r.red]}: ${r.etiqueta}`}>
                         <Icon size={20} />
                       </a>
                     </li>

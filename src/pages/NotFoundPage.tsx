@@ -10,7 +10,7 @@ export function Component() {
   return (
     <>
       <Seo title="Página no encontrada" noindex />
-      <Section width="prose" className={styles.page}>
+      <Section className={styles.page}>
         <p className={styles.code}>404</p>
         <h1>No encontramos esta página</h1>
         <p>Puede que el enlace haya cambiado. Probá buscar lo que necesitás o volvé al inicio.</p>

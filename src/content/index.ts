@@ -14,7 +14,7 @@ import galeriaJson from '@content/galeria.json';
 export type WithSlug<T> = T & { slug: string };
 
 /** "Hoy" a efectos del sitio: la fecha del build (se reconstruye todas las semanas). */
-export const TODAY: string = typeof __BUILD_DATE__ !== 'undefined' ? __BUILD_DATE__ : new Date().toISOString().slice(0, 10);
+export const TODAY: string = typeof __BUILD_DATE__ !== 'undefined' ? __BUILD_DATE__ : new Date(Date.now() - 3 * 36e5).toISOString().slice(0, 10);
 
 const daysBetween = (a: string, b: string) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
 
@@ -42,15 +42,28 @@ export const inscripcionesVigentes = (hoy: string = TODAY) => {
 export const esProximo = (c: Pick<Curso, 'fechaInicio'>) => Boolean(c.fechaInicio && c.fechaInicio >= TODAY);
 /** Ya comenzó: tenía fecha y pasó. */
 export const yaComenzo = (c: Pick<Curso, 'fechaInicio'>) => Boolean(c.fechaInicio && c.fechaInicio < TODAY);
-/** "¡Nuevo!" es automático: el curso tiene fecha de inicio por delante. "Destacado" se marca a mano en el panel. */
-export const etiquetasCurso = (c: Pick<Curso, 'fechaInicio' | 'destacado'>) =>
-  [c.destacado && { texto: 'Destacado', tono: 'brand' as const }, esProximo(c) && { texto: '¡Nuevo!', tono: 'white' as const }].filter(
+const MESES_NUEVO = 6;
+/** Fecha ISO + n meses (en UTC, sin corrimientos por zona horaria). */
+const sumarMeses = (iso: string, n: number) => {
+  const d = new Date(`${iso}T00:00:00Z`);
+  d.setUTCMonth(d.getUTCMonth() + n);
+  return d.toISOString().slice(0, 10);
+};
+/** «¡Nuevo!» durante 6 meses desde que se publicó (`creado`; si falta, la fecha de inicio). */
+export const esNuevo = (c: Pick<Curso, 'creado' | 'fechaInicio'>) => {
+  const desde = c.creado ?? c.fechaInicio;
+  return Boolean(desde && TODAY < sumarMeses(desde, MESES_NUEVO));
+};
+/** "¡Nuevo!" es automático (ver esNuevo). "Destacado" se marca a mano en el panel. */
+export const etiquetasCurso = (c: Pick<Curso, 'creado' | 'fechaInicio' | 'destacado'>) =>
+  [c.destacado && { texto: 'Destacado', tono: 'brand' as const }, esNuevo(c) && { texto: '¡Nuevo!', tono: 'white' as const }].filter(
     (x): x is { texto: string; tono: 'brand' | 'white' } => Boolean(x),
   );
 
 const byFeatured = (a: WithSlug<Curso>, b: WithSlug<Curso>) =>
   Number(esProximo(b)) - Number(esProximo(a)) ||
   (esProximo(a) && esProximo(b) ? a.fechaInicio!.localeCompare(b.fechaInicio!) : 0) ||
+  Number(esNuevo(b)) - Number(esNuevo(a)) ||
   Number(yaComenzo(a)) - Number(yaComenzo(b)) ||
   Number(b.destacado) - Number(a.destacado) ||
   (b.fechaInicio ?? '').localeCompare(a.fechaInicio ?? '') ||

@@ -111,7 +111,7 @@ export function Component() {
         <SectionHeader id="m25-title" title="Mayores de *25 años* sin secundario" lead={<Markdown text={inscripciones.mayores25.descripcion} />} />
         <Reveal className={styles.files}>
           {inscripciones.mayores25.archivos.map((a) => (
-            <Button key={a.url} href={a.url} download variant="dark" icon="download" onClick={() => track('file_download', { archivo: a.url })}>
+            <Button key={a.url} href={a.url} download icon="download" onClick={() => track('file_download', { archivo: a.url })}>
               {a.texto}
             </Button>
           ))}

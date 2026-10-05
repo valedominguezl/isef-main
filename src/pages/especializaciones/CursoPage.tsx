@@ -1,72 +1,144 @@
-import { Link, useParams } from 'react-router';
-import { AlertTriangle, CalendarDays, CircleDollarSign, ClipboardCheck, Clock, MonitorPlay } from 'lucide-react';
-import { cursos, disertantes, etiquetasCurso, getCurso, nombreCompleto, sitio, yaComenzo } from '@/content';
-import { formatDate, whatsappUrl } from '@/lib/format';
-import { excerpt, toPlainText } from '@/lib/markdown';
-import { track } from '@/lib/analytics';
-import Seo, { absoluteUrl, breadcrumbJsonLd } from '@/components/seo/Seo';
-import PageHero from '@/components/ui/PageHero';
-import Section from '@/components/ui/Section';
-import SectionHeader from '@/components/ui/SectionHeader';
-import Button from '@/components/ui/Button';
-import Badge from '@/components/ui/Badge';
-import Prose from '@/components/ui/Prose';
-import Accordion from '@/components/ui/Accordion';
-import Reveal, { RevealItem } from '@/components/ui/Reveal';
-import CardGrid from '@/components/ui/CardGrid';
-import CourseCard from '@/components/cards/CourseCard';
-import { Component as NotFound } from '../NotFoundPage';
-import styles from './CursoPage.module.scss';
+import { Link, useParams } from "react-router";
+import {
+  AlertTriangle,
+  ArrowUpRight,
+  CalendarDays,
+  CircleDollarSign,
+  ClipboardCheck,
+  Clock,
+  MonitorPlay,
+  PlayCircle,
+} from "lucide-react";
+import {
+  cursos,
+  disertantes,
+  etiquetasCurso,
+  getCurso,
+  nombreCompleto,
+  sitio,
+  yaComenzo,
+} from "@/content";
+import { formatDate, whatsappUrl } from "@/lib/format";
+import { excerpt, toPlainText } from "@/lib/markdown";
+import { track } from "@/lib/analytics";
+import Seo, { absoluteUrl, breadcrumbJsonLd } from "@/components/seo/Seo";
+import PageHero from "@/components/ui/PageHero";
+import Section from "@/components/ui/Section";
+import SectionHeader from "@/components/ui/SectionHeader";
+import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
+import Prose from "@/components/ui/Prose";
+import Accordion from "@/components/ui/Accordion";
+import Reveal, { RevealItem } from "@/components/ui/Reveal";
+import CardGrid from "@/components/ui/CardGrid";
+import CourseCard from "@/components/cards/CourseCard";
+import { Component as NotFound } from "../NotFoundPage";
+import styles from "./CursoPage.module.scss";
 
 export function Component() {
-  const { slug = '' } = useParams();
+  const { slug = "" } = useParams();
   const curso = getCurso(slug);
   if (!curso) return <NotFound />;
 
-  const dis = curso.disertantes.map((s) => disertantes.find((d) => d.slug === s)).filter((d): d is NonNullable<typeof d> => Boolean(d));
+  // El JSON se lee sin aplicar los valores por defecto del esquema: un curso viejo no trae la lista
+  const historial = [...(curso.conferencias ?? [])].sort((a, b) =>
+    (b.fecha ?? "").localeCompare(a.fecha ?? ""),
+  );
+  const dis = curso.disertantes
+    .map((s) => disertantes.find((d) => d.slug === s))
+    .filter((d): d is NonNullable<typeof d> => Boolean(d));
   const relacionados = cursos
     .filter((c) => c.slug !== curso.slug)
-    .sort((a, b) => Number(b.disertantes.some((d) => curso.disertantes.includes(d))) - Number(a.disertantes.some((d) => curso.disertantes.includes(d))))
+    .sort(
+      (a, b) =>
+        Number(b.disertantes.some((d) => curso.disertantes.includes(d))) -
+        Number(a.disertantes.some((d) => curso.disertantes.includes(d))),
+    )
     .slice(0, 3);
-  const consulta = whatsappUrl(sitio.whatsapp, `Hola! Quiero consultar por el curso "${curso.titulo}".`);
+  const consulta = whatsappUrl(
+    sitio.whatsapp,
+    `Hola! Quiero consultar por el curso "${curso.titulo}".`,
+  );
 
   const datos = [
-    curso.fechaInicio && { icon: CalendarDays, label: yaComenzo(curso) ? 'Última edición' : 'Inicio', value: `${formatDate(curso.fechaInicio)}${yaComenzo(curso) ? ' (ya comenzó: consultá la próxima)' : ''}` },
-    curso.modalidad && { icon: MonitorPlay, label: 'Modalidad', value: curso.modalidad },
-    curso.duracion && { icon: Clock, label: 'Duración y horario', value: curso.duracion },
-    curso.costo && { icon: CircleDollarSign, label: 'Costo', value: curso.costo },
-  ].filter(Boolean) as { icon: typeof CalendarDays; label: string; value: string }[];
+    curso.fechaInicio && {
+      icon: CalendarDays,
+      label: yaComenzo(curso) ? "Última edición" : "Inicio",
+      value: `${formatDate(curso.fechaInicio)}${yaComenzo(curso) ? " (ya comenzó: consultá la próxima)" : ""}`,
+    },
+    curso.modalidad && {
+      icon: MonitorPlay,
+      label: "Modalidad",
+      value: curso.modalidad,
+    },
+    curso.duracion && {
+      icon: Clock,
+      label: "Duración y horario",
+      value: curso.duracion,
+    },
+    curso.costo && {
+      icon: CircleDollarSign,
+      label: "Costo",
+      value: curso.costo,
+    },
+  ].filter(Boolean) as {
+    icon: typeof CalendarDays;
+    label: string;
+    value: string;
+  }[];
 
   return (
     <>
       <Seo
         title={curso.titulo}
-        description={excerpt(`${curso.subtitulo}. ${toPlainText(curso.descripcion)}`, 158)}
+        description={excerpt(
+          `${curso.subtitulo}. ${toPlainText(curso.descripcion)}`,
+          158,
+        )}
         image={`/og/especializaciones/${curso.slug}.jpg`}
         jsonLd={[
           {
-            '@type': 'Course',
+            "@type": "Course",
             name: curso.titulo,
-            description: excerpt(toPlainText(curso.descripcion) || curso.subtitulo, 300),
+            description: excerpt(
+              toPlainText(curso.descripcion) || curso.subtitulo,
+              300,
+            ),
             url: absoluteUrl(`/especializaciones/${curso.slug}`),
             image: curso.imagen ? absoluteUrl(curso.imagen) : undefined,
-            inLanguage: 'es',
-            provider: { '@type': 'EducationalOrganization', name: sitio.nombreLargo, sameAs: sitio.url },
-            instructor: dis.map((d) => ({ '@type': 'Person', name: nombreCompleto(d), url: absoluteUrl(`/disertantes/${d.slug}`) })),
-            syllabusSections: curso.temario.map((t) => ({ '@type': 'Syllabus', name: t.tema, description: t.subtemas.join('; ') })),
+            inLanguage: "es",
+            provider: {
+              "@type": "EducationalOrganization",
+              name: sitio.nombreLargo,
+              sameAs: sitio.url,
+            },
+            instructor: dis.map((d) => ({
+              "@type": "Person",
+              name: nombreCompleto(d),
+              url: absoluteUrl(`/disertantes/${d.slug}`),
+            })),
+            syllabusSections: curso.temario.map((t) => ({
+              "@type": "Syllabus",
+              name: t.tema,
+              description: t.subtemas.join("; "),
+            })),
             ...(curso.fechaInicio
               ? {
                   hasCourseInstance: {
-                    '@type': 'CourseInstance',
-                    courseMode: /online|zoom|meet|virtual/i.test(curso.modalidad ?? '') ? 'online' : 'onsite',
+                    "@type": "CourseInstance",
+                    courseMode: /online|zoom|meet|virtual/i.test(
+                      curso.modalidad ?? "",
+                    )
+                      ? "online"
+                      : "onsite",
                     startDate: curso.fechaInicio,
                   },
                 }
               : {}),
           },
           breadcrumbJsonLd([
-            { name: 'Inicio', path: '/' },
-            { name: 'Especializaciones', path: '/especializaciones' },
+            { name: "Inicio", path: "/" },
+            { name: "Especializaciones", path: "/especializaciones" },
             { name: curso.titulo, path: `/especializaciones/${curso.slug}` },
           ]),
         ]}
@@ -77,10 +149,24 @@ export function Component() {
         align="start"
         title={curso.titulo}
         subtitle={curso.subtitulo}
-        breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Especializaciones', path: '/especializaciones' }, { name: curso.titulo }]}
+        breadcrumbs={[
+          { name: "Inicio", path: "/" },
+          { name: "Especializaciones", path: "/especializaciones" },
+          { name: curso.titulo },
+        ]}
         actions={
           <>
-            <Button href={consulta} variant="primary" icon="external" onClick={() => track('whatsapp_click', { origen: 'curso', curso: curso.titulo })}>
+            <Button
+              href={consulta}
+              variant="primary"
+              icon="external"
+              onClick={() =>
+                track("whatsapp_click", {
+                  origen: "curso",
+                  curso: curso.titulo,
+                })
+              }
+            >
               Consultar cupos
             </Button>
             {curso.temario.length > 0 && (
@@ -97,7 +183,11 @@ export function Component() {
               {e.texto}
             </Badge>
           ))}
-          {dis.length > 0 && <Badge tone="light">Con {dis.map(nombreCompleto).join(' y ')}</Badge>}
+          {dis.length > 0 && (
+            <Badge tone="light">
+              Con {dis.map(nombreCompleto).join(" y ")}
+            </Badge>
+          )}
         </div>
       </PageHero>
 
@@ -114,7 +204,11 @@ export function Component() {
             )}
 
             {curso.temario.length > 0 && (
-              <Reveal as="section" aria-labelledby="temario" className={styles.block}>
+              <Reveal
+                as="section"
+                aria-labelledby="temario"
+                className={styles.block}
+              >
                 <h2 id="temario" className={styles.h2}>
                   Temario
                 </h2>
@@ -124,10 +218,15 @@ export function Component() {
                   items={curso.temario.map((t, i) => ({
                     title: (
                       <>
-                        <span className={styles.num}>{String(i + 1).padStart(2, '0')}</span> {t.tema}
+                        <span className={styles.num}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>{" "}
+                        {t.tema}
                       </>
                     ),
-                    meta: t.subtemas.length ? `${t.subtemas.length} temas` : undefined,
+                    meta: t.subtemas.length
+                      ? `${t.subtemas.length} temas`
+                      : undefined,
                     content: t.subtemas.length ? (
                       <ol className={styles.subtemas}>
                         {t.subtemas.map((s, j) => (
@@ -145,8 +244,66 @@ export function Component() {
               </Reveal>
             )}
 
+            {historial.length > 0 && (
+              <Reveal
+                as="section"
+                aria-labelledby="historial"
+                className={styles.block}
+              >
+                <h2 id="historial" className={styles.h2}>
+                  Conferencias pasadas
+                </h2>
+                {/* Historial: de la más reciente a la más vieja (las sin fecha, al final) */}
+                <ul className={styles.history} role="list">
+                  {historial.map((cf) => {
+                    const externo = /^https?:/.test(cf.url);
+                    return (
+                      <li key={cf.url + cf.titulo}>
+                        <a
+                          href={cf.url}
+                          {...(externo && {
+                            target: "_blank",
+                            rel: "noopener noreferrer",
+                          })}
+                          onClick={() =>
+                            track("conferencia_click", {
+                              curso: curso.slug,
+                              titulo: cf.titulo,
+                            })
+                          }
+                        >
+                          <PlayCircle
+                            className={styles.historyIcon}
+                            aria-hidden
+                          />
+                          <span className={styles.historyText}>
+                            <strong>{cf.titulo}</strong>
+                            {cf.fecha && <small>{formatDate(cf.fecha)}</small>}
+                          </span>
+                          {externo && (
+                            <span className="sr-only">
+                              {" "}
+                              (se abre en otra pestaña)
+                            </span>
+                          )}
+                          <ArrowUpRight
+                            className={styles.historyGo}
+                            aria-hidden
+                          />
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Reveal>
+            )}
+
             {(curso.importante || curso.condiciones) && (
-              <Reveal as="section" className={styles.block} aria-label="Condiciones de aprobación">
+              <Reveal
+                as="section"
+                className={styles.block}
+                aria-label="Condiciones de aprobación"
+              >
                 {curso.condiciones && (
                   <div className={styles.callout}>
                     <ClipboardCheck aria-hidden />
@@ -157,7 +314,7 @@ export function Component() {
                   </div>
                 )}
                 {curso.importante && (
-                  <div className={[styles.callout, styles.warn].join(' ')}>
+                  <div className={[styles.callout, styles.warn].join(" ")}>
                     <AlertTriangle aria-hidden />
                     <div>
                       <h3>Importante</h3>
@@ -183,21 +340,44 @@ export function Component() {
                   ))}
                 </dl>
               ) : (
-                <p className={styles.muted}>Próximamente publicaremos fechas y modalidad. Consultanos para reservar tu lugar.</p>
+                <p className={styles.muted}>
+                  Próximamente publicaremos fechas y modalidad. Consultanos para
+                  reservar tu lugar.
+                </p>
               )}
-              <Button href={consulta} block icon="external" onClick={() => track('whatsapp_click', { origen: 'curso_aside', curso: curso.titulo })}>
+              <Button
+                href={consulta}
+                block
+                icon="external"
+                onClick={() =>
+                  track("whatsapp_click", {
+                    origen: "curso_aside",
+                    curso: curso.titulo,
+                  })
+                }
+              >
                 Consultar por WhatsApp
               </Button>
             </div>
 
             {dis.length > 0 && (
               <div className={styles.card}>
-                <h2 className={styles.asideTitle}>{dis.length > 1 ? 'Disertantes' : 'Disertante'}</h2>
+                <h2 className={styles.asideTitle}>
+                  {dis.length > 1 ? "Disertantes" : "Disertante"}
+                </h2>
                 <ul className={styles.dis} role="list">
                   {dis.map((d) => (
                     <li key={d.slug}>
                       <Link to={`/disertantes/${d.slug}`}>
-                        {d.foto && <img src={d.foto} alt="" width={56} height={56} loading="lazy" />}
+                        {d.foto && (
+                          <img
+                            src={d.foto}
+                            alt=""
+                            width={56}
+                            height={56}
+                            loading="lazy"
+                          />
+                        )}
                         <span>
                           <strong>{nombreCompleto(d)}</strong>
                           <small>{d.especialidad}</small>

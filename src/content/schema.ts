@@ -24,6 +24,8 @@ export const cursoSchema = z.object({
   mostrarEnCarrera: z.boolean().default(false),
   disertantes: z.array(slug).default([]),
   fechaInicio: isoDate.optional(),
+  /** Cuándo se publicó el curso: muestra «¡Nuevo!» durante 6 meses desde esta fecha. */
+  creado: isoDate.optional(),
   modalidad: z.string().optional(),
   duracion: z.string().optional(),
   costo: z.string().optional(),
@@ -31,6 +33,16 @@ export const cursoSchema = z.object({
   importante: markdown.optional(),
   condiciones: markdown.optional(),
   temario: z.array(z.object({ tema: z.string().min(1), subtemas: z.array(z.string()).default([]) })).default([]),
+  /** Historial: links a conferencias/ediciones anteriores del curso (grabaciones, YouTube, Drive…). */
+  conferencias: z
+    .array(
+      z.object({
+        titulo: z.string().min(1),
+        fecha: isoDate.optional(),
+        url: z.string().regex(/^(https?:\/\/|\/)/,'Link completo (https://…) o ruta del sitio (/…)'),
+      }),
+    )
+    .default([]),
 });
 
 /* -------------------------------- Disertantes ------------------------------- */

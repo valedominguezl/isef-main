@@ -1273,47 +1273,6 @@ textarea.input {
   }
 }
 
-.howto {
-  margin-top: var(--space-2);
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-
-  > button {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    color: var(--violet-700);
-    font-weight: var(--weight-medium);
-    @include underline-on-hover(var(--violet-800));
-    @include focus-ring;
-
-    svg {
-      transition: rotate var(--duration-slow) var(--ease-emphasized);
-    }
-
-    &[aria-expanded='true'] svg {
-      rotate: 180deg;
-    }
-  }
-
-  > div {
-    overflow: hidden;
-  }
-
-  ol {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding-top: var(--space-3);
-    padding-left: 1.25em;
-  }
-
-  li {
-    font-family: var(--font-sans);
-    font-size: var(--text-sm);
-  }
-}
-
 .slugField {
   margin-bottom: var(--space-5);
 }
@@ -1431,8 +1390,17 @@ textarea.input {
   align-items: center;
   gap: var(--space-4);
 
+  /* En móvil el interruptor baja a su propia fila (si no, ensancha la columna del ícono y aprieta el título) */
+  > :nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
   @include up($bp-md) {
     grid-template-columns: auto 1fr auto;
+
+    > :nth-child(3) {
+      grid-column: auto;
+    }
   }
 }
 

@@ -23,7 +23,8 @@ El panel usa un token personal de GitHub (como una contraseña con permisos limi
 |---|---|
 | Publicar una noticia | Novedades → **Nueva novedad**. El resumen es lo que aparece en tarjetas y en Google. |
 | Cargar un curso nuevo | Especializaciones → **Nuevo curso**. Elegí disertantes, fecha de inicio y armá el temario por módulos. |
-| Sacar el "¡Nuevo!" de un curso viejo | Abrí el curso → borrá **Etiqueta** → Guardar. El inicio del panel te avisa cuáles están vencidos. |
+| El "¡Nuevo!" de un curso | Es automático: dura 6 meses desde **Publicado el** (se completa solo al crear el curso; si querés, cambiá la fecha). |
+| Sumar una conferencia pasada a un curso | Abrí el curso → **Conferencias pasadas** → **+ Conferencia**: título, fecha y link a la grabación. Se listan en la página del curso, de la más nueva a la más vieja. |
 | Ocultar un curso sin borrarlo | Desactivá **Publicado**. |
 | Agregar un disertante | Disertantes → **Nuevo disertante** → pestaña **Currículum normalizado**. |
 | Cerrar/abrir inscripciones | Configuración → Datos del instituto → Inscripciones. |

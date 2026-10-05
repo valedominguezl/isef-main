@@ -6,9 +6,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Rebuild semanal: actualiza reglas por fecha (cursos próximos, etiquetas vencidas)
+  # Rebuild diario: actualiza las reglas por fecha (cursos próximos, etiquetas vencidas, inscripciones)
   schedule:
-    - cron: '0 9 * * 1'
+    - cron: '5 3 * * *' # todos los días a las 00:05 de Argentina: «¡Nuevo!», novedades recientes y ventana de inscripciones
 
 concurrency:
   group: deploy-production
@@ -36,11 +36,13 @@ jobs:
       - name: Build + prerender
         run: npm run build
 
-  weekly-rebuild:
+  daily-rebuild:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
       - name: Disparar build en Cloudflare
         env:
           HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
-        run: curl -fsS -X POST "$HOOK"
+        run: |
+          if [ -z "$HOOK" ]; then echo "::warning::Falta el secret CF_DEPLOY_HOOK: no se reconstruye el sitio"; exit 0; fi
+          curl -fsS -X POST "$HOOK"

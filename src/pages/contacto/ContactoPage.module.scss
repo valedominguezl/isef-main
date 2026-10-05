@@ -48,6 +48,7 @@
 }
 
 .sede {
+  white-space: nowrap; /* «· San Luis» baja entero: el punto no queda colgado al final de la línea */
   font-weight: var(--weight-regular);
   color: var(--color-text-muted);
 }

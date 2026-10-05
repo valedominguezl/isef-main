@@ -53,7 +53,7 @@ export function Component() {
         title={n.titulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Novedades', path: '/novedades' }, { name: n.titulo }]}
       />
-      <Section width="prose">
+      <Section>
         <Reveal as="article" className={styles.article}>
           <p className={styles.lead}>{n.resumen}</p>
           <Prose text={n.cuerpo} />

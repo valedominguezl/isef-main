@@ -18,7 +18,7 @@ type Obj = Record<string, unknown>;
 export default function SingletonEditor() {
   const { key = '' } = useParams();
   const cfg = getSingleton(key);
-  const loaded = useFile(cfg?.file);
+  const { data: loaded, error: loadError } = useFile(cfg?.file);
   const { stage } = useAdmin();
   const refs = useRefs(cfg ? usesRefs(cfg.fields) : false);
   const [draft, setDraft] = useState<Obj | null>(null);
@@ -31,6 +31,16 @@ export default function SingletonEditor() {
   }, [loaded]);
 
   if (!cfg) return <p>Sección desconocida.</p>;
+  if (!draft && loadError)
+    return (
+      <p className={styles.errorBox} role="alert">
+        No se pudo leer el contenido ({loadError}). Revisá la conexión y{' '}
+        <button type="button" className={styles.btnGhost} onClick={() => window.location.reload()}>
+          volvé a intentar
+        </button>
+        .
+      </p>
+    );
   if (!draft)
     return (
       <>

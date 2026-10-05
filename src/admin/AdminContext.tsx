@@ -60,9 +60,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
           setStore(gh);
           setUser(login);
         })
-        .catch(() => {
-          sessionStorage.removeItem(TOKEN_KEY);
-          localStorage.removeItem(TOKEN_KEY);
+        .catch((e: Error) => {
+          // Solo se olvida la contraseña si fue rechazada; un corte de red no obliga a volver a escribirla
+          if (/incorrecta|vencida/.test(e.message)) {
+            sessionStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(TOKEN_KEY);
+          }
         })
         .finally(() => setChecking(false));
     }

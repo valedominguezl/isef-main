@@ -4,7 +4,7 @@ import RouteError from '@/pages/RouteError';
 
 const solid: RouteHandle = { nav: 'solid' };
 
-/** URLs del sitio anterior → nuevas (también como 301 en public/.htaccess). */
+/** URLs del sitio anterior → nuevas (también como 301 en public/_redirects). */
 export const LEGACY_REDIRECTS: Record<string, string> = {
   Carrera: '/carrera',
   Inscripciones: '/inscripciones',
@@ -20,7 +20,7 @@ export const LEGACY_REDIRECTS: Record<string, string> = {
 
 /**
  * Rutas del sitio. Cada página se carga bajo demanda (`lazy`) y se prerenderiza en el build
- * (ver scripts/prerender.ts). Las URLs viejas con mayúsculas redirigen con 301 desde .htaccess.
+ * (ver scripts/prerender.ts). Las URLs viejas con mayúsculas redirigen con 301 desde public/_redirects.
  */
 export const routes: RouteObject[] = [
   {
@@ -49,5 +49,3 @@ export const routes: RouteObject[] = [
   },
 ];
 
-/** Rutas que solo funcionan en el navegador (no se prerenderizan con contenido). */
-export const CLIENT_ONLY = ['/admin', '/test-hiit', '/hijos.htm'];

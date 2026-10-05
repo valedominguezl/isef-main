@@ -84,8 +84,8 @@ export class GitHubStore implements ContentStore {
     });
     if (!r.ok) {
       const body = await r.text();
-      if (r.status === 401) throw new Error('El token no es válido o venció. Volvé a iniciar sesión.');
-      if (r.status === 403) throw new Error('El token no tiene permisos suficientes (Contents: Read and write).');
+      if (r.status === 401) throw new Error('Contraseña incorrecta o vencida.');
+      if (r.status === 403) throw new Error('Esta contraseña no tiene permiso para guardar cambios.');
       if (r.status === 404 && init.method === undefined) throw Object.assign(new Error('No encontrado'), { status: 404 });
       throw new Error(`GitHub ${r.status}: ${body.slice(0, 200)}`);
     }
@@ -95,7 +95,7 @@ export class GitHubStore implements ContentStore {
   /** Verifica el token y que tenga permiso de escritura. */
   async verify(): Promise<{ login: string }> {
     const repo = await this.api<{ permissions?: { push?: boolean } }>('');
-    if (!repo.permissions?.push) throw new Error('El token puede leer el repositorio pero no escribir. Revisá el permiso "Contents: Read and write".');
+    if (!repo.permissions?.push) throw new Error('Esta contraseña no tiene permiso para guardar cambios.');
     const user = await fetch('https://api.github.com/user', { headers: { Authorization: `Bearer ${this.cfg.token}` } });
     return { login: user.ok ? ((await user.json()) as { login: string }).login : 'admin' };
   }

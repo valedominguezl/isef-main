@@ -41,7 +41,6 @@ export function Component() {
                 href={whatsappUrl(t.numero)}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${t.area}${t.sede ? ` (${t.sede})` : ''}: escribir por WhatsApp al ${formatPhone(t.numero)}`}
               >
                 <span className={styles.area}>
                   {t.area}
@@ -51,6 +50,7 @@ export function Component() {
                   {t.descripcion}
                 </span>
                 <span className={styles.num}>{formatPhone(t.numero)}</span>
+                <span className="sr-only"> — escribir por WhatsApp (se abre en otra pestaña)</span>
                 <span className={styles.go} aria-hidden>
                   <ArrowUpRight size={18} />
                 </span>

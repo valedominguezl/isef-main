@@ -43,4 +43,7 @@ export const TikTokIcon = ({ size, ...p }: P) => (
   </svg>
 );
 
+/** Nombre de cada red para lectores de pantalla. */
+export const socialLabel = { facebook: 'Facebook', instagram: 'Instagram', youtube: 'YouTube', tiktok: 'TikTok' } as const;
+
 export const socialIcon = { facebook: FacebookIcon, instagram: InstagramIcon, youtube: YouTubeIcon, tiktok: TikTokIcon } as const;

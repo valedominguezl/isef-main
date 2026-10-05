@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 import { ArrowLeft, ExternalLink, Save, Trash2 } from 'lucide-react';
 import type { ZodTypeAny } from 'zod';
 import CourseCard from '@/components/cards/CourseCard';
@@ -39,10 +39,20 @@ const isBlock = (f: Field) => f.type === 'group' || f.type === 'repeater' || f.t
  * Formulario: los campos sueltos consecutivos van juntos en una tarjeta; grupos, listas y secciones
  * son tarjetas con título. Así siempre se ve en qué bloque se está editando.
  */
+const sectionHasError = (s: Extract<Field, { type: 'section' }>, errors: Errors) =>
+  Object.keys(errors).some((k) => s.fields.some((c) => k === c.name || k.startsWith(`${c.name}.`)));
+
 export function FormBody({ fields, draft, setDraft, errors, entrySlug, refs }: FormProps) {
   const render = (f: Field) =>
     f.type === 'section' ? (
-      <Section key={f.name} title={f.label} help={f.help} collapsed={f.collapsed}>
+      <Section
+        key={f.name}
+        title={f.label}
+        help={f.help}
+        collapsed={f.collapsed}
+        // Si algún campo de adentro tiene error, la tarjeta se abre y se marca
+        error={sectionHasError(f, errors) ? 'Hay campos para corregir en esta sección.' : undefined}
+      >
         {f.fields.map(render)}
       </Section>
     ) : (
@@ -99,10 +109,10 @@ export default function EntryEditor() {
   const navigate = useNavigate();
   const { stage, mediaUrl } = useAdmin();
   const refs = useRefs();
-  const loaded = useFile(isNew || !col ? undefined : `${col.dir}/${slugParam}.json`);
+  const { data: loaded, error: loadError } = useFile(isNew || !col ? undefined : `${col.dir}/${slugParam}.json`);
   const cvCol = getCollection('cv')!;
   const isDis = key === 'disertantes';
-  const cvLoaded = useFile(isDis && !isNew ? `content/cv/${slugParam}.json` : undefined);
+  const { data: cvLoaded } = useFile(isDis && !isNew ? `content/cv/${slugParam}.json` : undefined);
   const tab = params.get('tab') === 'cv' && isDis ? 'cv' : 'main';
 
   const [draft, setDraft] = useState<Obj | null>(null);
@@ -110,9 +120,16 @@ export default function EntryEditor() {
   const [slug, setSlug] = useState('');
   const [slugTouched, setSlugTouched] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [saved, setSaved] = useState<string | null>(null);
+  const location = useLocation();
+  const [saved, setSaved] = useState<string | null>(() =>
+    (location.state as { saved?: boolean } | null)?.saved ? 'Guardado. Recordá tocar "Publicar" arriba a la derecha para que se vea en el sitio.' : null,
+  );
   const [dirty, setDirty] = useState(false);
   useUnsavedWarning(dirty);
+  // Si el archivo se relee mientras hay cambios sin guardar, no pisar lo que se está editando
+  const dirtyRef = useRef(dirty);
+  dirtyRef.current = dirty;
+  const shownSlug = useRef<string | null>(null);
 
   useEffect(() => {
     if (!col) return;
@@ -120,8 +137,10 @@ export default function EntryEditor() {
       setDraft(col.defaults());
       setSlug('');
     } else if (loaded !== undefined) {
+      if (dirtyRef.current && shownSlug.current === slugParam) return;
       setDraft(loaded ?? col.defaults());
       setSlug(slugParam);
+      shownSlug.current = slugParam;
     }
     setDirty(false);
   }, [col, isNew, loaded, slugParam]);
@@ -139,6 +158,16 @@ export default function EntryEditor() {
 
   const preview = useDebounced(draft, 200);
   if (!col) return <p>Colección desconocida.</p>;
+  if (!draft && loadError)
+    return (
+      <p className={styles.errorBox} role="alert">
+        No se pudo leer el contenido ({loadError}). Revisá la conexión y{' '}
+        <button type="button" className={styles.btnGhost} onClick={() => window.location.reload()}>
+          volvé a intentar
+        </button>
+        .
+      </p>
+    );
   if (!draft)
     return (
       <>
@@ -172,7 +201,7 @@ export default function EntryEditor() {
     stage(changes);
     setDirty(false);
     setSaved('Guardado. Recordá tocar "Publicar" arriba a la derecha para que se vea en el sitio.');
-    if (isNew) navigate(`/admin/c/${col.key}/${slug}`, { replace: true });
+    if (isNew) navigate(`/admin/c/${col.key}/${slug}`, { replace: true, state: { saved: true } });
   };
 
   const remove = () => {

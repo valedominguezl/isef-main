@@ -37,15 +37,17 @@ const sortItems = (items: CvItem[]) =>
 
 function CvSection({ titulo, items }: { titulo: string; items: CvItem[] }) {
   const [all, setAll] = useState(false);
+  // Sin fechas en toda la sección: una sola columna (sin el hueco vacío de los períodos)
+  const dated = items.some((it) => it.periodo);
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>
         {titulo} <small>{items.length}</small>
       </h2>
-      <ol className={styles.timeline} role="list">
+      <ol className={[styles.timeline, !dated && styles.undated].filter(Boolean).join(' ')} role="list">
         {items.map((it, i) => (
           <li key={i} className={!all && i >= LIMIT ? styles.extra : undefined}>
-            <span className={styles.period}>{it.periodo ?? ''}</span>
+            {dated && <span className={styles.period}>{it.periodo ?? ''}</span>}
             <div className={styles.entry}>
               <p className={styles.entryTitle}>{it.titulo}</p>
               {it.institucion && <p className={styles.inst}>{it.institucion}</p>}

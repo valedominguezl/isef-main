@@ -1,5 +1,11 @@
 @use '@/styles/mixins' as *;
 
+/* Alineado al borde común del contenido (como la cabecera); el texto mantiene el ancho de lectura */
+.article,
+.curso {
+  max-width: var(--container-prose);
+}
+
 .article {
   display: flex;
   flex-direction: column;

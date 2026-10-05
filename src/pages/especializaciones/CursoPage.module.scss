@@ -222,3 +222,65 @@
   justify-content: center;
   margin-top: var(--space-10);
 }
+
+/* ── Conferencias pasadas: lista de links, una fila por encuentro ── */
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 4rem;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-tint);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background-color var(--duration-slow) var(--ease-standard);
+    @include focus-ring;
+
+    &:hover {
+      color: var(--color-text);
+      background: var(--violet-100);
+    }
+  }
+}
+
+.historyIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--violet-600);
+}
+
+.historyText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  strong {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-semibold);
+  }
+
+  small {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+}
+
+.historyGo {
+  width: 20px;
+  height: 20px;
+  color: var(--violet-600);
+  transition: transform var(--duration-slow) var(--ease-emphasized);
+
+  .history a:hover & {
+    transform: translate(2px, -2px);
+  }
+}

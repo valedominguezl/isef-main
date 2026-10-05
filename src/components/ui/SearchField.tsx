@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Search, X } from 'lucide-react';
 import IconButton from './IconButton';
 import styles from './SearchField.module.scss';
@@ -14,11 +15,12 @@ interface Props {
 
 /** Campo de búsqueda único del sitio (FAQ, especializaciones, conferencias). Combinar con useDebounced. */
 export default function SearchField({ value, onChange, placeholder, label, pending, className }: Props) {
+  const input = useRef<HTMLInputElement>(null);
   return (
-    <label className={[styles.field, className].filter(Boolean).join(' ')}>
+    // Contenedor (no <label>): así el botón de borrar no se suma al nombre del campo. Un clic en cualquier parte enfoca el campo.
+    <div className={[styles.field, className].filter(Boolean).join(' ')} onClick={(e) => e.target === e.currentTarget && input.current?.focus()}>
       <Search className={styles.icon} size={18} aria-hidden />
-      <span className="sr-only">{label}</span>
-      <input type="search" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+      <input ref={input} type="search" aria-label={label} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
       <span className={[styles.dots, pending && styles.dotsOn].filter(Boolean).join(' ')} aria-hidden>
         <i />
         <i />
@@ -29,6 +31,6 @@ export default function SearchField({ value, onChange, placeholder, label, pendi
           <X size={16} />
         </IconButton>
       )}
-    </label>
+    </div>
   );
 }

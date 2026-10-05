@@ -33,9 +33,12 @@ const HEADINGS: [CvSeccionTipo, RegExp][] = [
 /** Subtítulos internos que no son antecedentes ("Carrera de grado", "Carrera de posgrado"…). */
 const SUBHEADING = /^(carrera(s)? de (grado|pos ?grado)|nivel (secundario|terciario|universitario)|posgrados?|grado)$/i;
 
-/** Líneas con datos personales que nunca se publican. */
+/**
+ * Líneas con datos personales que nunca se publican. Los rótulos exigen ":" o "." detrás
+ * ("Edad: 45"), para no descartar antecedentes como "Actividad física en la tercera edad" o "biología celular".
+ */
 const PERSONAL =
-  /(\b(dni|d\.n\.i|cuil|cuit|pasaporte)\b|@[\w-]+\.|\b(tel[eé]fono|tel\.|cel(ular)?|whatsapp)\b|\+54[\d\s-]{8,}|\b\d{2,4}[\s-]?\d{6,8}\b|\(\s*\d{2,4}\s*\)\s*\d{5,8}|domicilio|direcci[oó]n particular|\bdir\.\s*(real|legal)|fecha de nacimiento|\bf\.?\s*de\s*nac|datos personales|estado civil|nacionalidad|lugar de nacimiento|\bedad\b)/i;
+  /(\b(dni|d\.n\.i|cuil|cuit|pasaporte)\b|@[\w-]+\.|\+54[\d\s-]{8,}|\(\s*\d{2,4}\s*\)\s*\d{5,8}|\b(tel[eé]fono|tel|cel(ular)?|whatsapp|m[oó]vil|domicilio|direcci[oó]n( particular)?|edad|nacionalidad|estado civil|lugar de nacimiento|fecha de nacimiento|f\.?\s*de\s*nac)\s*[:.]|\bdir\.\s*(real|legal)|^\s*datos personales\s*:?\s*$)/i;
 
 const YEAR = '(?:19|20)\\d{2}';
 const PERIOD = new RegExp(`^\\(?((?:${YEAR})(?:\\s*[-–/a]\\s*(?:${YEAR}|actualidad|presente|hoy|la fecha))?)\\)?[\\s.:–-]*`, 'i');
@@ -62,22 +65,27 @@ export async function pdfLines(file: File): Promise<string[]> {
   const pdfjs = await import('pdfjs-dist');
   const worker = await import('pdfjs-dist/build/pdf.worker.min.mjs?url');
   pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
-  const doc = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+  const task = pdfjs.getDocument({ data: await file.arrayBuffer() });
+  const doc = await task.promise;
   const lines: string[] = [];
-  for (let p = 1; p <= doc.numPages; p++) {
-    const page = await doc.getPage(p);
-    const content = await page.getTextContent();
-    const rows = new Map<number, { x: number; s: string }[]>();
-    for (const it of content.items) {
-      if (!('str' in it) || !it.str.trim()) continue;
-      const y = Math.round(it.transform[5] / 3) * 3; // tolerancia de 3pt para la misma línea
-      const row = rows.get(y) ?? [];
-      row.push({ x: it.transform[4], s: it.str });
-      rows.set(y, row);
+  try {
+    for (let p = 1; p <= doc.numPages; p++) {
+      const page = await doc.getPage(p);
+      const content = await page.getTextContent();
+      const rows = new Map<number, { x: number; s: string }[]>();
+      for (const it of content.items) {
+        if (!('str' in it) || !it.str.trim()) continue;
+        const y = Math.round(it.transform[5] / 3) * 3; // tolerancia de 3pt para la misma línea
+        const row = rows.get(y) ?? [];
+        row.push({ x: it.transform[4], s: it.str });
+        rows.set(y, row);
+      }
+      [...rows.entries()]
+        .sort((a, b) => b[0] - a[0])
+        .forEach(([, row]) => lines.push(row.sort((a, b) => a.x - b.x).map((r) => r.s).join(' ').replace(/\s+/g, ' ').trim()));
     }
-    [...rows.entries()]
-      .sort((a, b) => b[0] - a[0])
-      .forEach(([, row]) => lines.push(row.sort((a, b) => a.x - b.x).map((r) => r.s).join(' ').replace(/\s+/g, ' ').trim()));
+  } finally {
+    await task.destroy(); // libera el worker de pdf.js
   }
   return lines.filter(Boolean);
 }

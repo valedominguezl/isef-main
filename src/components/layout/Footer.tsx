@@ -1,17 +1,17 @@
 import { Link } from 'react-router';
 import { Clock, ExternalLink, Mail, MapPin, Phone } from 'lucide-react';
 import logo from '@/assets/logo.webp';
-import { sitio } from '@/content';
+import { sitio, TODAY } from '@/content';
 import { useConsent } from '@/features/consent/ConsentContext';
 import { formatPhone, whatsappUrl } from '@/lib/format';
-import { socialIcon } from '../ui/Icons';
+import { socialIcon, socialLabel } from '../ui/Icons';
 import IconButton from '../ui/IconButton';
 import { MAIN_NAV, SECONDARY_NAV } from './nav';
 import styles from './Footer.module.scss';
 
 export default function Footer() {
   const { openSettings } = useConsent();
-  const year = new Date().getFullYear();
+  const year = TODAY.slice(0, 4);
 
   return (
     <footer className={`${styles.footer} on-dark`}>
@@ -43,7 +43,7 @@ export default function Footer() {
                     href={r.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    label={`${r.red === 'facebook' ? 'Facebook' : 'Instagram'}: ${r.etiqueta}`}
+                    label={`${socialLabel[r.red]}: ${r.etiqueta}`}
                     title={r.etiqueta}
                     variant="outline"
                     tone="light"

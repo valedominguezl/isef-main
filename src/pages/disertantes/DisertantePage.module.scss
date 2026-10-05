@@ -169,6 +169,10 @@
       gap: var(--space-6);
     }
   }
+
+  &.undated li {
+    grid-template-columns: 1fr;
+  }
 }
 
 .period {

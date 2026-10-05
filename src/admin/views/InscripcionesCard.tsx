@@ -15,14 +15,15 @@ const FILE = 'content/sitio.json';
 
 /** Lo más importante del panel: abrir/cerrar inscripciones y su ventana de fechas. Guarda en content/sitio.json. */
 export default function InscripcionesCard() {
-  const loaded = useFile(FILE);
+  const { data: loaded, error: loadError } = useFile(FILE);
   const { stage } = useAdmin();
   const [insc, setInsc] = useState<Insc | null>(null);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const ids = { sw: useId(), ini: useId(), fin: useId() };
 
+  // Solo la primera vez: una relectura no pisa un cambio sin guardar
   useEffect(() => {
-    if (loaded) setInsc({ ...((loaded.inscripciones as Insc) ?? {}) });
+    if (loaded) setInsc((v) => v ?? { ...((loaded.inscripciones as Insc) ?? {}) });
   }, [loaded]);
 
   const set = (patch: Insc) => {
@@ -62,7 +63,7 @@ export default function InscripcionesCard() {
         </span>
         <div>
           <h2>Inscripciones</h2>
-          <p className={styles.help}>{estado ?? <Sk w={280} h={14} />}</p>
+          <p className={styles.help}>{estado ?? (loadError ? 'No se pudo leer el estado. Revisá la conexión y recargá la página.' : <Sk w={280} h={14} />)}</p>
         </div>
         {insc ? (
           <label className={styles.switchRow} htmlFor={ids.sw}>

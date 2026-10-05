@@ -32,7 +32,7 @@ function Collapse({ open, children }: { open: boolean; children: ReactNode }) {
     if (open) setMounted(true);
   }, [open]);
   return (
-    <div className={styles.collapse} data-open={open || undefined} aria-hidden={!open}>
+    <div className={styles.collapse} data-open={open || undefined} {...(!open && { inert: '' })}>
       <div className={styles.collapseInner}>{mounted && children}</div>
     </div>
   );
@@ -457,6 +457,9 @@ export function FieldRenderer(props: FieldProps) {
 /** Sección del formulario: tarjeta con título claro, plegable. */
 export function Section({ title, help, error, collapsed, children }: { title: string; help?: string; error?: string; collapsed?: boolean; children: ReactNode }) {
   const [open, setOpen] = useState(!collapsed);
+  useEffect(() => {
+    if (error) setOpen(true);
+  }, [error]);
   return (
     <section className={[styles.section, open && styles.sectionOpen, error && styles.repError].filter(Boolean).join(' ')}>
       <button type="button" className={styles.sectionHead} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
@@ -531,11 +534,5 @@ export function clean(v: unknown): unknown {
   return v;
 }
 
-export function useDebounced<T>(value: T, ms = 250) {
-  const [v, setV] = useState(value);
-  useEffect(() => {
-    const t = setTimeout(() => setV(value), ms);
-    return () => clearTimeout(t);
-  }, [value, ms]);
-  return v;
-}
+/** Mismo hook que el sitio (antes había una copia acá). */
+export { useDebounced } from '@/lib/useDebounced';
