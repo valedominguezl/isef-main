@@ -11,6 +11,7 @@ import arancelesJson from '@content/aranceles.json';
 import conferenciasJson from '@content/conferencias.json';
 import galeriaJson from '@content/galeria.json';
 import { resolverPagina, type PaginaResuelta } from './paginas';
+import { NOVEDAD_CATEGORIAS } from './constants';
 import type { PaginaKey } from './schema';
 
 export type WithSlug<T> = T & { slug: string };
@@ -121,10 +122,27 @@ export async function loadCv(slug: string): Promise<Cv | null> {
   return loader ? loader() : null;
 }
 
-/** Novedades recientes (últimos 90 días) para la home; si no hay, la sección no se muestra. */
-export const novedadesRecientes = () => novedades.filter((n) => daysBetween(n.fecha, TODAY) <= 90);
+/**
+ * Novedades para la home: las de los últimos 90 días y, si son menos de `min`, se completa con
+ * las siguientes del listado (destacadas → activas → más nuevas) para que la sección no quede vacía.
+ */
+export const novedadesRecientes = (min = 3) => {
+  const recientes = new Set(novedades.filter((n) => daysBetween(n.fecha, TODAY) <= 90));
+  for (const n of novedades) {
+    if (recientes.size >= min) break;
+    recientes.add(n);
+  }
+  return novedades.filter((n) => recientes.has(n));
+};
 
 export const getCurso = (slug: string) => cursos.find((c) => c.slug === slug);
+
+/** Etiqueta de la tarjeta: «Nuevo curso» solo mientras el curso es nuevo (misma regla que «¡Nuevo!»). */
+export const etiquetaNovedad = (n: Pick<Novedad, 'categoria' | 'curso' | 'fecha'>) => {
+  if (n.categoria !== 'curso') return NOVEDAD_CATEGORIAS[n.categoria];
+  const curso = n.curso ? getCurso(n.curso) : undefined;
+  return esNuevo(curso ?? { creado: n.fecha }) ? 'Nuevo curso' : NOVEDAD_CATEGORIAS.curso;
+};
 export const getDisertante = (slug: string) => disertantes.find((d) => d.slug === slug);
 export const getNovedad = (slug: string) => novedades.find((n) => n.slug === slug);
 export const cursosDe = (disertante: string) => cursos.filter((c) => c.disertantes.includes(disertante));

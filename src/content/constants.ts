@@ -18,7 +18,7 @@ export type CvSeccionTipo = keyof typeof CV_SECCIONES;
 
 export const NOVEDAD_CATEGORIAS = {
   novedad: 'Novedad',
-  curso: 'Nuevo curso',
+  curso: 'Curso',
   evento: 'Evento',
   institucional: 'Institucional',
 } as const;

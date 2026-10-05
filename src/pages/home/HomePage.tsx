@@ -122,14 +122,14 @@ export function Component() {
         <h2 id="datos-title" className="sr-only">
           El I.S.E.F. en números
         </h2>
-        <RevealGroup className={styles.stats}>
+        <RevealGroup className={styles.stats} stagger={0.5}>
           {sitio.estadisticas.map((s, i) => {
             const Icon = STAT_ICONS[i % STAT_ICONS.length];
             return (
             <RevealItem key={s.etiqueta} className={styles.stat}>
               <Icon className={styles.statIcon} aria-hidden />
               <strong>
-                <CountUp to={s.valor} prefix={s.prefijo} />
+                <CountUp to={s.valor} prefix={s.prefijo} delay={0.3 + i * 0.5} />
               </strong>
               <span className={styles.statLabel}>{s.etiqueta}</span>
             </RevealItem>
@@ -186,7 +186,7 @@ export function Component() {
         </Feature>
       </Section>
 
-      {/* Novedades: solo si hay algo de los últimos 90 días */}
+      {/* Novedades: las de los últimos 90 días, completadas hasta 3 con las siguientes */}
       {recientes.length > 0 && (
         <Section labelledBy="novedades-title">
           <div className={styles.headRow}>

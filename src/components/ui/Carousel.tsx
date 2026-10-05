@@ -89,7 +89,8 @@ export default function Carousel({ children, label, slideWidth, gap, showDots = 
         ))}
       </div>
 
-      {slides.length > 1 && (
+      {/* Sin controles si todas las diapositivas entran a la vista */}
+      {slides.length > 1 && !(edges.start && edges.end) && (
         <div className={styles.controls}>
           {showDots && (
             <div className={styles.dots}>

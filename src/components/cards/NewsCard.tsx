@@ -1,7 +1,6 @@
 import { Link } from 'react-router';
 import type { Novedad } from '@/content/schema';
-import { NOVEDAD_CATEGORIAS } from '@/content/constants';
-import type { WithSlug } from '@/content';
+import { etiquetaNovedad, type WithSlug } from '@/content';
 import { formatDate } from '@/lib/format';
 import Badge from '../ui/Badge';
 import styles from './NewsCard.module.scss';
@@ -17,7 +16,7 @@ export default function NewsCard({ novedad, variant = 'overlay', headingLevel = 
       )}
       <div className={styles.content}>
         <div className={styles.meta}>
-          <Badge tone={variant === 'overlay' ? 'light' : 'violet'}>{NOVEDAD_CATEGORIAS[novedad.categoria]}</Badge>
+          <Badge tone={variant === 'overlay' ? 'light' : 'violet'}>{etiquetaNovedad(novedad)}</Badge>
           <time dateTime={novedad.fecha}>{formatDate(novedad.fecha)}</time>
         </div>
         <H className={styles.title}>
