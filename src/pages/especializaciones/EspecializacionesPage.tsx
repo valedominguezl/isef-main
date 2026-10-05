@@ -42,15 +42,14 @@ export function Component() {
     const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
     return searchable.filter((s) => (!dis || s.curso.disertantes.includes(dis)) && terms.every((t) => s.text.includes(t))).map((s) => s.curso);
   }, [query, dis]);
-  // Los activos (se dictan este ciclo lectivo) van primero y separados de las ediciones anteriores (si no hay ninguno, una sola lista)
+  // Destacados → este ciclo lectivo (activos) → ediciones anteriores. Con un solo grupo, sin títulos.
   const grupos = useMemo(() => {
-    const actuales = list.filter((c) => c.activo === true);
-    if (!actuales.length) return [{ titulo: null, cursos: list }];
-    const anteriores = list.filter((c) => c.activo !== true);
-    return [
-      { titulo: 'Este ciclo lectivo', cursos: actuales },
-      ...(anteriores.length ? [{ titulo: 'Ediciones anteriores', cursos: anteriores }] : []),
-    ];
+    const g = [
+      { titulo: 'Destacados', cursos: list.filter((c) => c.destacado === true) },
+      { titulo: 'Este ciclo lectivo', cursos: list.filter((c) => c.destacado !== true && c.activo === true) },
+      { titulo: 'Ediciones anteriores', cursos: list.filter((c) => c.destacado !== true && c.activo !== true) },
+    ].filter((x) => x.cursos.length);
+    return g.length > 1 ? g : [{ titulo: null, cursos: list }];
   }, [list]);
   const conCursos = disertantes.filter((d) => cursos.some((c) => c.disertantes.includes(d.slug)));
 

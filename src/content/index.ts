@@ -76,10 +76,10 @@ export const etiquetasCurso = (c: Pick<Curso, 'creado' | 'fechaInicio' | 'destac
     (x): x is { texto: string; tono: 'brand' | 'white' } => Boolean(x),
   );
 
-/** Activos primero (los inactivos, al final); entre ellos, los destacados primero. */
+/** Orden: destacados → activos → inactivos. */
 const byFeatured = (a: WithSlug<Curso>, b: WithSlug<Curso>) =>
-  Number(b.activo === true) - Number(a.activo === true) ||
   Number(b.destacado === true) - Number(a.destacado === true) ||
+  Number(b.activo === true) - Number(a.activo === true) ||
   Number(esProximo(b)) - Number(esProximo(a)) ||
   (esProximo(a) && esProximo(b) ? a.fechaInicio!.localeCompare(b.fechaInicio!) : 0) ||
   Number(esNuevo(b)) - Number(esNuevo(a)) ||
@@ -111,8 +111,8 @@ const conEstadoDelCurso = (n: WithSlug<Novedad>): WithSlug<Novedad> => {
 export const novedades = collection<Novedad>(import.meta.glob('/content/novedades/*.json', { eager: true, import: 'default' }))
   .map(conEstadoDelCurso)
   .filter((n) => n.publicado !== false)
-  // Activas primero (las inactivas, al final); entre ellas, destacadas primero; después, las más nuevas
-  .sort((a, b) => Number(b.activo !== false) - Number(a.activo !== false) || Number(b.destacado === true) - Number(a.destacado === true) || b.fecha.localeCompare(a.fecha));
+  // Destacadas → activas → inactivas; dentro de cada grupo, las más nuevas primero
+  .sort((a, b) => Number(b.destacado === true) - Number(a.destacado === true) || Number(b.activo !== false) - Number(a.activo !== false) || b.fecha.localeCompare(a.fecha));
 
 /** Los CV se cargan bajo demanda (cada uno en su propio chunk). */
 const cvLoaders = import.meta.glob<Cv>('/content/cv/*.json', { import: 'default' });

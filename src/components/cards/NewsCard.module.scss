@@ -19,6 +19,11 @@
   color: inherit;
   text-decoration: none;
 
+  /* El título no cambia de color al pasar el mouse (sobre la foto se perdía); la tarjeta ya se eleva */
+  &:hover {
+    color: inherit;
+  }
+
   &::before {
     content: '';
     position: absolute;
