@@ -19,6 +19,7 @@ import Notice from './Notice';
 import { Button } from '../ui/Button';
 import DeleteButton from '../ui/DeleteButton';
 import { useToast } from '../ui/Toaster';
+import { novedadDeCurso } from '../novedadDeCurso';
 import styles from '../Admin.module.scss';
 
 type Obj = Record<string, unknown>;
@@ -118,6 +119,7 @@ export default function EntryEditor() {
   const { data: loaded, error: loadError } = useFile(isNew || !col ? undefined : `${col.dir}/${slugParam}.json`);
   // Solo al crear: para no pisar una entrada que ya existe con el mismo título
   const { entries: existing } = useEntries(isNew ? col?.dir : undefined);
+  const { entries: novedades } = useEntries(isNew && col?.key === 'cursos' ? 'content/novedades' : undefined);
   const cvCol = getCollection('cv')!;
   const isDis = key === 'disertantes';
   const { data: cvLoaded } = useFile(isDis && !isNew ? `content/cv/${slugParam}.json` : undefined);
@@ -207,9 +209,18 @@ export default function EntryEditor() {
     const titulo = String(res.value[col.titleField]);
     const changes = [{ path: `${col.dir}/${slug}.json`, content: `${JSON.stringify(clean(draft), null, 2)}\n`, encoding: 'utf8' as const, label: `${col.singular[0].toUpperCase()}${col.singular.slice(1)}: ${titulo}` }];
     if (cvRes?.ok) changes.push({ path: `content/cv/${slug}.json`, content: `${JSON.stringify({ disertante: slug, ...(clean(cvDraft) as Obj) }, null, 2)}\n`, encoding: 'utf8', label: `Currículum: ${titulo}` });
-    stage(changes);
+    // Curso nuevo → su novedad se crea sola, vinculada (si todavía no hay una para ese curso)
+    const conNovedad = isNew && col.key === 'cursos' && !novedades?.some((n) => n.slug === slug || n.data.curso === slug);
+    if (conNovedad)
+      changes.push({
+        path: `content/novedades/${slug}.json`,
+        content: `${JSON.stringify(novedadDeCurso(slug, clean(draft) as Obj), null, 2)}\n`,
+        encoding: 'utf8',
+        label: `Novedad: ${titulo}`,
+      });
+    const undo = stage(changes);
     setDirty(false);
-    toast.saved();
+    toast.saved(conNovedad ? 'Guardado, con su novedad. Falta publicar.' : undefined, conNovedad ? undo : undefined);
     if (isNew) navigate(`/admin/c/${col.key}/${slug}`, { replace: true });
   };
 
