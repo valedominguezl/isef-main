@@ -37,6 +37,10 @@ async function start() {
     </StrictMode>
   );
 
+  // Etiquetas SEO del prerender (title/meta/link): React 19 pone las suyas en el <head> al montar.
+  // Se sacan antes para que no queden duplicadas cuando difieren (404 en otra URL, páginas esqueleto).
+  document.head.querySelectorAll('[data-seo]').forEach((n) => n.remove());
+
   if (prerendered) hydrateRoot(container, app);
   else createRoot(container).render(app);
 

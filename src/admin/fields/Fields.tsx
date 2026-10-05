@@ -36,7 +36,7 @@ function Collapse({ open, children }: { open: boolean; children: ReactNode }) {
     if (open) setMounted(true);
   }, [open]);
   return (
-    <div className={styles.collapse} data-open={open || undefined} {...(!open && { inert: '' })}>
+    <div className={styles.collapse} data-open={open || undefined} inert={!open}>
       <div className={styles.collapseInner}>{mounted && children}</div>
     </div>
   );
