@@ -1,0 +1,36 @@
+{
+  "titulo": "Tu primer proyecto deportivo",
+  "subtitulo": "Creá tu propia salida laboral antes de recibirte",
+  "destacado": true,
+  "activo": true,
+  "publicado": true,
+  "mostrarEnCarrera": false,
+  "creado": "2026-10-06",
+  "disertantes": [],
+  "costo": "Exclusivo para alumnos del I.S.E.F.",
+  "descripcion": "Herramientas de **gestión, administración y marketing estratégico** para crear tu propia salida laboral antes de recibirte. **No esperes a que el sistema te dé una oportunidad: creá tu propio trabajo.**\n\n**Del conocimiento de élite al negocio propio.**\n\nDurante tu carrera te formaste con **científicos de renombre mundial** en áreas clave: actividad física en enfermedades crónicas no transmisibles, actividad física en el adulto mayor, menopausia, entrenamiento de la fuerza, entrenamiento HIIT para la salud y el alto rendimiento, ejercicio en obesidad y diabetes, suplementación deportiva, nutrición deportiva, entrenamiento cardiovascular, entrenamiento personalizado, neurociencias, fisiopatología de las intervenciones en actividad física y salud, periodización del entrenamiento, cineantropometría, biomecánica y kinefilaxia.\n\nEn esta capacitación te enseñamos las herramientas de **administración, gestión y marketing** para integrar todo eso y transformarlo en tu propia salida laboral: **independiente, rentable y con respaldo científico**.\n\nAlgunos ejemplos:\n\n- **De «Ejercicio, obesidad y diabetes» al módulo de marketing:** cómo diseñar y vender un «programa de entrenamiento de 12 semanas para el control de la diabetes», dirigido a un público dispuesto a pagar una cuota mensual diferenciada.\n- **De «Entrenamiento en el adulto mayor» al módulo de administración:** cómo armar un servicio de entrenamiento personalizado a domicilio o en plazas, calculando costos de traslado, materiales y el seguro de responsabilidad civil correspondiente.",
+  "temario": [
+    {
+      "tema": "Aprender a administrar",
+      "subtemas": [
+        "Cómo calcular el valor real de tus servicios",
+        "Manejo de cobros digitales",
+        "Trabajar de forma segura y legal en cualquier espacio: plazas saludables, salones, a domicilio"
+      ]
+    },
+    {
+      "tema": "Aprender a gestionar",
+      "subtemas": [
+        "Cómo diseñar desde cero un proyecto propio, rentable y escalable",
+        "Grupos de entrenamiento, escuelitas deportivas y talleres de fin de semana"
+      ]
+    },
+    {
+      "tema": "Aprender a vender tu valor",
+      "subtemas": [
+        "Estrategias de marketing en redes sociales sin gastar un peso",
+        "Cómo conseguir y fidelizar a tus primeros 10 alumnos"
+      ]
+    }
+  ]
+}
