@@ -1,11 +1,12 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
-import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, LoaderCircle, Pencil, Plus, RotateCcw, Trash2, X } from 'lucide-react';
+import { createContext, useContext, useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, LoaderCircle, Pencil, Plus, RotateCcw, ScanSearch, Trash2, X } from 'lucide-react';
 import { Markdown } from '@/lib/markdown';
 import { useAdmin } from '../AdminContext';
 import { processImage, blobToBase64, slugify } from '../image';
 import type { Field } from '../config';
 import { Button, IconButton } from '../ui/Button';
 import DeleteButton from '../ui/DeleteButton';
+import StockPhotoPicker from './StockPhotoPicker';
 import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
 
@@ -100,22 +101,40 @@ function MarkdownEditor({ id, value, onChange, rows = 6, placeholder }: { id: st
   );
 }
 
-function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Field, { type: 'image' }>; value: string | undefined; onChange: (v: unknown) => void; entrySlug: string }) {
+/**
+ * Abre el buscador de fotos de un campo de imagen apenas se muestra el formulario, ya buscando `q`
+ * (curso armado con IA: la IA sugiere qué foto buscar). `usar` lo apaga para que no se vuelva a abrir.
+ */
+export const FotoSugerida = createContext<{ path: string; q: string; usar: () => void } | null>(null);
+
+function ImageField({ field, value, onChange, entrySlug, path: fieldPath }: { field: Extract<Field, { type: 'image' }>; value: string | undefined; onChange: (v: unknown) => void; entrySlug: string; path: string }) {
   const { stage, mediaUrl } = useAdmin();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  // Buscador de fotos de stock: null = cerrado; si no, la búsqueda con la que abre
+  const [buscar, setBuscar] = useState<string | null>(null);
+  const sugerida = useContext(FotoSugerida);
+  useEffect(() => {
+    if (sugerida?.path !== fieldPath) return;
+    setBuscar(sugerida.q);
+    sugerida.usar();
+  }, [sugerida, fieldPath]);
   const input = useRef<HTMLInputElement>(null);
+  /** Mismo camino para una foto subida o una de stock: recorte/redimensión → WebP → cambio pendiente. */
+  const procesar = async (foto: Blob, nombre: string) => {
+    const img = await processImage(foto, { maxWidth: field.maxWidth, aspect: field.aspect });
+    const base = slugify(entrySlug || nombre) || 'imagen';
+    const name = `${base}-${Date.now().toString(36)}.webp`;
+    const path = `/media/${field.folder}/${name}`;
+    stage([{ path: `public${path}`, content: img.base64, encoding: 'base64', label: `Imagen ${name} (${Math.round(img.size / 1024)} KB)` }]);
+    onChange(path);
+  };
   const onFile = async (file?: File) => {
     if (!file) return;
     setBusy(true);
     setErr(null);
     try {
-      const img = await processImage(file, { maxWidth: field.maxWidth, aspect: field.aspect });
-      const base = slugify(entrySlug || file.name.replace(/\.[^.]+$/, '')) || 'imagen';
-      const name = `${base}-${Date.now().toString(36)}.webp`;
-      const path = `/media/${field.folder}/${name}`;
-      stage([{ path: `public${path}`, content: img.base64, encoding: 'base64', label: `Imagen ${name} (${Math.round(img.size / 1024)} KB)` }]);
-      onChange(path);
+      await procesar(file, file.name.replace(/\.[^.]+$/, ''));
     } catch (e) {
       setErr((e as Error).message);
     } finally {
@@ -137,6 +156,9 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
           {busy ? 'Procesando…' : value || esActual ? 'Cambiar foto' : 'Subir foto'}
         </Button>
         <input ref={input} type="file" accept="image/*" hidden tabIndex={-1} onChange={(e) => onFile(e.target.files?.[0])} />
+        <Button variant="secondary" icon={ScanSearch} disabled={busy} onClick={() => setBuscar('')}>
+          Buscar foto gratis
+        </Button>
         {value && (
           <Button variant="ghost" icon={field.actual ? RotateCcw : X} onClick={() => onChange(undefined)}>
             {field.actual ? 'Volver a la foto original' : 'Quitar foto'}
@@ -144,6 +166,7 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
         )}
         {err && <p className={styles.error}>{err}</p>}
       </div>
+      <StockPhotoPicker open={buscar !== null} query={buscar ?? ''} onClose={() => setBuscar(null)} onPick={(foto) => procesar(foto, 'foto')} />
     </div>
   );
 }
@@ -373,7 +396,7 @@ export function FieldRenderer(props: FieldProps) {
     case 'image':
       return (
         <Wrapper field={field} error={error}>
-          <ImageField field={field} value={value as string | undefined} onChange={onChange} entrySlug={entrySlug} />
+          <ImageField field={field} value={value as string | undefined} onChange={onChange} entrySlug={entrySlug} path={path} />
         </Wrapper>
       );
     case 'file':

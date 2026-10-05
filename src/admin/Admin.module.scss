@@ -1182,6 +1182,117 @@ textarea.input {
   gap: var(--space-2);
 }
 
+/* ── Buscador de fotos de stock ─────────────────────────── */
+.stockSearch {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+
+  .search {
+    flex: 1;
+    max-width: none;
+    margin: 0;
+  }
+
+  @include down($bp-sm) {
+    flex-wrap: wrap;
+
+    > button {
+      flex: 1;
+    }
+  }
+}
+
+.stockGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-4) var(--space-3);
+  list-style: none;
+
+  @include down($bp-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+}
+
+.stockFoto,
+.stockSk {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.stockFoto {
+  background: var(--ink-50);
+  transition:
+    $press-transition,
+    box-shadow var(--duration-slow) var(--ease-standard);
+  @include focus-ring;
+  @include press-bounce;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 0 0 3px var(--violet-300);
+  }
+
+  &:disabled {
+    cursor: progress;
+  }
+
+  &:disabled:not([aria-busy='true']) img {
+    opacity: 0.5;
+  }
+}
+
+.stockBusy {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(255 255 255 / 0.6);
+  color: var(--violet-600);
+}
+
+.stockCredit {
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.stockEmpty {
+  padding: var(--space-8) 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ── Texto para la IA (curso nuevo, currículum pegado) ──── */
+.iaText {
+  min-height: 260px;
+
+  @include down($bp-sm) {
+    min-height: 200px;
+  }
+}
+
 .fileRow {
   display: flex;
   flex-wrap: wrap;
@@ -1573,6 +1684,21 @@ textarea.input {
   strong {
     font-family: var(--font-sans);
     font-weight: var(--weight-semibold);
+  }
+}
+
+.cvImport > .cvImportActions {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+
+  @include down($bp-sm) {
+    flex: 1 1 100%;
+
+    > button {
+      flex: 1;
+    }
   }
 }
 

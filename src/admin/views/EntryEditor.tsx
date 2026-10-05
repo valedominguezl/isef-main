@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 import { ArrowLeft, ExternalLink, FileText, RotateCw, Save, Trash2, UserRound } from 'lucide-react';
 import type { ZodTypeAny } from 'zod';
 import CourseCard from '@/components/cards/CourseCard';
@@ -8,13 +8,14 @@ import SpeakerCard from '@/components/cards/SpeakerCard';
 import type { Curso, Disertante, Novedad } from '@/content/schema';
 import { useAdmin } from '../AdminContext';
 import { getCollection, type Field, type QuickToggle } from '../config';
-import { clean, FieldRenderer, Section, useDebounced, type Errors, type RefOption } from '../fields/Fields';
+import { clean, FieldRenderer, FotoSugerida, Section, useDebounced, type Errors, type RefOption } from '../fields/Fields';
 import { slugify } from '../image';
 import { useEntries, useFile } from '../useEntries';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
 import QuickToggles, { avisoDe } from './QuickToggles';
 import { useLinkedQuick } from './useLinkedQuick';
 import CvPdfImport from './CvPdfImport';
+import type { DesdeIa } from './CursoIa';
 import Notice from './Notice';
 import { Button } from '../ui/Button';
 import DeleteButton from '../ui/DeleteButton';
@@ -133,17 +134,30 @@ export default function EntryEditor() {
   const dirtyRef = useRef(dirty);
   dirtyRef.current = dirty;
   const shownSlug = useRef<string | null>(null);
+  // Curso armado con IA: llega con los campos completos y la búsqueda de foto (nada se guarda hasta tocar Guardar)
+  const location = useLocation();
+  const desdeIa = isNew ? (location.state as DesdeIa | null) : null;
+  const [fotoAuto, setFotoAuto] = useState<{ path: string; q: string } | null>(null);
+  const fotoSugerida = useMemo(() => fotoAuto && { ...fotoAuto, usar: () => setFotoAuto(null) }, [fotoAuto]);
 
   useEffect(() => {
     if (!col) return;
-    if (isNew) setDraft(col.defaults());
-    else if (loaded !== undefined) {
+    if (isNew) {
+      const inicial = desdeIa?.inicial;
+      setDraft({ ...col.defaults(), ...inicial });
+      const img = col.fields.find((f) => f.type === 'image')?.name;
+      setFotoAuto(inicial && img && desdeIa?.buscarFoto ? { path: img, q: desdeIa.buscarFoto } : null);
+      // Lo que trajo la IA todavía no está guardado
+      setDirty(Boolean(inicial));
+      return;
+    }
+    if (loaded !== undefined) {
       if (dirtyRef.current && shownSlug.current === slugParam) return;
       setDraft(loaded ?? col.defaults());
       shownSlug.current = slugParam;
     }
     setDirty(false);
-  }, [col, isNew, loaded, slugParam]);
+  }, [col, isNew, loaded, slugParam, desdeIa]);
 
   useEffect(() => {
     if (!isDis) return;
@@ -317,7 +331,9 @@ export default function EntryEditor() {
               refs={refs}
             />
           ) : (
-            <FormBody fields={col.fields} draft={draft} setDraft={update} errors={mainErrors} entrySlug={slug} refs={refs} />
+            <FotoSugerida.Provider value={fotoSugerida}>
+              <FormBody fields={col.fields} draft={draft} setDraft={update} errors={mainErrors} entrySlug={slug} refs={refs} />
+            </FotoSugerida.Provider>
           )}
         </div>
         {col.preview && (

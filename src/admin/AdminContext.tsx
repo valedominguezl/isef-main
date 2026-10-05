@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { GitHubStore, LocalStore, loadPending, savePending, type Change, type ContentStore } from './store';
 import { clearAdminCache } from './useEntries';
+import { createApi, type AdminApi } from './api';
 
 export const REPO = { owner: 'valedominguezl', repo: 'isef-main', branch: 'main' };
 const TOKEN_KEY = 'isef-admin-token';
@@ -26,10 +27,15 @@ interface AdminCtx {
   refreshDeploy: () => void;
   /** URL para previsualizar un medio (incluye imágenes recién subidas y no publicadas). */
   mediaUrl: (path?: string) => string | undefined;
+  /** Funciones del Worker (IA, fotos de stock), con la contraseña ya puesta. */
+  api: AdminApi;
   version: number;
 }
 
 const Ctx = createContext<AdminCtx | null>(null);
+
+/** La misma contraseña con la que se entró al panel autoriza las funciones del Worker. */
+const api = createApi(() => readToken());
 
 function readToken() {
   try {
@@ -175,6 +181,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       deploy,
       refreshDeploy,
       mediaUrl,
+      api,
       version,
     }),
     [store, checking, user, login, logout, useLocal, pending, stage, discard, publish, publishing, deploy, refreshDeploy, mediaUrl, version],

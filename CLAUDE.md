@@ -9,6 +9,7 @@ Sitio del profesorado (isefsanluis.net). React 18 + TS + Vite 6, **prerenderizad
 - `src/styles/tokens.scss` ↔ `design/tokens.json` + `design/DESIGN.md` (sistema de diseño; mantener sincronizados).
 - `src/features/search` (buscador, índice generado en el build), `consent` (cookies + GA4/GTM), `test-hiit` (protocolo de investigación: **no cambiar su lógica**).
 - `src/admin/*` → panel /admin (config declarativa en `admin/config.ts`; storage local en dev / GitHub API en prod).
+- `worker/index.ts` → única función del servidor (Cloudflare): `/api/ia/*` (Claude) y `/api/fotos` para el panel; el resto del sitio es estático. Secretos: `ANTHROPIC_API_KEY`, `PEXELS_API_KEY`.
 - `scripts/` → `prerender.ts` (SSG + sitemap + robots + search-index), `validate-content.ts`, `check-case.mjs`, `health.mjs`, `optimize-images.ts`, `serve-dist.mjs`.
 
 ## Reglas

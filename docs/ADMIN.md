@@ -25,6 +25,9 @@ El panel usa un token personal de GitHub (como una contraseña con permisos limi
 | Cargar un curso nuevo | Especializaciones → **Nuevo curso**. Elegí disertantes, fecha de inicio y armá el temario por módulos. |
 | El "¡Nuevo!" de un curso | Es automático: dura 6 meses desde **Publicado el** (se completa solo al crear el curso; si querés, cambiá la fecha). |
 | Sumar una conferencia pasada a un curso | Abrí el curso → **Conferencias pasadas** → **+ Conferencia**: título, fecha y link a la grabación. Se listan en la página del curso, de la más nueva a la más vieja. |
+| Cargar un curso con IA | Especializaciones → **Nuevo curso con IA** → pegá la descripción → **Generar**. Se abre el curso completo y la búsqueda de foto: elegí una, revisá y tocá **Guardar**. |
+| Cambiar una foto por una de stock gratis | En cualquier campo de foto → **Buscar foto gratis**. |
+| Cargar un currículum | Disertante → pestaña **Currículum** → subí el PDF o **Pegar texto**: la IA lo ordena en las secciones y quita los datos personales. |
 | Ocultar un curso sin borrarlo | Desactivá **Publicado**. |
 | Agregar un disertante | Disertantes → **Nuevo disertante** → pestaña **Currículum normalizado**. |
 | Cerrar/abrir inscripciones | Configuración → Datos del instituto → Inscripciones. |

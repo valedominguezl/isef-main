@@ -1,12 +1,17 @@
-// Cloudflare Workers (solo archivos estáticos): sirve dist/ con las reglas de public/_redirects y _headers.
+// Cloudflare Workers: sirve dist/ con las reglas de public/_redirects y _headers.
+// Solo /api/* pasa por worker/index.ts (funciones del panel: IA y fotos de stock); el resto son archivos estáticos.
 // Build en Cloudflare: npm run check && npm run build · Deploy: npx wrangler deploy
+// Secretos (no van en el repo): ANTHROPIC_API_KEY, PEXELS_API_KEY (opcional) → Settings → Variables and secrets
 {
   "name": "isef-sanluis",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-09-01",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     // /ruta → ruta.html; /ruta/ y /ruta.html redirigen a /ruta
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
   }
 }

@@ -49,8 +49,13 @@ function Dialog({ title, body, confirmLabel = 'Eliminar', icon: Icon = Trash2, o
   // Foco: entra en "Cancelar" (la opción segura) y al cerrar vuelve a donde estaba
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
+    const el = box.current;
     cancel.current?.focus();
-    return () => prev?.focus?.();
+    return () => {
+      // Si al confirmar se abrió otro diálogo y tiene el foco, no se lo quita
+      const a = document.activeElement;
+      if (!a || a === document.body || el?.contains(a)) prev?.focus?.();
+    };
   }, []);
 
   const onKeyDown = (e: React.KeyboardEvent) => {

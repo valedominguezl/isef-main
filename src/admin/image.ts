@@ -6,7 +6,7 @@ export interface ImageOptions {
   quality?: number;
 }
 
-export async function processImage(file: File, { maxWidth, aspect, quality = 0.8 }: ImageOptions) {
+export async function processImage(file: Blob, { maxWidth, aspect, quality = 0.8 }: ImageOptions) {
   const bmp = await createImageBitmap(file);
   let sx = 0;
   let sy = 0;

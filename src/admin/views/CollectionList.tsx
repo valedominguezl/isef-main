@@ -10,6 +10,7 @@ import { useToast } from '../ui/Toaster';
 import { SkeletonRows } from './Skeleton';
 import QuickToggles, { avisoDe, quickValue } from './QuickToggles';
 import { useLinkedQuick } from './useLinkedQuick';
+import NuevoCursoIa from './CursoIa';
 import styles from '../Admin.module.scss';
 
 export default function CollectionList() {
@@ -65,9 +66,12 @@ export default function CollectionList() {
             <p className={styles.help}>{entries ? `${entries.length} en total` : ' '}</p>
           </div>
         </div>
-        <Button variant="primary" icon={Plus} to={`/admin/c/${col.key}/nueva`}>
-          {col.newLabel}
-        </Button>
+        <div className={styles.headActions}>
+          {col.key === 'cursos' && <NuevoCursoIa />}
+          <Button variant="primary" icon={Plus} to={`/admin/c/${col.key}/nueva`}>
+            {col.newLabel}
+          </Button>
+        </div>
       </div>
       <label className={styles.search}>
         <Search size={16} aria-hidden />
