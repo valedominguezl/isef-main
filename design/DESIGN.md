@@ -85,7 +85,7 @@ Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20�
 
 ## 4. Espaciado, grilla y forma
 - Base 4 px: `space-1…24` (4 → 96 px). Secciones: padding vertical 56→104 px fluido.
-- Un solo ancho de contenido: **1400 px**, el mismo borde que el navbar y el footer (texto largo 72ch). Gutter 16→48 px. Los bloques internos llenan el contenedor (nada de anchos máximos sueltos) y las grillas de dos columnas usan las proporciones de `Feature` (1.15fr / 1fr) para que las columnas coincidan entre secciones.
+- Un solo ancho de contenido: **1400 px**, el mismo borde que el navbar y el footer (texto largo 72ch). Excepción: páginas de tarjetas de borde a borde (contacto, novedades) usan `Section width="narrow"` (1120 px) para que las formas de fondo tengan lugar. Gutter 16→48 px. Los bloques internos llenan el contenedor (nada de anchos máximos sueltos) y las grillas de dos columnas usan las proporciones de `Feature` (1.15fr / 1fr) para que las columnas coincidan entre secciones.
 - Radios: 6 · 10 (botones, inputs) · 16 · **24 (tarjetas)** · pill.
 - Sombras suaves; botones con la sombra del original (`0 10px 15px rgb(0 0 0/.1)`).
 - **Hover solo en lo clickeable.** Tarjetas informativas sin sombra ni elevación al pasar el mouse.
