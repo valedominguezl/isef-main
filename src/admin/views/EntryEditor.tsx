@@ -1,21 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
-import { ArrowLeft, ExternalLink, Save, Trash2 } from 'lucide-react';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
+import { ArrowLeft, ExternalLink, FileText, RotateCw, Save, Trash2, UserRound } from 'lucide-react';
 import type { ZodTypeAny } from 'zod';
 import CourseCard from '@/components/cards/CourseCard';
 import NewsCard from '@/components/cards/NewsCard';
 import SpeakerCard from '@/components/cards/SpeakerCard';
 import type { Curso, Disertante, Novedad } from '@/content/schema';
 import { useAdmin } from '../AdminContext';
-import { getCollection, type Field } from '../config';
+import { getCollection, type Field, type QuickToggle } from '../config';
 import { clean, FieldRenderer, Section, useDebounced, type Errors, type RefOption } from '../fields/Fields';
 import { slugify } from '../image';
 import { useEntries, useFile } from '../useEntries';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
-import QuickToggles from './QuickToggles';
+import QuickToggles, { avisoDe } from './QuickToggles';
 import { useLinkedQuick } from './useLinkedQuick';
 import CvPdfImport from './CvPdfImport';
 import Notice from './Notice';
+import { Button } from '../ui/Button';
+import DeleteButton from '../ui/DeleteButton';
+import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
 
 type Obj = Record<string, unknown>;
@@ -110,8 +113,11 @@ export default function EntryEditor() {
   const isNew = slugParam === 'nueva';
   const navigate = useNavigate();
   const { stage, mediaUrl } = useAdmin();
+  const toast = useToast();
   const refs = useRefs();
   const { data: loaded, error: loadError } = useFile(isNew || !col ? undefined : `${col.dir}/${slugParam}.json`);
+  // Solo al crear: para no pisar una entrada que ya existe con el mismo título
+  const { entries: existing } = useEntries(isNew ? col?.dir : undefined);
   const cvCol = getCollection('cv')!;
   const isDis = key === 'disertantes';
   const { data: cvLoaded } = useFile(isDis && !isNew ? `content/cv/${slugParam}.json` : undefined);
@@ -119,13 +125,7 @@ export default function EntryEditor() {
 
   const [draft, setDraft] = useState<Obj | null>(null);
   const [cvDraft, setCvDraft] = useState<Obj | null>(null);
-  const [slug, setSlug] = useState('');
-  const [slugTouched, setSlugTouched] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
-  const location = useLocation();
-  const [saved, setSaved] = useState<string | null>(() =>
-    (location.state as { saved?: boolean } | null)?.saved ? 'Guardado. Recordá tocar "Publicar" arriba a la derecha para que se vea en el sitio.' : null,
-  );
   const [dirty, setDirty] = useState(false);
   useUnsavedWarning(dirty);
   const linkedQuick = useLinkedQuick(col);
@@ -136,13 +136,10 @@ export default function EntryEditor() {
 
   useEffect(() => {
     if (!col) return;
-    if (isNew) {
-      setDraft(col.defaults());
-      setSlug('');
-    } else if (loaded !== undefined) {
+    if (isNew) setDraft(col.defaults());
+    else if (loaded !== undefined) {
       if (dirtyRef.current && shownSlug.current === slugParam) return;
       setDraft(loaded ?? col.defaults());
-      setSlug(slugParam);
       shownSlug.current = slugParam;
     }
     setDirty(false);
@@ -154,22 +151,19 @@ export default function EntryEditor() {
     else if (cvLoaded !== undefined) setCvDraft(cvLoaded ?? cvCol.defaults());
   }, [isDis, isNew, cvLoaded, cvCol]);
 
-  // Slug automático a partir del título mientras sea nuevo
-  useEffect(() => {
-    if (isNew && !slugTouched && draft && col) setSlug(slugify(String(draft[col.titleField] ?? '')));
-  }, [draft, isNew, slugTouched, col]);
+  // La dirección (URL) sale sola del título al crear y después no cambia: no se muestra
+  const slug = isNew ? slugify(String(draft?.[col?.titleField ?? ''] ?? '')) : slugParam;
 
   const preview = useDebounced(draft, 200);
   if (!col) return <p>Colección desconocida.</p>;
   if (!draft && loadError)
     return (
-      <p className={styles.errorBox} role="alert">
-        No se pudo leer el contenido ({loadError}). Revisá la conexión y{' '}
-        <button type="button" className={styles.btnGhost} onClick={() => window.location.reload()}>
-          volvé a intentar
-        </button>
-        .
-      </p>
+      <div className={styles.errorBox} role="alert">
+        <p>No se pudo leer el contenido ({loadError}). Revisá la conexión.</p>
+        <Button variant="ghost" icon={RotateCw} onClick={() => window.location.reload()}>
+          Volver a intentar
+        </Button>
+      </div>
     );
   if (!draft)
     return (
@@ -179,41 +173,60 @@ export default function EntryEditor() {
       </>
     );
 
+  const title = String(draft[col.titleField] || '') || (isNew ? col.newLabel : slugParam);
+
   const update = (d: Obj) => {
     setDraft(d);
     setDirty(true);
-    setSaved(null);
   };
 
   const save = () => {
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
-      setErrors({ _slug: 'La URL solo puede tener minúsculas, números y guiones.' });
-      return;
-    }
     const res = validate(col.schema, clean(draft));
     const cvRes = isDis && cvDraft ? validate(cvCol.schema, { ...(clean(cvDraft) as Obj), disertante: slug }) : null;
-    if (!res.ok || (cvRes && !cvRes.ok)) {
-      setErrors({ ...(res.ok ? {} : res.errors), ...(cvRes && !cvRes.ok ? Object.fromEntries(Object.entries(cvRes.errors).map(([k, v]) => [`cv:${k}`, v])) : {}) });
-      if (cvRes && !cvRes.ok && res.ok) setParams({ tab: 'cv' });
+    // Errores del título por la dirección: sin letras ni números, o repetido con otra entrada
+    const slugError = !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)
+      ? 'Tiene que tener al menos una letra o número.'
+      : isNew && existing?.some((e) => e.slug === slug)
+        ? `Ya hay ${col.singular === 'novedad' ? 'una' : 'un'} ${col.singular} con este título. Cambialo un poco.`
+        : null;
+    if (!res.ok || (cvRes && !cvRes.ok) || slugError) {
+      setErrors({
+        ...(slugError && draft[col.titleField] ? { [col.titleField]: slugError } : {}),
+        ...(res.ok ? {} : res.errors),
+        ...(cvRes && !cvRes.ok ? Object.fromEntries(Object.entries(cvRes.errors).map(([k, v]) => [`cv:${k}`, v])) : {}),
+      });
+      if (cvRes && !cvRes.ok && res.ok && !slugError) setParams({ tab: 'cv' });
+      else if (tab === 'cv') setParams({});
       return;
     }
     setErrors({});
-    const title = String(res.value[col.titleField]);
-    const changes = [{ path: `${col.dir}/${slug}.json`, content: `${JSON.stringify(clean(draft), null, 2)}\n`, encoding: 'utf8' as const, label: `${col.singular[0].toUpperCase()}${col.singular.slice(1)}: ${title}` }];
-    if (cvRes?.ok) changes.push({ path: `content/cv/${slug}.json`, content: `${JSON.stringify({ disertante: slug, ...(clean(cvDraft) as Obj) }, null, 2)}\n`, encoding: 'utf8', label: `Currículum: ${title}` });
+    const titulo = String(res.value[col.titleField]);
+    const changes = [{ path: `${col.dir}/${slug}.json`, content: `${JSON.stringify(clean(draft), null, 2)}\n`, encoding: 'utf8' as const, label: `${col.singular[0].toUpperCase()}${col.singular.slice(1)}: ${titulo}` }];
+    if (cvRes?.ok) changes.push({ path: `content/cv/${slug}.json`, content: `${JSON.stringify({ disertante: slug, ...(clean(cvDraft) as Obj) }, null, 2)}\n`, encoding: 'utf8', label: `Currículum: ${titulo}` });
     stage(changes);
     setDirty(false);
-    setSaved('Guardado. Recordá tocar "Publicar" arriba a la derecha para que se vea en el sitio.');
-    if (isNew) navigate(`/admin/c/${col.key}/${slug}`, { replace: true, state: { saved: true } });
+    toast.saved();
+    if (isNew) navigate(`/admin/c/${col.key}/${slug}`, { replace: true });
   };
 
   const remove = () => {
-    if (!confirm(`¿Eliminar "${draft[col.titleField]}"? Se quitará del sitio al publicar.`)) return;
-    stage([
-      { path: `${col.dir}/${slugParam}.json`, delete: true, label: `Eliminar ${col.singular}: ${draft[col.titleField]}` },
-      ...(isDis ? [{ path: `content/cv/${slugParam}.json`, delete: true as const, label: `Eliminar currículum: ${draft[col.titleField]}` }] : []),
+    const undo = stage([
+      { path: `${col.dir}/${slugParam}.json`, delete: true, label: `Eliminar ${col.singular}: ${title}` },
+      ...(isDis ? [{ path: `content/cv/${slugParam}.json`, delete: true as const, label: `Eliminar currículum: ${title}` }] : []),
     ]);
+    setDirty(false);
     navigate(`/admin/c/${col.key}`);
+    toast.show({ text: `Se eliminó «${title}». Falta publicar.`, icon: Trash2, undo });
+  };
+
+  /** Opción básica desde el editor: cambia el borrador (se guarda con Guardar) y se puede deshacer. */
+  const toggleDraft = (q: QuickToggle, v: boolean) => {
+    const prev = draft[q.name];
+    update({ ...draft, [q.name]: v });
+    toast.show({
+      text: `${avisoDe(q, v, title)} Falta guardar.`,
+      undo: () => setDraft((d) => (d ? { ...d, [q.name]: prev } : d)),
+    });
   };
 
   const cvErrors = Object.fromEntries(Object.entries(errors).filter(([k]) => k.startsWith('cv:')).map(([k, v]) => [k.slice(3), v]));
@@ -226,24 +239,28 @@ export default function EntryEditor() {
       <div className={styles.pageHead}>
         <div>
           <Link to={`/admin/c/${col.key}`} className={styles.back}>
-            <ArrowLeft size={16} /> {col.label}
+            <ArrowLeft size={16} aria-hidden /> {col.label}
           </Link>
-          <h1>{isNew ? col.newLabel : String(draft[col.titleField] || slugParam)}</h1>
+          <h1>{title}</h1>
         </div>
+        {/* Eliminar queda aparte, separado de Ver en el sitio y Guardar */}
         <div className={styles.headActions}>
-          {!isNew && col.sitePath && (
-            <a href={col.sitePath(slugParam)} target="_blank" rel="noreferrer" className={styles.btnGhost}>
-              <ExternalLink size={16} /> Ver en el sitio
-            </a>
-          )}
           {!isNew && (
-            <button type="button" className={styles.btnDanger} onClick={remove}>
-              <Trash2 size={16} /> Eliminar
-            </button>
+            <>
+              <DeleteButton what={title} consequence={`Se quita del sitio${isDis ? ' (con su currículum)' : ''} cuando publiques.`} onDelete={remove}>
+                Eliminar
+              </DeleteButton>
+              <span className={styles.actionDivider} aria-hidden />
+            </>
           )}
-          <button type="button" className={styles.btnPrimary} onClick={save}>
-            <Save size={18} /> Guardar
-          </button>
+          {!isNew && col.sitePath && (
+            <Button variant="ghost" icon={ExternalLink} href={col.sitePath(slugParam)}>
+              Ver en el sitio
+            </Button>
+          )}
+          <Button variant="primary" icon={Save} onClick={save}>
+            Guardar
+          </Button>
         </div>
       </div>
 
@@ -255,55 +272,34 @@ export default function EntryEditor() {
           return ln ? (
             <QuickToggles toggles={ln.toggles} data={ln.data} onChange={ln.onChange} sincronizado={ln.titulo} />
           ) : (
-            <QuickToggles toggles={col.quick} data={draft} onChange={(name, v) => update({ ...draft, [name]: v })} />
+            <QuickToggles toggles={col.quick} data={draft} onChange={toggleDraft} />
           );
         })()}
 
-      <Notice show={!!saved}>{saved}</Notice>
       <Notice show={Object.keys(errors).length > 0} ok={false}>
-        Hay {Object.keys(errors).length} campo(s) para corregir. {errors._slug ?? ''}
+        Hay {Object.keys(errors).length} campo(s) para corregir.
       </Notice>
 
       {isDis && (
         <div className={styles.tabs} role="tablist">
           <button type="button" role="tab" aria-selected={tab === 'main'} onClick={() => setParams({})}>
-            Perfil
+            <UserRound size={18} aria-hidden /> Perfil
           </button>
           <button type="button" role="tab" aria-selected={tab === 'cv'} onClick={() => setParams({ tab: 'cv' })}>
-            Currículum {Object.keys(cvErrors).length > 0 && <span className={styles.badge}>!</span>}
+            <FileText size={18} aria-hidden /> Currículum {Object.keys(cvErrors).length > 0 && <span className={styles.badge}>!</span>}
           </button>
         </div>
       )}
 
       <div className={styles.editor}>
         <div>
-          <div className={`${styles.field} ${styles.slugField}`}>
-            <label className={styles.label} htmlFor="slug">
-              URL
-            </label>
-            <div className={styles.slugRow}>
-              <span>
-                isefsanluis.net{col.sitePath?.('').replace(/\/$/, '/') ?? '/'}
-              </span>
-              <input
-                id="slug"
-                className={styles.input}
-                value={slug}
-                disabled={!isNew}
-                onChange={(e) => {
-                  setSlug(slugify(e.target.value));
-                  setSlugTouched(true);
-                }}
-              />
-            </div>
-            {!isNew && <p className={styles.help}>La URL no se puede cambiar para no romper enlaces compartidos.</p>}
-          </div>
           {tab === 'cv' && cvDraft && (
             <CvPdfImport
               onImport={(cv) => {
+                const prev = cvDraft;
                 setCvDraft({ ...cvDraft, ...cv, disertante: slug });
                 setDirty(true);
-                setSaved(null);
+                return () => setCvDraft(prev);
               }}
               hasItems={((cvDraft.secciones as { items?: unknown[] }[] | undefined) ?? []).some((s) => s.items?.length)}
             />
@@ -326,13 +322,12 @@ export default function EntryEditor() {
         </div>
         {col.preview && (
           <aside className={styles.preview} aria-label="Vista previa">
-            <p className={styles.previewLabel}>Vista previa</p>
+            <p className={styles.previewLabel}>Así se ve en el sitio</p>
             <div className={styles.previewCard}>
               {col.preview === 'curso' && <CourseCard curso={card<Curso>({ disertantes: [], temario: [] }, 'imagen')} />}
               {col.preview === 'novedad' && <NewsCard novedad={card<Novedad>({}, 'imagen')} />}
               {col.preview === 'disertante' && <SpeakerCard disertante={card<Disertante>({ destacados: [] }, 'foto')} />}
             </div>
-            <p className={styles.help}>Así se verá la tarjeta en el sitio.</p>
           </aside>
         )}
       </div>

@@ -34,10 +34,7 @@ export default function Dashboard() {
   return (
     <>
       <div className={styles.pageHead}>
-        <div>
-          <h1>Hola</h1>
-          <p className={styles.help}>Desde acá actualizás todo el contenido del sitio.</p>
-        </div>
+        <h1>Hola</h1>
       </div>
       <InscripcionesCard />
       <div className={styles.stats}>

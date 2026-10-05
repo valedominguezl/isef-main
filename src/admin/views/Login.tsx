@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { KeyRound, Laptop } from 'lucide-react';
+import { KeyRound, Laptop, LoaderCircle } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { useAdmin } from '../AdminContext';
+import { Button } from '../ui/Button';
 import styles from '../Admin.module.scss';
 
 /** Ingreso simple: contraseña + recordar. (La "contraseña" es la clave de acceso al repositorio; no se explica acá a propósito.) */
@@ -52,13 +53,13 @@ export default function Login() {
             {error}
           </p>
         )}
-        <button type="submit" className={styles.btnPrimary} disabled={busy || !password}>
-          <KeyRound size={18} /> {busy ? 'Ingresando…' : 'Ingresar'}
-        </button>
+        <Button type="submit" variant="primary" icon={busy ? LoaderCircle : KeyRound} spin={busy} disabled={busy || !password}>
+          {busy ? 'Ingresando…' : 'Ingresar'}
+        </Button>
         {import.meta.env.DEV && (
-          <button type="button" className={styles.btnGhost} onClick={useLocal}>
-            <Laptop size={16} /> Usar modo local (escribe en tu disco)
-          </button>
+          <Button variant="ghost" icon={Laptop} onClick={useLocal}>
+            Usar modo local (escribe en tu disco)
+          </Button>
         )}
       </form>
     </div>

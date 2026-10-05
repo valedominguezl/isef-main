@@ -2,6 +2,8 @@ import type { QuickToggle, CollectionConfig } from '../config';
 import { getCollection } from '../config';
 import { useAdmin } from '../AdminContext';
 import { useEntries } from '../useEntries';
+import { useToast } from '../ui/Toaster';
+import { avisoDe } from './QuickToggles';
 
 type Obj = Record<string, unknown>;
 
@@ -9,17 +11,19 @@ export interface LinkedQuick {
   toggles: QuickToggle[];
   data: Obj;
   titulo: string;
-  onChange: (name: string, value: boolean) => void;
+  onChange: (q: QuickToggle, value: boolean) => void;
 }
 
 /**
  * Entradas sincronizadas (p. ej. una novedad de un curso): sus opciones básicas son las del curso.
- * Devuelve, para una entrada, los interruptores leídos del curso y un onChange que modifica el curso.
+ * Devuelve, para una entrada, los interruptores leídos del curso y un onChange que modifica el curso
+ * (queda pendiente y se puede deshacer desde el aviso).
  */
 export function useLinkedQuick(col: CollectionConfig | undefined) {
   const target = col?.syncWith ? getCollection(col.syncWith.collection) : undefined;
   const { entries } = useEntries(target?.dir);
   const { stage } = useAdmin();
+  const toast = useToast();
 
   return (data: Obj): LinkedQuick | null => {
     if (!col?.syncWith || !target?.quick || !col.quick) return null;
@@ -33,8 +37,10 @@ export function useLinkedQuick(col: CollectionConfig | undefined) {
       toggles: target.quick.filter((q) => nombres.has(q.name)),
       data: e.data,
       titulo,
-      onChange: (name, value) =>
-        stage([{ path: e.path, content: `${JSON.stringify({ ...e.data, [name]: value }, null, 2)}\n`, encoding: 'utf8', label: titulo }]),
+      onChange: (q, value) => {
+        const undo = stage([{ path: e.path, content: `${JSON.stringify({ ...e.data, [q.name]: value }, null, 2)}\n`, encoding: 'utf8', label: titulo }]);
+        toast.show({ text: avisoDe(q, value, titulo), undo });
+      },
     };
   };
 }

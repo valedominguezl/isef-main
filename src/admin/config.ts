@@ -3,6 +3,7 @@
  * Para agregar un campo nuevo: sumarlo al esquema (src/content/schema.ts) y acá.
  */
 import type { ZodTypeAny } from 'zod';
+import { CircleHelp, FileText, GraduationCap, Images, Library, Newspaper, Receipt, Settings2, Users, Video, type LucideIcon } from 'lucide-react';
 import {
   arancelesSchema,
   conferenciasSchema,
@@ -21,8 +22,8 @@ import { PAGINAS } from './paginasConfig';
 
 export type Field =
   | { type: 'text' | 'url' | 'email'; name: string; label: string; help?: string; placeholder?: string; required?: boolean; max?: number }
-  | { type: 'textarea'; name: string; label: string; help?: string; max?: number; rows?: number; required?: boolean }
-  | { type: 'markdown'; name: string; label: string; help?: string; rows?: number }
+  | { type: 'textarea'; name: string; label: string; help?: string; placeholder?: string; max?: number; rows?: number; required?: boolean }
+  | { type: 'markdown'; name: string; label: string; help?: string; placeholder?: string; rows?: number }
   | { type: 'number'; name: string; label: string; help?: string; step?: number }
   | { type: 'boolean'; name: string; label: string; help?: string }
   | { type: 'date'; name: string; label: string; help?: string; required?: boolean }
@@ -46,10 +47,28 @@ export interface QuickToggle {
   /** Valor si el archivo no trae el campo. */
   fallback: boolean;
   help: string;
+  /** Aviso al cambiarla, después del título («Antropometría» marcado como destacado): [al activar, al desactivar]. */
+  aviso: [string, string];
 }
 
-const ACTIVO: QuickToggle = { name: 'activo', on: 'Activo', off: 'Inactivo', icon: 'calendar', fallback: false, help: 'Se dicta este ciclo lectivo. Los inactivos se muestran al final.' };
-const VISIBLE: QuickToggle = { name: 'publicado', on: 'Visible', off: 'Oculto', icon: 'eye', fallback: true, help: 'Si está oculto no aparece en el sitio (no se borra).' };
+const ACTIVO: QuickToggle = {
+  name: 'activo',
+  on: 'Activo',
+  off: 'Inactivo',
+  icon: 'calendar',
+  fallback: false,
+  help: 'Se dicta este ciclo lectivo. Los inactivos se muestran al final.',
+  aviso: ['marcado como activo', 'marcado como inactivo'],
+};
+const VISIBLE: QuickToggle = {
+  name: 'publicado',
+  on: 'Visible',
+  off: 'Oculto',
+  icon: 'eye',
+  fallback: true,
+  help: 'Si está oculto no aparece en el sitio (no se borra).',
+  aviso: ['ahora se ve en el sitio', 'quedó oculto'],
+};
 
 export interface CollectionConfig {
   key: string;
@@ -57,6 +76,7 @@ export interface CollectionConfig {
   singular: string;
   /** "Nueva novedad" / "Nuevo curso" */
   newLabel: string;
+  icon: LucideIcon;
   dir: string;
   schema: ZodTypeAny;
   fields: Field[];
@@ -78,6 +98,7 @@ export interface SingletonConfig {
   key: string;
   label: string;
   description: string;
+  icon: LucideIcon;
   file: string;
   schema: ZodTypeAny;
   fields: Field[];
@@ -94,6 +115,7 @@ export const COLLECTIONS: CollectionConfig[] = [
     label: 'Novedades',
     singular: 'novedad',
     newLabel: 'Nueva novedad',
+    icon: Newspaper,
     dir: 'content/novedades',
     schema: novedadSchema,
     titleField: 'titulo',
@@ -106,15 +128,23 @@ export const COLLECTIONS: CollectionConfig[] = [
       { type: 'text', name: 'titulo', label: 'Título', required: true, max: 90 },
       { type: 'date', name: 'fecha', label: 'Fecha de publicación', required: true },
       { type: 'select', name: 'categoria', label: 'Categoría', options: opt(NOVEDAD_CATEGORIAS), required: true },
-      { type: 'textarea', name: 'resumen', label: 'Resumen', help: 'Se muestra en las tarjetas y en Google. Entre 1 y 3 oraciones.', max: 500, rows: 4, required: true },
+      { type: 'textarea', name: 'resumen', label: 'Resumen', help: 'De 1 a 3 oraciones: se ve en las tarjetas y en Google.', max: 500, rows: 4, required: true },
       { type: 'markdown', name: 'cuerpo', label: 'Texto completo (opcional)', rows: 10 },
-      { type: 'image', name: 'imagen', label: 'Imagen', folder: 'novedades', maxWidth: 1600, help: 'Horizontal. Se convierte a WebP automáticamente.' },
+      { type: 'image', name: 'imagen', label: 'Imagen', folder: 'novedades', maxWidth: 1600, help: 'Horizontal.' },
       { type: 'reference', name: 'curso', label: 'Curso relacionado', collection: 'cursos', multiple: false, help: 'Agrega un botón "Ver el curso".' },
     ],
     quick: [
-      { ...VISIBLE, off: 'Oculta' },
-      { ...ACTIVO, on: 'Activa', off: 'Inactiva', fallback: true, help: 'Vigente. Las inactivas se muestran al final.' },
-      { name: 'destacado', on: 'Destacada', off: 'No destacada', icon: 'star', fallback: false, help: 'Aparece primero en el inicio y en Novedades.' },
+      { ...VISIBLE, off: 'Oculta', aviso: ['ahora se ve en el sitio', 'quedó oculta'] },
+      { ...ACTIVO, on: 'Activa', off: 'Inactiva', fallback: true, help: 'Vigente. Las inactivas se muestran al final.', aviso: ['marcada como activa', 'marcada como inactiva'] },
+      {
+        name: 'destacado',
+        on: 'Destacada',
+        off: 'No destacada',
+        icon: 'star',
+        fallback: false,
+        help: 'Aparece primero en el inicio y en Novedades.',
+        aviso: ['marcada como destacada', 'ya no está destacada'],
+      },
     ],
     // Si la novedad es de un curso, sus opciones básicas son las del curso (se cambian ahí)
     syncWith: { field: 'curso', collection: 'cursos' },
@@ -124,6 +154,7 @@ export const COLLECTIONS: CollectionConfig[] = [
     label: 'Especializaciones',
     singular: 'curso',
     newLabel: 'Nuevo curso',
+    icon: GraduationCap,
     dir: 'content/cursos',
     schema: cursoSchema,
     titleField: 'titulo',
@@ -137,7 +168,7 @@ export const COLLECTIONS: CollectionConfig[] = [
       { type: 'image', name: 'imagen', label: 'Imagen de portada', folder: 'cursos', maxWidth: 1600 },
       { type: 'reference', name: 'disertantes', label: 'Disertantes', collection: 'disertantes', multiple: true },
       { type: 'date', name: 'fechaInicio', label: 'Fecha de inicio' },
-      { type: 'date', name: 'creado', label: 'Publicado el', help: 'Durante 6 meses desde esta fecha el curso muestra «¡Nuevo!» solo.' },
+      { type: 'date', name: 'creado', label: 'Publicado el', help: 'Muestra «¡Nuevo!» durante 6 meses desde esta fecha.' },
       { type: 'text', name: 'modalidad', label: 'Modalidad', placeholder: 'Online por Zoom / Presencial en la sede principal' },
       { type: 'text', name: 'duracion', label: 'Duración y horario', placeholder: '5 encuentros, jueves de 19 a 21 h' },
       { type: 'text', name: 'costo', label: 'Costo', placeholder: 'Gratuito para alumnos' },
@@ -158,14 +189,13 @@ export const COLLECTIONS: CollectionConfig[] = [
         type: 'repeater',
         name: 'conferencias',
         label: 'Conferencias pasadas',
-        help: 'Historial de encuentros anteriores: se muestran en la página del curso, del más reciente al más viejo.',
         itemLabel: 'Conferencia',
         titleField: 'titulo',
         collapsed: true,
         fields: [
           { type: 'text', name: 'titulo', label: 'Título', required: true, placeholder: 'Encuentro 1: fuerza y potencia' },
           { type: 'date', name: 'fecha', label: 'Fecha' },
-          { type: 'url', name: 'url', label: 'Link a la grabación', required: true, help: 'YouTube, Drive, Zoom o cualquier link.' },
+          { type: 'url', name: 'url', label: 'Link a la grabación', required: true },
         ],
       },
       { type: 'markdown', name: 'condiciones', label: 'Condiciones de aprobación', rows: 4 },
@@ -174,8 +204,24 @@ export const COLLECTIONS: CollectionConfig[] = [
     quick: [
       VISIBLE,
       ACTIVO,
-      { name: 'destacado', on: 'Destacado', off: 'No destacado', icon: 'star', fallback: false, help: 'Lleva la etiqueta «Destacado» y aparece primero.' },
-      { name: 'mostrarEnCarrera', on: 'En «La carrera»', off: 'No en «La carrera»', icon: 'graduation', fallback: false, help: 'Se muestra también en la página La carrera.' },
+      {
+        name: 'destacado',
+        on: 'Destacado',
+        off: 'No destacado',
+        icon: 'star',
+        fallback: false,
+        help: 'Lleva la etiqueta «Destacado» y aparece primero.',
+        aviso: ['marcado como destacado', 'ya no está destacado'],
+      },
+      {
+        name: 'mostrarEnCarrera',
+        on: 'En «La carrera»',
+        off: 'No en «La carrera»',
+        icon: 'graduation',
+        fallback: false,
+        help: 'Se muestra también en la página La carrera.',
+        aviso: ['se muestra en «La carrera»', 'ya no se muestra en «La carrera»'],
+      },
     ],
   },
   {
@@ -183,6 +229,7 @@ export const COLLECTIONS: CollectionConfig[] = [
     label: 'Disertantes',
     singular: 'disertante',
     newLabel: 'Nuevo disertante',
+    icon: Users,
     dir: 'content/disertantes',
     schema: disertanteSchema,
     titleField: 'nombre',
@@ -192,10 +239,10 @@ export const COLLECTIONS: CollectionConfig[] = [
     preview: 'disertante',
     defaults: () => ({ nombre: '', titulo: 'Dr.', especialidad: '', destacados: [], orden: 99, publicado: true }),
     fields: [
-      { type: 'text', name: 'nombre', label: 'Nombre y apellido', required: true, help: 'Sin el título (Dr., Lic.): ese va aparte.' },
+      { type: 'text', name: 'nombre', label: 'Nombre y apellido', required: true, help: 'Sin «Dr.» ni «Lic.»: el título va aparte.' },
       { type: 'select', name: 'titulo', label: 'Título', options: ['Dr.', 'Dra.', 'Lic.', 'Mg.', 'Prof.', 'Ing.', 'Abog.', ''].map((v) => ({ value: v, label: v || '(ninguno)' })) },
       { type: 'text', name: 'especialidad', label: 'Área de especialidad', required: true, placeholder: 'Neurociencias y educación', max: 60 },
-      { type: 'image', name: 'foto', label: 'Foto (retrato)', folder: 'disertantes', maxWidth: 800, aspect: 1, help: 'Se recorta cuadrada automáticamente.' },
+      { type: 'image', name: 'foto', label: 'Foto (retrato)', folder: 'disertantes', maxWidth: 800, aspect: 1, help: 'Se recorta cuadrada.' },
       { type: 'list', name: 'destacados', label: 'Puntos destacados de la tarjeta', itemLabel: 'punto', max: 8, help: 'Frases cortas: "Médico", "Egresado de la UBA"…' },
       { type: 'number', name: 'orden', label: 'Orden en el listado', help: 'Menor número = aparece antes.' },
     ],
@@ -206,6 +253,7 @@ export const COLLECTIONS: CollectionConfig[] = [
     label: 'Currículums',
     singular: 'currículum',
     newLabel: 'Nuevo currículum',
+    icon: FileText,
     dir: 'content/cv',
     schema: cvSchema,
     titleField: 'disertante',
@@ -220,7 +268,6 @@ export const COLLECTIONS: CollectionConfig[] = [
         itemLabel: 'Sección',
         titleField: 'tipo',
         collapsed: true,
-        help: 'Las secciones vacías no se muestran en el sitio.',
         fields: [
           { type: 'select', name: 'tipo', label: 'Tipo de sección', options: opt(CV_SECCIONES), required: true },
           { type: 'text', name: 'titulo', label: 'Título personalizado', help: 'Solo para "Otros antecedentes".' },
@@ -249,6 +296,7 @@ export const SINGLETONS: SingletonConfig[] = [
     key: 'sitio',
     label: 'Datos del instituto',
     description: 'Inscripciones, teléfonos, sedes y redes sociales.',
+    icon: Settings2,
     file: 'content/sitio.json',
     schema: sitioSchema,
     sitePath: '/contacto',
@@ -259,8 +307,8 @@ export const SINGLETONS: SingletonConfig[] = [
         label: 'Inscripciones',
         fields: [
           { type: 'boolean', name: 'abiertas', label: 'Inscripciones abiertas (muestra el botón "Inscribite")' },
-          { type: 'date', name: 'inicio', label: 'Abren el (opcional)', help: 'Si la cargás, antes de esta fecha el sitio no las muestra como abiertas.' },
-          { type: 'date', name: 'cierre', label: 'Cierran el (opcional)', help: 'Si la cargás, arriba de todo el sitio aparece la franja con la fecha y, los últimos 15 días, la cuenta regresiva. Sin fecha no se muestra.' },
+          { type: 'date', name: 'inicio', label: 'Abren el (opcional)', help: 'Antes de esta fecha el sitio no las muestra abiertas.' },
+          { type: 'date', name: 'cierre', label: 'Cierran el (opcional)', help: 'Muestra arriba del sitio una franja con la fecha (y la cuenta regresiva los últimos 15 días).' },
           { type: 'text', name: 'texto', label: 'Texto del botón principal' },
         ],
       },
@@ -292,7 +340,7 @@ export const SINGLETONS: SingletonConfig[] = [
         type: 'section',
         name: 'avanzado',
         label: 'Otros datos del sitio',
-        help: 'WhatsApp principal, correo, campus, números del inicio y datos técnicos. Casi nunca cambian.',
+        help: 'WhatsApp, correo, campus, números del inicio y datos técnicos.',
         collapsed: true,
         fields: [
           { type: 'text', name: 'whatsapp', label: 'WhatsApp principal', help: 'Solo números con código de país: 5492664564435' },
@@ -319,7 +367,8 @@ export const SINGLETONS: SingletonConfig[] = [
   {
     key: 'faq',
     label: 'Preguntas frecuentes',
-    description: 'Se muestran en el inicio y alimentan el buscador.',
+    description: 'Se muestran en el inicio y en el buscador.',
+    icon: CircleHelp,
     file: 'content/faq.json',
     schema: faqSchema,
     sitePath: '/#faq',
@@ -334,6 +383,7 @@ export const SINGLETONS: SingletonConfig[] = [
     key: 'inscripciones',
     label: 'Inscripciones',
     description: 'Pasos, documentos descargables y fechas límite.',
+    icon: FileText,
     file: 'content/inscripciones.json',
     schema: inscripcionesSchema,
     sitePath: '/inscripciones',
@@ -364,6 +414,7 @@ export const SINGLETONS: SingletonConfig[] = [
     key: 'plan',
     label: 'Plan de estudios',
     description: 'Materias por año, cargas horarias y resolución.',
+    icon: Library,
     file: 'content/plan.json',
     schema: planSchema,
     sitePath: '/carrera#plan',
@@ -388,7 +439,8 @@ export const SINGLETONS: SingletonConfig[] = [
   {
     key: 'aranceles',
     label: 'Aranceles',
-    description: 'Tabla de valores. Activá "visible" para publicar la página.',
+    description: 'Tabla de valores y formas de pago.',
+    icon: Receipt,
     file: 'content/aranceles.json',
     schema: arancelesSchema,
     sitePath: '/aranceles',
@@ -414,6 +466,7 @@ export const SINGLETONS: SingletonConfig[] = [
     key: 'galeria',
     label: 'Galería de la carrera',
     description: 'Fotos de los lugares de práctica en San Luis.',
+    icon: Images,
     file: 'content/galeria.json',
     schema: galeriaSchema,
     sitePath: '/carrera',
@@ -429,6 +482,7 @@ export const SINGLETONS: SingletonConfig[] = [
     key: 'conferencias',
     label: 'Grabaciones de conferencias',
     description: 'Página privada /hijos.htm con enlaces a videos y PDFs.',
+    icon: Video,
     file: 'content/conferencias.json',
     schema: conferenciasSchema,
     sitePath: '/hijos.htm',

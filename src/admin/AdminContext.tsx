@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { GitHubStore, LocalStore, loadPending, savePending, type Change, type ContentStore } from './store';
 import { clearAdminCache } from './useEntries';
 
@@ -17,7 +17,8 @@ interface AdminCtx {
   logout: () => void;
   useLocal: () => void;
   pending: Change[];
-  stage: (changes: Change[]) => void;
+  /** Deja cambios pendientes. Devuelve una función que deshace exactamente eso (vuelve a lo que había antes en esos archivos). */
+  stage: (changes: Change[]) => () => void;
   discard: (path?: string) => void;
   publish: (message: string) => Promise<void>;
   publishing: boolean;
@@ -47,10 +48,19 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [publishing, setPublishing] = useState(false);
   const [deploy, setDeploy] = useState<Deploy>(null);
   const [version, setVersion] = useState(0);
+  // Copia sincrónica de los pendientes: "Deshacer" necesita saber qué había justo antes de cada cambio
+  const pendingRef = useRef<Change[]>([]);
+  const writePending = useCallback((next: Change[]) => {
+    pendingRef.current = next;
+    savePending(next);
+    setPending(next);
+    setVersion((v) => v + 1);
+  }, []);
 
   // Restaurar sesión y cambios pendientes
   useEffect(() => {
-    setPending(loadPending());
+    pendingRef.current = loadPending();
+    setPending(pendingRef.current);
     if (devLocal) return;
     const token = readToken();
     if (token) {
@@ -94,23 +104,21 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setUser('modo local');
   }, []);
 
-  const stage = useCallback((changes: Change[]) => {
-    setPending((prev) => {
-      const next = [...prev.filter((p) => !changes.some((c) => c.path === p.path)), ...changes];
-      savePending(next);
-      return next;
-    });
-    setVersion((v) => v + 1);
-  }, []);
+  const stage = useCallback(
+    (changes: Change[]) => {
+      const paths = new Set(changes.map((c) => c.path));
+      const before = pendingRef.current.filter((p) => paths.has(p.path));
+      writePending([...pendingRef.current.filter((p) => !paths.has(p.path)), ...changes]);
+      // Deshacer: esos archivos vuelven al cambio pendiente que tenían (o a lo publicado si no había)
+      return () => writePending([...pendingRef.current.filter((p) => !paths.has(p.path)), ...before]);
+    },
+    [writePending],
+  );
 
-  const discard = useCallback((path?: string) => {
-    setPending((prev) => {
-      const next = path ? prev.filter((p) => p.path !== path) : [];
-      savePending(next);
-      return next;
-    });
-    setVersion((v) => v + 1);
-  }, []);
+  const discard = useCallback(
+    (path?: string) => writePending(path ? pendingRef.current.filter((p) => p.path !== path) : []),
+    [writePending],
+  );
 
   const refreshDeploy = useCallback(() => {
     if (store instanceof GitHubStore) store.lastDeploy().then(setDeploy);
@@ -122,15 +130,13 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       setPublishing(true);
       try {
         await store.commit(pending, message);
-        setPending([]);
-        savePending([]);
-        setVersion((v) => v + 1);
+        writePending([]);
         setTimeout(refreshDeploy, 4000);
       } finally {
         setPublishing(false);
       }
     },
-    [store, pending, refreshDeploy],
+    [store, pending, refreshDeploy, writePending],
   );
 
   // Seguir el deploy mientras esté en curso

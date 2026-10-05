@@ -7,6 +7,8 @@ import { useFile } from '../useEntries';
 import { clean } from '../fields/Fields';
 import { Sk } from './Skeleton';
 import Notice from './Notice';
+import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
 
 type Obj = Record<string, unknown>;
@@ -18,7 +20,8 @@ export default function InscripcionesCard() {
   const { data: loaded, error: loadError } = useFile(FILE);
   const { stage } = useAdmin();
   const [insc, setInsc] = useState<Insc | null>(null);
-  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const toast = useToast();
   const ids = { sw: useId(), ini: useId(), fin: useId() };
 
   // Solo la primera vez: una relectura no pisa un cambio sin guardar
@@ -28,23 +31,23 @@ export default function InscripcionesCard() {
 
   const set = (patch: Insc) => {
     setInsc((v) => ({ ...v, ...patch }));
-    setMsg(null);
+    setError(null);
   };
 
   const save = () => {
     if (!loaded || !insc) return;
     if (insc.inicio && insc.cierre && insc.cierre < insc.inicio) {
-      setMsg({ ok: false, text: 'La fecha de cierre tiene que ser posterior a la de apertura.' });
+      setError('La fecha de cierre tiene que ser posterior a la de apertura.');
       return;
     }
     const next = clean({ ...loaded, inscripciones: { ...insc, texto: insc.texto || 'Inscripciones abiertas' } }) as Obj;
     const res = sitioSchema.safeParse(next);
     if (!res.success) {
-      setMsg({ ok: false, text: 'No se pudo guardar: revisá "Datos del instituto".' });
+      setError('No se pudo guardar: revisá "Datos del instituto".');
       return;
     }
     stage([{ path: FILE, content: `${JSON.stringify(next, null, 2)}\n`, encoding: 'utf8', label: 'Inscripciones' }]);
-    setMsg({ ok: true, text: 'Guardado. Tocá "Publicar" arriba a la derecha para que se vea en el sitio.' });
+    toast.saved();
   };
 
   const estado = !insc
@@ -53,7 +56,7 @@ export default function InscripcionesCard() {
       ? 'Cerradas: el sitio no muestra el botón "Inscribite".'
       : insc.cierre
         ? `Abiertas${insc.inicio ? ` desde el ${formatDate(insc.inicio, { year: false })}` : ''} hasta el ${formatDate(insc.cierre, { year: false })}. Arriba del sitio se ve la cuenta regresiva.`
-        : 'Abiertas, sin fecha de cierre: no se muestra la franja de aviso. Las fechas son opcionales.';
+        : 'Abiertas, sin fecha de cierre.';
 
   return (
     <section className={[styles.panel, styles.inscCard, insc?.abiertas && styles.inscOn].filter(Boolean).join(' ')}>
@@ -96,13 +99,13 @@ export default function InscripcionesCard() {
             </label>
             <input id={ids.fin} type="date" className={styles.input} value={insc.cierre ?? ''} onChange={(e) => set({ cierre: e.target.value || undefined })} />
           </div>
-          <button type="button" className={styles.btnPrimary} onClick={save}>
-            <Save size={18} /> Guardar
-          </button>
+          <Button variant="primary" icon={Save} onClick={save}>
+            Guardar
+          </Button>
         </div>
       )}
-      <Notice show={!!msg} ok={msg?.ok}>
-        {msg?.text}
+      <Notice show={!!error} ok={false}>
+        {error}
       </Notice>
     </section>
   );

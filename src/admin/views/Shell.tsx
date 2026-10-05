@@ -1,14 +1,15 @@
-import { useState, type ReactNode } from 'react';
+import { useCallback, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
-import { BookOpen, CheckCircle2, CircleDashed, ExternalLink, GraduationCap, LayoutDashboard, LogOut, Newspaper, Settings2, UploadCloud, Users, XCircle } from 'lucide-react';
+import { CheckCircle2, CircleDashed, ExternalLink, LayoutDashboard, LogOut, UploadCloud, XCircle } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { useAdmin } from '../AdminContext';
-import { SINGLETONS } from '../config';
+import { COLLECTIONS, SINGLETONS } from '../config';
 import { PAGINAS, PAGINA_KEYS } from '../paginasConfig';
+import { Button } from '../ui/Button';
+import { ConfirmProvider } from '../ui/ConfirmDialog';
+import { ToastProvider } from '../ui/Toaster';
 import PendingDrawer from './PendingDrawer';
 import styles from '../Admin.module.scss';
-
-const ICONS: Record<string, typeof Newspaper> = { novedades: Newspaper, cursos: GraduationCap, disertantes: Users };
 
 function DeployPill() {
   const { deploy, mode } = useAdmin();
@@ -25,12 +26,15 @@ function DeployPill() {
 }
 
 export default function Shell({ children }: { children: ReactNode }) {
-  const { user, logout, pending } = useAdmin();
+  const { logout, pending } = useAdmin();
   const [drawer, setDrawer] = useState(false);
+  const openPending = useCallback(() => setDrawer(true), []);
   const { pathname } = useLocation();
   const link = ({ isActive }: { isActive: boolean }) => (isActive ? styles.navActive : undefined);
 
   return (
+    <ConfirmProvider>
+    <ToastProvider onOpenPending={openPending}>
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
         <Link to="/admin" className={styles.brand}>
@@ -45,33 +49,30 @@ export default function Shell({ children }: { children: ReactNode }) {
             <LayoutDashboard size={18} /> Inicio
           </NavLink>
           <p className={styles.navGroup}>Contenido</p>
-          {(['novedades', 'cursos', 'disertantes'] as const).map((k) => {
-            const Icon = ICONS[k];
-            return (
-              <NavLink key={k} to={`/admin/c/${k}`} className={link}>
-                <Icon size={18} /> {k === 'cursos' ? 'Especializaciones' : k[0].toUpperCase() + k.slice(1)}
-              </NavLink>
-            );
-          })}
+          {COLLECTIONS.filter((c) => !c.hidden).map(({ key, label, icon: Icon }) => (
+            <NavLink key={key} to={`/admin/c/${key}`} className={link}>
+              <Icon size={18} aria-hidden /> {label}
+            </NavLink>
+          ))}
           <p className={styles.navGroup}>Páginas</p>
           {PAGINAS.map(({ key, nav, icon: Icon, label }) => (
             <NavLink key={key} to={`/admin/s/${key}`} className={link} title={label}>
-              <Icon size={18} /> {nav}
+              <Icon size={18} aria-hidden /> {nav}
             </NavLink>
           ))}
           <p className={styles.navGroup}>Configuración</p>
-          {SINGLETONS.filter((s) => !PAGINA_KEYS.has(s.key)).map((s) => (
-            <NavLink key={s.key} to={`/admin/s/${s.key}`} className={link}>
-              {s.key === 'sitio' ? <Settings2 size={18} /> : <BookOpen size={18} />} {s.label}
+          {SINGLETONS.filter((s) => !PAGINA_KEYS.has(s.key)).map(({ key, label, icon: Icon }) => (
+            <NavLink key={key} to={`/admin/s/${key}`} className={link}>
+              <Icon size={18} aria-hidden /> {label}
             </NavLink>
           ))}
         </nav>
         <div className={styles.sideFoot}>
           <a href="/" target="_blank" rel="noreferrer">
-            <ExternalLink size={16} /> Ver el sitio
+            <ExternalLink size={18} aria-hidden /> Ver el sitio
           </a>
           <button type="button" onClick={logout}>
-            <LogOut size={16} /> Salir ({user})
+            <LogOut size={18} aria-hidden /> Salir
           </button>
         </div>
       </aside>
@@ -79,10 +80,9 @@ export default function Shell({ children }: { children: ReactNode }) {
       <div className={styles.main}>
         <header className={styles.topbar}>
           <DeployPill />
-          <button type="button" className={pending.length ? styles.btnPrimary : styles.btnSecondary} onClick={() => setDrawer(true)}>
-            <UploadCloud size={18} />
+          <Button variant={pending.length ? 'primary' : 'secondary'} icon={pending.length ? UploadCloud : CheckCircle2} onClick={openPending}>
             {pending.length ? `Publicar ${pending.length} cambio${pending.length > 1 ? 's' : ''}` : 'Sin cambios pendientes'}
-          </button>
+          </Button>
         </header>
         {/* Entrada suave de cada pantalla (la barra lateral y la superior no se mueven) */}
         <div key={pathname} className={`${styles.content} ${styles.viewIn}`}>
@@ -91,5 +91,7 @@ export default function Shell({ children }: { children: ReactNode }) {
       </div>
       <PendingDrawer open={drawer} onClose={() => setDrawer(false)} />
     </div>
+    </ToastProvider>
+    </ConfirmProvider>
   );
 }

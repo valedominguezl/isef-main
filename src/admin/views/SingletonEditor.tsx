@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { ExternalLink, Save } from 'lucide-react';
+import { ExternalLink, RotateCw, Save } from 'lucide-react';
 import { useAdmin } from '../AdminContext';
 import { getSingleton } from '../config';
 import { clean, type Errors } from '../fields/Fields';
@@ -9,6 +9,8 @@ import { FormBody, useRefs, validate } from './EntryEditor';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
 import type { Field } from '../config';
 import Notice from './Notice';
+import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
 
 const usesRefs = (fields: Field[]): boolean => fields.some((f) => f.type === 'reference' || ('fields' in f && usesRefs(f.fields)));
@@ -23,7 +25,7 @@ export default function SingletonEditor() {
   const refs = useRefs(cfg ? usesRefs(cfg.fields) : false);
   const [draft, setDraft] = useState<Obj | null>(null);
   const [errors, setErrors] = useState<Errors>({});
-  const [saved, setSaved] = useState<string | null>(null);
+  const toast = useToast();
 
   useEffect(() => {
     // null = el archivo todavía no existe: se empieza vacío en vez de quedar cargando
@@ -33,13 +35,12 @@ export default function SingletonEditor() {
   if (!cfg) return <p>Sección desconocida.</p>;
   if (!draft && loadError)
     return (
-      <p className={styles.errorBox} role="alert">
-        No se pudo leer el contenido ({loadError}). Revisá la conexión y{' '}
-        <button type="button" className={styles.btnGhost} onClick={() => window.location.reload()}>
-          volvé a intentar
-        </button>
-        .
-      </p>
+      <div className={styles.errorBox} role="alert">
+        <p>No se pudo leer el contenido ({loadError}). Revisá la conexión.</p>
+        <Button variant="ghost" icon={RotateCw} onClick={() => window.location.reload()}>
+          Volver a intentar
+        </Button>
+      </div>
     );
   if (!draft)
     return (
@@ -57,39 +58,40 @@ export default function SingletonEditor() {
     }
     setErrors({});
     stage([{ path: cfg.file, content: `${JSON.stringify(clean(draft), null, 2)}\n`, encoding: 'utf8', label: cfg.label }]);
-    setSaved('Guardado. Recordá tocar "Publicar" arriba a la derecha para que se vea en el sitio.');
+    toast.saved();
   };
 
   return (
     <>
       <div className={styles.pageHead}>
-        <div>
-          <h1>{cfg.label}</h1>
-          <p className={styles.help}>{cfg.description}</p>
+        <div className={styles.titleRow}>
+          <span className={styles.titleIcon} aria-hidden>
+            <cfg.icon size={22} />
+          </span>
+          <div>
+            <h1>{cfg.label}</h1>
+            <p className={styles.help}>{cfg.description}</p>
+          </div>
         </div>
         <div className={styles.headActions}>
           {cfg.sitePath && (
-            <a href={cfg.sitePath} target="_blank" rel="noreferrer" className={styles.btnGhost}>
-              <ExternalLink size={16} /> Ver en el sitio
-            </a>
+            <Button variant="ghost" icon={ExternalLink} href={cfg.sitePath}>
+              Ver en el sitio
+            </Button>
           )}
-          <button type="button" className={styles.btnPrimary} onClick={save}>
-            <Save size={18} /> Guardar
-          </button>
+          <Button variant="primary" icon={Save} onClick={save}>
+            Guardar
+          </Button>
         </div>
       </div>
-      <Notice show={!!saved}>{saved}</Notice>
       <Notice show={Object.keys(errors).length > 0} ok={false}>
-        Hay {Object.keys(errors).length} campo(s) para corregir: {Object.keys(errors).slice(0, 3).join(', ')}
+        Hay {Object.keys(errors).length} campo(s) para corregir.
       </Notice>
       <div className={styles.narrow}>
         <FormBody
           fields={cfg.fields}
           draft={draft}
-          setDraft={(d) => {
-            setDraft(d);
-            setSaved(null);
-          }}
+          setDraft={setDraft}
           errors={errors}
           entrySlug={cfg.key}
           refs={refs}

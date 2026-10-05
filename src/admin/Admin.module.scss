@@ -29,6 +29,10 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  svg {
+    flex: none;
+  }
 }
 
 .btnPrimary {
@@ -304,14 +308,58 @@
 .headActions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
+}
+
+/* Separa la acción destructiva del resto (Ver en el sitio / Guardar) */
+.actionDivider {
+  align-self: stretch;
+  width: 1px;
+  margin: var(--space-1) var(--space-2);
+  background: var(--color-border-strong);
+}
+
+/* Celular: Guardar arriba a lo ancho; Eliminar y Ver en el sitio debajo, en puntas opuestas */
+@include down($bp-sm) {
+  .headActions {
+    width: 100%;
+    justify-content: space-between;
+
+    > .btnPrimary {
+      order: -1;
+      flex-basis: 100%;
+    }
+  }
+
+  .actionDivider {
+    display: none;
+  }
+}
+
+/* Título de la página con el ícono de la sección */
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.titleIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: var(--violet-50);
+  color: var(--violet-600);
 }
 
 .back {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-5); /* aire entre "← Volver" y el título, igual en todos los editores */
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   @include underline-on-hover;
@@ -792,29 +840,6 @@ textarea.input {
   border-color: var(--danger-500);
 }
 
-.slugRow {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-md);
-  background: var(--ink-50);
-  overflow: hidden;
-
-  span {
-    padding: 0 var(--space-3);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--ink-500);
-    white-space: nowrap;
-  }
-
-  .input {
-    border: none;
-    border-radius: 0;
-    font-family: var(--font-mono);
-  }
-}
-
 .switchRow {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1100,6 +1125,15 @@ textarea.input {
       margin-left: auto;
     }
   }
+
+  /* Botones de formato: cuadrados, de solo ícono (con tooltip) */
+  .iconBtn {
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: var(--radius-sm);
+  }
 }
 
 .on {
@@ -1190,9 +1224,20 @@ textarea.input {
     align-items: center;
 
     h2 {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
       font-size: var(--text-h4);
       font-weight: var(--weight-semibold);
+
+      svg {
+        color: var(--violet-600);
+      }
     }
+  }
+
+  &:focus {
+    outline: none; /* recibe el foco al abrir solo para que Tab empiece adentro */
   }
 }
 
@@ -1288,10 +1333,6 @@ textarea.input {
     min-height: 48px;
     margin-top: var(--space-2);
   }
-}
-
-.slugField {
-  margin-bottom: var(--space-5);
 }
 
 /* ── Secciones del formulario ───────────────────────────── */
@@ -1619,4 +1660,13 @@ textarea.input {
   align-self: center;
   margin-right: var(--space-1);
   color: var(--violet-500);
+}
+
+/* Error de carga con botón para reintentar */
+div.errorBox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
 }

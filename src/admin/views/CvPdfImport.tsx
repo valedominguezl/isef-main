@@ -1,11 +1,15 @@
 import { useRef, useState } from 'react';
-import { FileUp, LoaderCircle, ShieldCheck } from 'lucide-react';
+import { FileUp, LoaderCircle, Replace, ShieldCheck } from 'lucide-react';
 import type { CvDraft } from '../cvImport';
+import { Button } from '../ui/Button';
+import { useConfirm } from '../ui/ConfirmDialog';
+import { useToast } from '../ui/Toaster';
 import Notice from './Notice';
 import styles from '../Admin.module.scss';
 
 interface Props {
-  onImport: (cv: CvDraft) => void;
+  /** Aplica el CV importado al borrador y devuelve cómo deshacerlo. */
+  onImport: (cv: CvDraft) => () => void;
   /** Ya hay antecedentes cargados (se pide confirmación antes de reemplazarlos). */
   hasItems: boolean;
 }
@@ -14,28 +18,39 @@ interface Props {
 export default function CvPdfImport({ onImport, hasItems }: Props) {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const confirm = useConfirm();
+  const toast = useToast();
+
+  const pick = async () => {
+    if (
+      hasItems &&
+      !(await confirm({ title: '¿Reemplazar el currículum?', body: 'Los antecedentes cargados se cambian por los del PDF.', confirmLabel: 'Reemplazar', icon: Replace }))
+    )
+      return;
+    input.current?.click();
+  };
 
   const onFile = async (file?: File) => {
     if (!file) return;
-    if (hasItems && !confirm('El currículum ya tiene antecedentes cargados. ¿Reemplazarlos por los del PDF?')) return;
     setBusy(true);
-    setMsg(null);
+    setError(null);
     try {
       const { importCvFromPdf } = await import('../cvImport');
       const { cv, descartadas } = await importCvFromPdf(file);
       const n = cv.secciones.reduce((a, s) => a + s.items.length, 0);
       if (!n) {
-        setMsg({ ok: false, text: 'No reconocimos las secciones de este PDF. Si es un escaneo (una imagen), no tiene texto para leer: cargalo a mano.' });
+        setError('No reconocimos las secciones de este PDF. Si es un escaneo (una imagen), no tiene texto para leer: cargalo a mano.');
         return;
       }
-      onImport(cv);
-      setMsg({
-        ok: true,
-        text: `Importamos ${n} antecedentes en ${cv.secciones.length} secciones${descartadas ? ` y descartamos ${descartadas} líneas con datos personales` : ''}. Revisalos abajo y tocá "Guardar".`,
+      const undo = onImport(cv);
+      toast.show({
+        text: `Importamos ${n} antecedentes${descartadas ? ` (y descartamos ${descartadas} líneas con datos personales)` : ''}. Revisalos y tocá Guardar.`,
+        icon: FileUp,
+        undo,
       });
     } catch {
-      setMsg({ ok: false, text: 'No se pudo leer el PDF. Probá con otro archivo.' });
+      setError('No se pudo leer el PDF. Probá con otro archivo.');
     } finally {
       setBusy(false);
       if (input.current) input.current.value = '';
@@ -47,19 +62,18 @@ export default function CvPdfImport({ onImport, hasItems }: Props) {
       <div>
         <strong>¿Tenés el CV en PDF?</strong>
         <p className={styles.help}>
-          Lo leemos y completamos las secciones solas. Después revisás y corregís lo que haga falta.{' '}
+          Completamos las secciones solas; después revisalas.{' '}
           <span className={styles.cvPrivacy}>
             <ShieldCheck size={14} aria-hidden /> DNI, teléfonos, mails y domicilio se descartan.
           </span>
         </p>
       </div>
-      <button type="button" className={styles.btnSecondary} onClick={() => input.current?.click()} disabled={busy}>
-        {busy ? <LoaderCircle size={18} className={styles.spin} /> : <FileUp size={18} />}
+      <Button variant="secondary" icon={busy ? LoaderCircle : FileUp} spin={busy} onClick={pick} disabled={busy}>
         {busy ? 'Leyendo el PDF…' : 'Importar desde PDF'}
-      </button>
-      <input ref={input} type="file" accept="application/pdf,.pdf" hidden onChange={(e) => onFile(e.target.files?.[0])} />
-      <Notice show={!!msg} ok={msg?.ok} className={styles.cvMsg}>
-        {msg?.text}
+      </Button>
+      <input ref={input} type="file" accept="application/pdf,.pdf" hidden tabIndex={-1} onChange={(e) => onFile(e.target.files?.[0])} />
+      <Notice show={!!error} ok={false} className={styles.cvMsg}>
+        {error}
       </Notice>
     </div>
   );

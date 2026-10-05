@@ -1,9 +1,12 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
-import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, Plus, Trash2, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, LoaderCircle, Pencil, Plus, RotateCcw, Trash2, X } from 'lucide-react';
 import { Markdown } from '@/lib/markdown';
 import { useAdmin } from '../AdminContext';
 import { processImage, blobToBase64, slugify } from '../image';
 import type { Field } from '../config';
+import { Button, IconButton } from '../ui/Button';
+import DeleteButton from '../ui/DeleteButton';
+import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
 
 export type Errors = Record<string, string>;
@@ -62,7 +65,7 @@ function Wrapper({ field, error, children, htmlFor, counter }: { field: Field; e
   );
 }
 
-function MarkdownEditor({ id, value, onChange, rows = 6 }: { id: string; value: string; onChange: (v: string) => void; rows?: number }) {
+function MarkdownEditor({ id, value, onChange, rows = 6, placeholder }: { id: string; value: string; onChange: (v: string) => void; rows?: number; placeholder?: string }) {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [preview, setPreview] = useState(false);
   const wrap = (before: string, after = before, placeholder = 'texto') => {
@@ -80,28 +83,19 @@ function MarkdownEditor({ id, value, onChange, rows = 6 }: { id: string; value: 
   return (
     <div className={styles.md}>
       <div className={styles.mdToolbar} role="toolbar" aria-label="Formato">
-        <button type="button" onClick={() => wrap('**')} title="Negrita">
-          <Bold size={16} />
-        </button>
-        <button type="button" onClick={() => wrap('_')} title="Cursiva">
-          <Italic size={16} />
-        </button>
-        <button type="button" onClick={() => wrap('[', '](https://)', 'texto del enlace')} title="Enlace">
-          <Link2 size={16} />
-        </button>
-        <button type="button" onClick={() => wrap('\n- ', '', 'elemento')} title="Lista">
-          <List size={16} />
-        </button>
-        <button type="button" className={preview ? styles.on : undefined} onClick={() => setPreview((p) => !p)} title="Vista previa" aria-pressed={preview}>
-          <Eye size={16} /> Vista previa
+        <IconButton icon={Bold} label="Negrita" onClick={() => wrap('**')} disabled={preview} />
+        <IconButton icon={Italic} label="Cursiva" onClick={() => wrap('_')} disabled={preview} />
+        <IconButton icon={Link2} label="Enlace" onClick={() => wrap('[', '](https://)', 'texto del enlace')} disabled={preview} />
+        <IconButton icon={List} label="Lista" onClick={() => wrap('\n- ', '', 'elemento')} disabled={preview} />
+        <button type="button" className={preview ? styles.on : undefined} onClick={() => setPreview((p) => !p)} aria-pressed={preview}>
+          {preview ? <Pencil size={16} aria-hidden /> : <Eye size={16} aria-hidden />} {preview ? 'Editar' : 'Ver cómo queda'}
         </button>
       </div>
       {preview ? (
-        <div className={styles.mdPreview}>{value ? <Markdown text={value} /> : <p className={styles.help}>(vacío)</p>}</div>
+        <div className={styles.mdPreview}>{value || placeholder ? <Markdown text={value || placeholder || ''} /> : <p className={styles.help}>(vacío)</p>}</div>
       ) : (
-        <textarea id={id} ref={ref} rows={rows} value={value} onChange={(e) => onChange(e.target.value)} className={styles.input} />
+        <textarea id={id} ref={ref} rows={rows} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} className={styles.input} />
       )}
-      <p className={styles.help}>**negrita**, _cursiva_, [texto](https://enlace). Dejá una línea en blanco para un párrafo nuevo.</p>
     </div>
   );
 }
@@ -110,7 +104,7 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
   const { stage, mediaUrl } = useAdmin();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-  const id = useId();
+  const input = useRef<HTMLInputElement>(null);
   const onFile = async (file?: File) => {
     if (!file) return;
     setBusy(true);
@@ -126,6 +120,7 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
       setErr((e as Error).message);
     } finally {
       setBusy(false);
+      if (input.current) input.current.value = '';
     }
   };
   // Sin foto propia: se muestra la que usa hoy el sitio (si el campo la conoce)
@@ -138,16 +133,15 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
       </div>
       <div className={styles.imageActions}>
         {esActual && <p className={styles.help}>Foto actual del sitio.</p>}
-        <label htmlFor={id} className={styles.btnSecondary}>
-          <FileUp size={16} /> {busy ? 'Procesando…' : value || esActual ? 'Cambiar foto' : 'Subir imagen'}
-        </label>
-        <input id={id} type="file" accept="image/*" hidden onChange={(e) => onFile(e.target.files?.[0])} />
+        <Button variant="secondary" icon={busy ? LoaderCircle : ImagePlus} spin={busy} disabled={busy} onClick={() => input.current?.click()}>
+          {busy ? 'Procesando…' : value || esActual ? 'Cambiar foto' : 'Subir foto'}
+        </Button>
+        <input ref={input} type="file" accept="image/*" hidden tabIndex={-1} onChange={(e) => onFile(e.target.files?.[0])} />
         {value && (
-          <button type="button" className={styles.btnGhost} onClick={() => onChange(undefined)}>
-            {field.actual ? 'Volver a la foto original' : 'Quitar'}
-          </button>
+          <Button variant="ghost" icon={field.actual ? RotateCcw : X} onClick={() => onChange(undefined)}>
+            {field.actual ? 'Volver a la foto original' : 'Quitar foto'}
+          </Button>
         )}
-        {value && <code className={styles.path}>{value}</code>}
         {err && <p className={styles.error}>{err}</p>}
       </div>
     </div>
@@ -156,9 +150,10 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
 
 function FileField({ field, value, onChange }: { field: Extract<Field, { type: 'file' }>; value: string | undefined; onChange: (v: unknown) => void }) {
   const { stage } = useAdmin();
-  const id = useId();
+  const input = useRef<HTMLInputElement>(null);
   const onFile = async (file?: File) => {
     if (!file) return;
+    if (input.current) input.current.value = '';
     const name = `${slugify(file.name.replace(/\.[^.]+$/, ''))}${file.name.match(/\.[^.]+$/)?.[0]?.toLowerCase() ?? ''}`;
     const path = `/${field.folder}/${name}`;
     stage([{ path: `public${path}`, content: await blobToBase64(file), encoding: 'base64', label: `Archivo ${name}` }]);
@@ -166,10 +161,10 @@ function FileField({ field, value, onChange }: { field: Extract<Field, { type: '
   };
   return (
     <div className={styles.fileRow}>
-      <label htmlFor={id} className={styles.btnSecondary}>
-        <FileUp size={16} /> {value ? 'Reemplazar archivo' : 'Subir archivo'}
-      </label>
-      <input id={id} type="file" accept={field.accept} hidden onChange={(e) => onFile(e.target.files?.[0])} />
+      <Button variant="secondary" icon={FileUp} onClick={() => input.current?.click()}>
+        {value ? 'Reemplazar archivo' : 'Subir archivo'}
+      </Button>
+      <input ref={input} type="file" accept={field.accept} hidden tabIndex={-1} onChange={(e) => onFile(e.target.files?.[0])} />
       {value && (
         <a href={value} target="_blank" rel="noreferrer" className={styles.path}>
           {value}
@@ -191,21 +186,15 @@ function ListField({ value, onChange, itemLabel = 'elemento', max }: { value: st
       {value.map((v, i) => (
         <div key={i} className={styles.listRow}>
           <input className={styles.input} value={v} onChange={(e) => set(i, e.target.value)} aria-label={`${itemLabel} ${i + 1}`} />
-          <button type="button" className={styles.iconBtn} disabled={i === 0} onClick={() => move(i, -1)} aria-label="Subir">
-            <ArrowUp size={16} />
-          </button>
-          <button type="button" className={styles.iconBtn} disabled={i === value.length - 1} onClick={() => move(i, 1)} aria-label="Bajar">
-            <ArrowDown size={16} />
-          </button>
-          <button type="button" className={styles.iconBtn} onClick={() => onChange(value.filter((_, j) => j !== i))} aria-label="Eliminar">
-            <X size={16} />
-          </button>
+          <IconButton icon={ArrowUp} label="Subir" disabled={i === 0} onClick={() => move(i, -1)} />
+          <IconButton icon={ArrowDown} label="Bajar" disabled={i === value.length - 1} onClick={() => move(i, 1)} />
+          <IconButton icon={X} label={`Quitar ${itemLabel}`} onClick={() => onChange(value.filter((_, j) => j !== i))} />
         </div>
       ))}
       {(!max || value.length < max) && (
-        <button type="button" className={styles.btnGhost} onClick={() => onChange([...value, ''])}>
-          <Plus size={16} /> Agregar {itemLabel}
-        </button>
+        <Button variant="ghost" icon={Plus} onClick={() => onChange([...value, ''])}>
+          Agregar {itemLabel}
+        </Button>
       )}
     </div>
   );
@@ -214,6 +203,10 @@ function ListField({ value, onChange, itemLabel = 'elemento', max }: { value: st
 function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater' }> }) {
   const { field, onChange, errors, path, entrySlug, refs } = props;
   const items = (Array.isArray(props.value) ? props.value : []) as Obj[];
+  const toast = useToast();
+  // "Deshacer" corre unos segundos después: usa la lista y el onChange del último render, no los de cuando se borró
+  const latest = useRef({ items, onChange });
+  latest.current = { items, onChange };
   const [open, setOpen] = useState<Set<number>>(() => new Set(field.collapsed ? [] : items.map((_, i) => i)));
   const toggle = (i: number) =>
     setOpen((s) => {
@@ -237,6 +230,20 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
     const arr = Object.values(it).find(Array.isArray) as unknown[] | undefined;
     return arr ? ` · ${arr.length}` : '';
   };
+  const remove = (i: number) => {
+    const removed = items[i];
+    const title = titleOf(removed, i);
+    onChange(items.filter((_, j) => j !== i));
+    setOpen((s) => new Set([...s].filter((j) => j !== i).map((j) => (j > i ? j - 1 : j))));
+    toast.show({
+      text: `Se quitó «${title}». Falta guardar.`,
+      icon: Trash2,
+      undo: () => {
+        const { items: cur, onChange: set } = latest.current;
+        set([...cur.slice(0, i), removed, ...cur.slice(i)]);
+      },
+    });
+  };
   const nested = depthOf(path) > 0;
   return (
     <div className={[styles.repeater, nested && styles.repNested].filter(Boolean).join(' ')}>
@@ -253,22 +260,15 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
                   <small>{count(it)}</small>
                 </span>
               </button>
-              <button type="button" className={styles.iconBtn} disabled={i === 0} onClick={() => move(i, -1)} aria-label="Subir">
-                <ArrowUp size={16} />
-              </button>
-              <button type="button" className={styles.iconBtn} disabled={i === items.length - 1} onClick={() => move(i, 1)} aria-label="Bajar">
-                <ArrowDown size={16} />
-              </button>
-              <button
-                type="button"
-                className={styles.iconBtn}
-                onClick={() => {
-                  if (confirm(`¿Eliminar "${titleOf(it, i)}"?`)) onChange(items.filter((_, j) => j !== i));
-                }}
-                aria-label="Eliminar"
-              >
-                <Trash2 size={16} />
-              </button>
+              <IconButton icon={ArrowUp} label="Subir" disabled={i === 0} onClick={() => move(i, -1)} />
+              <IconButton icon={ArrowDown} label="Bajar" disabled={i === items.length - 1} onClick={() => move(i, 1)} />
+              <DeleteButton
+                what={titleOf(it, i)}
+                consequence="Se quita de la lista. El cambio queda al tocar Guardar."
+                // Recién agregado y vacío: se quita sin preguntar
+                ask={Object.keys(clean(it) as Obj).length > 0}
+                onDelete={() => remove(i)}
+              />
             </div>
             <Collapse open={isOpen}>
               <div className={styles.repBody}>
@@ -289,16 +289,16 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
           </div>
         );
       })}
-      <button
-        type="button"
-        className={styles.btnGhost}
+      <Button
+        variant="ghost"
+        icon={Plus}
         onClick={() => {
           onChange([...items, {}]);
           setOpen((s) => new Set(s).add(items.length));
         }}
       >
-        <Plus size={16} /> Agregar {field.itemLabel.toLowerCase()}
-      </button>
+        Agregar {field.itemLabel.toLowerCase()}
+      </Button>
     </div>
   );
 }
@@ -321,13 +321,13 @@ export function FieldRenderer(props: FieldProps) {
     case 'textarea':
       return (
         <Wrapper field={field} error={error} htmlFor={id} counter={field.max ? <Counter n={str.length} max={field.max} /> : null}>
-          <textarea id={id} rows={field.rows ?? 4} className={styles.input} value={str} onChange={(e) => onChange(e.target.value)} />
+          <textarea id={id} rows={field.rows ?? 4} className={styles.input} value={str} placeholder={field.placeholder} onChange={(e) => onChange(e.target.value)} />
         </Wrapper>
       );
     case 'markdown':
       return (
         <Wrapper field={field} error={error} htmlFor={id}>
-          <MarkdownEditor id={id} value={str} onChange={onChange} rows={field.rows} />
+          <MarkdownEditor id={id} value={str} onChange={onChange} rows={field.rows} placeholder={field.placeholder} />
         </Wrapper>
       );
     case 'number':
