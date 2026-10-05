@@ -1,4 +1,4 @@
-import { CalendarCheck, Eye, EyeOff, GraduationCap, Star, type LucideIcon } from 'lucide-react';
+import { CalendarCheck, Eye, EyeOff, GraduationCap, Link2, Star, type LucideIcon } from 'lucide-react';
 import type { QuickToggle } from '../config';
 import styles from '../Admin.module.scss';
 
@@ -12,9 +12,24 @@ export const quickValue = (q: QuickToggle, data: Obj) => (typeof data[q.name] ==
  * Opciones básicas de una entrada (visible, destacado, este año…) como botones con ícono.
  * `compact`: solo íconos (filas de la lista); si no, ícono + texto (arriba del editor).
  */
-export default function QuickToggles({ toggles, data, onChange, compact }: { toggles: QuickToggle[]; data: Obj; onChange: (name: string, value: boolean) => void; compact?: boolean }) {
+export default function QuickToggles({
+  toggles,
+  data,
+  onChange,
+  compact,
+  sincronizado,
+}: {
+  toggles: QuickToggle[];
+  data: Obj;
+  onChange: (name: string, value: boolean) => void;
+  compact?: boolean;
+  /** Título del curso con el que se sincroniza (sus opciones son las del curso). */
+  sincronizado?: string;
+}) {
+  const nota = sincronizado ? `Sincronizado con el curso «${sincronizado}»: lo que cambies acá se cambia también en Especializaciones.` : undefined;
   return (
-    <div className={compact ? styles.quickCompact : styles.quickBar} role="group" aria-label="Opciones básicas">
+    <div className={compact ? styles.quickCompact : styles.quickBar} role="group" aria-label="Opciones básicas" title={compact ? nota : undefined}>
+      {compact && sincronizado && <Link2 size={14} className={styles.quickLink} aria-label={nota} />}
       {toggles.map((q) => {
         const on = quickValue(q, data);
         const Icon = q.icon === 'eye' && !on ? EyeOff : ICONS[q.icon];
@@ -39,6 +54,11 @@ export default function QuickToggles({ toggles, data, onChange, compact }: { tog
           </button>
         );
       })}
+      {!compact && nota && (
+        <p className={styles.quickNote}>
+          <Link2 size={14} aria-hidden /> {nota}
+        </p>
+      )}
     </div>
   );
 }

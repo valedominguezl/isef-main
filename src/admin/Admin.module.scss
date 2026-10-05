@@ -1604,3 +1604,19 @@ textarea.input {
   background: var(--violet-50);
   color: var(--violet-700);
 }
+
+/* Opciones sincronizadas con un curso (novedades de un curso) */
+.quickNote {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.quickLink {
+  align-self: center;
+  margin-right: var(--space-1);
+  color: var(--violet-500);
+}

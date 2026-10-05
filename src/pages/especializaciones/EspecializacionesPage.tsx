@@ -42,13 +42,13 @@ export function Component() {
     const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
     return searchable.filter((s) => (!dis || s.curso.disertantes.includes(dis)) && terms.every((t) => s.text.includes(t))).map((s) => s.curso);
   }, [query, dis]);
-  // Los que se cursan este año van primero y separados de las ediciones anteriores (si no hay ninguno, una sola lista)
+  // Los activos (se dictan este ciclo lectivo) van primero y separados de las ediciones anteriores (si no hay ninguno, una sola lista)
   const grupos = useMemo(() => {
-    const actuales = list.filter((c) => c.esteAnio === true);
+    const actuales = list.filter((c) => c.activo === true);
     if (!actuales.length) return [{ titulo: null, cursos: list }];
-    const anteriores = list.filter((c) => c.esteAnio !== true);
+    const anteriores = list.filter((c) => c.activo !== true);
     return [
-      { titulo: 'Se cursan este año', cursos: actuales },
+      { titulo: 'Este ciclo lectivo', cursos: actuales },
       ...(anteriores.length ? [{ titulo: 'Ediciones anteriores', cursos: anteriores }] : []),
     ];
   }, [list]);

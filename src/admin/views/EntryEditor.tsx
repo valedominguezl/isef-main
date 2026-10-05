@@ -13,6 +13,7 @@ import { slugify } from '../image';
 import { useEntries, useFile } from '../useEntries';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
 import QuickToggles from './QuickToggles';
+import { useLinkedQuick } from './useLinkedQuick';
 import CvPdfImport from './CvPdfImport';
 import Notice from './Notice';
 import styles from '../Admin.module.scss';
@@ -127,6 +128,7 @@ export default function EntryEditor() {
   );
   const [dirty, setDirty] = useState(false);
   useUnsavedWarning(dirty);
+  const linkedQuick = useLinkedQuick(col);
   // Si el archivo se relee mientras hay cambios sin guardar, no pisar lo que se está editando
   const dirtyRef = useRef(dirty);
   dirtyRef.current = dirty;
@@ -246,7 +248,16 @@ export default function EntryEditor() {
       </div>
 
       {/* Opciones básicas (visible, destacado, este año…): lo primero que se ve */}
-      {col.quick && tab === 'main' && <QuickToggles toggles={col.quick} data={draft} onChange={(name, v) => update({ ...draft, [name]: v })} />}
+      {col.quick &&
+        tab === 'main' &&
+        (() => {
+          const ln = linkedQuick(draft);
+          return ln ? (
+            <QuickToggles toggles={ln.toggles} data={ln.data} onChange={ln.onChange} sincronizado={ln.titulo} />
+          ) : (
+            <QuickToggles toggles={col.quick} data={draft} onChange={(name, v) => update({ ...draft, [name]: v })} />
+          );
+        })()}
 
       <Notice show={!!saved}>{saved}</Notice>
       <Notice show={Object.keys(errors).length > 0} ok={false}>

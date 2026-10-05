@@ -22,8 +22,8 @@ export const cursoSchema = z.object({
   destacado: z.boolean().default(false),
   publicado: z.boolean().default(true),
   mostrarEnCarrera: z.boolean().default(false),
-  /** Se cursa este año (los demás se listan como ediciones anteriores). */
-  esteAnio: z.boolean().default(false),
+  /** Activo: se dicta este ciclo lectivo. Los inactivos se listan al final (ediciones anteriores). */
+  activo: z.boolean().default(false),
   disertantes: z.array(slug).default([]),
   fechaInicio: isoDate.optional(),
   /** Cuándo se publicó el curso: muestra «¡Nuevo!» durante 6 meses desde esta fecha. */
@@ -89,6 +89,8 @@ export const novedadSchema = z.object({
   curso: slug.optional(),
   enlace: z.object({ texto: z.string(), url: z.string() }).optional(),
   destacado: z.boolean().default(false),
+  /** Vigente. Si la novedad es de un curso, manda el estado del curso. */
+  activo: z.boolean().default(true),
   publicado: z.boolean().default(true),
 });
 

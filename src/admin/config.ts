@@ -48,6 +48,7 @@ export interface QuickToggle {
   help: string;
 }
 
+const ACTIVO: QuickToggle = { name: 'activo', on: 'Activo', off: 'Inactivo', icon: 'calendar', fallback: false, help: 'Se dicta este ciclo lectivo. Los inactivos se muestran al final.' };
 const VISIBLE: QuickToggle = { name: 'publicado', on: 'Visible', off: 'Oculto', icon: 'eye', fallback: true, help: 'Si está oculto no aparece en el sitio (no se borra).' };
 
 export interface CollectionConfig {
@@ -69,6 +70,8 @@ export interface CollectionConfig {
   hidden?: boolean;
   /** Opciones básicas: arriba de todo del editor y en cada fila de la lista. */
   quick?: QuickToggle[];
+  /** Entradas vinculadas a otra colección (p. ej. novedad → curso): las opciones básicas son las de la vinculada. */
+  syncWith?: { field: string; collection: string };
 }
 
 export interface SingletonConfig {
@@ -98,7 +101,7 @@ export const COLLECTIONS: CollectionConfig[] = [
     sort: (a, b) => String(b.fecha).localeCompare(String(a.fecha)),
     sitePath: (s) => `/novedades/${s}`,
     preview: 'novedad',
-    defaults: () => ({ titulo: '', fecha: today(), categoria: 'novedad', resumen: '', publicado: true, destacado: false }),
+    defaults: () => ({ titulo: '', fecha: today(), categoria: 'novedad', resumen: '', publicado: true, activo: true, destacado: false }),
     fields: [
       { type: 'text', name: 'titulo', label: 'Título', required: true, max: 90 },
       { type: 'date', name: 'fecha', label: 'Fecha de publicación', required: true },
@@ -110,8 +113,11 @@ export const COLLECTIONS: CollectionConfig[] = [
     ],
     quick: [
       { ...VISIBLE, off: 'Oculta' },
+      { ...ACTIVO, on: 'Activa', off: 'Inactiva', fallback: true, help: 'Vigente. Las inactivas se muestran al final.' },
       { name: 'destacado', on: 'Destacada', off: 'No destacada', icon: 'star', fallback: false, help: 'Aparece primero en el inicio y en Novedades.' },
     ],
+    // Si la novedad es de un curso, sus opciones básicas son las del curso (se cambian ahí)
+    syncWith: { field: 'curso', collection: 'cursos' },
   },
   {
     key: 'cursos',
@@ -124,7 +130,7 @@ export const COLLECTIONS: CollectionConfig[] = [
     subtitle: (e) => [e.fechaInicio && `Inicio ${e.fechaInicio}`, e.publicado === false && 'Oculto'].filter(Boolean).join(' · '),
     sitePath: (s) => `/especializaciones/${s}`,
     preview: 'curso',
-    defaults: () => ({ titulo: '', subtitulo: '', creado: today(), destacado: false, esteAnio: true, publicado: true, mostrarEnCarrera: false, disertantes: [], temario: [] }),
+    defaults: () => ({ titulo: '', subtitulo: '', creado: today(), destacado: false, activo: true, publicado: true, mostrarEnCarrera: false, disertantes: [], temario: [] }),
     fields: [
       { type: 'text', name: 'titulo', label: 'Título', required: true, max: 70 },
       { type: 'text', name: 'subtitulo', label: 'Subtítulo', required: true, max: 100 },
@@ -167,8 +173,8 @@ export const COLLECTIONS: CollectionConfig[] = [
     ],
     quick: [
       VISIBLE,
+      ACTIVO,
       { name: 'destacado', on: 'Destacado', off: 'No destacado', icon: 'star', fallback: false, help: 'Lleva la etiqueta «Destacado» y aparece primero.' },
-      { name: 'esteAnio', on: 'Se cursa este año', off: 'Edición anterior', icon: 'calendar', fallback: false, help: 'Separa los cursos de este año de los que ya sucedieron.' },
       { name: 'mostrarEnCarrera', on: 'En «La carrera»', off: 'No en «La carrera»', icon: 'graduation', fallback: false, help: 'Se muestra también en la página La carrera.' },
     ],
   },

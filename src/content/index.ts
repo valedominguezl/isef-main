@@ -76,8 +76,10 @@ export const etiquetasCurso = (c: Pick<Curso, 'creado' | 'fechaInicio' | 'destac
     (x): x is { texto: string; tono: 'brand' | 'white' } => Boolean(x),
   );
 
+/** Activos primero (los inactivos, al final); entre ellos, los destacados primero. */
 const byFeatured = (a: WithSlug<Curso>, b: WithSlug<Curso>) =>
-  Number(b.esteAnio === true) - Number(a.esteAnio === true) ||
+  Number(b.activo === true) - Number(a.activo === true) ||
+  Number(b.destacado === true) - Number(a.destacado === true) ||
   Number(esProximo(b)) - Number(esProximo(a)) ||
   (esProximo(a) && esProximo(b) ? a.fechaInicio!.localeCompare(b.fechaInicio!) : 0) ||
   Number(esNuevo(b)) - Number(esNuevo(a)) ||
@@ -86,11 +88,10 @@ const byFeatured = (a: WithSlug<Curso>, b: WithSlug<Curso>) =>
   (b.fechaInicio ?? '').localeCompare(a.fechaInicio ?? '') ||
   a.titulo.localeCompare(b.titulo, 'es');
 
-export const cursos = collection<Curso>(
-  import.meta.glob('/content/cursos/*.json', { eager: true, import: 'default' }),
-)
-  .filter((c) => c.publicado !== false)
-  .sort(byFeatured);
+/** Todos los cursos, incluso los ocultos (para sincronizar las novedades vinculadas). */
+const todosLosCursos = collection<Curso>(import.meta.glob('/content/cursos/*.json', { eager: true, import: 'default' }));
+
+export const cursos = todosLosCursos.filter((c) => c.publicado !== false).sort(byFeatured);
 
 export const disertantes = collection<Disertante>(
   import.meta.glob('/content/disertantes/*.json', { eager: true, import: 'default' }),
@@ -98,11 +99,20 @@ export const disertantes = collection<Disertante>(
   .filter((d) => d.publicado !== false)
   .sort((a, b) => (a.orden ?? 99) - (b.orden ?? 99));
 
-export const novedades = collection<Novedad>(
-  import.meta.glob('/content/novedades/*.json', { eager: true, import: 'default' }),
-)
+/**
+ * Una novedad vinculada a un curso toma del curso su estado (visible, activo, destacado):
+ * se cambia en un solo lugar y no se desfasan.
+ */
+const conEstadoDelCurso = (n: WithSlug<Novedad>): WithSlug<Novedad> => {
+  const c = n.curso ? todosLosCursos.find((x) => x.slug === n.curso) : undefined;
+  return c ? { ...n, publicado: c.publicado !== false, activo: c.activo === true, destacado: c.destacado === true } : n;
+};
+
+export const novedades = collection<Novedad>(import.meta.glob('/content/novedades/*.json', { eager: true, import: 'default' }))
+  .map(conEstadoDelCurso)
   .filter((n) => n.publicado !== false)
-  .sort((a, b) => Number(b.destacado) - Number(a.destacado) || b.fecha.localeCompare(a.fecha));
+  // Activas primero (las inactivas, al final); entre ellas, destacadas primero; después, las más nuevas
+  .sort((a, b) => Number(b.activo !== false) - Number(a.activo !== false) || Number(b.destacado === true) - Number(a.destacado === true) || b.fecha.localeCompare(a.fecha));
 
 /** Los CV se cargan bajo demanda (cada uno en su propio chunk). */
 const cvLoaders = import.meta.glob<Cv>('/content/cv/*.json', { import: 'default' });

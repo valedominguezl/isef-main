@@ -7,6 +7,7 @@ import { getCollection } from '../config';
 import { useEntries } from '../useEntries';
 import { SkeletonRows } from './Skeleton';
 import QuickToggles from './QuickToggles';
+import { useLinkedQuick } from './useLinkedQuick';
 import styles from '../Admin.module.scss';
 
 export default function CollectionList() {
@@ -15,6 +16,7 @@ export default function CollectionList() {
   const { entries, error } = useEntries(col?.dir);
   const { pending, mediaUrl, stage } = useAdmin();
   const [q, setQ] = useState('');
+  const linkedQuick = useLinkedQuick(col);
 
   const list = useMemo(() => {
     if (!entries || !col) return [];
@@ -61,7 +63,15 @@ export default function CollectionList() {
                 </span>
                 {isPending && <span className={styles.tagWarn}>Sin publicar</span>}
               </Link>
-              {col.quick && <QuickToggles compact toggles={col.quick} data={e.data} onChange={(name, v) => toggle(e, name, v)} />}
+              {col.quick &&
+                (() => {
+                  const ln = linkedQuick(e.data);
+                  return ln ? (
+                    <QuickToggles compact toggles={ln.toggles} data={ln.data} onChange={ln.onChange} sincronizado={ln.titulo} />
+                  ) : (
+                    <QuickToggles compact toggles={col.quick} data={e.data} onChange={(name, v) => toggle(e, name, v)} />
+                  );
+                })()}
             </li>
           );
         })}
