@@ -19,7 +19,7 @@ Sitio del profesorado (isefsanluis.net). React 18 + TS + Vite 6, **prerenderizad
 - Antes de terminar: `npm run check` y `npm run build`.
 
 ## Comandos
-`npm run dev` · `npm run build` · `npm run preview` (imita Apache) · `npm run check` · `npm run health` (→ docs/MAPA.md)
+`npm run dev` · `npm run build` · `npm run preview` (imita Cloudflare Pages) · `npm run check` · `npm run health` (→ docs/MAPA.md)
 
 ## Mantenimiento
 Skill `/mantenimiento` (.claude/skills/mantenimiento). Sugerirla tras ~1M tokens de trabajo, antes de releases grandes o si `docs/MAPA.md` tiene más de 30 días.

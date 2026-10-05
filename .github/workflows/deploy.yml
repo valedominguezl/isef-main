@@ -1,5 +1,7 @@
 name: Deploy
 
+# El sitio lo publica Cloudflare Pages en cada push a main (historial y rollback en su panel).
+# Este workflow verifica cada push (el panel /admin muestra su estado) y dispara el rebuild semanal.
 on:
   push:
     branches: [main]
@@ -8,13 +10,13 @@ on:
   schedule:
     - cron: '0 9 * * 1'
 
-# Si el panel publica varios cambios seguidos, solo se despliega el último.
 concurrency:
   group: deploy-production
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  check:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -22,7 +24,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Instalar dependencias
@@ -34,29 +36,11 @@ jobs:
       - name: Build + prerender
         run: npm run build
 
-      - name: Subir al VPS
+  weekly-rebuild:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar build en Cloudflare Pages
         env:
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-        run: |
-          echo "$PRIVATE_KEY" > key.pem
-          chmod 600 key.pem
-          SSH="ssh -i key.pem -o StrictHostKeyChecking=accept-new"
-          BUILD_DIR=$(date +%Y%m%d%H%M%S)
-
-          $SSH $VPS_USER@$VPS_HOST "mkdir -p /var/www/builds/$BUILD_DIR"
-          rsync -az --delete -e "$SSH" ./dist/ $VPS_USER@$VPS_HOST:/var/www/builds/$BUILD_DIR/
-
-          # Activar la versión nueva (cambio atómico del symlink) y conservar las últimas 5
-          $SSH $VPS_USER@$VPS_HOST << EOF
-            set -e
-            ln -sfn /var/www/builds/$BUILD_DIR /var/www/html.tmp
-            [ -L /var/www/html ] || rm -rf /var/www/html
-            mv -T /var/www/html.tmp /var/www/html
-            sudo chown -R www-data:www-data /var/www/builds/$BUILD_DIR
-            sudo chmod -R 755 /var/www/builds/$BUILD_DIR
-            ls -1dt /var/www/builds/*/ | tail -n +6 | xargs -r rm -rf
-            echo "Despliegue completado: $BUILD_DIR"
-          EOF
-          rm -f key.pem
+          HOOK: ${{ secrets.CF_PAGES_DEPLOY_HOOK }}
+        run: curl -fsS -X POST "$HOOK"

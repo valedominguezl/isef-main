@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────────────────────
 # I.S.E.F. San Luis — Apache (sitio estático prerenderizado)
-# Producción usa nginx: deploy/nginx/isefsanluis.net.conf (mantener sincronizados)
+# SIN USO: producción es Cloudflare Pages (public/_redirects y _headers).
 # ─────────────────────────────────────────────────────────────
 Options -Indexes -MultiViews
 DirectorySlash Off

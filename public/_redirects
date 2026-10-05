@@ -1,0 +1,19 @@
+# I.S.E.F. San Luis — redirecciones de Cloudflare Pages (formato: origen destino código)
+# Pages ya sirve /ruta desde ruta.html y quita el .html; acá solo van las excepciones.
+# scripts/serve-dist.mjs (npm run preview) lee este mismo archivo.
+
+# URLs del sitio anterior (301 permanentes, conservan el posicionamiento)
+/Carrera                  /carrera                    301
+/Inscripciones            /inscripciones              301
+/Especializaciones        /especializaciones          301
+/Aranceles                /aranceles                  301
+/Noticias                 /novedades                  301
+/Cookies                  /privacidad                 301
+/Institucional/Contacto   /contacto                   301
+/Institucional/Historia   /carrera                    301
+/Institucional            /contacto                   301
+/TestHiit                 /test-hiit                  301
+/cvGatto.pdf              /disertantes/agustina-gatto 301
+
+# Panel de administración (solo cliente, con subrutas)
+/admin/*                  /admin                      200

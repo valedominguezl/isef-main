@@ -10,3 +10,5 @@ dist-ssr
 # Reportes locales de QA / mantenimiento
 .qa/
 .impeccable/
+# Emulador de Cloudflare (npx wrangler pages dev)
+.wrangler/
