@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { AlertTriangle, ArrowRight, GraduationCap, Newspaper, Plus, Users } from 'lucide-react';
 import { useEntries } from '../useEntries';
@@ -10,6 +11,8 @@ export default function Dashboard() {
   const { entries: cur } = useEntries('content/cursos');
   const { entries: dis } = useEntries('content/disertantes');
   const { entries: cvs } = useEntries('content/cv');
+  // Hora fija al montar: el render tiene que ser puro (react-hooks/purity)
+  const [now] = useState(() => Date.now());
 
   // Chequeos de salud del contenido
   const alerts: { text: string; to: string }[] = [];
@@ -22,7 +25,7 @@ export default function Dashboard() {
     if (cvs && n === 0) alerts.push({ text: `${d.data.nombre} no tiene el currículum cargado.`, to: `/admin/c/disertantes/${d.slug}?tab=cv` });
   });
   const lastNov = nov?.map((n) => String(n.data.fecha)).sort().pop();
-  if (lastNov && Date.now() - new Date(lastNov).getTime() > 60 * 864e5)
+  if (lastNov && now - new Date(lastNov).getTime() > 60 * 864e5)
     alerts.push({ text: `La última novedad es del ${lastNov}. ¡Publicá algo nuevo para mantener el sitio activo!`, to: '/admin/c/novedades/nueva' });
 
   const cards = [

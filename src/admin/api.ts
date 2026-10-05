@@ -35,7 +35,7 @@ export function createApi(getToken: () => string | null): AdminApi {
       });
     } catch (e) {
       if (isAbort(e)) throw e;
-      throw new Error('Sin conexión. Probá de nuevo.');
+      throw new Error('Sin conexión. Probá de nuevo.', { cause: e });
     }
     const tipo = r.headers.get('content-type') ?? '';
     if (r.ok && !tipo.includes('text/html')) return r;

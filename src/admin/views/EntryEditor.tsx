@@ -134,7 +134,9 @@ export default function EntryEditor() {
   const linkedQuick = useLinkedQuick(col);
   // Si el archivo se relee mientras hay cambios sin guardar, no pisar lo que se está editando
   const dirtyRef = useRef(dirty);
-  dirtyRef.current = dirty;
+  useEffect(() => {
+    dirtyRef.current = dirty;
+  });
   const shownSlug = useRef<string | null>(null);
 
   useEffect(() => {
