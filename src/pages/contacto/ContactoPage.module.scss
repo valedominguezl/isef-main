@@ -1,34 +1,50 @@
 @use '@/styles/mixins' as *;
 
-/* Directorio formal: filas alternadas en vez de tarjetas (ni líneas, ni sombras, ni hover) */
+/* Directorio formal: una fila por número, todas del mismo alto; la fila entera abre WhatsApp */
 .directory {
   display: flex;
   flex-direction: column;
-  max-width: 56rem;
+  padding: 0;
+  list-style: none;
 }
 
 .row {
   display: grid;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-5);
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'area go'
+    'num go';
+  align-items: center;
+  gap: var(--space-1) var(--space-4);
+  min-height: 4.5rem;
+  padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-md);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color var(--duration-slow) var(--ease-standard);
+  @include focus-ring;
 
-  &:nth-child(odd) {
+  li:nth-child(odd) > & {
     background: var(--color-bg-tint);
   }
 
   @include up($bp-md) {
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: var(--space-8);
+    grid-template-columns: minmax(16rem, 1.1fr) 2fr auto auto;
+    grid-template-areas: 'area desc num go';
+    gap: var(--space-6);
+  }
+
+  &:hover {
+    color: var(--color-text);
+    background: var(--violet-100);
   }
 }
 
 .area {
-  h3 {
-    font-size: var(--text-base);
-    font-weight: var(--weight-semibold);
-  }
+  grid-area: area;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
 }
 
 .sede {
@@ -36,56 +52,57 @@
   color: var(--color-text-muted);
 }
 
+/* Una sola línea para que todas las filas midan lo mismo (el texto completo queda en el title) */
 .desc {
-  margin-top: var(--space-1);
+  grid-area: desc;
+  display: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: var(--text-sm);
-}
-
-.nums {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  color: var(--color-text-muted);
 
   @include up($bp-md) {
-    align-items: flex-end;
-  }
-
-  a {
-    font-family: var(--font-sans);
-    font-weight: var(--weight-medium);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+    display: block;
   }
 }
 
-.map,
-.mapPlaceholder {
+.num {
+  grid-area: num;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--color-link);
+}
+
+.go {
+  grid-area: go;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--violet-200);
+  color: var(--violet-600);
+  transition:
+    transform var(--duration-slow) var(--ease-emphasized),
+    background-color var(--duration-slow) var(--ease-standard),
+    color var(--duration-slow) var(--ease-standard),
+    border-color var(--duration-slow) var(--ease-standard);
+
+  .row:hover & {
+    transform: translate(2px, -2px);
+    background: var(--violet-500);
+    border-color: var(--violet-500);
+    color: white;
+  }
+}
+
+.map {
+  display: block;
   width: 100%;
   aspect-ratio: 16 / 10;
   border: 0;
+  background: var(--color-bg-subtle);
 }
-
-.mapPlaceholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  background:
-    radial-gradient(circle at 30% 30%, var(--violet-100), transparent 60%),
-    repeating-linear-gradient(45deg, var(--ink-50) 0 12px, var(--ink-25) 12px 24px);
-  color: var(--violet-700);
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  @include focus-ring(-4px);
-
-  small {
-    font-weight: var(--weight-regular);
-    color: var(--color-text-muted);
-  }
-
-  &:hover {
-    color: var(--violet-800);
-  }
-}
-

@@ -6,6 +6,7 @@ import { useAdmin } from '../AdminContext';
 import { useFile } from '../useEntries';
 import { clean } from '../fields/Fields';
 import { Sk } from './Skeleton';
+import Notice from './Notice';
 import styles from '../Admin.module.scss';
 
 type Obj = Record<string, unknown>;
@@ -99,7 +100,9 @@ export default function InscripcionesCard() {
           </button>
         </div>
       )}
-      {msg && <p className={msg.ok ? styles.notice : styles.errorBox}>{msg.text}</p>}
+      <Notice show={!!msg} ok={msg?.ok}>
+        {msg?.text}
+      </Notice>
     </section>
   );
 }

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { FileUp, LoaderCircle, ShieldCheck } from 'lucide-react';
 import type { CvDraft } from '../cvImport';
+import Notice from './Notice';
 import styles from '../Admin.module.scss';
 
 interface Props {
@@ -57,7 +58,9 @@ export default function CvPdfImport({ onImport, hasItems }: Props) {
         {busy ? 'Leyendo el PDF…' : 'Importar desde PDF'}
       </button>
       <input ref={input} type="file" accept="application/pdf,.pdf" hidden onChange={(e) => onFile(e.target.files?.[0])} />
-      {msg && <p className={[msg.ok ? styles.notice : styles.errorBox, styles.cvMsg].join(' ')}>{msg.text}</p>}
+      <Notice show={!!msg} ok={msg?.ok} className={styles.cvMsg}>
+        {msg?.text}
+      </Notice>
     </div>
   );
 }

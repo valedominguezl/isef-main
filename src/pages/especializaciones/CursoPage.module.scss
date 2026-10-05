@@ -174,9 +174,11 @@
     border-radius: var(--radius-md);
     color: inherit;
     text-decoration: none;
+    transition: background-color var(--duration-base) var(--ease-standard);
 
     &:hover {
-      background: var(--ink-25);
+      color: inherit;
+      background: var(--color-bg-tint);
 
       em {
         text-decoration: underline;

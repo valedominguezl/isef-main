@@ -77,6 +77,10 @@
     transition: clip-path 300ms var(--ease-emphasized), background-color var(--duration-base);
   }
 
+  &:hover:not(.dotActive)::before {
+    background: var(--violet-400);
+  }
+
   // Área táctil mínima sin agrandar el punto
 
   &::after {
@@ -105,6 +109,10 @@
 .dark {
   .dot::before {
     background: rgb(255 255 255 / 0.3);
+  }
+
+  .dot:hover:not(.dotActive)::before {
+    background: rgb(255 255 255 / 0.6);
   }
 
   .dotActive::before {

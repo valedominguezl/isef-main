@@ -115,7 +115,7 @@ export function Component() {
       />
 
       {/* Datos */}
-      <Section tone="brand" spacing="sm" width="wide" labelledBy="datos-title">
+      <Section tone="brand" spacing="sm" labelledBy="datos-title">
         <h2 id="datos-title" className="sr-only">
           El I.S.E.F. en números
         </h2>
@@ -124,8 +124,8 @@ export function Component() {
             const Icon = STAT_ICONS[i % STAT_ICONS.length];
             return (
             <RevealItem key={s.etiqueta} className={styles.stat}>
-              <Icon className={styles.statIcon} aria-hidden />
-              <strong>
+              <strong className={styles.statValue}>
+                <Icon className={styles.statIcon} aria-hidden />
                 <CountUp to={s.valor} prefix={s.prefijo} />
               </strong>
               <span className={styles.statLabel}>{s.etiqueta}</span>
@@ -188,7 +188,7 @@ export function Component() {
 
       {/* Novedades: solo si hay algo de los últimos 90 días */}
       {recientes.length > 0 && (
-        <Section width="wide" labelledBy="novedades-title">
+        <Section labelledBy="novedades-title">
           <div className={styles.headRow}>
             <SectionHeader id="novedades-title" title="Las *últimas noticias*" lead="Cursos nuevos, eventos y novedades del profesorado." />
             <Button to="/novedades" variant="outline" className={styles.headAction}>
@@ -205,8 +205,8 @@ export function Component() {
         </Section>
       )}
 
-      {/* Especializaciones */}
-      <Section width="wide">
+      {/* Especializaciones: la foto recortada apoya sobre el borde de la banda siguiente (como el sitio original) */}
+      <Section className={styles.especIntro}>
         <Feature
           reverse
           title="Las *especializaciones*"
@@ -221,7 +221,9 @@ export function Component() {
             psicólogos y kinesiólogos.
           </p>
         </Feature>
-        <CardGrid reveal className={styles.courses}>
+      </Section>
+      <Section tone="tint">
+        <CardGrid reveal>
           {destacados.map((c) => (
             <RevealItem key={c.slug}>
               <CourseCard curso={c} />

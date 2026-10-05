@@ -14,12 +14,12 @@
   color: white;
   text-decoration: none;
   box-shadow: 0 10px 24px -6px rgb(37 211 102 / 0.6);
-  transition: transform var(--duration-base) var(--ease-emphasized);
+  transition: $press-transition;
   @include focus-ring;
+  @include press-bounce;
 
   &:hover {
     color: white;
-    transform: translateY(-2px);
   }
 
   &:hover .label,

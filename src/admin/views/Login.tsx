@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { KeyRound, Laptop } from 'lucide-react';
+import { useId, useState } from 'react';
+import { AnimatePresence, m } from 'motion/react';
+import { ChevronDown, KeyRound, Laptop } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { REPO, useAdmin } from '../AdminContext';
 import styles from '../Admin.module.scss';
@@ -10,6 +11,8 @@ export default function Login() {
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [howto, setHowto] = useState(false);
+  const howtoId = useId();
 
   return (
     <div className={styles.login}>
@@ -66,21 +69,39 @@ export default function Login() {
             <Laptop size={16} /> Usar modo local (escribe en tu disco)
           </button>
         )}
-        <details className={styles.howto}>
-          <summary>¿Cómo creo el token?</summary>
-          <ol>
-            <li>
-              Entrá a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noreferrer">GitHub → Fine-grained tokens</a>.
-            </li>
-            <li>
-              En <em>Repository access</em> elegí <strong>Only select repositories</strong> → <code>{REPO.repo}</code>.
-            </li>
-            <li>
-              En <em>Permissions</em>: <strong>Contents: Read and write</strong> y <strong>Actions: Read-only</strong>.
-            </li>
-            <li>Generalo, copialo y pegalo acá. Guardalo en un lugar seguro: GitHub no lo vuelve a mostrar.</li>
-          </ol>
-        </details>
+        {/* Instructivo plegable: abre y cierra con altura + fundido */}
+        <div className={styles.howto}>
+          <button type="button" aria-expanded={howto} aria-controls={howtoId} onClick={() => setHowto((v) => !v)}>
+            ¿Cómo creo el token? <ChevronDown size={16} aria-hidden />
+          </button>
+          <AnimatePresence initial={false}>
+            {howto && (
+              <m.div
+                id={howtoId}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
+                exit={{ height: 0, opacity: 0, transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] } }}
+              >
+                <ol>
+                  <li>
+                    Entrá a{' '}
+                    <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noreferrer">
+                      GitHub → Fine-grained tokens
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    En <em>Repository access</em> elegí <strong>Only select repositories</strong> → <code>{REPO.repo}</code>.
+                  </li>
+                  <li>
+                    En <em>Permissions</em>: <strong>Contents: Read and write</strong> y <strong>Actions: Read-only</strong>.
+                  </li>
+                  <li>Generalo, copialo y pegalo acá. Guardalo en un lugar seguro: GitHub no lo vuelve a mostrar.</li>
+                </ol>
+              </m.div>
+            )}
+          </AnimatePresence>
+        </div>
       </form>
     </div>
   );

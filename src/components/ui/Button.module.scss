@@ -24,17 +24,19 @@
   cursor: pointer;
   box-shadow: 0 10px 15px rgb(0 0 0 / 0.1); /* sombra del sitio original */
   transition:
-    transform var(--duration-base) var(--ease-standard),
+    $press-transition,
     background-color var(--duration-slow) var(--ease-standard),
     border-color var(--duration-slow) var(--ease-standard),
     color var(--duration-slow) var(--ease-standard),
     opacity var(--duration-slow) var(--ease-standard);
   @include focus-ring;
+  /* Hover/presión estándar del sitio: crece apenas con rebote y se hunde al presionar */
+  @include press-bounce;
 
-  /* Hover sereno como el original: el botón se aclara apenas y la flecha avanza */
+  /* El color se aclara apenas (como el original) y la flecha avanza */
   &:hover {
     color: var(--btn-fg);
-    opacity: 0.9;
+    opacity: 0.92;
   }
 
   /* Solo la flecha avanza ("ir a"); descargar y enlace externo no se mueven */
@@ -42,12 +44,6 @@
     &:hover .arrow {
       transform: translateX(4px);
     }
-  }
-
-  // Presión: rápida y sutil (la respuesta del sistema no se demora)
-  &:active {
-    transform: scale(0.97);
-    transition: transform 160ms var(--ease-out);
   }
 
   &[disabled],

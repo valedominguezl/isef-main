@@ -16,16 +16,14 @@
   cursor: pointer;
   white-space: nowrap;
   transition:
+    $press-transition,
     background-color var(--duration-slow) var(--ease-standard),
     border-color var(--duration-slow) var(--ease-standard),
     color var(--duration-slow) var(--ease-standard),
-    opacity var(--duration-slow) var(--ease-standard),
-    transform var(--duration-base) var(--ease-standard);
+    opacity var(--duration-slow) var(--ease-standard);
   @include focus-ring;
-
-  &:active:not(:disabled) {
-    transform: scale(0.97);
-  }
+  /* Mismo hover/presión que los botones del sitio: crece con rebote y se hunde al presionar */
+  @include press-bounce;
 
   &:disabled {
     opacity: 0.5;
@@ -40,7 +38,7 @@
   box-shadow: 0 10px 15px rgb(0 0 0 / 0.1);
 
   &:hover:not(:disabled) {
-    opacity: 0.9;
+    opacity: 0.92;
   }
 }
 
@@ -83,9 +81,11 @@
   border-radius: var(--radius-pill);
   color: var(--ink-600);
   transition:
+    $press-transition,
     background-color var(--duration-slow) var(--ease-standard),
     color var(--duration-slow) var(--ease-standard);
   @include focus-ring;
+  @include press-bounce;
 
   &:hover:not(:disabled) {
     background: var(--violet-50);
@@ -314,7 +314,7 @@
   margin-bottom: var(--space-2);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
-  text-decoration: none;
+  @include underline-on-hover;
 }
 
 /* ── Estado / pills ─────────────────────────────────────── */
@@ -331,6 +331,15 @@
   font-weight: var(--weight-medium);
   text-decoration: none;
   margin-right: auto;
+}
+
+a.pill {
+  transition: filter var(--duration-base) var(--ease-standard);
+
+  &:hover {
+    filter: brightness(0.96);
+    text-decoration: underline;
+  }
 }
 
 .pillRun {
@@ -378,6 +387,10 @@
   border-radius: var(--radius-md);
   font-family: var(--font-sans) !important;
   font-size: var(--text-sm) !important;
+}
+
+.noticeWrap {
+  overflow: hidden; /* el aviso entra y sale con altura animada (views/Notice.tsx) */
 }
 
 .notice {
@@ -447,7 +460,7 @@
       gap: var(--space-1);
       font-family: var(--font-sans);
       font-size: var(--text-sm);
-      text-decoration: none;
+      @include underline-on-hover;
     }
   }
 }
@@ -477,6 +490,7 @@
     font-size: var(--text-sm);
     color: var(--ink-800);
     text-decoration: none;
+    transition: color var(--duration-base) var(--ease-standard);
 
     &:hover {
       color: var(--violet-700);
@@ -634,6 +648,11 @@
       border-color var(--duration-slow) var(--ease-standard),
       color var(--duration-slow) var(--ease-standard);
     @include focus-ring(-2px);
+
+    &:hover:not([aria-selected='true']) {
+      border-color: var(--violet-200);
+      color: var(--violet-700);
+    }
 
     &[aria-selected='true'] {
       border-color: var(--violet-500);
@@ -851,13 +870,16 @@ textarea.input {
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     transition:
+      $press-transition,
       background-color var(--duration-slow) var(--ease-standard),
       border-color var(--duration-slow) var(--ease-standard),
       color var(--duration-slow) var(--ease-standard);
     @include focus-ring;
+    @include press-bounce;
 
     &:hover:not([aria-pressed='true']) {
       border-color: var(--violet-400);
+      background: var(--violet-50);
       color: var(--violet-700);
     }
 
@@ -970,7 +992,15 @@ textarea.input {
   font-size: var(--text-base);
   font-weight: var(--weight-medium);
   border-radius: var(--radius-md);
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
   @include focus-ring(-2px);
+
+  &:hover {
+    background: color-mix(in srgb, var(--violet-500) 8%, transparent);
+    color: var(--violet-800);
+  }
 
   span {
     overflow: hidden;
@@ -1037,10 +1067,16 @@ textarea.input {
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     color: var(--ink-700);
+    transition:
+      $press-transition,
+      background-color var(--duration-base) var(--ease-standard),
+      color var(--duration-base) var(--ease-standard);
     @include focus-ring;
+    @include press-bounce;
 
     &:hover {
-      background: var(--ink-100);
+      background: var(--violet-50);
+      color: var(--violet-700);
     }
 
     &:last-child {
@@ -1116,13 +1152,7 @@ textarea.input {
   z-index: var(--z-overlay);
   background: rgb(13 12 18 / 0.45);
   backdrop-filter: blur(3px);
-  animation: fadeIn var(--duration-slow) var(--ease-standard);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
+  /* Entrada y salida: Motion (views/PendingDrawer.tsx) */
 }
 
 .drawer {
@@ -1136,7 +1166,6 @@ textarea.input {
   background: white;
   box-shadow: var(--shadow-lg);
   overflow-y: auto;
-  animation: slideIn var(--duration-slow) var(--ease-emphasized);
 
   header {
     display: flex;
@@ -1147,13 +1176,6 @@ textarea.input {
       font-size: var(--text-h4);
       font-weight: var(--weight-semibold);
     }
-  }
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(40px);
-    opacity: 0;
   }
 }
 
@@ -1256,17 +1278,33 @@ textarea.input {
   font-family: var(--font-sans);
   font-size: var(--text-sm);
 
-  summary {
-    cursor: pointer;
+  > button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
     color: var(--violet-700);
     font-weight: var(--weight-medium);
+    @include underline-on-hover(var(--violet-800));
+    @include focus-ring;
+
+    svg {
+      transition: rotate var(--duration-slow) var(--ease-emphasized);
+    }
+
+    &[aria-expanded='true'] svg {
+      rotate: 180deg;
+    }
+  }
+
+  > div {
+    overflow: hidden;
   }
 
   ol {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    margin-top: var(--space-3);
+    padding-top: var(--space-3);
     padding-left: 1.25em;
   }
 
@@ -1295,6 +1333,13 @@ textarea.input {
 .collapseInner {
   min-height: 0;
   overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-standard);
+
+  [data-open] > & {
+    opacity: 1;
+    transition-duration: var(--duration-slow);
+  }
 }
 
 /* Cada bloque del formulario es una tarjeta con título (grupos, listas y campos sueltos) */
@@ -1515,4 +1560,90 @@ textarea.input {
 .cvMsg {
   flex-basis: 100%;
   margin-bottom: 0;
+
+  > p {
+    margin-bottom: 0;
+  }
+}
+
+/* ── Destacado: interruptor con estrella, primero en el formulario ── */
+.featured {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: white;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+
+  strong {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+  }
+
+  small {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  &:hover {
+    border-color: var(--violet-300);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+}
+
+.featuredStar {
+  color: var(--violet-300);
+  transition:
+    color var(--duration-base) var(--ease-standard),
+    transform var(--duration-slow) var(--ease-bounce, var(--ease-emphasized));
+}
+
+.featured:hover .featuredStar {
+  transform: rotate(-12deg) scale(1.1);
+}
+
+.featuredState {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-subtle);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-muted);
+}
+
+.featuredOn {
+  border-color: var(--violet-500);
+  background: var(--violet-50);
+
+  .featuredStar {
+    color: var(--violet-500);
+  }
+
+  .featuredState {
+    background: var(--violet-500);
+    color: white;
+  }
+}
+
+.rowStar {
+  flex: none;
+  color: var(--violet-500);
 }

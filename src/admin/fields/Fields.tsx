@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
-import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, Plus, Trash2, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, Plus, Star, Trash2, X } from 'lucide-react';
 import { Markdown } from '@/lib/markdown';
 import { useAdmin } from '../AdminContext';
 import { processImage, blobToBase64, slugify } from '../image';
@@ -347,6 +347,24 @@ export function FieldRenderer(props: FieldProps) {
         </Wrapper>
       );
     case 'boolean':
+      if (field.featured) {
+        const on = Boolean(value);
+        return (
+          <button
+            type="button"
+            className={[styles.featured, on && styles.featuredOn].filter(Boolean).join(' ')}
+            aria-pressed={on}
+            onClick={() => onChange(!on)}
+          >
+            <Star size={22} className={styles.featuredStar} fill={on ? 'currentColor' : 'none'} aria-hidden />
+            <span>
+              <strong>{field.label}</strong>
+              {field.help && <small>{field.help}</small>}
+            </span>
+            <span className={styles.featuredState}>{on ? 'Sí' : 'No'}</span>
+          </button>
+        );
+      }
       return (
         <div className={styles.switchRow}>
           <input id={id} type="checkbox" role="switch" className={styles.switch} checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)} />

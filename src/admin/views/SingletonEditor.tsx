@@ -8,6 +8,7 @@ import { useFile } from '../useEntries';
 import { FormBody, useRefs, validate } from './EntryEditor';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
 import type { Field } from '../config';
+import Notice from './Notice';
 import styles from '../Admin.module.scss';
 
 const usesRefs = (fields: Field[]): boolean => fields.some((f) => f.type === 'reference' || ('fields' in f && usesRefs(f.fields)));
@@ -67,12 +68,10 @@ export default function SingletonEditor() {
           </button>
         </div>
       </div>
-      {saved && <p className={styles.notice}>{saved}</p>}
-      {Object.keys(errors).length > 0 && (
-        <p className={styles.errorBox} role="alert">
-          Hay {Object.keys(errors).length} campo(s) para corregir: {Object.keys(errors).slice(0, 3).join(', ')}
-        </p>
-      )}
+      <Notice show={!!saved}>{saved}</Notice>
+      <Notice show={Object.keys(errors).length > 0} ok={false}>
+        Hay {Object.keys(errors).length} campo(s) para corregir: {Object.keys(errors).slice(0, 3).join(', ')}
+      </Notice>
       <div className={styles.narrow}>
         <FormBody
           fields={cfg.fields}

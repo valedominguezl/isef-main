@@ -34,8 +34,11 @@ const DATOS = [
 
 function Galeria() {
   const [index, setIndex] = useState<number | null>(null);
+  // Última foto abierta: el visor la sigue mostrando mientras se cierra con su animación de salida
+  const [last, setLast] = useState(0);
+  if (index != null && index !== last) setLast(index);
   const imgs = galeria.imagenes;
-  const current = index != null ? imgs[index] : null;
+  const current = imgs[index ?? last];
   const step = (d: number) => setIndex((i) => (i == null ? i : (i + d + imgs.length) % imgs.length));
 
   return (
@@ -75,7 +78,7 @@ function Galeria() {
                 <strong>{current.lugar}</strong>
                 {current.credito && <small> · {current.credito}</small>}
                 <span>
-                  {index! + 1} / {imgs.length}
+                  {(index ?? last) + 1} / {imgs.length}
                 </span>
               </p>
               <IconButton label="Foto siguiente" tone="light" onClick={() => step(1)}>

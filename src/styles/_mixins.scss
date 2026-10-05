@@ -60,3 +60,42 @@ $bp-xl: 1280px;
     }
   }
 }
+
+/*
+ * Lenguaje común de todo lo que es botón (Button, IconButton, chips, botones del navbar, WhatsApp, admin):
+ * al pasar el mouse crece apenas con un rebote leve; al presionar se hunde rápido y vuelve rebotando.
+ * Usa la propiedad `scale` (no `transform`), así convive con giros/desplazamientos propios del componente.
+ * El componente suma `$press-transition` a su `transition`. Con reducir movimiento los tokens valen 1.
+ */
+$press-transition: scale var(--duration-base) var(--ease-bounce);
+
+@mixin press-bounce($hover: var(--scale-hover), $press: var(--scale-press)) {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled, [aria-disabled='true']) {
+      scale: $hover;
+    }
+  }
+
+  &:active:not(:disabled, [aria-disabled='true']) {
+    scale: $press;
+    transition: scale var(--duration-fast) var(--ease-out); /* la presión responde al instante */
+  }
+}
+
+/* Enlaces de texto sin subrayado en reposo: el subrayado aparece con un fundido al pasar el mouse */
+@mixin underline-on-hover($hover-color: null) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition:
+    color var(--duration-base) var(--ease-standard),
+    text-decoration-color var(--duration-base) var(--ease-standard);
+
+  &:hover {
+    text-decoration-color: currentColor;
+    @if $hover-color {
+      color: $hover-color;
+    }
+  }
+}

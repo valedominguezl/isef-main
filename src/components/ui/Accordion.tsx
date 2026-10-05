@@ -60,10 +60,10 @@ export default function Accordion({ items, variant = 'card', multiple = true, de
                   role="region"
                   aria-labelledby={btnId}
                   className={styles.panel}
+                  // Abre suave (altura + fundido); cierra un poco más rápido
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: [0.2, 0.7, 0.2, 1] }}
+                  animate={{ height: 'auto', opacity: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
+                  exit={{ height: 0, opacity: 0, transition: { duration: 0.28, ease: [0.4, 0, 0.2, 1] } }}
                 >
                   <div className={styles.body}>{item.content}</div>
                 </m.div>

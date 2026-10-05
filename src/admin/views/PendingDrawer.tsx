@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AnimatePresence, m } from 'motion/react';
 import { FileJson, ImageIcon, Trash2, UploadCloud, X } from 'lucide-react';
 import { useAdmin } from '../AdminContext';
 import styles from '../Admin.module.scss';
@@ -8,7 +9,6 @@ export default function PendingDrawer({ open, onClose }: { open: boolean; onClos
   const [msg, setMsg] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
-  if (!open) return null;
 
   const onPublish = async () => {
     setError(null);
@@ -21,9 +21,26 @@ export default function PendingDrawer({ open, onClose }: { open: boolean; onClos
     }
   };
 
+  // Fondo con fundido y panel que entra desde la derecha; al cerrar, sale más rápido
   return (
-    <div className={styles.drawerBackdrop} onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <aside className={styles.drawer} role="dialog" aria-modal="true" aria-label="Cambios pendientes">
+    <AnimatePresence>
+    {open && (
+    <m.div
+      className={styles.drawerBackdrop}
+      onMouseDown={(e) => e.target === e.currentTarget && onClose()}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
+      exit={{ opacity: 0, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } }}
+    >
+      <m.aside
+        className={styles.drawer}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Cambios pendientes"
+        initial={{ x: 48, opacity: 0 }}
+        animate={{ x: 0, opacity: 1, transition: { duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] } }}
+        exit={{ x: 32, opacity: 0, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } }}
+      >
         <header>
           <h2>Cambios pendientes</h2>
           <button type="button" className={styles.iconBtn} onClick={onClose} aria-label="Cerrar">
@@ -71,7 +88,9 @@ export default function PendingDrawer({ open, onClose }: { open: boolean; onClos
         ) : (
           <p className={styles.help}>No hay cambios sin publicar.</p>
         )}
-      </aside>
-    </div>
+      </m.aside>
+    </m.div>
+    )}
+    </AnimatePresence>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { AnimatePresence, m } from 'motion/react';
 import { Cookie } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Dialog from '@/components/ui/Dialog';
@@ -33,8 +34,17 @@ export default function CookieBanner() {
 
   return (
     <>
+      {/* Sube con un fundido al aparecer y baja (más rápido) al decidir o abrir la configuración */}
+      <AnimatePresence>
       {!decided && !settingsOpen && (
-        <div className={styles.banner} role="region" aria-label="Aviso de cookies">
+        <m.div
+          className={styles.banner}
+          role="region"
+          aria-label="Aviso de cookies"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } }}
+          exit={{ opacity: 0, y: 16, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } }}
+        >
           <Cookie className={styles.icon} size={28} aria-hidden />
           <p className={styles.text}>
             Usamos cookies propias y de terceros para analizar el uso del sitio y mejorar tu experiencia. Podés aceptarlas,
@@ -51,8 +61,9 @@ export default function CookieBanner() {
               Aceptar
             </Button>
           </div>
-        </div>
+        </m.div>
       )}
+      </AnimatePresence>
 
       <Dialog
         open={settingsOpen}

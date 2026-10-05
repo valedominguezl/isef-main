@@ -173,6 +173,19 @@ div.gallery {
   border-radius: var(--radius-pill);
   background: rgb(13 12 18 / 0.5);
   color: white;
+  transition:
+    $press-transition,
+    background-color var(--duration-base) var(--ease-standard);
+
+  .photo:hover & {
+    background: var(--violet-600);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .photo:hover & {
+      scale: var(--scale-hover);
+    }
+  }
 }
 
 .lightbox {

@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { MapPin } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { sitio } from '@/content';
 import { formatPhone, whatsappUrl } from '@/lib/format';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
@@ -11,19 +10,13 @@ import CardGrid from '@/components/ui/CardGrid';
 import SedeCard from '@/components/cards/SedeCard';
 import styles from './ContactoPage.module.scss';
 
-/** El iframe de Google Maps se carga recién al hacer clic (privacidad + rendimiento). */
+/** Mapa de Google Maps embebido (diferido: se carga al acercarse a la vista). */
 function Mapa({ src, title }: { src: string; title: string }) {
-  const [on, setOn] = useState(false);
-  return on ? (
-    <iframe src={src} title={title} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen className={styles.map} />
-  ) : (
-    <button type="button" className={styles.mapPlaceholder} onClick={() => setOn(true)}>
-      <MapPin size={28} aria-hidden />
-      <span>Mostrar mapa interactivo</span>
-      <small>Se cargará Google Maps</small>
-    </button>
-  );
+  return <iframe src={src} title={title} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen className={styles.map} />;
 }
+
+/** Una fila por número: el directorio se lee como tabla y cada fila lleva a ese WhatsApp. */
+const filas = sitio.telefonos.flatMap((t) => t.numeros.map((n) => ({ ...t, numero: n })));
 
 export function Component() {
   return (
@@ -40,26 +33,28 @@ export function Component() {
 
       <Section labelledBy="tel-title">
         <SectionHeader id="tel-title" title="Teléfonos *de contacto*" lead="Todos los números funcionan por WhatsApp." />
-        {/* Directorio: una fila por área, los números a la derecha */}
         <RevealGroup as="ul" className={styles.directory}>
-          {sitio.telefonos.map((t) => (
-            <RevealItem key={t.area + (t.sede ?? '')} as="li" className={styles.row}>
-              <div className={styles.area}>
-                <h3>
+          {filas.map((t) => (
+            <RevealItem key={t.numero} as="li">
+              <a
+                className={styles.row}
+                href={whatsappUrl(t.numero)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${t.area}${t.sede ? ` (${t.sede})` : ''}: escribir por WhatsApp al ${formatPhone(t.numero)}`}
+              >
+                <span className={styles.area}>
                   {t.area}
                   {t.sede && <span className={styles.sede}> · {t.sede}</span>}
-                </h3>
-                <p className={styles.desc}>{t.descripcion}</p>
-              </div>
-              <ul role="list" className={styles.nums}>
-                {t.numeros.map((n) => (
-                  <li key={n}>
-                    <a href={whatsappUrl(n)} target="_blank" rel="noopener noreferrer">
-                      {formatPhone(n)}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                </span>
+                <span className={styles.desc} title={t.descripcion}>
+                  {t.descripcion}
+                </span>
+                <span className={styles.num}>{formatPhone(t.numero)}</span>
+                <span className={styles.go} aria-hidden>
+                  <ArrowUpRight size={18} />
+                </span>
+              </a>
             </RevealItem>
           ))}
         </RevealGroup>

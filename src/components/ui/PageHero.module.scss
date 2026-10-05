@@ -19,8 +19,13 @@
   }
 }
 
+/* Sin foto: la textura violeta del sitio original, a la vista (sin el velo oscuro de las fotos) */
 .noImage {
-  background: var(--ink-950) url('@/assets/media/fx/fondo.webp') center / cover;
+  background: var(--surface-fx);
+
+  &::after {
+    display: none;
+  }
 }
 
 .lg {

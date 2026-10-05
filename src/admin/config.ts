@@ -23,7 +23,7 @@ export type Field =
   | { type: 'textarea'; name: string; label: string; help?: string; max?: number; rows?: number; required?: boolean }
   | { type: 'markdown'; name: string; label: string; help?: string; rows?: number }
   | { type: 'number'; name: string; label: string; help?: string; step?: number }
-  | { type: 'boolean'; name: string; label: string; help?: string }
+  | { type: 'boolean'; name: string; label: string; help?: string; /** Interruptor con estrella, arriba de todo del formulario. */ featured?: boolean }
   | { type: 'date'; name: string; label: string; help?: string; required?: boolean }
   | { type: 'select'; name: string; label: string; help?: string; options: { value: string; label: string }[]; required?: boolean }
   | { type: 'image'; name: string; label: string; help?: string; folder: string; maxWidth: number; aspect?: number }
@@ -83,6 +83,7 @@ export const COLLECTIONS: CollectionConfig[] = [
     preview: 'novedad',
     defaults: () => ({ titulo: '', fecha: today(), categoria: 'novedad', resumen: '', publicado: true, destacado: false }),
     fields: [
+      { type: 'boolean', name: 'destacado', label: 'Novedad destacada', help: 'Aparece primero en el inicio y en Novedades.', featured: true },
       { type: 'text', name: 'titulo', label: 'Título', required: true, max: 90 },
       { type: 'date', name: 'fecha', label: 'Fecha de publicación', required: true },
       { type: 'select', name: 'categoria', label: 'Categoría', options: opt(NOVEDAD_CATEGORIAS), required: true },
@@ -100,7 +101,6 @@ export const COLLECTIONS: CollectionConfig[] = [
           { type: 'url', name: 'url', label: 'URL' },
         ],
       },
-      { type: 'boolean', name: 'destacado', label: 'Destacada (aparece primero)' },
       { type: 'boolean', name: 'publicado', label: 'Publicada' },
     ],
   },
@@ -112,11 +112,12 @@ export const COLLECTIONS: CollectionConfig[] = [
     dir: 'content/cursos',
     schema: cursoSchema,
     titleField: 'titulo',
-    subtitle: (e) => [e.destacado && 'Destacado', e.fechaInicio && `Inicio ${e.fechaInicio}`, e.publicado === false && 'Oculto'].filter(Boolean).join(' · '),
+    subtitle: (e) => [e.fechaInicio && `Inicio ${e.fechaInicio}`, e.publicado === false && 'Oculto'].filter(Boolean).join(' · '),
     sitePath: (s) => `/especializaciones/${s}`,
     preview: 'curso',
     defaults: () => ({ titulo: '', subtitulo: '', destacado: false, publicado: true, mostrarEnCarrera: false, disertantes: [], temario: [] }),
     fields: [
+      { type: 'boolean', name: 'destacado', label: 'Especialización destacada', help: 'Lleva la etiqueta «Destacado» y aparece primero.', featured: true },
       { type: 'text', name: 'titulo', label: 'Título', required: true, max: 70 },
       { type: 'text', name: 'subtitulo', label: 'Subtítulo', required: true, max: 100 },
       { type: 'image', name: 'imagen', label: 'Imagen de portada', folder: 'cursos', maxWidth: 1600 },
@@ -140,7 +141,6 @@ export const COLLECTIONS: CollectionConfig[] = [
       },
       { type: 'markdown', name: 'condiciones', label: 'Condiciones de aprobación', rows: 4 },
       { type: 'markdown', name: 'importante', label: 'Aviso importante', rows: 3 },
-      { type: 'boolean', name: 'destacado', label: 'Destacado (muestra la etiqueta "Destacado" y aparece primero)' },
       { type: 'boolean', name: 'mostrarEnCarrera', label: 'Mostrar en la página "La carrera"' },
       { type: 'boolean', name: 'publicado', label: 'Publicado' },
     ],

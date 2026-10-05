@@ -211,7 +211,16 @@
   color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition:
+    color var(--duration-base) var(--ease-standard),
+    text-decoration-color var(--duration-base) var(--ease-standard);
   @include focus-ring;
+
+  &:hover {
+    color: var(--violet-800);
+    text-decoration-color: currentColor;
+  }
 }
 
 /* ── Impresión / PDF: formato estándar A4 ── */

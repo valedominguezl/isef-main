@@ -110,18 +110,18 @@
   transform-origin: 50% -36px;
   animation: swing 1.4s ease-in-out infinite alternate;
 
-  /* Hilos */
+  /* Hilos: suben desde las esquinas del cartel hasta el clavo (forma de /\) */
   &::before {
     content: '';
     position: absolute;
     left: 50%;
     bottom: 100%;
-    width: 64px;
+    width: 112px;
     height: 34px;
     translate: -50% 0;
     background:
-      linear-gradient(to top right, transparent calc(50% - 1px), var(--ink-800) calc(50% - 1px), var(--ink-800) calc(50% + 0.5px), transparent calc(50% + 0.5px)) left / 50% 100% no-repeat,
-      linear-gradient(to top left, transparent calc(50% - 1px), var(--ink-800) calc(50% - 1px), var(--ink-800) calc(50% + 0.5px), transparent calc(50% + 0.5px)) right / 50% 100% no-repeat;
+      linear-gradient(to bottom right, transparent calc(50% - 1px), var(--ink-800) calc(50% - 1px), var(--ink-800) calc(50% + 0.5px), transparent calc(50% + 0.5px)) left / 50% 100% no-repeat,
+      linear-gradient(to bottom left, transparent calc(50% - 1px), var(--ink-800) calc(50% - 1px), var(--ink-800) calc(50% + 0.5px), transparent calc(50% + 0.5px)) right / 50% 100% no-repeat;
   }
 
   /* Clavo */

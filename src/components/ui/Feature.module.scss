@@ -65,6 +65,22 @@
 }
 
 .cutout {
+  /* La foto recortada se apoya en el borde inferior de la sección (sin aire debajo) */
+  .media {
+    align-self: end;
+
+    img {
+      display: block;
+      object-position: bottom;
+    }
+  }
+
+  @include up($bp-lg) {
+    .text {
+      padding-block: var(--section-y);
+    }
+  }
+
   /* En móvil la ilustración no suma: el texto ocupa todo */
   @include down($bp-lg) {
     grid-template-columns: 1fr;

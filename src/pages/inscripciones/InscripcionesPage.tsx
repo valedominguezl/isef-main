@@ -1,7 +1,7 @@
 import { FilePen, Receipt, Stethoscope } from 'lucide-react';
 import heroImg from '@/assets/media/inscripciones/main.webp';
 import heroSm from '@/assets/media/inscripciones/main-800.webp';
-import { aranceles, faq, inscripciones, sitio, inscripcionesVigentes } from '@/content';
+import { faq, inscripciones, sitio, inscripcionesVigentes } from '@/content';
 import { whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import { track } from '@/lib/analytics';
@@ -70,9 +70,16 @@ export function Component() {
                   {p.archivoTexto ?? 'Descargar'}
                 </Button>
               )}
-              {!p.archivo && aranceles.visible && (
-                <Button to="/aranceles" variant="dark">
-                  Ver aranceles
+              {/* Sin archivo para descargar (p. ej. reservar el banco): se consulta por WhatsApp */}
+              {!p.archivo && (
+                <Button
+                  href={whatsappUrl(sitio.whatsapp, `Hola! Quiero consultar por: ${p.titulo.toLowerCase()}.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  icon="external"
+                  onClick={() => track('whatsapp_click', { origen: 'inscripciones_paso' })}
+                >
+                  Consultar por WhatsApp
                 </Button>
               )}
             </RevealItem>

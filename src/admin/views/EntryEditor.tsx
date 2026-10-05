@@ -13,6 +13,7 @@ import { slugify } from '../image';
 import { useEntries, useFile } from '../useEntries';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
 import CvPdfImport from './CvPdfImport';
+import Notice from './Notice';
 import styles from '../Admin.module.scss';
 
 type Obj = Record<string, unknown>;
@@ -214,12 +215,10 @@ export default function EntryEditor() {
         </div>
       </div>
 
-      {saved && <p className={styles.notice}>{saved}</p>}
-      {Object.keys(errors).length > 0 && (
-        <p className={styles.errorBox} role="alert">
-          Hay {Object.keys(errors).length} campo(s) para corregir. {errors._slug ?? ''}
-        </p>
-      )}
+      <Notice show={!!saved}>{saved}</Notice>
+      <Notice show={Object.keys(errors).length > 0} ok={false}>
+        Hay {Object.keys(errors).length} campo(s) para corregir. {errors._slug ?? ''}
+      </Notice>
 
       {isDis && (
         <div className={styles.tabs} role="tablist">

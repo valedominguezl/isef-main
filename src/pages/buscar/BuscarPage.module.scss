@@ -27,6 +27,14 @@
   box-shadow: var(--shadow-sm);
   color: var(--violet-500);
 
+  transition:
+    border-color var(--duration-slow) var(--ease-standard),
+    box-shadow var(--duration-slow) var(--ease-standard);
+
+  &:hover {
+    border-color: var(--violet-300);
+  }
+
   &:focus-within {
     border-color: var(--violet-400);
     box-shadow: 0 0 0 4px var(--violet-100);
@@ -54,7 +62,15 @@
     color: white;
     font-family: var(--font-sans);
     font-weight: var(--weight-medium);
+    transition:
+      $press-transition,
+      opacity var(--duration-slow) var(--ease-standard);
     @include focus-ring;
+    @include press-bounce;
+
+    &:hover {
+      opacity: 0.92;
+    }
   }
 }
 
@@ -100,11 +116,7 @@
   font-weight: var(--weight-medium);
 
   a {
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
+    @include underline-on-hover;
   }
 }
 

@@ -24,6 +24,16 @@
   &[open]::backdrop {
     animation: fadeIn var(--duration-slow) var(--ease-standard);
   }
+
+  /* Salida: más corta que la entrada (el <dialog> sigue abierto hasta que termina) */
+  &.closing {
+    animation: dialogOut var(--duration-base) var(--ease-exit) forwards;
+    pointer-events: none;
+  }
+
+  &.closing::backdrop {
+    animation: fadeOut var(--duration-base) var(--ease-exit) forwards;
+  }
 }
 
 @keyframes dialogIn {
@@ -33,9 +43,33 @@
   }
 }
 
+@keyframes dialogOut {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Reducir movimiento: solo fundidos */
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open] {
+    animation-name: fadeIn;
+  }
+
+  .dialog.closing {
+    animation-name: fadeOut;
   }
 }
 

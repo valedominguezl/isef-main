@@ -60,8 +60,8 @@ export function Component() {
             </li>
           </ul>
           <p>
-            Los mapas de Google de la página de contacto se cargan <strong>solo si hacés clic</strong> en ellos; a partir de ese momento rige la
-            política de privacidad de Google.
+            La página de contacto muestra mapas de Google embebidos; al verlos rige la{' '}
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política de privacidad de Google</a>.
           </p>
 
           <h2>5. Transferencia internacional</h2>

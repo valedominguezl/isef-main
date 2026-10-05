@@ -117,7 +117,7 @@
 
   --gutter: clamp(1rem, 4vw, 3rem);
   --section-y: clamp(3.5rem, 7vw, 6.5rem);
-  --container: 1200px;
+  --container: 1400px; /* un solo ancho para todo el contenido: el mismo borde que el navbar y el footer */
   --container-wide: 1400px;
   --container-prose: 72ch;
   --nav-height: 72px;
@@ -142,6 +142,9 @@
   --ease-emphasized: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* suave, sin arranque brusco: entradas y desplazamientos */
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* ease-out fuerte para UI (presión, navbar) */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* rebote leve: hover y presión de botones */
+  --scale-hover: 1.04; /* todo lo que es botón crece apenas al pasar el mouse */
+  --scale-press: 0.97; /* …y se hunde al presionar */
   --duration-fast: 150ms;
   --duration-base: 300ms;
   --duration-slow: 500ms;
@@ -160,5 +163,7 @@
   :root {
     --duration-slow: var(--duration-base);
     --duration-reveal: 0ms;
+    --scale-hover: 1; /* sin escala: queda solo el cambio de color */
+    --scale-press: 1;
   }
 }

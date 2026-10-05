@@ -67,10 +67,16 @@
   padding: var(--space-2);
   border-radius: var(--radius-md);
   color: var(--ink-600);
+  transition:
+    $press-transition,
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
   @include focus-ring;
+  @include press-bounce;
 
   &:hover {
-    background: var(--ink-50);
+    background: var(--violet-50);
+    color: var(--violet-700);
   }
 
   kbd {
@@ -131,8 +137,12 @@
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
-  transition: background-color var(--duration-base), color var(--duration-base);
+  transition:
+    $press-transition,
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
   @include focus-ring;
+  @include press-bounce;
 
   &:hover {
     background: var(--violet-600);
@@ -157,7 +167,12 @@
     font-size: var(--text-base);
     text-align: left;
     color: var(--color-text);
+    transition: color var(--duration-base) var(--ease-standard);
     @include focus-ring;
+
+    &:hover {
+      color: var(--violet-700);
+    }
 
     svg {
       color: var(--color-primary);
@@ -252,6 +267,7 @@
   font-family: var(--font-sans);
   font-weight: var(--weight-medium);
   color: var(--color-link);
+  transition: background-color var(--duration-base) var(--ease-standard);
   @include focus-ring(-3px);
 
   &:hover,
@@ -260,25 +276,10 @@
   }
 }
 
-/* ── Transiciones del buscador ── */
-.overlay {
-  animation: searchFade 220ms var(--ease-out);
-}
-
-.panel {
-  animation: searchIn 260ms var(--ease-out);
-}
-
+/* ── Transiciones del buscador: la apertura y el cierre los anima Motion (AnimatePresence) ── */
 @keyframes searchFade {
   from {
     opacity: 0;
-  }
-}
-
-@keyframes searchIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.99);
   }
 }
 
@@ -318,10 +319,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panel {
-    animation-name: searchFade;
-  }
-
   .skeleton span {
     animation: none;
   }

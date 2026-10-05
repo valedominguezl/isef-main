@@ -30,13 +30,16 @@
   color: var(--color-text-body);
   background: var(--color-surface);
   transition:
+    $press-transition,
     background-color var(--duration-base) var(--ease-standard),
     border-color var(--duration-base) var(--ease-standard),
     color var(--duration-base) var(--ease-standard);
   @include focus-ring;
+  @include press-bounce;
 
-  &:hover {
+  &:hover:not([aria-pressed='true']) {
     border-color: var(--violet-400);
+    background: var(--violet-50);
     color: var(--violet-700);
   }
 

@@ -1,12 +1,14 @@
 @use '@/styles/mixins' as *;
 
+/* Primer y último dato tocan los bordes del contenido (mismo borde que el resto de las secciones) */
 .stats {
   display: grid;
   gap: var(--space-8);
   text-align: center;
 
   @include up($bp-md) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
   }
 }
 
@@ -27,6 +29,13 @@
     font-variant-numeric: tabular-nums;
   }
 
+}
+
+/* El ícono se centra en el número, no en todo el bloque */
+.statValue {
+  position: relative;
+  isolation: isolate;
+  align-self: center;
 }
 
 /* Ícono grande y tenue detrás del número (como el sitio original) */
@@ -64,8 +73,11 @@
   margin-bottom: var(--space-10);
 }
 
-.courses {
-  margin-top: var(--space-16);
+/* Sin aire abajo: la foto recortada toca la banda de las tarjetas */
+.especIntro {
+  @include up($bp-lg) {
+    padding-bottom: 0;
+  }
 }
 
 .center {
@@ -92,8 +104,9 @@
   display: grid;
   gap: var(--space-8);
 
+  /* Mismas columnas que Feature: los datos arrancan donde arranca la foto de la sección siguiente */
   @include up($bp-lg) {
-    grid-template-columns: 1fr 1.1fr;
+    grid-template-columns: 1.15fr 1fr;
     gap: var(--space-16);
     align-items: center;
 

@@ -85,7 +85,11 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
           <ul className={styles.links} role="list">
             {MAIN_NAV.map((item) => (
               <li key={item.to}>
-                <NavLink to={item.to} className={({ isActive }) => [styles.link, isActive && styles.active].filter(Boolean).join(' ')}>
+                <NavLink
+                  to={item.to}
+                  data-label={item.label}
+                  className={({ isActive }) => [styles.link, isActive && styles.active].filter(Boolean).join(' ')}
+                >
                   {item.label}
                 </NavLink>
               </li>

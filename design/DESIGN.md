@@ -76,7 +76,7 @@ Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20�
 
 ## 4. Espaciado, grilla y forma
 - Base 4 px: `space-1…24` (4 → 96 px). Secciones: padding vertical 56→104 px fluido.
-- Contenedor 1200 px (texto 72ch, ancho 1400 px). Gutter 16→48 px.
+- Un solo ancho de contenido: **1400 px**, el mismo borde que el navbar y el footer (texto largo 72ch). Gutter 16→48 px. Los bloques internos llenan el contenedor (nada de anchos máximos sueltos) y las grillas de dos columnas usan las proporciones de `Feature` (1.15fr / 1fr) para que las columnas coincidan entre secciones.
 - Radios: 6 · 10 (botones, inputs) · 16 · **24 (tarjetas)** · pill.
 - Sombras suaves; botones con la sombra del original (`0 10px 15px rgb(0 0 0/.1)`).
 - **Hover solo en lo clickeable.** Tarjetas informativas sin sombra ni elevación al pasar el mouse.
@@ -89,13 +89,23 @@ Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20�
 |---|---|---|
 | `ease-emphasized` | `cubic-bezier(.25,.46,.45,.94)` | Entradas y desplazamientos: arranque suave, sin tirón |
 | `ease-standard` | `cubic-bezier(.25,.1,.25,1)` (ease) | Hover, transiciones de color |
+| `ease-bounce` | `cubic-bezier(.34,1.56,.64,1)` | Crecimiento de botones al pasar el mouse (rebote leve) |
+| `scale-hover` / `scale-press` | 1.04 / 0.97 | Hover y presión de todo lo que es botón (valen 1 con reducir movimiento) |
 | `duration-base` / `slow` | 300 / 500 ms | Hover y cambios de estado (sin saltos) |
 | `duration-reveal` | 1100 ms | Aparición al hacer scroll (sube 24 px + fade) |
 | stagger | 120 ms | Grillas de tarjetas, cabeceras |
 
-Es una web institucional: las **entradas son lentas y elegantes** (como el sitio original), las respuestas a una acción son cortas. Patrones: cabecera de cada página con entrada escalonada (en la home el título entra desde la izquierda), reveal al entrar en pantalla (`<Reveal>`), **sin fundido entre páginas** (la página anterior queda hasta que la nueva está lista: nunca un pantallazo blanco), fotos de bandas fijas al desplazarse (parallax, solo escritorio), menú móvil que se abre como un círculo que crece desde fuera de la pantalla con fondo de vidrio translúcido, hover de botones por opacidad (solo la flecha avanza; descargar/externo no se mueven), buscadores que esperan a que se deje de escribir (`useDebounced` + `SearchField`), esqueletos con brillo en fotos y en el panel. Todo respeta `prefers-reduced-motion`. Librería: **Motion** (motion.dev) con `LazyMotion`.
+Es una web institucional: las **entradas son lentas y elegantes** (como el sitio original), las respuestas a una acción son cortas. Patrones: cabecera de cada página con entrada escalonada (en la home el título entra desde la izquierda), reveal al entrar en pantalla (`<Reveal>`), **sin fundido entre páginas** (la página anterior queda hasta que la nueva está lista: nunca un pantallazo blanco), fotos de bandas fijas al desplazarse (parallax, solo escritorio), menú móvil que se abre como un círculo que crece desde fuera de la pantalla con fondo de vidrio translúcido, buscadores que esperan a que se deje de escribir (`useDebounced` + `SearchField`), esqueletos con brillo en fotos y en el panel. Todo respeta `prefers-reduced-motion`. Librería: **Motion** (motion.dev) con `LazyMotion`.
 
-**Navbar:** blanco opaco y fijo (no se esconde al bajar); nombre en peso regular; página activa con pastilla tenue; "Campus virtual" como botón con borde al lado de "Inscribite". Arriba, la franja de cierre de inscripciones con cuenta regresiva cuando hay fecha de cierre.
+**Hover y presión (iguales en todo el sitio y en el panel):**
+- *Botones* (Button, IconButton, chips, botones del navbar, WhatsApp, botones del admin): mixin `press-bounce` → al pasar el mouse crecen a `scale-hover` con `ease-bounce`; al presionar se hunden a `scale-press` en 150 ms y vuelven rebotando. Usa la propiedad `scale` (no pisa otros `transform`) y se suma `$press-transition` al `transition` del componente. Los colores del botón no cambian (el primario se aclara apenas; la flecha avanza).
+- *Tarjetas-enlace* (CourseCard, NewsCard, SpeakerCard): `card-hover` (sube 2 px + sombra) y la foto se acerca lentamente.
+- *Enlaces de texto*: subrayado tenue que se completa (`a` global); los que no van subrayados (footer, migas, menú) usan `underline-on-hover` (el subrayado aparece con fundido).
+- *Filas y disparadores* (acordeón, resultados, filas del admin, pestañas): tinte violeta suave de fondo o color. Nada de rojo; hover solo en lo clickeable.
+
+**Abrir y cerrar:** todo lo que aparece también se va animado (`AnimatePresence` o clase `closing`). Entrada 350–500 ms con `ease-emphasized` (fundido + 8–24 px o escala .98), salida más rápida (200–300 ms, `ease-exit`). `Dialog` (y el visor de fotos) mantiene el `<dialog>` abierto hasta que termina la salida; buscador, aviso de cookies, cajón de cambios y avisos del admin con Motion; acordeones y plegables animan altura + opacidad. El menú móvil conserva su círculo (clip-path).
+
+**Navbar:** transparente sobre la foto, blanca en páginas claras y con el degradé al pasar la cabecera. Links en peso regular; el activo en semibold con una barra de 2 px (`currentColor`) debajo; en los demás la barra crece desde la izquierda al pasar el mouse (500 ms, `ease-emphasized`). Buscar, Inscribite, Campus virtual y Menú comparten alto (40 px, 44 táctil), radio 10 y texto 14 px. Arriba, la franja de cierre de inscripciones con cuenta regresiva cuando hay fecha de cierre.
 
 ---
 
@@ -110,8 +120,8 @@ Es una web institucional: las **entradas son lentas y elegantes** (como el sitio
 | `Accordion` | card · brand · plain | Accesible, animación de altura |
 | `Carousel` | light · dark | Scroll-snap nativo (sin librerías) |
 | `Badge` | violet · white · neutral · light · success | `white` para «¡Nuevo!» sobre fotos |
-| `Dialog` | sm · md · lg · full; default · dark | `<dialog>` nativo |
-| `ChipGroup` (`Chips.tsx`) | align start · center; chip «Todos» opcional; `count` por opción | Filtros en píldora (`role="group"` + `aria-pressed`). Activo: relleno `violet-600`; hover: borde `violet-400`. Tocar el activo lo apaga |
+| `Dialog` | sm · md · lg · full; default · dark | `<dialog>` nativo; entra y sale animado (clase `closing`) |
+| `ChipGroup` (`Chips.tsx`) | align start · center; chip «Todos» opcional; `count` por opción | Filtros en píldora (`role="group"` + `aria-pressed`). Activo: relleno `violet-600`; hover: borde `violet-400`, tinte `violet-50` y crecimiento con rebote. Tocar el activo lo apaga |
 | `IconButton` | ghost · outline · overlay; tone default · brand · light; sm 36 (44 táctil) · md 44 · lg 48 | Botón redondo de solo ícono; `label` obligatorio (aria-label). Con `href` es un `<a>` (redes) |
 | `CardGrid` | cols 2 · 3 · 4; `dense`; `reveal`; as div · ul · ol | 1 columna en móvil → 2 desde md → 3 desde xl (`dense`: 2 desde sm, 3 desde lg). Estira las tarjetas de una fila al mismo alto. Las grillas asimétricas siguen con CSS propio |
 | Tarjetas | `CourseCard` · `NewsCard` (overlay/plain) · `SpeakerCard` | Toda la tarjeta es clickeable |

@@ -41,6 +41,20 @@
     flex-direction: column;
   }
 
+  img {
+    transition: $press-transition;
+  }
+
+  &:hover {
+    color: white;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover img {
+      scale: var(--scale-hover);
+    }
+  }
+
   strong {
     font-family: var(--font-sans);
     font-size: var(--text-h4);
@@ -79,11 +93,10 @@
     align-items: center;
     gap: var(--space-1);
     color: var(--color-on-dark-body) !important;
-    text-decoration: none;
+    @include underline-on-hover;
 
     &:hover {
       color: white !important;
-      text-decoration: underline;
     }
   }
 }
@@ -115,11 +128,10 @@
 
   a {
     color: var(--color-on-dark-body) !important;
-    text-decoration: none;
+    @include underline-on-hover;
 
     &:hover {
       color: white !important;
-      text-decoration: underline;
     }
   }
 }
@@ -163,12 +175,11 @@
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     color: var(--color-on-dark-body) !important;
-    text-decoration: none;
+    @include underline-on-hover;
     @include focus-ring;
 
     &:hover {
       color: white !important;
-      text-decoration: underline;
     }
   }
 }

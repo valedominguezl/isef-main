@@ -114,15 +114,20 @@ b {
   color: var(--color-text);
 }
 
+/* Enlaces en el texto: subrayado tenue que se completa al pasar el mouse (mismo hover en todo el sitio) */
 a {
   color: var(--color-link);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  transition: color var(--duration-fast) var(--ease-standard);
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition:
+    color var(--duration-base) var(--ease-standard),
+    text-decoration-color var(--duration-base) var(--ease-standard);
   @include focus-ring(2px);
 
   &:hover {
     color: var(--violet-800);
+    text-decoration-color: currentColor;
   }
 }
 

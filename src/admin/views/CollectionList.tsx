@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
-import { EyeOff, Plus, Search } from 'lucide-react';
+import { EyeOff, Plus, Search, Star } from 'lucide-react';
 import { normalize } from '@/lib/format';
 import { useAdmin } from '../AdminContext';
 import { getCollection } from '../config';
@@ -54,6 +54,7 @@ export default function CollectionList() {
                   <strong>{String(e.data[col.titleField] ?? e.slug)}</strong>
                   <small>{col.subtitle?.(e.data)}</small>
                 </span>
+                {e.data.destacado === true && <Star size={18} fill="currentColor" className={styles.rowStar} aria-label="Destacado" />}
                 {e.data.publicado === false && (
                   <span className={styles.tag}>
                     <EyeOff size={12} /> Oculto

@@ -21,11 +21,13 @@
   color: var(--ib-fg);
   text-decoration: none;
   transition:
+    $press-transition,
     background-color var(--duration-base) var(--ease-standard),
     border-color var(--duration-base) var(--ease-standard),
     color var(--duration-base) var(--ease-standard),
     opacity var(--duration-base) var(--ease-standard);
   @include focus-ring;
+  @include press-bounce;
 
   &:disabled {
     opacity: 0.35;

@@ -105,6 +105,7 @@
   color: inherit;
 
   li {
+    display: flex; /* sin esto el link inline-flex se apoya en la línea base y baja unos px */
     color: inherit;
   }
 
@@ -119,30 +120,63 @@
 
 .link {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
   padding: var(--space-2) var(--space-3);
   color: inherit;
   text-decoration: none;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  border-radius: var(--radius-pill);
-  opacity: 0.82;
-  transition:
-    opacity var(--duration-slow) var(--ease-standard),
-    background-color var(--duration-slow) var(--ease-standard);
+  font-weight: var(--weight-regular); /* las demás, livianas; la activa en semibold */
+  border-radius: var(--radius-sm);
+  opacity: 0.85;
+  transition: opacity var(--duration-slow) var(--ease-standard);
   @include focus-ring;
+
+  /* Reserva el ancho del texto en semibold: al cambiar de página los links no se corren */
+  &::before {
+    content: attr(data-label);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    font-weight: var(--weight-semibold);
+  }
+
+  /* Barra que crece desde abajo del link: fija en la activa, al pasar el mouse en las demás.
+     currentColor → sirve en los tres estados del navbar (sobre foto, blanco y degradé) */
+  &::after {
+    content: '';
+    position: absolute;
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: 2px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration-slow) var(--ease-emphasized);
+  }
 
   &:hover {
     color: inherit;
     opacity: 1;
+
+    &::after {
+      transform: scaleX(1);
+    }
   }
 }
 
-/* Página actual: pastilla tenue del mismo color del texto (sin acentos de otro color) */
+/* Página actual: semibold y la barra visible (sin pastilla de fondo) */
 .active {
   opacity: 1;
-  background-color: color-mix(in srgb, currentColor 12%, transparent);
+  font-weight: var(--weight-semibold);
+
+  &::after {
+    transform: scaleX(1);
+  }
 }
 
 .actions {
@@ -156,37 +190,56 @@
   }
 }
 
+/* Botones del navbar (Buscar, Inscribite, Campus virtual y Menú): mismo alto, radio y tipografía */
+.search,
+.menuBtn,
+.actions .cta,
+.actions .campus {
+  min-height: var(--nav-btn-h);
+  height: var(--nav-btn-h);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+}
+
+.actions {
+  --nav-btn-h: 40px;
+
+  @media (pointer: coarse) {
+    --nav-btn-h: 44px; /* área táctil mínima */
+  }
+}
+
 .search,
 .menuBtn {
   display: inline-flex;
   align-items: center;
   flex: none;
   gap: var(--space-2);
-  min-height: 44px;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   color: inherit;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
   text-decoration: none;
-  transition: background-color var(--duration-slow) var(--ease-standard);
+  transition:
+    $press-transition,
+    background-color var(--duration-slow) var(--ease-standard),
+    border-color var(--duration-slow) var(--ease-standard);
   @include focus-ring;
+  @include press-bounce;
 
   &:hover {
     color: inherit;
+    border-color: color-mix(in srgb, currentColor 55%, transparent);
     background: color-mix(in srgb, currentColor 10%, transparent);
   }
-}
-
-.search {
-  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
 }
 
 @include down($bp-sm) {
   .search,
   .menuBtn {
-    min-width: 44px;
+    min-width: var(--nav-btn-h);
     justify-content: center;
     padding-inline: var(--space-2);
   }
@@ -288,9 +341,11 @@
   background: transparent;
   border: 1px solid rgb(255 255 255 / 0.45);
   transition:
+    $press-transition,
     border-color var(--duration-slow) var(--ease-standard),
     background-color var(--duration-slow) var(--ease-standard);
   @include focus-ring;
+  @include press-bounce;
 
   &:hover {
     border-color: white;
@@ -360,12 +415,7 @@
     color: rgb(255 255 255 / 0.85);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
-    text-decoration: none;
-
-    &:hover {
-      color: white;
-      text-decoration: underline;
-    }
+    @include underline-on-hover(white);
   }
 }
 
@@ -381,7 +431,12 @@
     border-radius: var(--radius-pill);
     background: rgb(255 255 255 / 0.15);
     color: white;
+    transition:
+      $press-transition,
+      background-color var(--duration-base) var(--ease-standard),
+      color var(--duration-base) var(--ease-standard);
     @include focus-ring;
+    @include press-bounce;
 
     &:hover {
       background: white;

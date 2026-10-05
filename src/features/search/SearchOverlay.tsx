@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { AnimatePresence, m } from 'motion/react';
 import { ArrowRight, CornerDownLeft, Search, X } from 'lucide-react';
 import { track } from '@/lib/analytics';
 import { loadIndex, search, snippet, type Hit } from './engine';
@@ -95,10 +96,16 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
 
   let idx = -1;
 
+  // Entrada suave (fondo con fundido, panel que baja apenas) y salida más corta
   return (
-    open && (
-        <div
+    <AnimatePresence>
+      {open && (
+        <m.div
+          key="buscador"
           className={styles.overlay}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
+          exit={{ opacity: 0, transition: { duration: 0.22, ease: [0.4, 0, 1, 1] } }}
           role="dialog"
           aria-modal="true"
           aria-label="Buscar en el sitio"
@@ -107,7 +114,12 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
             if (e.target === e.currentTarget) onClose();
           }}
         >
-          <div className={styles.panel}>
+          <m.div
+            className={styles.panel}
+            initial={{ opacity: 0, y: -12, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
+            exit={{ opacity: 0, y: -8, scale: 0.98, transition: { duration: 0.2, ease: [0.4, 0, 1, 1] } }}
+          >
             <div className={styles.bar}>
               <Search className={styles.barIcon} size={26} aria-hidden />
               <input
@@ -227,8 +239,9 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
                 Ver todos los resultados ({hits.length}) para “{settled.trim()}” <ArrowRight size={18} aria-hidden />
               </button>
             )}
-          </div>
-        </div>
-      )
+          </m.div>
+        </m.div>
+      )}
+    </AnimatePresence>
   );
 }

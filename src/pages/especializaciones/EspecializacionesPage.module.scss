@@ -24,6 +24,8 @@
     gap: var(--space-1);
     color: var(--color-link);
     font-weight: var(--weight-medium);
+    @include underline-on-hover(var(--violet-800));
+    @include focus-ring;
   }
 }
 
