@@ -91,7 +91,7 @@ export interface CollectionConfig {
   /** Opciones básicas: arriba de todo del editor y en cada fila de la lista. */
   quick?: QuickToggle[];
   /** Entradas vinculadas a otra colección (p. ej. novedad → curso): las opciones básicas son las de la vinculada. */
-  syncWith?: { field: string; collection: string };
+  syncWith?: { field: string; collection: string; /** Solo se sincroniza si este campo tiene este valor. */ when?: { field: string; value: string } };
 }
 
 export interface SingletonConfig {
@@ -147,7 +147,8 @@ export const COLLECTIONS: CollectionConfig[] = [
       },
     ],
     // Si la novedad es de un curso, sus opciones básicas son las del curso (se cambian ahí)
-    syncWith: { field: 'curso', collection: 'cursos' },
+    // Solo las novedades de categoría «curso» siguen el estado del curso (igual que conEstadoDelCurso en el sitio)
+    syncWith: { field: 'curso', collection: 'cursos', when: { field: 'categoria', value: 'curso' } },
   },
   {
     key: 'cursos',

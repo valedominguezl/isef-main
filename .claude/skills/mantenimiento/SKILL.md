@@ -44,4 +44,4 @@ npm run health -- --quick               # regenera el mapa
 - No tocar la lógica de `src/features/test-hiit/` (protocolo de investigación congelado).
 - No hacer push ni deploy sin confirmación.
 - Cambios visuales: respetar tokens y componentes de `src/components/ui`.
-- Falsos positivos conocidos del detector de impeccable (no "arreglar"): línea de marca del footer (`Footer.module.scss` ::before), franja de la foto en `SpeakerCard`, borde del `blockquote` en `Prose`.
+- Falsos positivos conocidos del detector de impeccable (no "arreglar"): línea de marca del footer (`Footer.module.scss` ::before), franja de la foto en `SpeakerCard`, borde del `blockquote` en `Prose`, `--ease-bounce` en `tokens.scss` (rebote leve de botones, pedido por la usuaria).

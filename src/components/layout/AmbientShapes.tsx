@@ -42,10 +42,19 @@ function layout(main: HTMLElement, mobile: boolean): Shape[] {
     else zones.push({ top: s.top, bottom: s.bottom });
   }
 
+  // Una sola pasada por los elementos de las secciones claras: sticky + superficies con fondo propio
+  const stickies: HTMLElement[] = [];
+  const painted: HTMLElement[] = [];
+  for (const el of main.querySelectorAll<HTMLElement>('[data-surface="light"] *')) {
+    const cs = getComputedStyle(el);
+    if (cs.position === 'sticky') stickies.push(el);
+    const box = el.getBoundingClientRect();
+    if (box.width < 100 || box.height < 40) continue;
+    const media = el instanceof HTMLImageElement || el instanceof HTMLVideoElement || el instanceof HTMLIFrameElement;
+    const alpha = Number(cs.backgroundColor.match(/[\d.]+/g)?.[3] ?? 1);
+    if (media || (cs.backgroundColor !== 'rgba(0, 0, 0, 0)' && alpha > 0.3) || cs.backgroundImage !== 'none') painted.push(el);
+  }
   // Lo que es sticky se mueve con el scroll: ocupa todo el alto de su contenedor
-  const stickies = [...main.querySelectorAll<HTMLElement>('[data-surface="light"] *')].filter(
-    (el) => getComputedStyle(el).position === 'sticky',
-  );
   const rectOf = (el: Element) => {
     const r = el.getBoundingClientRect();
     const sticky = stickies.find((s) => s.contains(el));
@@ -61,20 +70,11 @@ function layout(main: HTMLElement, mobile: boolean): Shape[] {
     return { top: r.top - 32, bottom: r.bottom + 32, left: r.left - 32, right: r.right + 32 };
   });
   // Superficies con fondo propio (tarjetas, paneles, fotos): taparían la forma o su halo con un corte recto
-  const surfaces: Rect[] = [];
-  for (const el of main.querySelectorAll<HTMLElement>('[data-surface="light"] *')) {
-    const box = el.getBoundingClientRect();
-    if (box.width < 100 || box.height < 40) continue;
-    const cs = getComputedStyle(el);
-    const media = el instanceof HTMLImageElement || el instanceof HTMLVideoElement || el instanceof HTMLIFrameElement;
-    const alpha = Number(cs.backgroundColor.match(/[\d.]+/g)?.[3] ?? 1);
-    const painted = cs.backgroundColor !== 'rgba(0, 0, 0, 0)' && alpha > 0.3;
-    if (media || painted || cs.backgroundImage !== 'none') {
-      // 24 px de más arriba/abajo: cubre el corrimiento de las entradas de Reveal
-      const r = rectOf(el);
-      surfaces.push({ top: r.top - 24, bottom: r.bottom + 24, left: r.left, right: r.right });
-    }
-  }
+  // 24 px de más arriba/abajo: cubre el corrimiento de las entradas de Reveal
+  const surfaces: Rect[] = painted.map((el) => {
+    const r = rectOf(el);
+    return { top: r.top - 24, bottom: r.bottom + 24, left: r.left, right: r.right };
+  });
   const hitsCircle = (o: Rect, cx: number, cy: number, rad: number) => {
     const dx = cx - Math.max(o.left, Math.min(cx, o.right));
     const dy = cy - Math.max(o.top, Math.min(cy, o.bottom));
@@ -146,27 +146,29 @@ export default function AmbientShapes() {
     if (!main) return;
     const mqMobile = matchMedia('(max-width: 767px)');
     const mqDesktop = matchMedia(DESKTOP);
-    let raf = 0;
+    let timer = 0;
     let last = '';
-    const update = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const next = layout(main, mqMobile.matches);
-        const key = JSON.stringify(next);
-        if (key !== last) {
-          last = key;
-          setShapes(next);
-        }
-        setDesktop(mqDesktop.matches);
-      });
+    const run = () => {
+      const next = layout(main, mqMobile.matches);
+      const key = JSON.stringify(next);
+      if (key !== last) {
+        last = key;
+        setShapes(next);
+      }
+      setDesktop(mqDesktop.matches);
     };
-    update();
+    // Con espera: durante animaciones de alto (acordeones) el tamaño de <main> cambia en cada cuadro
+    const update = () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(run, 150);
+    };
+    run();
     const ro = new ResizeObserver(update);
     ro.observe(main);
     mqMobile.addEventListener('change', update);
     mqDesktop.addEventListener('change', update);
     return () => {
-      cancelAnimationFrame(raf);
+      clearTimeout(timer);
       ro.disconnect();
       mqMobile.removeEventListener('change', update);
       mqDesktop.removeEventListener('change', update);

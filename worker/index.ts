@@ -22,19 +22,21 @@ const error = (status: number, mensaje: string) => json({ error: mensaje }, stat
 const verificados = new Map<string, number>();
 
 /** La "contraseña" del panel es un token de GitHub: tiene que poder escribir en el repositorio del sitio. */
-async function autorizado(req: Request): Promise<boolean> {
+/** 'limite' = GitHub frenó las consultas por un rato (no es la contraseña). */
+async function autorizado(req: Request): Promise<'si' | 'no' | 'limite'> {
   const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '').trim();
-  if (!token) return false;
+  if (!token) return 'no';
   const vence = verificados.get(token);
-  if (vence && vence > Date.now()) return true;
+  if (vence && vence > Date.now()) return 'si';
   const r = await fetch(`https://api.github.com/repos/${REPO}`, {
     headers: { authorization: `Bearer ${token}`, accept: 'application/vnd.github+json', 'user-agent': 'isef-sanluis-admin' },
   });
-  if (!r.ok) return false;
+  if ((r.status === 403 || r.status === 429) && r.headers.get('x-ratelimit-remaining') === '0') return 'limite';
+  if (!r.ok) return 'no';
   const repo = (await r.json()) as { permissions?: { push?: boolean } };
-  if (!repo.permissions?.push) return false;
+  if (!repo.permissions?.push) return 'no';
   verificados.set(token, Date.now() + 10 * 60_000);
-  return true;
+  return 'si';
 }
 
 /* ───────────────────────── Fotos de stock ───────────────────────── */
@@ -55,20 +57,24 @@ async function buscarFotos(q: string): Promise<Foto[]> {
   );
   if (!r.ok) return [];
   const d = (await r.json()) as { results: { thumbnail: string; url: string; creator?: string; source: string; foreign_landing_url: string }[] };
-  return d.results.map((p) => ({ miniatura: p.thumbnail, url: p.url, autor: p.creator ?? '', fuente: p.source, enlace: p.foreign_landing_url }));
+  return (d.results ?? [])
+    .filter((p) => fotoPermitida(p.url)) // solo las que después se pueden bajar
+    .map((p) => ({ miniatura: p.thumbnail, url: p.url, autor: p.creator ?? '', fuente: p.source, enlace: p.foreign_landing_url }));
 }
 
 /** Solo se descargan fotos de los bancos de imágenes (no es un proxy abierto). */
 const HOSTS_FOTOS = /(^|\.)(pexels\.com|openverse\.org|stocksnap\.io|rawpixel\.com|wikimedia\.org|staticflickr\.com|flickr\.com|unsplash\.com)$/;
 
+function fotoPermitida(url: string): boolean {
+  if (!URL.canParse(url)) return false;
+  const u = new URL(url);
+  return u.protocol === 'https:' && HOSTS_FOTOS.test(u.hostname);
+}
+
 async function descargarFoto(url: string): Promise<Response> {
-  let u: URL;
-  try {
-    u = new URL(url);
-  } catch {
-    return error(400, 'URL inválida.');
-  }
-  if (u.protocol !== 'https:' || !HOSTS_FOTOS.test(u.hostname)) return error(400, 'Esa foto no viene de un banco de imágenes permitido.');
+  if (!URL.canParse(url)) return error(400, 'URL inválida.');
+  const u = new URL(url);
+  if (!fotoPermitida(url)) return error(400, 'Esa foto no viene de un banco de imágenes permitido.');
   const r = await fetch(u.toString(), { headers: { 'user-agent': 'isef-sanluis-admin (isefsanluis.net)' } });
   const tipo = r.headers.get('content-type') ?? '';
   if (!r.ok || !tipo.startsWith('image/')) return error(502, 'No se pudo bajar la foto.');
@@ -78,7 +84,9 @@ async function descargarFoto(url: string): Promise<Response> {
 /* ───────────────────────── Rutas ───────────────────────── */
 
 async function api(req: Request, url: URL): Promise<Response> {
-  if (!(await autorizado(req))) return error(401, 'Contraseña incorrecta o vencida.');
+  const auth = await autorizado(req);
+  if (auth === 'limite') return error(503, 'GitHub está limitando las consultas. Probá de nuevo en unos minutos.');
+  if (auth === 'no') return error(401, 'Contraseña incorrecta o vencida.');
 
   if (url.pathname === '/api/fotos' && req.method === 'GET') {
     const q = url.searchParams.get('q')?.trim();
@@ -93,7 +101,14 @@ async function api(req: Request, url: URL): Promise<Response> {
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const url = new URL(req.url);
-    if (url.pathname.startsWith('/api/')) return api(req, url);
+    if (url.pathname.startsWith('/api/')) {
+      // Un error de red (GitHub, Openverse) devuelve JSON claro, no la página de error de Cloudflare
+      try {
+        return await api(req, url);
+      } catch {
+        return error(502, 'No se pudo conectar con el servicio de fotos. Probá de nuevo en un rato.');
+      }
+    }
     return env.ASSETS.fetch(req);
   },
 } satisfies ExportedHandler<Env>;

@@ -119,7 +119,8 @@ export default function EntryEditor() {
   const { data: loaded, error: loadError } = useFile(isNew || !col ? undefined : `${col.dir}/${slugParam}.json`);
   // Solo al crear: para no pisar una entrada que ya existe con el mismo título
   const { entries: existing } = useEntries(isNew ? col?.dir : undefined);
-  const { entries: novedades } = useEntries(isNew && col?.key === 'cursos' ? 'content/novedades' : undefined);
+  // Novedades: para crear la vinculada a un curso nuevo y para borrarla junto con el curso
+  const { entries: novedades } = useEntries(col?.key === 'cursos' ? 'content/novedades' : undefined);
   const cvCol = getCollection('cv')!;
   const isDis = key === 'disertantes';
   const { data: cvLoaded } = useFile(isDis && !isNew ? `content/cv/${slugParam}.json` : undefined);
@@ -209,25 +210,43 @@ export default function EntryEditor() {
     const titulo = String(res.value[col.titleField]);
     const changes = [{ path: `${col.dir}/${slug}.json`, content: `${JSON.stringify(clean(draft), null, 2)}\n`, encoding: 'utf8' as const, label: `${col.singular[0].toUpperCase()}${col.singular.slice(1)}: ${titulo}` }];
     if (cvRes?.ok) changes.push({ path: `content/cv/${slug}.json`, content: `${JSON.stringify({ disertante: slug, ...(clean(cvDraft) as Obj) }, null, 2)}\n`, encoding: 'utf8', label: `Currículum: ${titulo}` });
-    // Curso nuevo → su novedad se crea sola, vinculada (si todavía no hay una para ese curso)
-    const conNovedad = isNew && col.key === 'cursos' && !novedades?.some((n) => n.slug === slug || n.data.curso === slug);
-    if (conNovedad)
-      changes.push({
-        path: `content/novedades/${slug}.json`,
-        content: `${JSON.stringify(novedadDeCurso(slug, clean(draft) as Obj), null, 2)}\n`,
-        encoding: 'utf8',
-        label: `Novedad: ${titulo}`,
-      });
-    const undo = stage(changes);
+    // Curso nuevo → su novedad se crea sola, vinculada (si todavía no hay una para ese curso).
+    // Solo con la lista de novedades cargada: si no, podría pisar una existente con el mismo nombre.
+    const conNovedad = isNew && col.key === 'cursos' && novedades != null && !novedades.some((n) => n.slug === slug || n.data.curso === slug);
+    stage(changes);
+    // «Deshacer» del aviso quita solo la novedad: el curso guardado queda
+    const undoNovedad = conNovedad
+      ? stage([
+          {
+            path: `content/novedades/${slug}.json`,
+            content: `${JSON.stringify(novedadDeCurso(slug, clean(draft) as Obj), null, 2)}\n`,
+            encoding: 'utf8',
+            label: `Novedad: ${titulo}`,
+          },
+        ])
+      : undefined;
     setDirty(false);
-    toast.saved(conNovedad ? 'Guardado, con su novedad. Falta publicar.' : undefined, conNovedad ? undo : undefined);
+    toast.saved(conNovedad ? 'Guardado. También se creó su novedad. Falta publicar.' : undefined, undoNovedad);
     if (isNew) navigate(`/admin/c/${col.key}/${slug}`, { replace: true });
   };
 
   const remove = () => {
+    // Un curso se borra junto con su novedad (si no, la novedad apunta a un curso que no existe y no se
+    // puede publicar). Las novedades de otra categoría que lo mencionan solo pierden el vínculo.
+    if (col.key === 'cursos' && novedades == null) {
+      toast.show({ text: 'Esperá un momento: todavía se están cargando las novedades.' });
+      return;
+    }
+    const vinculadas = col.key === 'cursos' ? (novedades ?? []).filter((n) => n.data.curso === slugParam) : [];
     const undo = stage([
       { path: `${col.dir}/${slugParam}.json`, delete: true, label: `Eliminar ${col.singular}: ${title}` },
       ...(isDis ? [{ path: `content/cv/${slugParam}.json`, delete: true as const, label: `Eliminar currículum: ${title}` }] : []),
+      ...vinculadas.map((n) => {
+        const nombre = String(n.data.titulo ?? n.slug);
+        if (n.data.categoria === 'curso') return { path: n.path, delete: true as const, label: `Eliminar novedad: ${nombre}` };
+        const { curso: _curso, ...resto } = n.data;
+        return { path: n.path, content: `${JSON.stringify(resto, null, 2)}\n`, encoding: 'utf8' as const, label: `Novedad: ${nombre}` };
+      }),
     ]);
     setDirty(false);
     navigate(`/admin/c/${col.key}`);

@@ -27,6 +27,8 @@ export function useLinkedQuick(col: CollectionConfig | undefined) {
 
   return (data: Obj): LinkedQuick | null => {
     if (!col?.syncWith || !target?.quick || !col.quick) return null;
+    const { when } = col.syncWith;
+    if (when && data[when.field] !== when.value) return null;
     const slug = data[col.syncWith.field];
     const e = typeof slug === 'string' && slug ? entries?.find((x) => x.slug === slug) : undefined;
     if (!e) return null;

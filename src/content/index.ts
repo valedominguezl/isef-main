@@ -101,11 +101,11 @@ export const disertantes = collection<Disertante>(
   .sort((a, b) => (a.orden ?? 99) - (b.orden ?? 99));
 
 /**
- * Una novedad vinculada a un curso toma del curso su estado (visible, activo, destacado):
- * se cambia en un solo lugar y no se desfasan.
+ * Una novedad de categoría «curso» vinculada a un curso toma del curso su estado (visible, activo,
+ * destacado): se cambia en un solo lugar y no se desfasan. Las de otra categoría solo enlazan.
  */
 const conEstadoDelCurso = (n: WithSlug<Novedad>): WithSlug<Novedad> => {
-  const c = n.curso ? todosLosCursos.find((x) => x.slug === n.curso) : undefined;
+  const c = n.curso && n.categoria === 'curso' ? todosLosCursos.find((x) => x.slug === n.curso) : undefined;
   return c ? { ...n, publicado: c.publicado !== false, activo: c.activo === true, destacado: c.destacado === true } : n;
 };
 
