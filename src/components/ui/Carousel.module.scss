@@ -102,30 +102,6 @@
   gap: var(--space-2);
 }
 
-.arrow {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-border-strong);
-  background: var(--color-surface);
-  color: var(--color-text);
-  transition: background-color var(--duration-base), color var(--duration-base), opacity var(--duration-base);
-  @include focus-ring;
-
-  &:hover:not(:disabled) {
-    background: var(--violet-500);
-    border-color: var(--violet-500);
-    color: white;
-  }
-
-  &:disabled {
-    opacity: 0.35;
-    cursor: default;
-  }
-}
-
 .dark {
   .dot::before {
     background: rgb(255 255 255 / 0.3);
@@ -133,17 +109,5 @@
 
   .dotActive::before {
     background: white;
-  }
-
-  .arrow {
-    background: transparent;
-    border-color: rgb(255 255 255 / 0.4);
-    color: white;
-
-    &:hover:not(:disabled) {
-      background: white;
-      color: var(--ink-950);
-      border-color: white;
-    }
   }
 }

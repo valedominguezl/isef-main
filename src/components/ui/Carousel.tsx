@@ -1,5 +1,6 @@
 import { Children, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import IconButton from './IconButton';
 import styles from './Carousel.module.scss';
 
 interface CarouselProps {
@@ -105,12 +106,12 @@ export default function Carousel({ children, label, slideWidth, gap, showDots = 
             </div>
           )}
           <div className={styles.arrows}>
-            <button type="button" className={styles.arrow} onClick={() => step(-1)} disabled={edges.start} aria-label="Anterior">
+            <IconButton label="Anterior" variant="outline" tone={tone === 'dark' ? 'light' : 'default'} onClick={() => step(-1)} disabled={edges.start}>
               <ChevronLeft size={20} />
-            </button>
-            <button type="button" className={styles.arrow} onClick={() => step(1)} disabled={edges.end} aria-label="Siguiente">
+            </IconButton>
+            <IconButton label="Siguiente" variant="outline" tone={tone === 'dark' ? 'light' : 'default'} onClick={() => step(1)} disabled={edges.end}>
               <ChevronRight size={20} />
-            </button>
+            </IconButton>
           </div>
         </div>
       )}

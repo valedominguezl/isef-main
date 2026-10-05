@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { getCurso, getNovedad, novedades, sitio } from '@/content';
 import { NOVEDAD_CATEGORIAS } from '@/content/constants';
 import { formatDate } from '@/lib/format';

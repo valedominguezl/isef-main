@@ -51,7 +51,7 @@ export default function InscripcionesCard() {
       ? 'Cerradas: el sitio no muestra el botón "Inscribite".'
       : insc.cierre
         ? `Abiertas${insc.inicio ? ` desde el ${formatDate(insc.inicio, { year: false })}` : ''} hasta el ${formatDate(insc.cierre, { year: false })}. Arriba del sitio se ve la cuenta regresiva.`
-        : 'Abiertas, sin fecha de cierre (cargala para mostrar la cuenta regresiva).';
+        : 'Abiertas, sin fecha de cierre: no se muestra la franja de aviso. Las fechas son opcionales.';
 
   return (
     <section className={[styles.panel, styles.inscCard, insc?.abiertas && styles.inscOn].filter(Boolean).join(' ')}>
@@ -84,13 +84,13 @@ export default function InscripcionesCard() {
         <div className={styles.inscBody}>
           <div className={styles.field}>
             <label className={styles.label} htmlFor={ids.ini}>
-              <CalendarRange size={14} aria-hidden /> Abren el
+              <CalendarRange size={14} aria-hidden /> Abren el (opcional)
             </label>
             <input id={ids.ini} type="date" className={styles.input} value={insc.inicio ?? ''} onChange={(e) => set({ inicio: e.target.value || undefined })} />
           </div>
           <div className={styles.field}>
             <label className={styles.label} htmlFor={ids.fin}>
-              <CalendarRange size={14} aria-hidden /> Cierran el
+              <CalendarRange size={14} aria-hidden /> Cierran el (opcional)
             </label>
             <input id={ids.fin} type="date" className={styles.input} value={insc.cierre ?? ''} onChange={(e) => set({ cierre: e.target.value || undefined })} />
           </div>

@@ -89,38 +89,6 @@
   font-weight: var(--weight-medium);
 }
 
-.close {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--ink-700);
-  transition:
-    background-color var(--duration-slow) var(--ease-standard),
-    color var(--duration-slow) var(--ease-standard);
-  @include focus-ring;
-
-  &:hover {
-    background: var(--ink-50);
-    color: var(--ink-900);
-  }
-}
-
-/* En el visor oscuro: ícono blanco sobre un círculo oscuro translúcido (se lee sobre cualquier foto) */
-.dark .close {
-  color: white;
-  background: rgb(0 0 0 / 0.35);
-  backdrop-filter: blur(8px);
-
-  &:hover {
-    color: white;
-    background: rgb(0 0 0 / 0.55);
-  }
-}
-
 .body {
   flex: 1;
   overflow-y: auto;

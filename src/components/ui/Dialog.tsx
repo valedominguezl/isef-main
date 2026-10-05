@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
+import IconButton from './IconButton';
 import styles from './Dialog.module.scss';
 
 interface DialogProps {
@@ -46,9 +47,9 @@ export default function Dialog({ open, onClose, title, hideTitle, size = 'md', v
         <div className={styles.content}>
           <div className={[styles.header, hideTitle && styles.headerFloating].filter(Boolean).join(' ')}>
             {!hideTitle && <h2 className={styles.title}>{title}</h2>}
-            <button type="button" className={styles.close} onClick={onClose} aria-label="Cerrar">
+            <IconButton label="Cerrar" variant={variant === 'dark' ? 'overlay' : 'ghost'} onClick={onClose}>
               <X size={20} />
-            </button>
+            </IconButton>
           </div>
           <div className={styles.body}>{children}</div>
           {footer && <div className={styles.footer}>{footer}</div>}

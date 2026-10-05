@@ -7,6 +7,7 @@ import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
 import { RevealGroup, RevealItem } from '@/components/ui/Reveal';
+import CardGrid from '@/components/ui/CardGrid';
 import SedeCard from '@/components/cards/SedeCard';
 import styles from './ContactoPage.module.scss';
 
@@ -66,13 +67,13 @@ export function Component() {
 
       <Section id="sedes" tone="tint" width="wide" labelledBy="sedes-title">
         <SectionHeader id="sedes-title" title="Nuestras *sedes*" lead="Cómo llegar a cada una." />
-        <RevealGroup className={styles.sedes}>
+        <CardGrid reveal cols={2}>
           {sitio.sedes.map((s) => (
             <RevealItem key={s.nombre}>
               <SedeCard sede={s} media={<Mapa src={s.mapaEmbed} title={`Mapa de la sede ${s.nombre}`} />} />
             </RevealItem>
           ))}
-        </RevealGroup>
+        </CardGrid>
       </Section>
     </>
   );

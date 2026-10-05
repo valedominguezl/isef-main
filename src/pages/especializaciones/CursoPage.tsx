@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { AlertTriangle, CalendarDays, CircleDollarSign, ClipboardCheck, Clock, MonitorPlay } from 'lucide-react';
 import { cursos, disertantes, etiquetasCurso, getCurso, nombreCompleto, sitio, yaComenzo } from '@/content';
 import { formatDate, whatsappUrl } from '@/lib/format';
@@ -12,7 +12,8 @@ import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import Prose from '@/components/ui/Prose';
 import Accordion from '@/components/ui/Accordion';
-import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
+import Reveal, { RevealItem } from '@/components/ui/Reveal';
+import CardGrid from '@/components/ui/CardGrid';
 import CourseCard from '@/components/cards/CourseCard';
 import { Component as NotFound } from '../NotFoundPage';
 import styles from './CursoPage.module.scss';
@@ -214,13 +215,13 @@ export function Component() {
 
       <Section tone="tint" width="wide" labelledBy="rel-title">
         <SectionHeader id="rel-title" title="Otras *especializaciones*" />
-        <RevealGroup className={styles.related}>
+        <CardGrid reveal>
           {relacionados.map((c) => (
             <RevealItem key={c.slug}>
               <CourseCard curso={c} />
             </RevealItem>
           ))}
-        </RevealGroup>
+        </CardGrid>
         <div className={styles.center}>
           <Button to="/especializaciones#cursos" variant="outline">
             Ver todas

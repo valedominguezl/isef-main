@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { ArrowLeft, ExternalLink, Save, Trash2 } from 'lucide-react';
 import type { ZodTypeAny } from 'zod';
 import CourseCard from '@/components/cards/CourseCard';

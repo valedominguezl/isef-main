@@ -7,6 +7,7 @@ import SearchField from '@/components/ui/SearchField';
 import { useDebounced } from '@/lib/useDebounced';
 import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
+import CardGrid from '@/components/ui/CardGrid';
 import styles from './ConferenciasPage.module.scss';
 
 /** Grabaciones de conferencias para alumnos (URL no listada; noindex). */
@@ -23,7 +24,7 @@ export function Component() {
       <PageHero title="Conferencias" subtitle="Accedé a las grabaciones desde un solo lugar" />
       <Section width="wide">
         <SearchField className={styles.search} value={q} onChange={setQ} pending={q !== query} label="Buscar conferencias" placeholder="Buscar conferencias…" />
-        <div className={styles.grid}>
+        <CardGrid>
           {list.map((g) => (
             <article key={g.titulo} className={styles.card}>
               <p className={styles.sub}>{g.subtitulo}</p>
@@ -41,7 +42,7 @@ export function Component() {
             </article>
           ))}
           {!list.length && <p>No se encontraron grabaciones.</p>}
-        </div>
+        </CardGrid>
       </Section>
     </>
   );

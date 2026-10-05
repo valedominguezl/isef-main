@@ -215,19 +215,6 @@
   }
 }
 
-.related {
-  display: grid;
-  gap: var(--space-5);
-
-  @include up($bp-md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include up($bp-xl) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .center {
   display: flex;
   justify-content: center;

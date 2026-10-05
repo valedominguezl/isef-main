@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 import { Search } from 'lucide-react';
 import { search, snippet, type Hit } from '@/features/search/engine';
 import Highlight from '@/features/search/Highlight';
@@ -7,6 +7,7 @@ import { TYPE_LABELS, TYPE_ORDER, type SearchType } from '@/features/search/type
 import { track } from '@/lib/analytics';
 import Seo from '@/components/seo/Seo';
 import Section from '@/components/ui/Section';
+import ChipGroup from '@/components/ui/Chips';
 import styles from './BuscarPage.module.scss';
 
 export function Component() {
@@ -71,16 +72,14 @@ export function Component() {
               )}
             </p>
             {hits.length > 0 && (
-              <div className={styles.tabs} role="group" aria-label="Filtrar resultados">
-                <button type="button" aria-pressed={!type} onClick={() => setType(null)}>
-                  Todo <span>{hits.length}</span>
-                </button>
-                {TYPE_ORDER.filter((t) => counts.get(t)).map((t) => (
-                  <button key={t} type="button" aria-pressed={type === t} onClick={() => setType(t)}>
-                    {TYPE_LABELS[t]} <span>{counts.get(t)}</span>
-                  </button>
-                ))}
-              </div>
+              <ChipGroup
+                label="Filtrar resultados"
+                className={styles.tabs}
+                value={type}
+                onChange={setType}
+                all={{ label: 'Todo', count: hits.length }}
+                options={TYPE_ORDER.filter((t) => counts.get(t)).map((t) => ({ value: t, label: TYPE_LABELS[t], count: counts.get(t) }))}
+              />
             )}
             <ol className={styles.results} role="list">
               {list.map((h) => {

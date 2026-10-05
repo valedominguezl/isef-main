@@ -65,32 +65,13 @@
 }
 
 .courses {
-  display: grid;
-  gap: var(--space-5);
   margin-top: var(--space-16);
-
-  @include up($bp-md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include up($bp-xl) {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 .center {
   display: flex;
   justify-content: center;
   margin-top: var(--space-8);
-}
-
-.sedes {
-  display: grid;
-  gap: var(--space-6);
-
-  @include up($bp-md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 .faqList {

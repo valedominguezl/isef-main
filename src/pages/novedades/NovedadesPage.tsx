@@ -6,7 +6,9 @@ import { NOVEDAD_CATEGORIAS } from '@/content/constants';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
 import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
-import { RevealGroup, RevealItem } from '@/components/ui/Reveal';
+import { RevealItem } from '@/components/ui/Reveal';
+import ChipGroup from '@/components/ui/Chips';
+import CardGrid from '@/components/ui/CardGrid';
 import NewsCard from '@/components/cards/NewsCard';
 import styles from './NovedadesPage.module.scss';
 
@@ -32,24 +34,22 @@ export function Component() {
         image={heroImg} title="Novedades" subtitle="Las últimas noticias del I.S.E.F." breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Novedades' }]} />
       <Section width="wide">
         {cats.length > 1 && (
-          <div className={styles.chips} role="group" aria-label="Filtrar por categoría">
-            <button type="button" aria-pressed={!cat} onClick={() => setCat(null)}>
-              Todas
-            </button>
-            {cats.map((c) => (
-              <button key={c} type="button" aria-pressed={cat === c} onClick={() => setCat(cat === c ? null : c)}>
-                {NOVEDAD_CATEGORIAS[c]}
-              </button>
-            ))}
-          </div>
+          <ChipGroup
+            label="Filtrar por categoría"
+            className={styles.filters}
+            value={cat}
+            onChange={setCat}
+            all={{ label: 'Todas' }}
+            options={cats.map((c) => ({ value: c, label: NOVEDAD_CATEGORIAS[c] }))}
+          />
         )}
-        <RevealGroup className={styles.grid} key={cat ?? 'all'}>
+        <CardGrid reveal key={cat ?? 'all'}>
           {list.map((n, i) => (
             <RevealItem key={n.slug} className={i === 0 && !cat ? styles.first : undefined}>
               <NewsCard novedad={n} variant={i === 0 && !cat ? 'overlay' : 'plain'} headingLevel={2} />
             </RevealItem>
           ))}
-        </RevealGroup>
+        </CardGrid>
       </Section>
     </>
   );

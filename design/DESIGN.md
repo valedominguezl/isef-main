@@ -111,6 +111,9 @@ Es una web institucional: las **entradas son lentas y elegantes** (como el sitio
 | `Carousel` | light · dark | Scroll-snap nativo (sin librerías) |
 | `Badge` | violet · white · neutral · light · success | `white` para «¡Nuevo!» sobre fotos |
 | `Dialog` | sm · md · lg · full; default · dark | `<dialog>` nativo |
+| `ChipGroup` (`Chips.tsx`) | align start · center; chip «Todos» opcional; `count` por opción | Filtros en píldora (`role="group"` + `aria-pressed`). Activo: relleno `violet-600`; hover: borde `violet-400`. Tocar el activo lo apaga |
+| `IconButton` | ghost · outline · overlay; tone default · brand · light; sm 36 (44 táctil) · md 44 · lg 48 | Botón redondo de solo ícono; `label` obligatorio (aria-label). Con `href` es un `<a>` (redes) |
+| `CardGrid` | cols 2 · 3 · 4; `dense`; `reveal`; as div · ul · ol | 1 columna en móvil → 2 desde md → 3 desde xl (`dense`: 2 desde sm, 3 desde lg). Estira las tarjetas de una fila al mismo alto. Las grillas asimétricas siguen con CSS propio |
 | Tarjetas | `CourseCard` · `NewsCard` (overlay/plain) · `SpeakerCard` | Toda la tarjeta es clickeable |
 
 ---

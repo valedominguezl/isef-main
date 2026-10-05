@@ -1,19 +1,5 @@
 @use '@/styles/mixins' as *;
 
-.datos {
-  display: grid;
-  gap: var(--space-4);
-  list-style: none;
-
-  @include up($bp-md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include up($bp-lg) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .dato {
   display: flex;
   align-items: center;
@@ -227,22 +213,6 @@ div.gallery {
 
   span {
     color: var(--color-on-dark-muted);
-  }
-
-  button {
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-pill);
-    background: transparent;
-    color: white;
-    transition: background-color var(--duration-slow) var(--ease-standard);
-    @include focus-ring;
-
-    &:hover {
-      background: rgb(255 255 255 / 0.12);
-    }
   }
 }
 

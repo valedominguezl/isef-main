@@ -1,4 +1,4 @@
-import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 
 /** Error inesperado de una ruta (por ejemplo, un chunk que no se pudo descargar tras un deploy). */
 export default function RouteError() {

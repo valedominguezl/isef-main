@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLoaderData, useParams, type LoaderFunctionArgs } from 'react-router-dom';
+import { useLoaderData, useParams, type LoaderFunctionArgs } from 'react-router';
 import logo from '@/assets/logo.webp';
 import { cursosDe, getDisertante, loadCv, nombreCompleto, sitio } from '@/content';
 import { CV_SECCIONES } from '@/content/constants';
@@ -9,7 +9,8 @@ import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import Button from '@/components/ui/Button';
-import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
+import Reveal, { RevealItem } from '@/components/ui/Reveal';
+import CardGrid from '@/components/ui/CardGrid';
 import CourseCard from '@/components/cards/CourseCard';
 import { Component as NotFound } from '../NotFoundPage';
 import styles from './DisertantePage.module.scss';
@@ -146,13 +147,13 @@ export function Component() {
       {cursos.length > 0 && (
         <Section id="cursos" tone="tint" width="wide" labelledBy="cursos-title" className="no-print">
           <SectionHeader id="cursos-title" title={`Cursos con *${nombre}*`} />
-          <RevealGroup className={styles.cursos}>
+          <CardGrid reveal>
             {cursos.map((c) => (
               <RevealItem key={c.slug}>
                 <CourseCard curso={c} />
               </RevealItem>
             ))}
-          </RevealGroup>
+          </CardGrid>
         </Section>
       )}
     </>

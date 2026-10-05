@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { AlertTriangle, ArrowRight, GraduationCap, Newspaper, Plus, Users } from 'lucide-react';
 import { useEntries } from '../useEntries';
 import InscripcionesCard from './InscripcionesCard';

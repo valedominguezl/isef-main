@@ -1,5 +1,5 @@
 import { forwardRef, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ArrowRight, Download, ExternalLink } from 'lucide-react';
 import styles from './Button.module.scss';
 

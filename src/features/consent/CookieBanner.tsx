@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Cookie } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Dialog from '@/components/ui/Dialog';

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { EyeOff, Plus, Search } from 'lucide-react';
 import { normalize } from '@/lib/format';
 import { useAdmin } from '../AdminContext';

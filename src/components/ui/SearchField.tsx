@@ -1,4 +1,5 @@
 import { Search, X } from 'lucide-react';
+import IconButton from './IconButton';
 import styles from './SearchField.module.scss';
 
 interface Props {
@@ -24,9 +25,9 @@ export default function SearchField({ value, onChange, placeholder, label, pendi
         <i />
       </span>
       {value && (
-        <button type="button" className={styles.clear} onClick={() => onChange('')} aria-label="Borrar búsqueda">
-          <X size={16} aria-hidden />
-        </button>
+        <IconButton label="Borrar búsqueda" size="sm" onClick={() => onChange('')}>
+          <X size={16} />
+        </IconButton>
       )}
     </label>
   );

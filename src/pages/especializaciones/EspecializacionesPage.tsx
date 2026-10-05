@@ -11,11 +11,13 @@ import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Feature from '@/components/ui/Feature';
-import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
+import Reveal, { RevealItem } from '@/components/ui/Reveal';
 import CourseCard from '@/components/cards/CourseCard';
 import SpeakerCard from '@/components/cards/SpeakerCard';
 import Button from '@/components/ui/Button';
 import SearchField from '@/components/ui/SearchField';
+import ChipGroup from '@/components/ui/Chips';
+import CardGrid from '@/components/ui/CardGrid';
 import { useDebounced } from '@/lib/useDebounced';
 import styles from './EspecializacionesPage.module.scss';
 
@@ -94,22 +96,22 @@ export function Component() {
             </p>
           }
         />
-        <RevealGroup className={styles.speakers}>
+        <CardGrid reveal dense>
           {disertantes.slice(0, DIS_INICIALES).map((d) => (
             <RevealItem key={d.slug}>
               <SpeakerCard disertante={d} />
             </RevealItem>
           ))}
-        </RevealGroup>
+        </CardGrid>
         {/* El resto aparece al pedirlo, con la misma entrada escalonada */}
         {todosDis && (
-          <RevealGroup className={`${styles.speakers} ${styles.speakersMore}`}>
+          <CardGrid reveal dense className={styles.speakersMore}>
             {disertantes.slice(DIS_INICIALES).map((d) => (
               <RevealItem key={d.slug}>
                 <SpeakerCard disertante={d} />
               </RevealItem>
             ))}
-          </RevealGroup>
+          </CardGrid>
         )}
         {!todosDis && disertantes.length > DIS_INICIALES && (
           <div className={styles.more}>
@@ -125,16 +127,14 @@ export function Component() {
 
         <Reveal className={styles.filters}>
           <SearchField value={q} onChange={setQ} pending={q !== query} label="Buscar cursos" placeholder="Buscar por tema, disertante o contenido del temario…" />
-          <div className={styles.chips} role="group" aria-label="Filtrar por disertante">
-            <button type="button" aria-pressed={!dis} onClick={() => setDis(null)}>
-              Todos
-            </button>
-            {conCursos.map((d) => (
-              <button key={d.slug} type="button" aria-pressed={dis === d.slug} onClick={() => setDis(dis === d.slug ? null : d.slug)}>
-                {nombreCompleto(d)}
-              </button>
-            ))}
-          </div>
+          <ChipGroup
+            label="Filtrar por disertante"
+            align="center"
+            value={dis}
+            onChange={setDis}
+            all={{ label: 'Todos' }}
+            options={conCursos.map((d) => ({ value: d.slug, label: nombreCompleto(d) }))}
+          />
         </Reveal>
 
         <p className={styles.count} aria-live="polite">
@@ -153,13 +153,13 @@ export function Component() {
         </p>
 
         {list.length ? (
-          <ul className={[styles.grid, q !== query && styles.pending].filter(Boolean).join(' ')} role="list" key={`${dis ?? 'todos'}|${query}`}>
+          <CardGrid as="ul" role="list" className={[styles.results, q !== query && styles.pending].filter(Boolean).join(' ')} key={`${dis ?? 'todos'}|${query}`}>
             {list.map((c, i) => (
               <li key={c.slug} style={{ animationDelay: `${Math.min(i, 8) * 70}ms` }}>
                 <CourseCard curso={c} />
               </li>
             ))}
-          </ul>
+          </CardGrid>
         ) : (
           <p className={styles.empty}>¡Disculpá! No encontramos cursos sobre eso. Probá con otra palabra.</p>
         )}

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ArrowRight, CalendarDays } from 'lucide-react';
 import type { Curso } from '@/content/schema';
 import { esProximo, etiquetasCurso, type WithSlug } from '@/content';

@@ -17,7 +17,9 @@ import Button from '@/components/ui/Button';
 import Carousel from '@/components/ui/Carousel';
 import Accordion from '@/components/ui/Accordion';
 import Dialog from '@/components/ui/Dialog';
-import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
+import Reveal, { RevealItem } from '@/components/ui/Reveal';
+import CardGrid from '@/components/ui/CardGrid';
+import IconButton from '@/components/ui/IconButton';
 import CourseCard from '@/components/cards/CourseCard';
 import styles from './CarreraPage.module.scss';
 
@@ -66,9 +68,9 @@ function Galeria() {
               <img key={current.imagen} className={styles.swap} src={current.imagen} alt={current.lugar} />
             </div>
             <div className={`${styles.lightboxBar} on-dark`}>
-              <button type="button" onClick={() => step(-1)} aria-label="Foto anterior">
+              <IconButton label="Foto anterior" tone="light" onClick={() => step(-1)}>
                 <ChevronLeft />
-              </button>
+              </IconButton>
               <p>
                 <strong>{current.lugar}</strong>
                 {current.credito && <small> · {current.credito}</small>}
@@ -76,9 +78,9 @@ function Galeria() {
                   {index! + 1} / {imgs.length}
                 </span>
               </p>
-              <button type="button" onClick={() => step(1)} aria-label="Foto siguiente">
+              <IconButton label="Foto siguiente" tone="light" onClick={() => step(1)}>
                 <ChevronRight />
-              </button>
+              </IconButton>
             </div>
           </div>
         )}
@@ -155,7 +157,7 @@ export function Component() {
 
       <Section labelledBy="datos-title">
         <SectionHeader id="datos-title" title="Información *general*" />
-        <RevealGroup className={styles.datos} as="ul">
+        <CardGrid reveal dense as="ul">
           {DATOS.map(({ icon: Icon, label, value }) => (
             <RevealItem key={label} as="li" className={styles.dato}>
               <Icon className={styles.datoIcon} aria-hidden />
@@ -165,7 +167,7 @@ export function Component() {
               </span>
             </RevealItem>
           ))}
-        </RevealGroup>
+        </CardGrid>
       </Section>
 
       <Section tone="dark" labelledBy="validez-title">

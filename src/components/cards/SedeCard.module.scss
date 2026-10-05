@@ -81,29 +81,3 @@
   align-items: center;
   gap: var(--space-3);
 }
-
-.social {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--violet-300);
-  color: var(--color-primary-strong);
-  transition:
-    background-color var(--duration-slow) var(--ease-standard),
-    color var(--duration-slow) var(--ease-standard);
-  @include focus-ring;
-
-  &:hover {
-    background: var(--violet-50);
-    color: var(--violet-700);
-  }
-}
-
-@media (pointer: coarse) {
-  .social {
-    width: 44px;
-    height: 44px;
-  }
-}

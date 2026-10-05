@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { CalendarClock, Clock, GraduationCap, Landmark, ShieldCheck, Wallet } from 'lucide-react';
 import heroImg from '@/assets/media/home/hero.webp';
 import heroSm from '@/assets/media/home/hero-800.webp';
@@ -21,6 +21,7 @@ import CountUp from '@/components/ui/CountUp';
 import SearchField from '@/components/ui/SearchField';
 import { useDebounced } from '@/lib/useDebounced';
 import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
+import CardGrid from '@/components/ui/CardGrid';
 import NewsCard from '@/components/cards/NewsCard';
 import CourseCard from '@/components/cards/CourseCard';
 import SedeCard from '@/components/cards/SedeCard';
@@ -220,13 +221,13 @@ export function Component() {
             psicólogos y kinesiólogos.
           </p>
         </Feature>
-        <RevealGroup className={styles.courses}>
+        <CardGrid reveal className={styles.courses}>
           {destacados.map((c) => (
             <RevealItem key={c.slug}>
               <CourseCard curso={c} />
             </RevealItem>
           ))}
-        </RevealGroup>
+        </CardGrid>
       </Section>
 
       {/* Cuota */}
@@ -269,13 +270,13 @@ export function Component() {
             </p>
           }
         />
-        <RevealGroup className={styles.sedes}>
+        <CardGrid reveal cols={2}>
           {sitio.sedes.map((s) => (
             <RevealItem key={s.nombre}>
               <SedeCard sede={s} />
             </RevealItem>
           ))}
-        </RevealGroup>
+        </CardGrid>
       </Section>
 
       <Faq />

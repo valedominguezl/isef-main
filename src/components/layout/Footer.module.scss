@@ -57,23 +57,6 @@
 .social {
   display: flex;
   gap: var(--space-2);
-
-  a {
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-pill);
-    border: 1px solid rgb(255 255 255 / 0.2);
-    color: white;
-    transition: background-color var(--duration-base), border-color var(--duration-base);
-    @include focus-ring;
-
-    &:hover {
-      background: var(--violet-500);
-      border-color: var(--violet-500);
-    }
-  }
 }
 
 .col {

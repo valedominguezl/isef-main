@@ -1,4 +1,4 @@
-import { Navigate, type RouteObject } from 'react-router-dom';
+import { Navigate, type RouteObject } from 'react-router';
 import Layout, { type RouteHandle } from './Layout';
 import RouteError from '@/pages/RouteError';
 

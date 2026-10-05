@@ -4,19 +4,6 @@
   margin: 0 auto var(--space-8);
 }
 
-.grid {
-  display: grid;
-  gap: var(--space-5);
-
-  @include up($bp-md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include up($bp-xl) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .card {
   display: flex;
   flex-direction: column;

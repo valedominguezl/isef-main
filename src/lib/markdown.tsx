@@ -4,7 +4,7 @@
  * y listas con "- ". Los enlaces internos (/ruta) usan el router.
  */
 import { Fragment, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const INLINE = /(\*\*[^*]+\*\*|_[^_]+_|\[[^\]]+\]\([^)\s]+\))/g;
 

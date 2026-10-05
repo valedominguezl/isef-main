@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { ExternalLink, Save } from 'lucide-react';
 import { useAdmin } from '../AdminContext';
 import { getSingleton } from '../config';

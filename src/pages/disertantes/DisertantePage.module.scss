@@ -214,19 +214,6 @@
   @include focus-ring;
 }
 
-.cursos {
-  display: grid;
-  gap: var(--space-5);
-
-  @include up($bp-md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include up($bp-xl) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 /* ── Impresión / PDF: formato estándar A4 ── */
 @media print {
   @page {

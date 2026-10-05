@@ -1,4 +1,4 @@
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router';
 import Seo from '@/components/seo/Seo';
 import { AdminProvider, useAdmin } from './AdminContext';
 import Shell from './views/Shell';

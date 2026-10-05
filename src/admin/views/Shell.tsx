@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router';
 import { BookOpen, CheckCircle2, CircleDashed, ExternalLink, GraduationCap, LayoutDashboard, LogOut, Newspaper, Settings2, UploadCloud, Users, XCircle } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { useAdmin } from '../AdminContext';

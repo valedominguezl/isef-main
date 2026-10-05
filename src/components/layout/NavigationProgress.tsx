@@ -1,4 +1,4 @@
-import { useNavigation } from 'react-router-dom';
+import { useNavigation } from 'react-router';
 import styles from './NavigationProgress.module.scss';
 
 /** Barra superior mientras se descarga el código de la próxima página (real, no simulada). */

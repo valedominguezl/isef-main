@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
-import { createBrowserRouter, matchRoutes, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, matchRoutes } from 'react-router';
+import { RouterProvider } from 'react-router/dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { routes } from '@/app/routes';
 import '@fontsource-variable/libre-franklin';
@@ -18,7 +19,7 @@ async function start() {
   if (matches?.length) {
     await Promise.all(
       matches.map(async (m) => {
-        const mod = await m.route.lazy!();
+        const mod = await (m.route.lazy as () => Promise<object>)(); // las rutas usan la forma función de lazy
         Object.assign(m.route, { ...mod, lazy: undefined });
       }),
     );
@@ -26,13 +27,12 @@ async function start() {
 
   const router = createBrowserRouter(routes, {
     hydrationData: prerendered ? (window as unknown as { __staticRouterHydrationData?: never }).__staticRouterHydrationData : undefined,
-    future: { v7_relativeSplatPath: true },
   });
 
   const app = (
     <StrictMode>
       <HelmetProvider>
-        <RouterProvider router={router} future={{ v7_startTransition: true }} />
+        <RouterProvider router={router} />
       </HelmetProvider>
     </StrictMode>
   );

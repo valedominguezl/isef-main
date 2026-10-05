@@ -31,4 +31,16 @@ export const WhatsAppIcon = ({ size, ...p }: P) => (
   </svg>
 );
 
-export const socialIcon = { facebook: FacebookIcon, instagram: InstagramIcon, youtube: FacebookIcon, tiktok: InstagramIcon } as const;
+export const YouTubeIcon = ({ size, ...p }: P) => (
+  <svg {...base(size, p)} fill="currentColor">
+    <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.5 2.5 0 0 0-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8ZM10 15V9l5.2 3L10 15Z" />
+  </svg>
+);
+
+export const TikTokIcon = ({ size, ...p }: P) => (
+  <svg {...base(size, p)} fill="currentColor">
+    <path d="M16.6 3h-3.1v12.2a2.7 2.7 0 1 1-2.7-2.7c.3 0 .5 0 .8.1V9.4a5.8 5.8 0 1 0 5 5.8V9a7.3 7.3 0 0 0 4.4 1.5V7.4A4.4 4.4 0 0 1 16.6 3Z" />
+  </svg>
+);
+
+export const socialIcon = { facebook: FacebookIcon, instagram: InstagramIcon, youtube: YouTubeIcon, tiktok: TikTokIcon } as const;

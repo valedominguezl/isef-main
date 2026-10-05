@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet, ScrollRestoration, useLocation, useMatches } from 'react-router-dom';
+import { Outlet, ScrollRestoration, useLocation, useMatches } from 'react-router';
 import { domAnimation, LazyMotion, MotionConfig } from 'motion/react';
 import Navbar, { type NavTheme } from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';

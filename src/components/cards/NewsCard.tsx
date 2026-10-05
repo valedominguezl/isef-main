@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import type { Novedad } from '@/content/schema';
 import { NOVEDAD_CATEGORIAS } from '@/content/constants';
 import type { WithSlug } from '@/content';

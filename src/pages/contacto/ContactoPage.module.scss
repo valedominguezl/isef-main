@@ -58,15 +58,6 @@
   }
 }
 
-.sedes {
-  display: grid;
-  gap: var(--space-6);
-
-  @include up($bp-lg) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 .map,
 .mapPlaceholder {
   width: 100%;

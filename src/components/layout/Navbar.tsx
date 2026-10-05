@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router';
 import { AnimatePresence, m } from 'motion/react';
 import { ExternalLink, Menu, Search, X } from 'lucide-react';
 import logo from '@/assets/logo.webp';
@@ -13,13 +13,48 @@ import styles from './Navbar.module.scss';
 
 export type NavTheme = 'overlay' | 'solid';
 
-/** Barra fija, siempre blanca (no se esconde ni cambia al desplazarse). */
-export default function Navbar(_props: { theme?: NavTheme }) {
+/**
+ * Como el sitio original: transparente sobre la foto de cabecera ('overlay') o blanca en páginas
+ * de fondo claro ('solid'); pasada la cabecera toma el degradé de marca. Se esconde al bajar y
+ * vuelve al subir.
+ */
+export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const header = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
   const { open: openSearch } = useSearch();
 
   useEffect(() => setMenuOpen(false), [pathname]);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      const navH = header.current?.offsetHeight ?? 72;
+      // La cabecera de la página es el primer bloque de <main>: el degradé aparece cuando la barra la deja atrás
+      const hero = document.getElementById('contenido')?.firstElementChild;
+      setPastHero(hero ? hero.getBoundingClientRect().bottom <= navH : y > 700);
+      if (y <= navH) setHidden(false);
+      else if (Math.abs(y - lastY) > 4) setHidden(y > lastY);
+      lastY = y;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, [pathname]);
+
+  const tone = pastHero ? styles.brandBg : theme === 'solid' ? styles.light : styles.clear;
+  const onLight = !pastHero && theme === 'solid';
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -35,7 +70,11 @@ export default function Navbar(_props: { theme?: NavTheme }) {
 
   return (
     <>
-      <header className={styles.header}>
+      <header
+        ref={header}
+        className={[styles.header, tone, hidden && !menuOpen && styles.hidden].filter(Boolean).join(' ')}
+        onFocusCapture={() => setHidden(false)}
+      >
         <InscripcionesAviso />
         <nav className={styles.nav} aria-label="Principal">
           <Link to="/" className={styles.brand} aria-label={`${sitio.nombre} — Inicio`}>
@@ -60,11 +99,19 @@ export default function Navbar(_props: { theme?: NavTheme }) {
               <kbd className={styles.kbd}>/</kbd>
             </button>
             {inscripcionesVigentes() && (
-              <Button to="/inscripciones" size="sm" icon="none" className={styles.cta}>
+              <Button to="/inscripciones" size="sm" icon="none" variant={pastHero ? 'light' : 'primary'} className={styles.cta}>
                 Inscribite
               </Button>
             )}
-            <Button href={sitio.campusUrl} target="_blank" rel="noopener noreferrer" size="sm" variant="outline" icon="none" className={styles.campus}>
+            <Button
+              href={sitio.campusUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              size="sm"
+              variant={onLight ? 'outline' : 'outline-light'}
+              icon="none"
+              className={styles.campus}
+            >
               Campus virtual
             </Button>
             <button

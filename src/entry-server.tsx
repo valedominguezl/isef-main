@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
-import { createStaticHandler, createStaticRouter, StaticRouterProvider } from 'react-router-dom/server';
+import { createStaticHandler, createStaticRouter, StaticRouterProvider } from 'react-router';
 import { HelmetProvider, type HelmetServerState } from 'react-helmet-async';
 import { routes } from '@/app/routes';
 

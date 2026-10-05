@@ -1,0 +1,123 @@
+@use '@/styles/mixins' as *;
+
+/*
+ * Botón redondo de solo ícono. Los colores van por variables (--ib-*) como en Button:
+ * cada combinación variante × tono solo cambia variables, nunca la estructura.
+ */
+.btn {
+  --ib-size: 44px;
+  --ib-bg: transparent;
+  --ib-fg: currentColor;
+  --ib-border: transparent;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--ib-size);
+  height: var(--ib-size);
+  padding: 0;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--ib-border);
+  background: var(--ib-bg);
+  color: var(--ib-fg);
+  text-decoration: none;
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard),
+    opacity var(--duration-base) var(--ease-standard);
+  @include focus-ring;
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+/* ── Tamaños (sm crece a 44 px en pantallas táctiles: área mínima de toque) ── */
+.sm {
+  --ib-size: 36px;
+
+  @media (pointer: coarse) {
+    --ib-size: 44px;
+  }
+}
+
+.md {
+  --ib-size: 44px;
+}
+
+.lg {
+  --ib-size: 48px;
+}
+
+/* ── ghost: sin borde, el hover es un tinte suave ── */
+.ghost.default {
+  --ib-fg: var(--color-text-muted);
+
+  &:hover:not(:disabled) {
+    --ib-bg: var(--ink-50);
+    --ib-fg: var(--color-text);
+  }
+}
+
+.ghost.brand {
+  --ib-fg: var(--color-primary-strong);
+
+  &:hover:not(:disabled) {
+    --ib-bg: var(--violet-50);
+    --ib-fg: var(--violet-700);
+  }
+}
+
+.ghost.light {
+  --ib-fg: var(--color-on-dark);
+
+  &:hover:not(:disabled) {
+    --ib-bg: rgb(255 255 255 / 0.12);
+  }
+}
+
+/* ── outline: con borde ── */
+.outline.default {
+  --ib-bg: var(--color-surface);
+  --ib-fg: var(--color-text);
+  --ib-border: var(--color-border-strong);
+
+  &:hover:not(:disabled) {
+    --ib-bg: var(--violet-500);
+    --ib-border: var(--violet-500);
+    --ib-fg: var(--color-on-dark);
+  }
+}
+
+/* Gemelo de <Button variant="outline">: para ir al lado de uno */
+.outline.brand {
+  --ib-fg: var(--color-primary-strong);
+  --ib-border: var(--violet-300);
+
+  &:hover:not(:disabled) {
+    --ib-bg: var(--violet-50);
+    --ib-fg: var(--violet-700);
+  }
+}
+
+.outline.light {
+  --ib-fg: var(--color-on-dark);
+  --ib-border: rgb(255 255 255 / 0.2);
+
+  &:hover:not(:disabled) {
+    --ib-bg: var(--violet-500);
+    --ib-border: var(--violet-500);
+  }
+}
+
+/* ── overlay: círculo oscuro translúcido, se lee sobre cualquier foto (el tono no aplica) ── */
+.overlay {
+  --ib-bg: rgb(0 0 0 / 0.35);
+  --ib-fg: var(--color-on-dark);
+  backdrop-filter: blur(8px);
+
+  &:hover:not(:disabled) {
+    --ib-bg: rgb(0 0 0 / 0.55);
+  }
+}

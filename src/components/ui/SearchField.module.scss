@@ -80,22 +80,3 @@
     opacity: 1;
   }
 }
-
-.clear {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-pill);
-  color: var(--color-text-muted);
-  transition:
-    background-color var(--duration-slow) var(--ease-standard),
-    color var(--duration-slow) var(--ease-standard);
-  @include focus-ring;
-
-  &:hover {
-    background: var(--ink-50);
-    color: var(--color-text);
-  }
-}

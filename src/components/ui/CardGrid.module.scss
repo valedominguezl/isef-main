@@ -1,0 +1,75 @@
+@use '@/styles/mixins' as *;
+
+.grid {
+  display: grid;
+  gap: var(--space-5);
+  list-style: none;
+
+  /* Cada celda estira a su tarjeta: las de una misma fila quedan del mismo alto */
+  > * {
+    display: flex;
+  }
+
+  > * > :only-child {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* ── Rampa normal (tarjetas con foto/texto: cursos, novedades, sedes) ── */
+.cols2 {
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.cols3 {
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up($bp-xl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cols4 {
+  @include up($bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up($bp-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include up($bp-xl) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Rampa densa (tarjetas chicas: disertantes, datos): llega antes al máximo ── */
+.cols2.dense {
+  @include up($bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.cols3.dense {
+  @include up($bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up($bp-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cols4.dense {
+  @include up($bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up($bp-lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

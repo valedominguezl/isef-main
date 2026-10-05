@@ -226,8 +226,8 @@ export const SINGLETONS: SingletonConfig[] = [
         label: 'Inscripciones',
         fields: [
           { type: 'boolean', name: 'abiertas', label: 'Inscripciones abiertas (muestra el botón "Inscribite")' },
-          { type: 'date', name: 'inicio', label: 'Abren el', help: 'Opcional. Antes de esta fecha no se muestran como abiertas.' },
-          { type: 'date', name: 'cierre', label: 'Cierran el', help: 'Se muestra arriba de todo el sitio con la cuenta regresiva.' },
+          { type: 'date', name: 'inicio', label: 'Abren el (opcional)', help: 'Si la cargás, antes de esta fecha el sitio no las muestra como abiertas.' },
+          { type: 'date', name: 'cierre', label: 'Cierran el (opcional)', help: 'Si la cargás, arriba de todo el sitio aparece la franja con la fecha y, los últimos 15 días, la cuenta regresiva. Sin fecha no se muestra.' },
           { type: 'text', name: 'texto', label: 'Texto del botón principal' },
         ],
       },

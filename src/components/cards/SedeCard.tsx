@@ -4,6 +4,7 @@ import { sitio } from '@/content';
 import { formatPhone, whatsappUrl } from '@/lib/format';
 import { FacebookIcon, WhatsAppIcon } from '../ui/Icons';
 import Button from '../ui/Button';
+import IconButton from '../ui/IconButton';
 import styles from './SedeCard.module.scss';
 
 type Sede = (typeof sitio.sedes)[number];
@@ -54,9 +55,9 @@ export default function SedeCard({ sede, media, headingLevel = 3 }: Props) {
             Cómo llegar
           </Button>
           {sede.facebook && (
-            <a href={sede.facebook} target="_blank" rel="noopener noreferrer" className={styles.social} aria-label={`Facebook de la sede ${sede.nombre}`}>
+            <IconButton href={sede.facebook} target="_blank" rel="noopener noreferrer" label={`Facebook de la sede ${sede.nombre}`} size="sm" variant="outline" tone="brand">
               <FacebookIcon size={18} />
-            </a>
+            </IconButton>
           )}
         </div>
       </div>
