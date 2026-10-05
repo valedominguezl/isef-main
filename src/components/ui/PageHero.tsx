@@ -30,7 +30,7 @@ export default function PageHero({ title, subtitle, eyebrow, image, imageSmall, 
           srcSet={imageSmall ? `${imageSmall} 800w, ${image} 1920w` : undefined}
           sizes={imageSmall ? '100vw' : undefined}
           alt=""
-          {...{ fetchpriority: 'high' }}
+          fetchPriority="high"
           decoding="async"
         />
       )}

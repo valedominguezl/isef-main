@@ -62,13 +62,13 @@ const FONT_PRELOADS = fs
   .map((f) => `<link rel="preload" href="/assets/${f}" as="font" type="font/woff2" crossorigin>`)
   .join('\n');
 
-/** Precarga la imagen principal (LCP) marcada con fetchpriority="high". */
-function lcpPreload(html: string) {
+/** Precarga la imagen principal (LCP) marcada con fetchpriority="high", salvo que React ya la precargue. */
+function lcpPreload(html: string, head: string) {
   const m = html.match(/<img[^>]*fetchpriority="high"[^>]*>/);
   const src = m?.[0].match(/src="([^"]+)"/)?.[1];
   const srcset = m?.[0].match(/srcSet="([^"]+)"|srcset="([^"]+)"/);
   const set = srcset ? srcset[1] ?? srcset[2] : '';
-  if (!src) return '';
+  if (!src || head.includes(`href="${src}"`) || (set && head.includes(set))) return '';
   return set
     ? `<link rel="preload" as="image" imagesrcset="${set}" imagesizes="100vw" fetchpriority="high">`
     : `<link rel="preload" as="image" href="${src}" fetchpriority="high">`;
@@ -85,10 +85,12 @@ function write(file: string, html: string) {
 }
 
 async function page(url: string, out = fileFor(url)) {
-  const { html, helmet } = await render(url);
-  const head = [helmet.title, helmet.priority, helmet.meta, helmet.link, helmet.script].map((h: { toString(): string }) => h.toString()).join('\n') + '\n' + assetsFor(url).links + '\n' + FONT_PRELOADS + '\n' + lcpPreload(html);
+  // `seo`: <title>, <meta>, <link> y precargas que React 19 sube al <head> (ver src/entry-server.tsx).
+  // Van marcadas con data-seo: el cliente las saca antes de montar y React pone las suyas (sin duplicados).
+  const { html, head: seo } = await render(url);
+  const head = seo.replace(/<(title|meta|link)\b/g, '<$1 data-seo') + '\n' + assetsFor(url).links + '\n' + FONT_PRELOADS + '\n' + lcpPreload(html, seo);
   const doc = template
-    .replace(/<html[^>]*>/, () => `<html ${helmet.htmlAttributes.toString() || 'lang="es-AR"'}>`)
+    .replace(/<html[^>]*>/, () => '<html lang="es-AR">')
     .replace('<!--app-head-->', () => head)
     .replace('<!--app-html-->', () => html);
   write(out, doc);
@@ -97,7 +99,7 @@ async function page(url: string, out = fileFor(url)) {
 
 function shell(url: string, title: string, out = fileFor(url), placeholder = '') {
   const doc = template
-    .replace('<!--app-head-->', `<title>${title} | ${sitio.nombre}</title>\n<meta name="robots" content="noindex, nofollow">`)
+    .replace('<!--app-head-->', `<title data-seo>${title} | ${sitio.nombre}</title>\n<meta data-seo name="robots" content="noindex, nofollow">`)
     .replace('<div id="root"><!--app-html--></div>', `<div id="root" data-shell="1">${placeholder}</div>`);
   write(out, doc);
 }

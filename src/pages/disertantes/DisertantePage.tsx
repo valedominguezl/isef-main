@@ -112,7 +112,7 @@ export function Component() {
             </span>
           </div>
           <div className={styles.profile}>
-            {d.foto && <img className={styles.photo} src={d.foto} alt={`Retrato de ${nombre}`} width={200} height={200} {...{ fetchpriority: "high" }} />}
+            {d.foto && <img className={styles.photo} src={d.foto} alt={`Retrato de ${nombre}`} width={200} height={200} fetchPriority="high" />}
             <div className={styles.identity}>
               <p className={styles.area}>{d.especialidad}</p>
               <h1>{nombre}</h1>

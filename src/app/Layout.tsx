@@ -9,7 +9,7 @@ import AmbientShapes from '@/components/layout/AmbientShapes';
 import CookieBanner from '@/features/consent/CookieBanner';
 import { ConsentProvider } from '@/features/consent/ConsentContext';
 import { SearchProvider } from '@/features/search/SearchContext';
-import Seo, { organizationJsonLd, safeJson } from '@/components/seo/Seo';
+import { organizationJsonLd, safeJson } from '@/components/seo/Seo';
 import { trackPageView } from '@/lib/analytics';
 import { Helmet } from 'react-helmet-async';
 
@@ -53,7 +53,7 @@ export default function Layout() {
     <MotionConfig reducedMotion="user">
       <ConsentProvider>
         <SearchProvider>
-          <Seo />
+          {/* Sin <Seo /> por defecto: cada página pone el suyo y React 19 no deduplica <title>/<meta> */}
           <Helmet>
             <script type="application/ld+json">{safeJson({ '@context': 'https://schema.org', ...organizationJsonLd() })}</script>
           </Helmet>

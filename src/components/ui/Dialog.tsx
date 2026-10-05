@@ -24,7 +24,9 @@ export default function Dialog({ open, onClose, title, hideTitle, size = 'md', v
   const [rendered, setRendered] = useState(open);
   const [closing, setClosing] = useState(false);
   const openRef = useRef(open);
-  openRef.current = open;
+  useEffect(() => {
+    openRef.current = open;
+  });
 
   useEffect(() => {
     const d = ref.current;

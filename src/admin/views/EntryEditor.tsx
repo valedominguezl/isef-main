@@ -25,12 +25,15 @@ import styles from '../Admin.module.scss';
 type Obj = Record<string, unknown>;
 
 export function validate(schema: ZodTypeAny, data: unknown): { ok: true; value: Obj } | { ok: false; errors: Errors } {
-  const r = schema.safeParse(data);
+  // Campo faltante → mensaje propio; el resto usa el mensaje del esquema (o el de zod)
+  const r = schema.safeParse(data, {
+    error: (iss) => (iss.code === 'invalid_type' && iss.input === undefined ? 'Este campo es obligatorio' : undefined),
+  });
   if (r.success) return { ok: true, value: r.data as Obj };
   const errors: Errors = {};
   for (const i of r.error.issues) {
     const key = i.path.join('.') || '_';
-    errors[key] ??= i.message === 'Required' ? 'Este campo es obligatorio' : i.message;
+    errors[key] ??= i.message;
   }
   return { ok: false, errors };
 }
@@ -134,7 +137,9 @@ export default function EntryEditor() {
   const linkedQuick = useLinkedQuick(col);
   // Si el archivo se relee mientras hay cambios sin guardar, no pisar lo que se está editando
   const dirtyRef = useRef(dirty);
-  dirtyRef.current = dirty;
+  useEffect(() => {
+    dirtyRef.current = dirty;
+  });
   const shownSlug = useRef<string | null>(null);
 
   useEffect(() => {

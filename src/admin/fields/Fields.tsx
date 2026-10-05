@@ -36,7 +36,7 @@ function Collapse({ open, children }: { open: boolean; children: ReactNode }) {
     if (open) setMounted(true);
   }, [open]);
   return (
-    <div className={styles.collapse} data-open={open || undefined} {...(!open && { inert: '' })}>
+    <div className={styles.collapse} data-open={open || undefined} inert={!open}>
       <div className={styles.collapseInner}>{mounted && children}</div>
     </div>
   );
@@ -217,7 +217,9 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
   const toast = useToast();
   // "Deshacer" corre unos segundos después: usa la lista y el onChange del último render, no los de cuando se borró
   const latest = useRef({ items, onChange });
-  latest.current = { items, onChange };
+  useEffect(() => {
+    latest.current = { items, onChange };
+  });
   const [open, setOpen] = useState<Set<number>>(() => new Set(field.collapsed ? [] : items.map((_, i) => i)));
   const toggle = (i: number) =>
     setOpen((s) => {
