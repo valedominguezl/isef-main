@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────────────────────
 # I.S.E.F. San Luis — Apache (sitio estático prerenderizado)
-# Equivalente nginx en docs/DEPLOY.md
+# Producción usa nginx: deploy/nginx/isefsanluis.net.conf (mantener sincronizados)
 # ─────────────────────────────────────────────────────────────
 Options -Indexes -MultiViews
 DirectorySlash Off
