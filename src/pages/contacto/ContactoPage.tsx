@@ -1,5 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
-import { sitio } from '@/content';
+import { paginas, sitio } from '@/content';
+import { Markdown } from '@/lib/markdown';
 import { formatPhone, whatsappUrl } from '@/lib/format';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
 import PageHero from '@/components/ui/PageHero';
@@ -18,21 +19,25 @@ function Mapa({ src, title }: { src: string; title: string }) {
 /** Una fila por número: el directorio se lee como tabla y cada fila lleva a ese WhatsApp. */
 const filas = sitio.telefonos.flatMap((t) => t.numeros.map((n) => ({ ...t, numero: n })));
 
+/** Textos y fotos editables desde /admin → Páginas → Contacto (sin foto de cabecera, salvo que se cargue una). */
+const textos = paginas.contacto;
+
 export function Component() {
   return (
     <>
       <Seo
         title="Contacto y sedes"
         description="Teléfonos de rectoría, secretaría académica y secretarías administrativas, y ubicación de las sedes del I.S.E.F. en San Luis y Villa Mercedes."
+        image={textos.hero.imagen}
         jsonLd={breadcrumbJsonLd([
           { name: 'Inicio', path: '/' },
           { name: 'Contacto', path: '/contacto' },
         ])}
       />
-      <PageHero title="Contacto" subtitle="Toda la información de nuestras sedes" breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Contacto' }]} />
+      <PageHero image={textos.hero.imagen} title={textos.hero.titulo} subtitle={textos.hero.subtitulo} breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Contacto' }]} />
 
       <Section labelledBy="tel-title">
-        <SectionHeader id="tel-title" title="Teléfonos *de contacto*" lead="Todos los números funcionan por WhatsApp." />
+        <SectionHeader id="tel-title" title={textos.telefonos.titulo} lead={<Markdown text={textos.telefonos.texto} />} />
         <RevealGroup as="ul" className={styles.directory}>
           {filas.map((t) => (
             <RevealItem key={t.numero} as="li">
@@ -61,7 +66,7 @@ export function Component() {
       </Section>
 
       <Section id="sedes" tone="tint" width="wide" labelledBy="sedes-title">
-        <SectionHeader id="sedes-title" title="Nuestras *sedes*" lead="Cómo llegar a cada una." />
+        <SectionHeader id="sedes-title" title={textos.sedes.titulo} lead={<Markdown text={textos.sedes.texto} />} />
         <CardGrid reveal cols={2}>
           {sitio.sedes.map((s) => (
             <RevealItem key={s.nombre}>

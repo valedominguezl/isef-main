@@ -10,6 +10,8 @@ import inscripcionesJson from '@content/inscripciones.json';
 import arancelesJson from '@content/aranceles.json';
 import conferenciasJson from '@content/conferencias.json';
 import galeriaJson from '@content/galeria.json';
+import { resolverPagina, type PaginaResuelta } from './paginas';
+import type { PaginaKey } from './schema';
 
 export type WithSlug<T> = T & { slug: string };
 
@@ -31,6 +33,20 @@ export const inscripciones = inscripcionesJson as Inscripciones;
 export const aranceles = arancelesJson as Aranceles;
 export const conferencias = conferenciasJson as Conferencias;
 export const galeria = galeriaJson as Galeria;
+
+/** Textos y fotos de cada página (content/paginas/*.json, editables en /admin → Páginas). */
+const paginasJson = import.meta.glob('/content/paginas/*.json', { eager: true, import: 'default' });
+const pagina = <K extends PaginaKey>(k: K) => resolverPagina(k, paginasJson[`/content/paginas/${k}.json`]);
+export const paginas: { [K in PaginaKey]: PaginaResuelta<K> } = {
+  inicio: pagina('inicio'),
+  carrera: pagina('carrera'),
+  especializaciones: pagina('especializaciones'),
+  inscripciones: pagina('inscripciones'),
+  novedades: pagina('novedades'),
+  contacto: pagina('contacto'),
+  aranceles: pagina('aranceles'),
+  conferencias: pagina('conferencias'),
+};
 
 /** Inscripciones abiertas hoy: el interruptor del panel + la ventana inicio/cierre (si están cargadas). */
 export const inscripcionesVigentes = (hoy: string = TODAY) => {
@@ -61,6 +77,7 @@ export const etiquetasCurso = (c: Pick<Curso, 'creado' | 'fechaInicio' | 'destac
   );
 
 const byFeatured = (a: WithSlug<Curso>, b: WithSlug<Curso>) =>
+  Number(b.esteAnio === true) - Number(a.esteAnio === true) ||
   Number(esProximo(b)) - Number(esProximo(a)) ||
   (esProximo(a) && esProximo(b) ? a.fechaInicio!.localeCompare(b.fechaInicio!) : 0) ||
   Number(esNuevo(b)) - Number(esNuevo(a)) ||

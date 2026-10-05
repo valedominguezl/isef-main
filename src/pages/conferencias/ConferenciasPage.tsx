@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { FileText, PlayCircle } from 'lucide-react';
-import { conferencias } from '@/content';
+import { conferencias, paginas } from '@/content';
 import { normalize } from '@/lib/format';
 import Seo from '@/components/seo/Seo';
 import SearchField from '@/components/ui/SearchField';
@@ -9,6 +9,9 @@ import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
 import CardGrid from '@/components/ui/CardGrid';
 import styles from './ConferenciasPage.module.scss';
+
+/** Textos y foto editables desde /admin → Páginas → Conferencias. */
+const textos = paginas.conferencias;
 
 /** Grabaciones de conferencias para alumnos (URL no listada; noindex). */
 export function Component() {
@@ -21,7 +24,7 @@ export function Component() {
   return (
     <>
       <Seo title="Conferencias" noindex />
-      <PageHero title="Conferencias" subtitle="Accedé a las grabaciones desde un solo lugar" />
+      <PageHero image={textos.hero.imagen} title={textos.hero.titulo} subtitle={textos.hero.subtitulo} />
       <Section width="wide">
         <SearchField className={styles.search} value={q} onChange={setQ} pending={q !== query} label="Buscar conferencias" placeholder="Buscar conferencias…" />
         <CardGrid>

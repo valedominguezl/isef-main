@@ -4,6 +4,7 @@ import { BookOpen, CheckCircle2, CircleDashed, ExternalLink, GraduationCap, Layo
 import logo from '@/assets/logo.webp';
 import { useAdmin } from '../AdminContext';
 import { SINGLETONS } from '../config';
+import { PAGINAS, PAGINA_KEYS } from '../paginasConfig';
 import PendingDrawer from './PendingDrawer';
 import styles from '../Admin.module.scss';
 
@@ -52,8 +53,14 @@ export default function Shell({ children }: { children: ReactNode }) {
               </NavLink>
             );
           })}
+          <p className={styles.navGroup}>Páginas</p>
+          {PAGINAS.map(({ key, nav, icon: Icon, label }) => (
+            <NavLink key={key} to={`/admin/s/${key}`} className={link} title={label}>
+              <Icon size={18} /> {nav}
+            </NavLink>
+          ))}
           <p className={styles.navGroup}>Configuración</p>
-          {SINGLETONS.map((s) => (
+          {SINGLETONS.filter((s) => !PAGINA_KEYS.has(s.key)).map((s) => (
             <NavLink key={s.key} to={`/admin/s/${s.key}`} className={link}>
               {s.key === 'sitio' ? <Settings2 size={18} /> : <BookOpen size={18} />} {s.label}
             </NavLink>

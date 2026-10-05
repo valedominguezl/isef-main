@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
-import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, Plus, Star, Trash2, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, Bold, ChevronDown, Eye, FileUp, ImagePlus, Italic, Link2, List, Plus, Trash2, X } from 'lucide-react';
 import { Markdown } from '@/lib/markdown';
 import { useAdmin } from '../AdminContext';
 import { processImage, blobToBase64, slugify } from '../image';
@@ -128,20 +128,23 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
       setBusy(false);
     }
   };
-  const src = mediaUrl(value);
+  // Sin foto propia: se muestra la que usa hoy el sitio (si el campo la conoce)
+  const src = mediaUrl(value) ?? field.actual;
+  const esActual = !value && Boolean(field.actual);
   return (
     <div className={styles.image}>
       <div className={styles.imagePreview} style={field.aspect ? { aspectRatio: String(field.aspect) } : undefined}>
         {src ? <img src={src} alt="" /> : <ImagePlus size={28} aria-hidden />}
       </div>
       <div className={styles.imageActions}>
+        {esActual && <p className={styles.help}>Foto actual del sitio.</p>}
         <label htmlFor={id} className={styles.btnSecondary}>
-          <FileUp size={16} /> {busy ? 'Procesando…' : value ? 'Reemplazar' : 'Subir imagen'}
+          <FileUp size={16} /> {busy ? 'Procesando…' : value || esActual ? 'Cambiar foto' : 'Subir imagen'}
         </label>
         <input id={id} type="file" accept="image/*" hidden onChange={(e) => onFile(e.target.files?.[0])} />
         {value && (
           <button type="button" className={styles.btnGhost} onClick={() => onChange(undefined)}>
-            Quitar
+            {field.actual ? 'Volver a la foto original' : 'Quitar'}
           </button>
         )}
         {value && <code className={styles.path}>{value}</code>}
@@ -347,24 +350,6 @@ export function FieldRenderer(props: FieldProps) {
         </Wrapper>
       );
     case 'boolean':
-      if (field.featured) {
-        const on = Boolean(value);
-        return (
-          <button
-            type="button"
-            className={[styles.featured, on && styles.featuredOn].filter(Boolean).join(' ')}
-            aria-pressed={on}
-            onClick={() => onChange(!on)}
-          >
-            <Star size={22} className={styles.featuredStar} fill={on ? 'currentColor' : 'none'} aria-hidden />
-            <span>
-              <strong>{field.label}</strong>
-              {field.help && <small>{field.help}</small>}
-            </span>
-            <span className={styles.featuredState}>{on ? 'Sí' : 'No'}</span>
-          </button>
-        );
-      }
       return (
         <div className={styles.switchRow}>
           <input id={id} type="checkbox" role="switch" className={styles.switch} checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)} />

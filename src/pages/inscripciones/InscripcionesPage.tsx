@@ -1,7 +1,8 @@
 import { FilePen, Receipt, Stethoscope } from 'lucide-react';
 import heroImg from '@/assets/media/inscripciones/main.webp';
 import heroSm from '@/assets/media/inscripciones/main-800.webp';
-import { faq, inscripciones, sitio, inscripcionesVigentes } from '@/content';
+import { Fragment } from 'react';
+import { faq, inscripciones, paginas, sitio, inscripcionesVigentes } from '@/content';
 import { whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import { track } from '@/lib/analytics';
@@ -17,6 +18,15 @@ import styles from './InscripcionesPage.module.scss';
 /** Ícono de cada paso (planilla, exámenes médicos, pago), como en el sitio original. */
 const STEP_ICONS = [FilePen, Stethoscope, Receipt];
 
+/** Textos y fotos editables desde /admin → Páginas → Inscripciones. */
+const textos = paginas.inscripciones;
+
+/** Título sobre la banda violeta: el *resaltado* va en negrita (no en color, que no contrasta). */
+const negrita = (titulo: string) =>
+  titulo.split(/(\*[^*]+\*)/g).map((parte, i) =>
+    parte.length > 2 && parte.startsWith('*') && parte.endsWith('*') ? <strong key={i}>{parte.slice(1, -1)}</strong> : <Fragment key={i}>{parte}</Fragment>,
+  );
+
 export function Component() {
   const preguntas = faq.preguntas.filter((p) => /inscrib|requisit|secundario|cuota|present/i.test(p.pregunta));
   return (
@@ -24,7 +34,7 @@ export function Component() {
       <Seo
         title="Inscripciones"
         description={`Cómo inscribirte al Profesorado de Educación Física: ficha de inscripción, exámenes médicos y reserva de banco. Plazo para presentar requisitos: ${inscripciones.fechaLimiteRequisitos}.`}
-        image={heroImg}
+        image={textos.hero.imagen ?? heroImg}
         jsonLd={[
           {
             '@type': 'HowTo',
@@ -38,15 +48,15 @@ export function Component() {
         ]}
       />
       <PageHero
-        imageSmall={heroSm}
-        image={heroImg}
-        title="Inscripciones"
-        subtitle={inscripcionesVigentes() ? sitio.inscripciones.texto : 'Toda la información para inscribirte'}
+        imageSmall={textos.hero.imagen ? undefined : heroSm}
+        image={textos.hero.imagen ?? heroImg}
+        title={textos.hero.titulo}
+        subtitle={inscripcionesVigentes() ? sitio.inscripciones.texto : textos.hero.subtitulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Inscripciones' }]}
       />
 
       <Section labelledBy="req-title">
-        <SectionHeader id="req-title" title="Requisitos *a presentar*" lead={<Markdown text={inscripciones.intro} />} />
+        <SectionHeader id="req-title" title={textos.requisitos.titulo} lead={<Markdown text={inscripciones.intro} />} />
         <RevealGroup className={styles.steps} as="ol">
           {inscripciones.pasos.map((p, i) => {
             const Icon = STEP_ICONS[i % STEP_ICONS.length];
@@ -95,9 +105,7 @@ export function Component() {
       <Section tone="brand" labelledBy="sec-title">
         <div className={styles.secundario}>
           <Reveal>
-            <h2 id="sec-title">
-              ¿Recién terminás el <strong>secundario</strong>?
-            </h2>
+            <h2 id="sec-title">{negrita(textos.secundario.titulo)}</h2>
             <Markdown text={inscripciones.secundario} className={styles.secText} />
           </Reveal>
           <Reveal className={styles.calendar} delay={0.15} aria-hidden>
@@ -108,7 +116,7 @@ export function Component() {
       </Section>
 
       <Section labelledBy="m25-title">
-        <SectionHeader id="m25-title" title="Mayores de *25 años* sin secundario" lead={<Markdown text={inscripciones.mayores25.descripcion} />} />
+        <SectionHeader id="m25-title" title={textos.mayores25.titulo} lead={<Markdown text={inscripciones.mayores25.descripcion} />} />
         <Reveal className={styles.files}>
           {inscripciones.mayores25.archivos.map((a) => (
             <Button key={a.url} href={a.url} download icon="download" onClick={() => track('file_download', { archivo: a.url })}>
@@ -120,7 +128,7 @@ export function Component() {
 
       {preguntas.length > 0 && (
         <Section tone="tint" width="prose" labelledBy="dudas-title">
-          <SectionHeader id="dudas-title" title="Dudas *frecuentes*" align="center" />
+          <SectionHeader id="dudas-title" title={textos.dudas.titulo} align="center" />
           <Accordion items={preguntas.map((p) => ({ title: p.pregunta, content: <Markdown text={p.respuesta} /> }))} />
           <div className={styles.center}>
             <Button href={whatsappUrl(sitio.whatsapp, 'Hola! Tengo una consulta sobre la inscripción.')} variant="outline" icon="external">

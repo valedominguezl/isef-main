@@ -3,7 +3,7 @@
 Sitio del profesorado (isefsanluis.net). React 18 + TS + Vite 6, **prerenderizado** (SSG) y con panel de contenido Git-based. El campus (Chamilo) es otro sistema: no está acá.
 
 ## Mapa
-- `content/*.json` → TODO el contenido editable (cursos, disertantes, cv, novedades, faq, plan, sitio, inscripciones, aranceles, galería, conferencias). Esquemas zod: `src/content/schema.ts`. Acceso tipado: `src/content/index.ts`.
+- `content/*.json` → TODO el contenido editable (cursos, disertantes, cv, novedades, faq, plan, sitio, inscripciones, aranceles, galería, conferencias); `content/paginas/*.json` → textos y fotos de cada página (vacío = default de `src/content/paginas.ts`). El JSON se lee SIN defaults de zod: campos nuevos con `?? fallback`. Esquemas zod: `src/content/schema.ts`. Acceso tipado: `src/content/index.ts`.
 - `src/pages/<ruta>/*Page.tsx` → una página por ruta (lazy). Rutas: `src/app/routes.tsx`. Layout: `src/app/Layout.tsx`.
 - `src/components/ui/*` → sistema de diseño (Button, Section, SectionHeader, PageHero, Feature, Accordion, Carousel, Dialog, Reveal…). `src/components/cards/*` tarjetas.
 - `src/styles/tokens.scss` ↔ `design/tokens.json` + `design/DESIGN.md` (sistema de diseño; mantener sincronizados).

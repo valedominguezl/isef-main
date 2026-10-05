@@ -76,3 +76,14 @@
 .pending {
   opacity: 0.5;
 }
+
+/* Este año / ediciones anteriores */
+.group + .group {
+  margin-top: var(--space-16);
+}
+
+.groupTitle {
+  margin-bottom: var(--space-6);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-light);
+}

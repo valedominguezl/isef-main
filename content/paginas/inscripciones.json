@@ -1,0 +1,18 @@
+{
+  "hero": {
+    "titulo": "Inscripciones",
+    "subtitulo": "Toda la información para inscribirte"
+  },
+  "requisitos": {
+    "titulo": "Requisitos *a presentar*"
+  },
+  "secundario": {
+    "titulo": "¿Recién terminás el *secundario*?"
+  },
+  "mayores25": {
+    "titulo": "Mayores de *25 años* sin secundario"
+  },
+  "dudas": {
+    "titulo": "Dudas *frecuentes*"
+  }
+}

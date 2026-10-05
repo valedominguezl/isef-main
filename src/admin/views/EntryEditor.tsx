@@ -12,6 +12,7 @@ import { clean, FieldRenderer, Section, useDebounced, type Errors, type RefOptio
 import { slugify } from '../image';
 import { useEntries, useFile } from '../useEntries';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
+import QuickToggles from './QuickToggles';
 import CvPdfImport from './CvPdfImport';
 import Notice from './Notice';
 import styles from '../Admin.module.scss';
@@ -243,6 +244,9 @@ export default function EntryEditor() {
           </button>
         </div>
       </div>
+
+      {/* Opciones básicas (visible, destacado, este año…): lo primero que se ve */}
+      {col.quick && tab === 'main' && <QuickToggles toggles={col.quick} data={draft} onChange={(name, v) => update({ ...draft, [name]: v })} />}
 
       <Notice show={!!saved}>{saved}</Notice>
       <Notice show={Object.keys(errors).length > 0} ok={false}>

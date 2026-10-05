@@ -3,10 +3,11 @@ import { Plus, X } from 'lucide-react';
 import heroImg from '@/assets/media/especializaciones/main.webp';
 import heroSm from '@/assets/media/especializaciones/main-800.webp';
 import introImg from '@/assets/media/especializaciones/intro.webp';
-import { cursos, disertantes, nombreCompleto } from '@/content';
+import { cursos, disertantes, nombreCompleto, paginas } from '@/content';
 import { normalize } from '@/lib/format';
-import { toPlainText } from '@/lib/markdown';
+import { Markdown, toPlainText } from '@/lib/markdown';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
+import Prose from '@/components/ui/Prose';
 import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -20,6 +21,9 @@ import ChipGroup from '@/components/ui/Chips';
 import CardGrid from '@/components/ui/CardGrid';
 import { useDebounced } from '@/lib/useDebounced';
 import styles from './EspecializacionesPage.module.scss';
+
+/** Textos y fotos editables desde /admin → Páginas → Especializaciones. */
+const textos = paginas.especializaciones;
 
 const searchable = cursos.map((c) => ({
   curso: c,
@@ -38,6 +42,16 @@ export function Component() {
     const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
     return searchable.filter((s) => (!dis || s.curso.disertantes.includes(dis)) && terms.every((t) => s.text.includes(t))).map((s) => s.curso);
   }, [query, dis]);
+  // Los que se cursan este año van primero y separados de las ediciones anteriores (si no hay ninguno, una sola lista)
+  const grupos = useMemo(() => {
+    const actuales = list.filter((c) => c.esteAnio === true);
+    if (!actuales.length) return [{ titulo: null, cursos: list }];
+    const anteriores = list.filter((c) => c.esteAnio !== true);
+    return [
+      { titulo: 'Se cursan este año', cursos: actuales },
+      ...(anteriores.length ? [{ titulo: 'Ediciones anteriores', cursos: anteriores }] : []),
+    ];
+  }, [list]);
   const conCursos = disertantes.filter((d) => cursos.some((c) => c.disertantes.includes(d.slug)));
 
   return (
@@ -45,7 +59,7 @@ export function Component() {
       <Seo
         title="Especializaciones y cursos"
         description="Cursos y talleres gratuitos para alumnos con científicos de renombre: neurociencias, nutrición deportiva, fuerza, salud e inteligencia artificial."
-        image={heroImg}
+        image={textos.hero.imagen ?? heroImg}
         jsonLd={[
           {
             '@type': 'ItemList',
@@ -59,43 +73,22 @@ export function Component() {
         ]}
       />
       <PageHero
-        imageSmall={heroSm}
-        image={heroImg}
+        imageSmall={textos.hero.imagen ? undefined : heroSm}
+        image={textos.hero.imagen ?? heroImg}
         size="lg"
-        title="Especializaciones"
-        subtitle="Conocé lo que nos hace únicos"
+        title={textos.hero.titulo}
+        subtitle={textos.hero.subtitulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Especializaciones' }]}
       />
 
       <Section>
-        <Feature title="Siempre con las *últimas novedades*" image={introImg} imageAlt="Clase de especialización">
-          <p>
-            La <strong>intervención sobre las enfermedades debe empezar en la niñez</strong>: la obesidad se relaciona con un mayor riesgo de
-            desarrollar trece tipos de cáncer, entre ellos el <strong>cáncer de mama</strong> en mujeres posmenopáusicas, de colon, de páncreas o
-            de <strong>tiroides</strong>.
-          </p>
-          <p>
-            Las neurociencias, pilar de esta formación, te brindan herramientas para comprender <strong>cómo el cerebro responde al ejercicio</strong>{' '}
-            y cómo influye en el desarrollo cognitivo, emocional y físico de cada etapa.
-          </p>
-          <p>
-            Con talleres dictados por <strong>científicos de renombre internacional</strong> combinamos ciencias del deporte y neurociencias en{' '}
-            <strong>temáticas actualizadas</strong>. Por eso, en el I.S.E.F. San Luis, te abrimos <strong>caminos nunca antes pensados</strong>.
-          </p>
+        <Feature title={textos.intro.titulo} image={textos.intro.imagen ?? introImg} imageAlt="Clase de especialización">
+          <Prose text={textos.intro.texto} />
         </Feature>
       </Section>
 
       <Section id="disertantes" tone="tint" width="wide" labelledBy="dis-title">
-        <SectionHeader
-          id="dis-title"
-          align="center"
-          title="Conocé a los *disertantes*"
-          lead={
-            <p>
-              Ellos son quienes impulsan tu carrera para que estés <strong>a la altura de los estándares internacionales</strong>.
-            </p>
-          }
-        />
+        <SectionHeader id="dis-title" align="center" title={textos.disertantes.titulo} lead={<Markdown text={textos.disertantes.texto} />} />
         <CardGrid reveal dense>
           {disertantes.slice(0, DIS_INICIALES).map((d) => (
             <RevealItem key={d.slug}>
@@ -153,13 +146,18 @@ export function Component() {
         </p>
 
         {list.length ? (
-          <CardGrid as="ul" role="list" className={[styles.results, q !== query && styles.pending].filter(Boolean).join(' ')} key={`${dis ?? 'todos'}|${query}`}>
-            {list.map((c, i) => (
-              <li key={c.slug} style={{ animationDelay: `${Math.min(i, 8) * 70}ms` }}>
-                <CourseCard curso={c} />
-              </li>
-            ))}
-          </CardGrid>
+          grupos.map((g) => (
+            <div key={g.titulo ?? 'todos'} className={styles.group}>
+              {g.titulo && <h3 className={styles.groupTitle}>{g.titulo}</h3>}
+              <CardGrid as="ul" role="list" className={[styles.results, q !== query && styles.pending].filter(Boolean).join(' ')} key={`${dis ?? 'todos'}|${query}`}>
+                {g.cursos.map((c, i) => (
+                  <li key={c.slug} style={{ animationDelay: `${Math.min(i, 8) * 70}ms` }}>
+                    <CourseCard curso={c} />
+                  </li>
+                ))}
+              </CardGrid>
+            </div>
+          ))
         ) : (
           <p className={styles.empty}>¡Disculpá! No encontramos cursos sobre eso. Probá con otra palabra.</p>
         )}

@@ -22,6 +22,8 @@ export const cursoSchema = z.object({
   destacado: z.boolean().default(false),
   publicado: z.boolean().default(true),
   mostrarEnCarrera: z.boolean().default(false),
+  /** Se cursa este año (los demás se listan como ediciones anteriores). */
+  esteAnio: z.boolean().default(false),
   disertantes: z.array(slug).default([]),
   fechaInicio: isoDate.optional(),
   /** Cuándo se publicó el curso: muestra «¡Nuevo!» durante 6 meses desde esta fecha. */
@@ -201,6 +203,49 @@ export const sitioSchema = z.object({
   analytics: z.object({ ga4: z.string(), gtm: z.string() }),
 });
 
+/* -------------------- Textos y fotos de las páginas (content/paginas) -------------------- */
+/**
+ * Un archivo por página. Todo es opcional: lo que falta o queda vacío usa el texto actual
+ * (src/content/paginas.ts) y la foto que viene con el sitio (src/assets/media).
+ * Títulos con *resaltado*; textos en Markdown.
+ */
+const opcional = z.string().optional();
+const heroPagina = z.object({ titulo: opcional, subtitulo: opcional, imagen: mediaPath.optional() }).optional();
+const bloquePagina = z.object({ titulo: opcional, texto: markdown.optional(), imagen: mediaPath.optional() }).optional();
+const tituloPagina = z.object({ titulo: opcional }).optional();
+
+export const paginaSchemas = {
+  inicio: z.object({
+    hero: heroPagina,
+    inscribite: bloquePagina,
+    bienvenida: bloquePagina,
+    novedades: bloquePagina,
+    especializaciones: bloquePagina,
+    cuota: bloquePagina,
+    sedes: bloquePagina,
+    faq: bloquePagina,
+  }),
+  carrera: z.object({
+    hero: heroPagina,
+    intro: bloquePagina,
+    especializaciones: bloquePagina,
+    datos: tituloPagina,
+    validez: bloquePagina,
+    plan: tituloPagina,
+    gabinete: bloquePagina,
+    explora: bloquePagina,
+  }),
+  especializaciones: z.object({ hero: heroPagina, intro: bloquePagina, disertantes: bloquePagina }),
+  inscripciones: z.object({ hero: heroPagina, requisitos: tituloPagina, secundario: tituloPagina, mayores25: tituloPagina, dudas: tituloPagina }),
+  novedades: z.object({ hero: heroPagina }),
+  contacto: z.object({ hero: heroPagina, telefonos: bloquePagina, sedes: bloquePagina }),
+  aranceles: z.object({ hero: heroPagina }),
+  conferencias: z.object({ hero: heroPagina }),
+} as const;
+
+export type PaginaKey = keyof typeof paginaSchemas;
+export type Paginas = { [K in PaginaKey]: z.infer<(typeof paginaSchemas)[K]> };
+
 export type Curso = z.infer<typeof cursoSchema>;
 export type Disertante = z.infer<typeof disertanteSchema>;
 export type Cv = z.infer<typeof cvSchema>;
@@ -230,4 +275,12 @@ export const singletons = {
   aranceles: { file: 'content/aranceles.json', schema: arancelesSchema },
   conferencias: { file: 'content/conferencias.json', schema: conferenciasSchema },
   galeria: { file: 'content/galeria.json', schema: galeriaSchema },
+  paginaInicio: { file: 'content/paginas/inicio.json', schema: paginaSchemas.inicio },
+  paginaCarrera: { file: 'content/paginas/carrera.json', schema: paginaSchemas.carrera },
+  paginaEspecializaciones: { file: 'content/paginas/especializaciones.json', schema: paginaSchemas.especializaciones },
+  paginaInscripciones: { file: 'content/paginas/inscripciones.json', schema: paginaSchemas.inscripciones },
+  paginaNovedades: { file: 'content/paginas/novedades.json', schema: paginaSchemas.novedades },
+  paginaContacto: { file: 'content/paginas/contacto.json', schema: paginaSchemas.contacto },
+  paginaAranceles: { file: 'content/paginas/aranceles.json', schema: paginaSchemas.aranceles },
+  paginaConferencias: { file: 'content/paginas/conferencias.json', schema: paginaSchemas.conferencias },
 } as const;

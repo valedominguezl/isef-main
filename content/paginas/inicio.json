@@ -1,0 +1,34 @@
+{
+  "hero": {
+    "titulo": "Desde 1993, *abriendo caminos*",
+    "subtitulo": "Título oficial con validez nacional, especializaciones gratuitas con científicos de renombre internacional y la cuota más baja del país."
+  },
+  "inscribite": {
+    "titulo": "*Inscribite* en el profesorado",
+    "texto": "Todo lo que necesitás saber para empezar a cursar."
+  },
+  "bienvenida": {
+    "titulo": "Te damos la bienvenida al *I.S.E.F.*",
+    "texto": "Hace más de 30 años que formamos profes en San Luis. Estudiás cerca de los tuyos, con docentes que te acompañan y con herramientas para trabajar **dentro y fuera de la escuela**: clubes, gimnasios, centros de salud y alto rendimiento."
+  },
+  "novedades": {
+    "titulo": "Las *últimas noticias*",
+    "texto": "Cursos nuevos, eventos y novedades del profesorado."
+  },
+  "especializaciones": {
+    "titulo": "Las *especializaciones*",
+    "texto": "Cursos **gratuitos para alumnos** con científicos de renombre internacional: neurociencias, nutrición deportiva, adulto mayor, enfermedades crónicas, inteligencia artificial y más. Te preparan para trabajar en equipos interdisciplinarios con médicos, psicólogos y kinesiólogos."
+  },
+  "cuota": {
+    "titulo": "La cuota más *competitiva*",
+    "texto": "**No te cobramos gastos adicionales**: constancias, certificaciones, cuota aguinaldo, matrícula y pileta de natación no tienen costo. Por eso tenemos **la cuota más baja de todo el país**."
+  },
+  "sedes": {
+    "titulo": "Conocé *nuestras sedes*",
+    "texto": "Cursá en la **Ciudad de San Luis** o en **Villa Mercedes**. Todos los teléfonos por área están en [contacto](/contacto)."
+  },
+  "faq": {
+    "titulo": "Preguntas *frecuentes*",
+    "texto": "Lo que más nos consultan antes de inscribirse."
+  }
+}

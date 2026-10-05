@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
 import { CalendarClock, Clock, GraduationCap, Landmark, ShieldCheck, Wallet } from 'lucide-react';
 import heroImg from '@/assets/media/home/hero.webp';
 import heroSm from '@/assets/media/home/hero-800.webp';
 import introImg from '@/assets/media/home/intro.webp';
 import especImg from '@/assets/media/home/especializaciones.webp';
 import cuotaImg from '@/assets/media/aranceles/main.webp';
-import { aranceles, cursos, faq, inscripciones, novedadesRecientes, plan, sitio, inscripcionesVigentes } from '@/content';
+import { aranceles, cursos, faq, inscripciones, novedadesRecientes, paginas, plan, sitio, inscripcionesVigentes } from '@/content';
 import { normalize, whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import Seo from '@/components/seo/Seo';
+import Prose from '@/components/ui/Prose';
 import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -30,6 +30,9 @@ import styles from './HomePage.module.scss';
 /** Íconos de fondo de cada número (mismo orden que sitio.estadisticas). */
 const STAT_ICONS = [ShieldCheck, Landmark, GraduationCap];
 
+/** Textos y fotos editables desde /admin → Páginas → Inicio. */
+const textos = paginas.inicio;
+
 function Faq() {
   const [q, setQ] = useState('');
   const [showAll, setShowAll] = useState(false);
@@ -44,7 +47,7 @@ function Faq() {
 
   return (
     <Section id="faq" tone="tint" width="default" labelledBy="faq-title">
-      <SectionHeader id="faq-title" title="Preguntas *frecuentes*" align="center" lead="Lo que más nos consultan antes de inscribirse." />
+      <SectionHeader id="faq-title" title={textos.faq.titulo} align="center" lead={<Markdown text={textos.faq.texto} />} />
       <SearchField
         className={styles.faqSearch}
         value={q}
@@ -97,10 +100,10 @@ export function Component() {
       <PageHero
         size="full"
         align="start"
-        image={heroImg}
-        imageSmall={heroSm}
-        title={`Desde ${sitio.fundacion}, *abriendo caminos*`}
-        subtitle="Título oficial con validez nacional, especializaciones gratuitas con científicos de renombre internacional y la cuota más baja del país."
+        image={textos.hero.imagen ?? heroImg}
+        imageSmall={textos.hero.imagen ? undefined : heroSm}
+        title={textos.hero.titulo}
+        subtitle={textos.hero.subtitulo}
         actions={
           inscripcionesVigentes() ? (
             <Button to="/inscripciones" variant="outline-light" size="lg" leading={<span aria-hidden>🚀</span>}>
@@ -138,7 +141,7 @@ export function Component() {
       {/* Inscripción: lo que la persona viene a buscar (los pasos están en /inscripciones) */}
       <Section id="inscribite" labelledBy="insc-title">
         <div className={styles.enroll}>
-          <SectionHeader id="insc-title" title="*Inscribite* en el profesorado" lead="Todo lo que necesitás saber para empezar a cursar." />
+          <SectionHeader id="insc-title" title={textos.inscribite.titulo} lead={<Markdown text={textos.inscribite.texto} />} />
           <div className={styles.enrollBody}>
               <dl className={styles.facts}>
                 <div>
@@ -174,15 +177,12 @@ export function Component() {
       {/* Bienvenida */}
       <Section tone="tint">
         <Feature
-          title="Te damos la bienvenida al *I.S.E.F.*"
-          image={introImg}
+          title={textos.bienvenida.titulo}
+          image={textos.bienvenida.imagen ?? introImg}
           imageAlt="Vista aérea del predio del profesorado con las sierras de San Luis"
           actions={<Button to="/carrera">Conocé la carrera</Button>}
         >
-          <p>
-            Hace más de 30 años que formamos profes en San Luis. Estudiás cerca de los tuyos, con docentes que te acompañan y con herramientas
-            para trabajar <strong>dentro y fuera de la escuela</strong>: clubes, gimnasios, centros de salud y alto rendimiento.
-          </p>
+          <Prose text={textos.bienvenida.texto} />
         </Feature>
       </Section>
 
@@ -190,7 +190,7 @@ export function Component() {
       {recientes.length > 0 && (
         <Section labelledBy="novedades-title">
           <div className={styles.headRow}>
-            <SectionHeader id="novedades-title" title="Las *últimas noticias*" lead="Cursos nuevos, eventos y novedades del profesorado." />
+            <SectionHeader id="novedades-title" title={textos.novedades.titulo} lead={<Markdown text={textos.novedades.texto} />} />
             <Button to="/novedades" variant="outline" className={styles.headAction}>
               Ver todas
             </Button>
@@ -209,17 +209,13 @@ export function Component() {
       <Section className={styles.especIntro}>
         <Feature
           reverse
-          title="Las *especializaciones*"
-          image={especImg}
+          title={textos.especializaciones.titulo}
+          image={textos.especializaciones.imagen ?? especImg}
           imageFit="cutout"
           imageAlt="Clase práctica de entrenamiento de la fuerza"
           actions={<Button to="/especializaciones">Ver todas las especializaciones</Button>}
         >
-          <p>
-            Cursos <strong>gratuitos para alumnos</strong> con científicos de renombre internacional: neurociencias, nutrición deportiva, adulto
-            mayor, enfermedades crónicas, inteligencia artificial y más. Te preparan para trabajar en equipos interdisciplinarios con médicos,
-            psicólogos y kinesiólogos.
-          </p>
+          <Prose text={textos.especializaciones.texto} />
         </Feature>
       </Section>
       <Section tone="tint">
@@ -233,18 +229,8 @@ export function Component() {
       </Section>
 
       {/* Cuota */}
-      <Section image={cuotaImg} width="prose" labelledBy="cuota-title" spacing="lg">
-        <SectionHeader
-          id="cuota-title"
-          align="center"
-          title="La cuota más *competitiva*"
-          lead={
-            <p>
-              <strong>No te cobramos gastos adicionales</strong>: constancias, certificaciones, cuota aguinaldo, matrícula y pileta de natación no
-              tienen costo. Por eso tenemos <strong>la cuota más baja de todo el país</strong>.
-            </p>
-          }
-        >
+      <Section image={textos.cuota.imagen ?? cuotaImg} width="prose" labelledBy="cuota-title" spacing="lg">
+        <SectionHeader id="cuota-title" align="center" title={textos.cuota.titulo} lead={<Markdown text={textos.cuota.texto} />}>
           <div className={styles.center}>
             {aranceles.visible ? (
               <Button to="/aranceles" variant="outline-light">
@@ -264,13 +250,8 @@ export function Component() {
         <SectionHeader
           id="sedes-title"
           align="center"
-          title="Conocé *nuestras sedes*"
-          lead={
-            <p>
-              Cursá en la <strong>Ciudad de San Luis</strong> o en <strong>Villa Mercedes</strong>. Todos los teléfonos por área están en{' '}
-              <Link to="/contacto">contacto</Link>.
-            </p>
-          }
+          title={textos.sedes.titulo}
+          lead={<Markdown text={textos.sedes.texto} />}
         />
         <CardGrid reveal cols={2}>
           {sitio.sedes.map((s) => (

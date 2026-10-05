@@ -63,6 +63,12 @@ const insc = read('content/inscripciones.json');
 for (const p of insc.pasos) if (!exists(p.archivo)) fail('inscripciones', `no existe ${p.archivo}`);
 for (const a of insc.mayores25.archivos) if (!exists(a.url)) fail('inscripciones', `no existe ${a.url}`);
 for (const g of read('content/galeria.json').imagenes) if (!exists(g.imagen)) fail('galeria', `no existe ${g.imagen}`);
+// Fotos cargadas en Páginas (content/paginas/*.json → { bloque: { imagen } })
+for (const [key, { file }] of Object.entries(singletons)) {
+  if (!file.startsWith('content/paginas/')) continue;
+  for (const [bloque, v] of Object.entries(read(file) as Record<string, { imagen?: string }>))
+    if (!exists(v?.imagen)) fail(key, `${bloque}: no existe la imagen ${v.imagen}`);
+}
 
 if (errors) {
   console.error(`\n${errors} error(es) de contenido.`);

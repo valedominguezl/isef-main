@@ -1,0 +1,14 @@
+{
+  "hero": {
+    "titulo": "Contacto",
+    "subtitulo": "Toda la información de nuestras sedes"
+  },
+  "telefonos": {
+    "titulo": "Teléfonos *de contacto*",
+    "texto": "Todos los números funcionan por WhatsApp."
+  },
+  "sedes": {
+    "titulo": "Nuestras *sedes*",
+    "texto": "Cómo llegar a cada una."
+  }
+}

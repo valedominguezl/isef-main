@@ -17,16 +17,17 @@ import {
   sitioSchema,
 } from '@/content/schema';
 import { CV_SECCIONES, NOVEDAD_CATEGORIAS } from '@/content/constants';
+import { PAGINAS } from './paginasConfig';
 
 export type Field =
   | { type: 'text' | 'url' | 'email'; name: string; label: string; help?: string; placeholder?: string; required?: boolean; max?: number }
   | { type: 'textarea'; name: string; label: string; help?: string; max?: number; rows?: number; required?: boolean }
   | { type: 'markdown'; name: string; label: string; help?: string; rows?: number }
   | { type: 'number'; name: string; label: string; help?: string; step?: number }
-  | { type: 'boolean'; name: string; label: string; help?: string; /** Interruptor con estrella, arriba de todo del formulario. */ featured?: boolean }
+  | { type: 'boolean'; name: string; label: string; help?: string }
   | { type: 'date'; name: string; label: string; help?: string; required?: boolean }
   | { type: 'select'; name: string; label: string; help?: string; options: { value: string; label: string }[]; required?: boolean }
-  | { type: 'image'; name: string; label: string; help?: string; folder: string; maxWidth: number; aspect?: number }
+  | { type: 'image'; name: string; label: string; help?: string; folder: string; maxWidth: number; aspect?: number; /** Foto que se usa hoy si el campo queda vacío (se muestra como vista previa). */ actual?: string }
   | { type: 'file'; name: string; label: string; help?: string; folder: string; accept: string }
   | { type: 'list'; name: string; label: string; help?: string; itemLabel?: string; max?: number }
   | { type: 'reference'; name: string; label: string; help?: string; collection: 'disertantes' | 'cursos'; multiple: boolean }
@@ -34,6 +35,20 @@ export type Field =
   /** Solo visual: agrupa campos del mismo nivel en una tarjeta plegable (no cambia el JSON). */
   | { type: 'section'; name: string; label: string; help?: string; fields: Field[]; collapsed?: boolean }
   | { type: 'repeater'; name: string; label: string; help?: string; itemLabel: string; fields: Field[]; titleField?: string; collapsed?: boolean };
+
+/** Opción de sí/no que se maneja desde la barra de arriba (editor) y desde la lista, con ícono. */
+export interface QuickToggle {
+  name: string;
+  /** Texto cuando está activa / cuando no. */
+  on: string;
+  off: string;
+  icon: 'eye' | 'star' | 'calendar' | 'graduation';
+  /** Valor si el archivo no trae el campo. */
+  fallback: boolean;
+  help: string;
+}
+
+const VISIBLE: QuickToggle = { name: 'publicado', on: 'Visible', off: 'Oculto', icon: 'eye', fallback: true, help: 'Si está oculto no aparece en el sitio (no se borra).' };
 
 export interface CollectionConfig {
   key: string;
@@ -52,6 +67,8 @@ export interface CollectionConfig {
   defaults: () => Record<string, unknown>;
   preview?: 'curso' | 'novedad' | 'disertante';
   hidden?: boolean;
+  /** Opciones básicas: arriba de todo del editor y en cada fila de la lista. */
+  quick?: QuickToggle[];
 }
 
 export interface SingletonConfig {
@@ -83,7 +100,6 @@ export const COLLECTIONS: CollectionConfig[] = [
     preview: 'novedad',
     defaults: () => ({ titulo: '', fecha: today(), categoria: 'novedad', resumen: '', publicado: true, destacado: false }),
     fields: [
-      { type: 'boolean', name: 'destacado', label: 'Novedad destacada', help: 'Aparece primero en el inicio y en Novedades.', featured: true },
       { type: 'text', name: 'titulo', label: 'Título', required: true, max: 90 },
       { type: 'date', name: 'fecha', label: 'Fecha de publicación', required: true },
       { type: 'select', name: 'categoria', label: 'Categoría', options: opt(NOVEDAD_CATEGORIAS), required: true },
@@ -91,17 +107,10 @@ export const COLLECTIONS: CollectionConfig[] = [
       { type: 'markdown', name: 'cuerpo', label: 'Texto completo (opcional)', rows: 10 },
       { type: 'image', name: 'imagen', label: 'Imagen', folder: 'novedades', maxWidth: 1600, help: 'Horizontal. Se convierte a WebP automáticamente.' },
       { type: 'reference', name: 'curso', label: 'Curso relacionado', collection: 'cursos', multiple: false, help: 'Agrega un botón "Ver el curso".' },
-      {
-        type: 'group',
-        name: 'enlace',
-        label: 'Botón externo (opcional)',
-        optional: true,
-        fields: [
-          { type: 'text', name: 'texto', label: 'Texto del botón' },
-          { type: 'url', name: 'url', label: 'URL' },
-        ],
-      },
-      { type: 'boolean', name: 'publicado', label: 'Publicada' },
+    ],
+    quick: [
+      { ...VISIBLE, off: 'Oculta' },
+      { name: 'destacado', on: 'Destacada', off: 'No destacada', icon: 'star', fallback: false, help: 'Aparece primero en el inicio y en Novedades.' },
     ],
   },
   {
@@ -115,9 +124,8 @@ export const COLLECTIONS: CollectionConfig[] = [
     subtitle: (e) => [e.fechaInicio && `Inicio ${e.fechaInicio}`, e.publicado === false && 'Oculto'].filter(Boolean).join(' · '),
     sitePath: (s) => `/especializaciones/${s}`,
     preview: 'curso',
-    defaults: () => ({ titulo: '', subtitulo: '', creado: today(), destacado: false, publicado: true, mostrarEnCarrera: false, disertantes: [], temario: [] }),
+    defaults: () => ({ titulo: '', subtitulo: '', creado: today(), destacado: false, esteAnio: true, publicado: true, mostrarEnCarrera: false, disertantes: [], temario: [] }),
     fields: [
-      { type: 'boolean', name: 'destacado', label: 'Especialización destacada', help: 'Lleva la etiqueta «Destacado» y aparece primero.', featured: true },
       { type: 'text', name: 'titulo', label: 'Título', required: true, max: 70 },
       { type: 'text', name: 'subtitulo', label: 'Subtítulo', required: true, max: 100 },
       { type: 'image', name: 'imagen', label: 'Imagen de portada', folder: 'cursos', maxWidth: 1600 },
@@ -156,8 +164,12 @@ export const COLLECTIONS: CollectionConfig[] = [
       },
       { type: 'markdown', name: 'condiciones', label: 'Condiciones de aprobación', rows: 4 },
       { type: 'markdown', name: 'importante', label: 'Aviso importante', rows: 3 },
-      { type: 'boolean', name: 'mostrarEnCarrera', label: 'Mostrar en la página "La carrera"' },
-      { type: 'boolean', name: 'publicado', label: 'Publicado' },
+    ],
+    quick: [
+      VISIBLE,
+      { name: 'destacado', on: 'Destacado', off: 'No destacado', icon: 'star', fallback: false, help: 'Lleva la etiqueta «Destacado» y aparece primero.' },
+      { name: 'esteAnio', on: 'Se cursa este año', off: 'Edición anterior', icon: 'calendar', fallback: false, help: 'Separa los cursos de este año de los que ya sucedieron.' },
+      { name: 'mostrarEnCarrera', on: 'En «La carrera»', off: 'No en «La carrera»', icon: 'graduation', fallback: false, help: 'Se muestra también en la página La carrera.' },
     ],
   },
   {
@@ -180,8 +192,8 @@ export const COLLECTIONS: CollectionConfig[] = [
       { type: 'image', name: 'foto', label: 'Foto (retrato)', folder: 'disertantes', maxWidth: 800, aspect: 1, help: 'Se recorta cuadrada automáticamente.' },
       { type: 'list', name: 'destacados', label: 'Puntos destacados de la tarjeta', itemLabel: 'punto', max: 8, help: 'Frases cortas: "Médico", "Egresado de la UBA"…' },
       { type: 'number', name: 'orden', label: 'Orden en el listado', help: 'Menor número = aparece antes.' },
-      { type: 'boolean', name: 'publicado', label: 'Publicado' },
     ],
+    quick: [VISIBLE],
   },
   {
     key: 'cv',
@@ -425,6 +437,8 @@ export const SINGLETONS: SingletonConfig[] = [
       ] },
     ],
   },
+  // Textos y fotos de cada página (grupo "Páginas" de la barra lateral)
+  ...PAGINAS,
 ];
 
 export const getCollection = (key: string) => COLLECTIONS.find((c) => c.key === key);

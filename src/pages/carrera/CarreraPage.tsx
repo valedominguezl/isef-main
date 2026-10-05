@@ -7,8 +7,10 @@ import gabineteImg from '@/assets/media/carrera/gabinete.webp';
 import sanLuisLogo from '@/assets/validez/sanLuis.webp';
 import argentinaLogo from '@/assets/validez/argentina.webp';
 import mercosurLogo from '@/assets/validez/mercosur.webp';
-import { cursos, galeria, plan } from '@/content';
+import { cursos, galeria, paginas, plan } from '@/content';
+import { Markdown } from '@/lib/markdown';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
+import Prose from '@/components/ui/Prose';
 import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -31,6 +33,9 @@ const DATOS = [
   { icon: Clock, label: 'Horario', value: 'De 07:30 a 13:30 h' },
   { icon: BadgeCheck, label: 'Validez', value: 'Nacional y MERCOSUR' },
 ];
+
+/** Textos y fotos editables desde /admin → Páginas → La carrera. */
+const textos = paginas.carrera;
 
 function Galeria() {
   const [index, setIndex] = useState<number | null>(null);
@@ -99,7 +104,7 @@ export function Component() {
       <Seo
         title="La carrera: Profesorado de Educación Física"
         description={`Profesorado de Educación Física de ${plan.duracion}, presencial y con título oficial de validez nacional. Plan de estudios, salida laboral y especializaciones.`}
-        image={heroImg}
+        image={textos.hero.imagen ?? heroImg}
         jsonLd={[
           {
             '@type': 'EducationalOccupationalProgram',
@@ -118,36 +123,28 @@ export function Component() {
         ]}
       />
       <PageHero
-        imageSmall={heroSm}
-        image={heroImg}
+        imageSmall={textos.hero.imagen ? undefined : heroSm}
+        image={textos.hero.imagen ?? heroImg}
         size="lg"
-        title="Profesorado de *educación física*"
-        subtitle="Títulos oficiales de validez nacional"
+        title={textos.hero.titulo}
+        subtitle={textos.hero.subtitulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'La carrera' }]}
       />
 
       <Section>
         <Feature
-          title="Te necesitan, *profe*"
-          image={introImg}
+          title={textos.intro.titulo}
+          image={textos.intro.imagen ?? introImg}
           imageAlt="Profesor de educación física trabajando con alumnos"
           actions={<Button to="/especializaciones">Ver talleres</Button>}
         >
-          <p>
-            Gracias al I.S.E.F. San Luis, <strong>sos necesario</strong>. Con los talleres de especialización que te ofrecemos de manera gratuita
-            vas a poder ejercer en equipos interdisciplinarios en centros de salud, gimnasios, clubes, clínicas, hospitales y mucho más.
-          </p>
-          <p>
-            Te damos herramientas para que seas capaz de <strong>mucho más que la docencia</strong>: el club, el gimnasio, la pileta, ciclistas,
-            maratonistas, artes marciales, danza, patinaje, <strong>centros de alto rendimiento</strong> y la reinserción deportiva junto a
-            kinesiólogos. Los egresados del I.S.E.F. están en <strong>todos lados, mucho más allá de las escuelas</strong>.
-          </p>
+          <Prose text={textos.intro.texto} />
         </Feature>
       </Section>
 
       {enCarrera.length > 0 && (
         <Section tone="tint" width="wide" labelledBy="esp-title">
-          <SectionHeader id="esp-title" title="Algunas de nuestras *especializaciones*" lead="Gratuitas para los alumnos del profesorado." />
+          <SectionHeader id="esp-title" title={textos.especializaciones.titulo} lead={<Markdown text={textos.especializaciones.texto} />} />
           <Reveal>
             <Carousel label="Especializaciones destacadas">
               {enCarrera.map((c) => (
@@ -159,7 +156,7 @@ export function Component() {
       )}
 
       <Section labelledBy="datos-title">
-        <SectionHeader id="datos-title" title="Información *general*" />
+        <SectionHeader id="datos-title" title={textos.datos.titulo} />
         <CardGrid reveal dense as="ul">
           {DATOS.map(({ icon: Icon, label, value }) => (
             <RevealItem key={label} as="li" className={styles.dato}>
@@ -178,13 +175,8 @@ export function Component() {
           <SectionHeader
             id="validez-title"
             eyebrow={plan.resolucion}
-            title="Validez *nacional e internacional*"
-            lead={
-              <p>
-                Tu título te permite trabajar en todo el territorio argentino y en los <strong>países del MERCOSUR</strong>. Consultá la validez
-                nacional del título al 4452000, interno 3309, del Ministerio de Educación de San Luis.
-              </p>
-            }
+            title={textos.validez.titulo}
+            lead={<Markdown text={textos.validez.texto} />}
           />
           <Reveal className={styles.logos}>
             {[
@@ -201,7 +193,7 @@ export function Component() {
       <Section id="plan" tone="tint" labelledBy="plan-title">
         <SectionHeader
           id="plan-title"
-          title="Plan de *estudios*"
+          title={textos.plan.titulo}
           lead={
             <p>
               La carrera tiene una <strong>duración estimada de {plan.duracion}</strong>, expresada en{' '}
@@ -238,33 +230,15 @@ export function Component() {
         </Reveal>
       </Section>
 
-      <Section image={gabineteImg} width="prose" labelledBy="gabinete-title">
-        <SectionHeader
-          id="gabinete-title"
-          align="center"
-          title="Gabinete de *apoyo psicopedagógico*"
-          lead={
-            <p>
-              Pensando siempre en tu formación, el profesorado dispone de un gabinete de apoyo psicopedagógico <strong>gratuito</strong> para
-              acompañarte en el estudio. Así, tus conflictos se transforman en fortalezas y tu paso por esta casa de estudios es una experiencia
-              realmente agradable. <strong>Pedí turno en secretaría</strong>.
-            </p>
-          }
-        />
+      <Section image={textos.gabinete.imagen ?? gabineteImg} width="prose" labelledBy="gabinete-title">
+        <SectionHeader id="gabinete-title" align="center" title={textos.gabinete.titulo} lead={<Markdown text={textos.gabinete.texto} />} />
       </Section>
 
       <Section width="wide" labelledBy="explora-title">
         <SectionHeader
           id="explora-title"
-          title="Exploramos *lo lindo que es San Luis*"
-          lead={
-            <p>
-              <strong>“Actividades y deportes regionales”</strong> es un trayecto que integra las disciplinas de naturaleza y tiempo libre de primero a
-              cuarto año, y concluye con una <strong>residencia integradora</strong> en el espacio curricular <strong>“Vida en la naturaleza”</strong>.
-              Los <strong>campamentos recreativos</strong> incluyen palestra, senderismo, kayak, trekking, rapel, tirolesa, escalada, canotaje,
-              mountain bike, montañismo, apnea, hidrospeed y remo en los <strong>lugares más turísticos de San Luis</strong>.
-            </p>
-          }
+          title={textos.explora.titulo}
+          lead={<Markdown text={textos.explora.texto} />}
         />
         <Reveal>
           <Galeria />

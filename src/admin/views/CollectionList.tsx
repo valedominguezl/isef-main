@@ -1,18 +1,19 @@
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
-import { EyeOff, Plus, Search, Star } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { normalize } from '@/lib/format';
 import { useAdmin } from '../AdminContext';
 import { getCollection } from '../config';
 import { useEntries } from '../useEntries';
 import { SkeletonRows } from './Skeleton';
+import QuickToggles from './QuickToggles';
 import styles from '../Admin.module.scss';
 
 export default function CollectionList() {
   const { key = '' } = useParams();
   const col = getCollection(key);
   const { entries, error } = useEntries(col?.dir);
-  const { pending, mediaUrl } = useAdmin();
+  const { pending, mediaUrl, stage } = useAdmin();
   const [q, setQ] = useState('');
 
   const list = useMemo(() => {
@@ -23,6 +24,10 @@ export default function CollectionList() {
   }, [entries, col, q]);
 
   if (!col) return <p>Colección desconocida.</p>;
+  /** Cambia una opción básica desde la lista: queda como cambio pendiente (se publica con "Publicar"). */
+  const toggle = (e: { path: string; data: Record<string, unknown> }, name: string, value: boolean) =>
+    stage([{ path: e.path, content: `${JSON.stringify({ ...e.data, [name]: value }, null, 2)}
+`, encoding: 'utf8', label: String(e.data[col.titleField] ?? '') }]);
   const imgField = col.fields.find((f) => f.type === 'image')?.name;
 
   return (
@@ -54,14 +59,9 @@ export default function CollectionList() {
                   <strong>{String(e.data[col.titleField] ?? e.slug)}</strong>
                   <small>{col.subtitle?.(e.data)}</small>
                 </span>
-                {e.data.destacado === true && <Star size={18} fill="currentColor" className={styles.rowStar} aria-label="Destacado" />}
-                {e.data.publicado === false && (
-                  <span className={styles.tag}>
-                    <EyeOff size={12} /> Oculto
-                  </span>
-                )}
                 {isPending && <span className={styles.tagWarn}>Sin publicar</span>}
               </Link>
+              {col.quick && <QuickToggles compact toggles={col.quick} data={e.data} onChange={(name, v) => toggle(e, name, v)} />}
             </li>
           );
         })}

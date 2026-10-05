@@ -1,0 +1,14 @@
+{
+  "hero": {
+    "titulo": "Especializaciones",
+    "subtitulo": "Conocé lo que nos hace únicos"
+  },
+  "intro": {
+    "titulo": "Siempre con las *últimas novedades*",
+    "texto": "La **intervención sobre las enfermedades debe empezar en la niñez**: la obesidad se relaciona con un mayor riesgo de desarrollar trece tipos de cáncer, entre ellos el **cáncer de mama** en mujeres posmenopáusicas, de colon, de páncreas o de **tiroides**.\n\nLas neurociencias, pilar de esta formación, te brindan herramientas para comprender **cómo el cerebro responde al ejercicio** y cómo influye en el desarrollo cognitivo, emocional y físico de cada etapa.\n\nCon talleres dictados por **científicos de renombre internacional** combinamos ciencias del deporte y neurociencias en **temáticas actualizadas**. Por eso, en el I.S.E.F. San Luis, te abrimos **caminos nunca antes pensados**."
+  },
+  "disertantes": {
+    "titulo": "Conocé a los *disertantes*",
+    "texto": "Ellos son quienes impulsan tu carrera para que estés **a la altura de los estándares internacionales**."
+  }
+}

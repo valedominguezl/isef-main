@@ -1,5 +1,5 @@
 import heroImg from '@/assets/media/aranceles/main.webp';
-import { aranceles } from '@/content';
+import { aranceles, paginas } from '@/content';
 import { formatDate } from '@/lib/format';
 import { Markdown } from '@/lib/markdown';
 import Seo from '@/components/seo/Seo';
@@ -9,12 +9,15 @@ import Reveal from '@/components/ui/Reveal';
 import { Component as NotFound } from '../NotFoundPage';
 import styles from './ArancelesPage.module.scss';
 
+/** Título y foto editables desde /admin → Páginas → Aranceles (la bajada es la nota de Aranceles). */
+const textos = paginas.aranceles;
+
 export function Component() {
   if (!aranceles.visible) return <NotFound />;
   return (
     <>
-      <Seo title="Aranceles" description={`Valores de inscripción, cuotas y título. ${aranceles.nota}`} image={heroImg} />
-      <PageHero image={heroImg} title="Aranceles" subtitle={aranceles.nota} breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Aranceles' }]} />
+      <Seo title="Aranceles" description={`Valores de inscripción, cuotas y título. ${aranceles.nota}`} image={textos.hero.imagen ?? heroImg} />
+      <PageHero image={textos.hero.imagen ?? heroImg} title={textos.hero.titulo} subtitle={aranceles.nota} breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Aranceles' }]} />
       <Section width="default">
         <Reveal className={styles.wrap}>
           <table className={styles.table}>

@@ -1,6 +1,6 @@
 # Guía del panel de administración
 
-El panel está en **https://isefsanluis.net/admin**. Sirve para actualizar novedades, especializaciones, disertantes (con su currículum), preguntas frecuentes, plan de estudios, inscripciones, aranceles, galería y datos de contacto, **sin tocar código**.
+El panel está en **https://isefsanluis.net/admin**. Sirve para actualizar novedades, especializaciones, disertantes (con su currículum), preguntas frecuentes, plan de estudios, inscripciones, aranceles, galería, datos de contacto y los textos y fotos de cada página, **sin tocar código**.
 
 ## Cómo funciona
 1. Editás y tocás **Guardar** → el cambio queda como *pendiente* (no se ve todavía en el sitio).
@@ -30,6 +30,7 @@ El panel usa un token personal de GitHub (como una contraseña con permisos limi
 | Cerrar/abrir inscripciones | Configuración → Datos del instituto → Inscripciones. |
 | Mostrar los aranceles | Configuración → Aranceles → activar **Página visible**. |
 | Cambiar un teléfono | Configuración → Datos del instituto → Teléfonos por área. |
+| Cambiar el texto o la foto de una página | Barra lateral → **Páginas** → elegí la página (Inicio, La carrera, Especializaciones…). Cada bloque se abre tocando su título: cambiás título, texto y foto. En los títulos, lo que va entre `*asteriscos*` sale resaltado. Si dejás un campo vacío, vuelve el texto o la foto original. Las fotos de cabecera conviene que sean horizontales y grandes. |
 
 ## Currículums normalizados
 Todos los CV tienen las **mismas secciones en el mismo orden**: Formación académica, Antecedentes docentes, Experiencia profesional, Cargos de gestión, Investigación y publicaciones, Congresos y disertaciones, Premios, Vínculo con la comunidad, Capacitación continua, Idiomas y Otros. Cada antecedente tiene: *Período · Título/cargo · Institución · Detalle*. Las secciones vacías no se muestran y los antecedentes se ordenan solos del más reciente al más antiguo. Cada CV tiene su página (`/disertantes/nombre`) y un botón para descargarlo en PDF con formato A4 uniforme.

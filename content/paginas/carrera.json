@@ -1,0 +1,32 @@
+{
+  "hero": {
+    "titulo": "Profesorado de *educación física*",
+    "subtitulo": "Títulos oficiales de validez nacional"
+  },
+  "intro": {
+    "titulo": "Te necesitan, *profe*",
+    "texto": "Gracias al I.S.E.F. San Luis, **sos necesario**. Con los talleres de especialización que te ofrecemos de manera gratuita vas a poder ejercer en equipos interdisciplinarios en centros de salud, gimnasios, clubes, clínicas, hospitales y mucho más.\n\nTe damos herramientas para que seas capaz de **mucho más que la docencia**: el club, el gimnasio, la pileta, ciclistas, maratonistas, artes marciales, danza, patinaje, **centros de alto rendimiento** y la reinserción deportiva junto a kinesiólogos. Los egresados del I.S.E.F. están en **todos lados, mucho más allá de las escuelas**."
+  },
+  "especializaciones": {
+    "titulo": "Algunas de nuestras *especializaciones*",
+    "texto": "Gratuitas para los alumnos del profesorado."
+  },
+  "datos": {
+    "titulo": "Información *general*"
+  },
+  "validez": {
+    "titulo": "Validez *nacional e internacional*",
+    "texto": "Tu título te permite trabajar en todo el territorio argentino y en los **países del MERCOSUR**. Consultá la validez nacional del título al 4452000, interno 3309, del Ministerio de Educación de San Luis."
+  },
+  "plan": {
+    "titulo": "Plan de *estudios*"
+  },
+  "gabinete": {
+    "titulo": "Gabinete de *apoyo psicopedagógico*",
+    "texto": "Pensando siempre en tu formación, el profesorado dispone de un gabinete de apoyo psicopedagógico **gratuito** para acompañarte en el estudio. Así, tus conflictos se transforman en fortalezas y tu paso por esta casa de estudios es una experiencia realmente agradable. **Pedí turno en secretaría**."
+  },
+  "explora": {
+    "titulo": "Exploramos *lo lindo que es San Luis*",
+    "texto": "**“Actividades y deportes regionales”** es un trayecto que integra las disciplinas de naturaleza y tiempo libre de primero a cuarto año, y concluye con una **residencia integradora** en el espacio curricular **“Vida en la naturaleza”**. Los **campamentos recreativos** incluyen palestra, senderismo, kayak, trekking, rapel, tirolesa, escalada, canotaje, mountain bike, montañismo, apnea, hidrospeed y remo en los **lugares más turísticos de San Luis**."
+  }
+}
