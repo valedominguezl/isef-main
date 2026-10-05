@@ -1,6 +1,6 @@
 # I.S.E.F. San Luis — guía rápida para agentes
 
-Sitio del profesorado (isefsanluis.net). React 18 + TS + Vite 6, **prerenderizado** (SSG) y con panel de contenido Git-based. El campus (Chamilo) es otro sistema: no está acá.
+Sitio del profesorado (isefsanluis.net). React 19 + TS 5.9 + Vite 8, **prerenderizado** (SSG) y con panel de contenido Git-based. El campus (Chamilo) es otro sistema: no está acá.
 
 ## Mapa
 - `content/*.json` → TODO el contenido editable (cursos, disertantes, cv, novedades, faq, plan, sitio, inscripciones, aranceles, galería, conferencias); `content/paginas/*.json` → textos y fotos de cada página (vacío = default de `src/content/paginas.ts`). El JSON se lee SIN defaults de zod: campos nuevos con `?? fallback`. Esquemas zod: `src/content/schema.ts`. Acceso tipado: `src/content/index.ts`.
