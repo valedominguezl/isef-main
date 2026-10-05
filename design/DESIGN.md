@@ -47,6 +47,15 @@ Escalas completas (50→950) en `tokens.json`. Neutros con un leve tinte violeta
 - **Textura violeta** (`--surface-fx`): `fx/fondo.webp` con 20 % de negro → bandas de datos, validez, CTA final, cabecera de disertantes.
 - **Overlay de imagen**: `linear-gradient(135deg, rgba(13,12,18,.86), rgba(119,97,255,.62))` → toda foto con texto encima.
 
+### Formas de fondo (`AmbientShapes`)
+Para que el blanco no sea plano: círculos y píldoras lila con un halo violeta difuso asoman por los costados, alternando lados, detrás del contenido (`src/components/layout/AmbientShapes.tsx`, montado en `Layout`).
+- **Solo en zonas claras**: secciones con `data-surface="light"` contiguas. Cada forma y su halo entran completos en la zona (32 px de aire), así nunca quedan cortadas por una banda violeta, una foto o el footer. Las secciones claras son translúcidas (`--color-bg-subtle-glass`, `--color-bg-tint-glass`) para que las formas crucen de una a otra.
+- **Colores**: `--ambient-circle` (violet-200 → 100), `--ambient-pill` (violet-300 al 60 % → 100, rotada ±18°), `--ambient-glow` (violet-500 al 30 %, radial). Centro visible ≈ R 205–215 sobre blanco: más claro no se ve, más oscuro compite.
+- **Medidas**: escritorio 420–500 px (se achican hasta 0,65× para entrar en un hueco), 55 % fuera de pantalla, 700 px de aire entre formas del mismo costado; celular 0,55× y 62 % afuera, 1100 px de aire. Halo de 1,5× (círculo) / 1,1× (píldora).
+- **Esquivan** botones y enlaces (32 px de aire) y toda superficie con fondo propio: tarjetas, paneles, fotos (el halo no puede tocarlas; si no, se vería cortado en línea recta). Lo sticky cuenta con todo su recorrido. Por eso una página llena de tarjetas de borde a borde puede quedar sin formas: es preferible a un halo cortado.
+- **Movimiento**: deriva muy lenta (±18 px, 22–34 s) solo en escritorio con mouse; quietas con movimiento reducido.
+- No sumar otras formas sueltas en componentes.
+
 ### Reglas de contraste (WCAG 2.2 AA)
 - `#7761FF` **solo** en texto ≥ 24 px (o 19 px bold) o decorativo. Para texto chico usar `violet-600`.
 - Texto blanco sobre coral: usar `coral-700` o el gradiente de acento.

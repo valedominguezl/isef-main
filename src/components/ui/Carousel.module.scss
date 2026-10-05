@@ -72,7 +72,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: var(--violet-200);
+    background: var(--violet-300); /* 200 se perdía sobre las formas lila del fondo */
     clip-path: inset(0 9px round 999px);
     transition: clip-path 300ms var(--ease-emphasized), background-color var(--duration-base);
   }

@@ -33,6 +33,12 @@ body {
   overflow-x: clip;
 }
 
+/* Contexto propio para que las formas de fondo (AmbientShapes) queden detrás de las secciones */
+#contenido {
+  position: relative;
+  isolation: isolate;
+}
+
 img,
 svg,
 video,

@@ -1,0 +1,50 @@
+/* Capa detrás de todas las secciones de <main>; las bandas oscuras y las fotos la tapan */
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  display: block;
+
+  /* Halo difuso detrás de cada forma (un degradé que se desvanece dentro de su caja: sin cortes) */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    width: var(--glow);
+    height: var(--glow);
+    border-radius: 50%;
+    background: var(--ambient-glow);
+    translate: calc(-50% + var(--glow-x)) -50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+}
+
+.circle {
+  border-radius: 50%;
+
+  &::after {
+    background: var(--ambient-circle);
+  }
+}
+
+.pill {
+  border-radius: var(--radius-pill);
+
+  &::after {
+    background: var(--ambient-pill);
+  }
+}

@@ -5,6 +5,7 @@ import Navbar, { type NavTheme } from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import WhatsAppButton from '@/components/layout/WhatsAppButton';
 import NavigationProgress from '@/components/layout/NavigationProgress';
+import AmbientShapes from '@/components/layout/AmbientShapes';
 import CookieBanner from '@/features/consent/CookieBanner';
 import { ConsentProvider } from '@/features/consent/ConsentContext';
 import { SearchProvider } from '@/features/search/SearchContext';
@@ -62,6 +63,7 @@ export default function Layout() {
           <NavigationProgress />
           {!handle.bare && <Navbar theme={handle.nav ?? 'overlay'} />}
           <main id="contenido" tabIndex={-1}>
+            {!handle.bare && <AmbientShapes />}
             <Outlet />
           </main>
           {!handle.bare && <Footer />}

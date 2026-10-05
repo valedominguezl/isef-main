@@ -35,6 +35,8 @@ export default function Section({
     <Tag
       id={id}
       aria-labelledby={labelledBy}
+      // AmbientShapes ubica las formas de fondo solo sobre secciones claras
+      data-surface={dark ? 'dark' : 'light'}
       className={[styles.section, styles[tone], image && styles.image, styles[`sp-${spacing}`], dark && 'on-dark', className]
         .filter(Boolean)
         .join(' ')}

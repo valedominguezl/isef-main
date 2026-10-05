@@ -34,16 +34,17 @@
   max-width: none;
 }
 
+/* Fondos claros translúcidos: dejan ver las formas de AmbientShapes (el blanco lo pone el body) */
 .default {
-  background: var(--color-bg);
+  background: transparent;
 }
 
 .subtle {
-  background: var(--color-bg-subtle);
+  background: var(--color-bg-subtle-glass);
 }
 
 .tint {
-  background: var(--color-bg-tint);
+  background: var(--color-bg-tint-glass);
 }
 
 /* Bandas de color: la textura violeta del sitio original (no negro) */

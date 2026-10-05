@@ -47,6 +47,13 @@
   --color-bg: var(--ink-0);
   --color-bg-subtle: var(--ink-25);
   --color-bg-tint: color-mix(in srgb, var(--violet-500) 5%, white);
+  /* Mismos tonos que subtle/tint pero translúcidos: las secciones dejan ver las formas de fondo */
+  --color-bg-subtle-glass: color-mix(in srgb, var(--violet-500) 2.5%, transparent);
+  --color-bg-tint-glass: color-mix(in srgb, var(--violet-500) 5%, transparent);
+  /* Formas de fondo (AmbientShapes) */
+  --ambient-circle: linear-gradient(155deg, var(--violet-200) 35%, var(--violet-100));
+  --ambient-pill: linear-gradient(90deg, color-mix(in srgb, var(--violet-300) 60%, transparent), var(--violet-100));
+  --ambient-glow: radial-gradient(closest-side, color-mix(in srgb, var(--violet-500) 30%, transparent), transparent);
   --color-surface: var(--ink-0);
   --color-border: var(--ink-100);
   --color-border-strong: var(--ink-200);
