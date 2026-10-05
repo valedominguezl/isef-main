@@ -1,14 +1,13 @@
 @use '@/styles/mixins' as *;
 
-/* Primer y último dato tocan los bordes del contenido (mismo borde que el resto de las secciones) */
+/* Tres columnas iguales, cada dato centrado en la suya (como el sitio original) */
 .stats {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-4);
   text-align: center;
 
   @include up($bp-md) {
-    grid-template-columns: repeat(3, auto);
-    justify-content: space-between;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -17,8 +16,11 @@
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  padding-block: var(--space-4);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 12rem;
+  padding-block: var(--space-6);
 
   strong {
     font-family: var(--font-sans);
@@ -26,29 +28,20 @@
     font-weight: var(--weight-semibold);
     line-height: 1;
     letter-spacing: var(--tracking-tight);
-    font-variant-numeric: tabular-nums;
   }
-
 }
 
-/* El ícono se centra en el número, no en todo el bloque */
-.statValue {
-  position: relative;
-  isolation: isolate;
-  align-self: center;
-}
-
-/* Ícono grande y tenue detrás del número (como el sitio original) */
+/* Ícono grande y tenue centrado detrás de todo el dato; mismo tamaño en los tres */
 .statIcon {
   position: absolute;
   inset: 50% auto auto 50%;
   z-index: -1;
-  width: 7.5rem;
-  height: 7.5rem;
+  width: clamp(9rem, 14vw, 12rem);
+  height: clamp(9rem, 14vw, 12rem);
   translate: -50% -50%;
   color: white;
-  opacity: 0.12;
-  stroke-width: 1.25;
+  opacity: 0.1;
+  stroke-width: 1;
 }
 
 .statLabel {

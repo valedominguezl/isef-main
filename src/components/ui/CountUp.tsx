@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useInView, useReducedMotion } from 'motion/react';
+import styles from './CountUp.module.scss';
 
 const fmt = new Intl.NumberFormat('es-AR');
 const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - 2 ** (-10 * t));
@@ -24,12 +25,16 @@ export default function CountUp({ to, prefix = '', duration = 2 }: { to: number;
     return () => cancelAnimationFrame(raf);
   }, [inView, to, duration, reduced]);
 
+  const final = `${prefix}${fmt.format(to)}`;
   return (
     <span ref={ref}>
-      <span className="sr-only">{`${prefix}${fmt.format(to)}`}</span>
-      <span aria-hidden>
-        {prefix}
-        {fmt.format(value)}
+      <span className="sr-only">{final}</span>
+      <span className={styles.root} aria-hidden>
+        <span className={styles.ghost}>{final}</span>
+        <span className={styles.live}>
+          {prefix}
+          {fmt.format(value)}
+        </span>
       </span>
     </span>
   );

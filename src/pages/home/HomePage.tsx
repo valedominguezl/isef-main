@@ -127,8 +127,8 @@ export function Component() {
             const Icon = STAT_ICONS[i % STAT_ICONS.length];
             return (
             <RevealItem key={s.etiqueta} className={styles.stat}>
-              <strong className={styles.statValue}>
-                <Icon className={styles.statIcon} aria-hidden />
+              <Icon className={styles.statIcon} aria-hidden />
+              <strong>
                 <CountUp to={s.valor} prefix={s.prefijo} />
               </strong>
               <span className={styles.statLabel}>{s.etiqueta}</span>

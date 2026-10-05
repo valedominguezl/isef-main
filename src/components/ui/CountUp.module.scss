@@ -1,0 +1,17 @@
+/* El valor final (invisible) reserva el ancho: el número cuenta sin mover nada alrededor */
+.root {
+  display: inline-grid;
+  font-variant-numeric: tabular-nums;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+.ghost {
+  visibility: hidden;
+}
+
+.live {
+  text-align: end;
+}
