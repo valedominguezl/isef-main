@@ -46,7 +46,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
         setSettled(q);
         setActive(0);
       }
-    }, q.trim() ? 280 : 0);
+    }, q.trim() ? 350 : 0);
     return () => {
       cancel = true;
       clearTimeout(t);

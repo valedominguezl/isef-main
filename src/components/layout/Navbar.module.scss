@@ -4,39 +4,18 @@
   position: fixed;
   inset: 0 0 auto;
   z-index: var(--z-nav);
-  height: var(--nav-height);
-  padding-inline: var(--gutter);
-  transition:
-    transform var(--duration-slow) var(--ease-emphasized),
-    background-color var(--duration-slow) var(--ease-standard),
-    box-shadow var(--duration-slow) var(--ease-standard),
-    color var(--duration-slow) var(--ease-standard);
-}
-
-/* Sobre la foto de cabecera: transparente, como el sitio original */
-.overlay {
-  color: white;
-  background-color: transparent;
-}
-
-/* Al desplazarse: vidrio esmerilado claro (se ve lo de abajo, desenfocado) */
-.solid {
+  /* Siempre blanca y opaca */
   color: var(--color-text);
-  background-color: rgb(255 255 255 / 0.72);
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  box-shadow: 0 10px 30px -12px rgb(24 22 31 / 0.18);
-}
-
-.hidden {
-  transform: translateY(-100%);
+  background-color: white;
+  box-shadow: 0 10px 30px -12px rgb(24 22 31 / 0.14);
 }
 
 .nav {
   display: flex;
   align-items: center;
   gap: clamp(var(--space-2), 2vw, var(--space-6));
-  height: 100%;
+  height: var(--nav-height);
+  padding-inline: var(--gutter);
   max-width: var(--container-wide);
   margin-inline: auto;
 }
@@ -55,7 +34,7 @@
   color: inherit;
   text-decoration: none;
   font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-regular); /* texto oscuro sobre blanco: liviano */
   font-size: var(--text-base);
   white-space: nowrap;
   @include focus-ring;
@@ -71,10 +50,7 @@
   }
 }
 
-/* Texto oscuro sobre fondo claro: peso liviano (el semibold se ve pesado en negro) */
-.solid .brand {
-  font-weight: var(--weight-regular);
-}
+
 
 .links {
   display: none;
@@ -133,8 +109,7 @@
 }
 
 .search,
-.menuBtn,
-.campus {
+.menuBtn {
   display: inline-flex;
   align-items: center;
   flex: none;
@@ -189,10 +164,10 @@
 }
 
 .campus {
-  display: none;
+  display: none !important;
 
   @include up($bp-xl) {
-    display: inline-flex;
+    display: inline-flex !important;
   }
 }
 
@@ -211,8 +186,11 @@
   }
 }
 
-.menuCta {
-  align-self: flex-start;
+.menuCtas {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
   margin-bottom: var(--space-8);
 }
 

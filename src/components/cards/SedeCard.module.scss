@@ -1,0 +1,109 @@
+@use '@/styles/mixins' as *;
+
+/* Tarjeta informativa (no es un enlace): sin hover. Mismo lenguaje que el resto de las tarjetas claras. */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  flex: 1;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.pin {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-primary);
+  color: white;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.tipo {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.nombre {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-light);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+
+  li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: var(--space-3);
+    align-items: start;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    color: var(--color-text-body);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    color: var(--violet-500);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.social {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--violet-300);
+  color: var(--color-primary-strong);
+  transition:
+    background-color var(--duration-slow) var(--ease-standard),
+    color var(--duration-slow) var(--ease-standard);
+  @include focus-ring;
+
+  &:hover {
+    background: var(--violet-50);
+    color: var(--violet-700);
+  }
+}
+
+@media (pointer: coarse) {
+  .social {
+    width: 44px;
+    height: 44px;
+  }
+}

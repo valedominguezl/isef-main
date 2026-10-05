@@ -5,7 +5,7 @@
   display: grid;
   align-items: center;
   min-height: 56svh;
-  padding: calc(var(--nav-height) + var(--space-12)) var(--gutter) var(--space-16);
+  padding: calc(var(--header-h) + var(--space-12)) var(--gutter) var(--space-16);
   overflow: hidden;
   isolation: isolate;
   background: var(--ink-950);

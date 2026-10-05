@@ -64,8 +64,33 @@
   }
 }
 
+.cutout {
+  /* En móvil la ilustración no suma: el texto ocupa todo */
+  @include down($bp-lg) {
+    grid-template-columns: 1fr;
+
+    .media {
+      display: none;
+    }
+  }
+
+  .media img {
+    aspect-ratio: auto;
+    max-height: 32rem;
+    object-fit: contain;
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+  }
+}
+
 .reverse .media img {
   @include up($bp-lg) {
     border-radius: var(--radius-xl) 10rem 10rem var(--radius-xl);
   }
+}
+
+/* Va al final: le gana al radio en píldora de .reverse */
+.cutout .media img {
+  border-radius: 0;
 }

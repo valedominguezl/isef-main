@@ -121,6 +121,8 @@
   --container-wide: 1400px;
   --container-prose: 72ch;
   --nav-height: 72px;
+  --announce-h: 0px; /* franja de inscripciones (se activa en global.scss) */
+  --header-h: calc(var(--nav-height) + var(--announce-h)); /* alto total de la cabecera fija */
 
   /* ── Forma ───────────────────────────────────────────────── */
   --radius-sm: 6px;

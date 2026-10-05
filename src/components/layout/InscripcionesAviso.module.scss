@@ -1,0 +1,55 @@
+@use '@/styles/mixins' as *;
+
+/* Alto fijo: global.scss lo reserva con :root:has([data-announce]) → --announce-h */
+.aviso {
+  height: var(--announce-h);
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 100%;
+  padding-inline: var(--gutter);
+  color: white;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  @include focus-ring(-3px);
+
+  &:hover {
+    color: white;
+  }
+
+  strong {
+    font-weight: var(--weight-semibold);
+  }
+}
+
+.arrow {
+  flex: none;
+  transition: transform var(--duration-slow) var(--ease-emphasized);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .link:hover .arrow {
+    transform: translateX(4px);
+  }
+}
+
+.showSm {
+  display: none;
+}
+
+@include down($bp-sm) {
+  .hideSm {
+    display: none;
+  }
+
+  .showSm {
+    display: inline;
+  }
+}

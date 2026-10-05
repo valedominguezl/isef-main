@@ -31,7 +31,7 @@ export function contentDocs(): SearchDoc[] {
       title: c.titulo,
       url: `/especializaciones/${c.slug}`,
       context: c.subtitulo,
-      keywords: [dis, c.modalidad, c.etiqueta].filter(Boolean).join(' '),
+      keywords: [dis, c.modalidad, c.destacado && 'destacado'].filter(Boolean).join(' '),
       text: clip(`${c.subtitulo}. ${toPlainText(c.descripcion)} ${temario}`),
     });
   }

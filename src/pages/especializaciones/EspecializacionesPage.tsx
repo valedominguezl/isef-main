@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import heroImg from '@/assets/media/especializaciones/main.webp';
 import heroSm from '@/assets/media/especializaciones/main-800.webp';
 import introImg from '@/assets/media/especializaciones/intro.webp';
@@ -14,6 +14,9 @@ import Feature from '@/components/ui/Feature';
 import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
 import CourseCard from '@/components/cards/CourseCard';
 import SpeakerCard from '@/components/cards/SpeakerCard';
+import Button from '@/components/ui/Button';
+import SearchField from '@/components/ui/SearchField';
+import { useDebounced } from '@/lib/useDebounced';
 import styles from './EspecializacionesPage.module.scss';
 
 const searchable = cursos.map((c) => ({
@@ -26,10 +29,13 @@ const searchable = cursos.map((c) => ({
 export function Component() {
   const [q, setQ] = useState('');
   const [dis, setDis] = useState<string | null>(null);
+  const [todosDis, setTodosDis] = useState(false);
+  const DIS_INICIALES = 3;
+  const query = useDebounced(q);
   const list = useMemo(() => {
-    const terms = normalize(q.trim()).split(/\s+/).filter(Boolean);
+    const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
     return searchable.filter((s) => (!dis || s.curso.disertantes.includes(dis)) && terms.every((t) => s.text.includes(t))).map((s) => s.curso);
-  }, [q, dis]);
+  }, [query, dis]);
   const conCursos = disertantes.filter((d) => cursos.some((c) => c.disertantes.includes(d.slug)));
 
   return (
@@ -84,29 +90,41 @@ export function Component() {
           title="Conocé a los *disertantes*"
           lead={
             <p>
-              Ellos son quienes impulsan tu carrera para que estés <strong>a la altura de los estándares internacionales</strong>. Todos sus
-              currículums siguen el mismo formato.
+              Ellos son quienes impulsan tu carrera para que estés <strong>a la altura de los estándares internacionales</strong>.
             </p>
           }
         />
         <RevealGroup className={styles.speakers}>
-          {disertantes.map((d) => (
+          {disertantes.slice(0, DIS_INICIALES).map((d) => (
             <RevealItem key={d.slug}>
               <SpeakerCard disertante={d} />
             </RevealItem>
           ))}
         </RevealGroup>
+        {/* El resto aparece al pedirlo, con la misma entrada escalonada */}
+        {todosDis && (
+          <RevealGroup className={`${styles.speakers} ${styles.speakersMore}`}>
+            {disertantes.slice(DIS_INICIALES).map((d) => (
+              <RevealItem key={d.slug}>
+                <SpeakerCard disertante={d} />
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        )}
+        {!todosDis && disertantes.length > DIS_INICIALES && (
+          <div className={styles.more}>
+            <Button variant="outline" icon="none" leading={<Plus size={18} aria-hidden />} onClick={() => setTodosDis(true)}>
+              Ver más disertantes ({disertantes.length - DIS_INICIALES})
+            </Button>
+          </div>
+        )}
       </Section>
 
       <Section id="cursos" width="wide" labelledBy="cursos-title">
         <SectionHeader id="cursos-title" align="center" title="Nuestras *especializaciones*" lead="Toda la información detallada de cada curso: temario, modalidad, fechas y disertantes." />
 
         <Reveal className={styles.filters}>
-          <label className={styles.search}>
-            <Search size={18} aria-hidden />
-            <span className="sr-only">Buscar cursos</span>
-            <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar por tema, disertante o contenido del temario…" />
-          </label>
+          <SearchField value={q} onChange={setQ} pending={q !== query} label="Buscar cursos" placeholder="Buscar por tema, disertante o contenido del temario…" />
           <div className={styles.chips} role="group" aria-label="Filtrar por disertante">
             <button type="button" aria-pressed={!dis} onClick={() => setDis(null)}>
               Todos
@@ -135,7 +153,7 @@ export function Component() {
         </p>
 
         {list.length ? (
-          <ul className={styles.grid} role="list" key={dis ?? "todos"}>
+          <ul className={[styles.grid, q !== query && styles.pending].filter(Boolean).join(' ')} role="list" key={`${dis ?? 'todos'}|${query}`}>
             {list.map((c, i) => (
               <li key={c.slug} style={{ animationDelay: `${Math.min(i, 8) * 70}ms` }}>
                 <CourseCard curso={c} />

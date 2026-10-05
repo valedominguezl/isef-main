@@ -32,19 +32,27 @@ export const aranceles = arancelesJson as Aranceles;
 export const conferencias = conferenciasJson as Conferencias;
 export const galeria = galeriaJson as Galeria;
 
+/** Inscripciones abiertas hoy: el interruptor del panel + la ventana inicio/cierre (si están cargadas). */
+export const inscripcionesVigentes = (hoy: string = TODAY) => {
+  const { abiertas, inicio, cierre } = sitio.inscripciones;
+  return abiertas && (!inicio || hoy >= inicio) && (!cierre || hoy <= cierre);
+};
+
 /** Próximo: tiene fecha de inicio hoy o más adelante. */
 export const esProximo = (c: Pick<Curso, 'fechaInicio'>) => Boolean(c.fechaInicio && c.fechaInicio >= TODAY);
 /** Ya comenzó: tenía fecha y pasó. */
 export const yaComenzo = (c: Pick<Curso, 'fechaInicio'>) => Boolean(c.fechaInicio && c.fechaInicio < TODAY);
-/** La etiqueta ("¡Nuevo!") se oculta sola cuando el curso ya empezó. */
-export const etiquetaVigente = (c: Pick<Curso, 'fechaInicio' | 'etiqueta'>) => (yaComenzo(c) ? undefined : c.etiqueta);
+/** "¡Nuevo!" es automático: el curso tiene fecha de inicio por delante. "Destacado" se marca a mano en el panel. */
+export const etiquetasCurso = (c: Pick<Curso, 'fechaInicio' | 'destacado'>) =>
+  [c.destacado && { texto: 'Destacado', tono: 'brand' as const }, esProximo(c) && { texto: '¡Nuevo!', tono: 'white' as const }].filter(
+    (x): x is { texto: string; tono: 'brand' | 'white' } => Boolean(x),
+  );
 
 const byFeatured = (a: WithSlug<Curso>, b: WithSlug<Curso>) =>
   Number(esProximo(b)) - Number(esProximo(a)) ||
   (esProximo(a) && esProximo(b) ? a.fechaInicio!.localeCompare(b.fechaInicio!) : 0) ||
   Number(yaComenzo(a)) - Number(yaComenzo(b)) ||
   Number(b.destacado) - Number(a.destacado) ||
-  Number(Boolean(b.etiqueta)) - Number(Boolean(a.etiqueta)) ||
   (b.fechaInicio ?? '').localeCompare(a.fechaInicio ?? '') ||
   a.titulo.localeCompare(b.titulo, 'es');
 

@@ -83,11 +83,11 @@
 }
 
 .warn {
-  background: var(--coral-50);
-  border-color: var(--coral-100);
+  background: var(--violet-50);
+  border-color: var(--violet-100);
 
   > svg {
-    color: var(--coral-600);
+    color: var(--violet-600);
   }
 }
 
@@ -98,7 +98,7 @@
 
   @include up($bp-lg) {
     position: sticky;
-    top: calc(var(--nav-height) + var(--space-6));
+    top: calc(var(--header-h) + var(--space-6));
   }
 }
 

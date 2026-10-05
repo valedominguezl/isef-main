@@ -37,8 +37,9 @@
     opacity: 0.9;
   }
 
+  /* Solo la flecha avanza ("ir a"); descargar y enlace externo no se mueven */
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    &:hover .icon {
+    &:hover .arrow {
       transform: translateX(4px);
     }
   }
@@ -63,10 +64,6 @@
 
 .primary {
   --btn-bg: var(--gradient-primary);
-}
-
-.accent {
-  --btn-bg: var(--gradient-accent);
 }
 
 .dark {

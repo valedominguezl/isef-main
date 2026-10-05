@@ -1,37 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, m } from 'motion/react';
 import { ExternalLink, Menu, Search, X } from 'lucide-react';
 import logo from '@/assets/logo.webp';
-import { sitio } from '@/content';
+import { sitio, inscripcionesVigentes } from '@/content';
 import { useSearch } from '@/features/search/SearchContext';
 import { socialIcon } from '../ui/Icons';
 import Button from '../ui/Button';
 import { MAIN_NAV, SECONDARY_NAV } from './nav';
+import InscripcionesAviso from './InscripcionesAviso';
 import styles from './Navbar.module.scss';
 
 export type NavTheme = 'overlay' | 'solid';
 
-export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
-  const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
+/** Barra fija, siempre blanca (no se esconde ni cambia al desplazarse). */
+export default function Navbar(_props: { theme?: NavTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const lastY = useRef(0);
   const { pathname } = useLocation();
   const { open: openSearch } = useSearch();
-
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 40);
-      setHidden(y > 400 && y > lastY.current + 4);
-      if (y < lastY.current - 4 || y < 400) setHidden(false);
-      lastY.current = y;
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   useEffect(() => setMenuOpen(false), [pathname]);
 
@@ -47,13 +33,10 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
     };
   }, [menuOpen]);
 
-  const solid = theme === 'solid' || scrolled;
-
   return (
     <>
-      <header
-        className={[styles.header, solid ? styles.solid : styles.overlay, hidden && !menuOpen && styles.hidden].filter(Boolean).join(' ')}
-      >
+      <header className={styles.header}>
+        <InscripcionesAviso />
         <nav className={styles.nav} aria-label="Principal">
           <Link to="/" className={styles.brand} aria-label={`${sitio.nombre} — Inicio`}>
             <img src={logo} alt="" width={48} height={48} />
@@ -76,14 +59,14 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
               <span className={styles.searchLabel}>Buscar</span>
               <kbd className={styles.kbd}>/</kbd>
             </button>
-            <a href={sitio.campusUrl} className={styles.campus} target="_blank" rel="noopener noreferrer" title="Aula virtual para alumnos">
-              Campus virtual
-            </a>
-            {sitio.inscripciones.abiertas && (
+            {inscripcionesVigentes() && (
               <Button to="/inscripciones" size="sm" icon="none" className={styles.cta}>
                 Inscribite
               </Button>
             )}
+            <Button href={sitio.campusUrl} target="_blank" rel="noopener noreferrer" size="sm" variant="outline" icon="none" className={styles.campus}>
+              Campus virtual
+            </Button>
             <button
               type="button"
               className={styles.menuBtn}
@@ -106,10 +89,11 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
             role="dialog"
             aria-modal="true"
             aria-label="Menú"
-            // Cortina desde el borde superior (como el sitio original); cierra más rápido de lo que abre
-            initial={{ clipPath: 'inset(0% 0% 100% 0%)', opacity: 0.6 }}
-            animate={{ clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, transition: { duration: 0.6, ease: [0.32, 0.72, 0, 1] } }}
-            exit={{ clipPath: 'inset(0% 0% 100% 0%)', opacity: 0.6, transition: { duration: 0.4, ease: [0.32, 0.72, 0, 1] } }}
+            // Círculo que crece desde fuera de la pantalla (arriba a la derecha): no se ve el punto de origen.
+            // Cierra más rápido de lo que abre.
+            initial={{ clipPath: 'circle(0px at calc(100% + 120px) -120px)' }}
+            animate={{ clipPath: 'circle(170vmax at calc(100% + 120px) -120px)', transition: { duration: 0.7, ease: [0.32, 0.72, 0, 1] } }}
+            exit={{ clipPath: 'circle(0px at calc(100% + 120px) -120px)', transition: { duration: 0.45, ease: [0.32, 0.72, 0, 1] } }}
           >
             <div className={styles.menuTop}>
               <Link to="/" className={styles.brand}>
@@ -141,14 +125,19 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
                 </m.li>
               ))}
             </m.ul>
-            {sitio.inscripciones.abiertas && (
-              <Button to="/inscripciones" variant="light" size="lg" className={styles.menuCta}>
-                Inscribite
+            <div className={styles.menuCtas}>
+              {inscripcionesVigentes() && (
+                <Button to="/inscripciones" variant="light" size="lg" leading={<span aria-hidden>🚀</span>}>
+                  Inscribite ya
+                </Button>
+              )}
+              <Button href={sitio.campusUrl} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" icon="none">
+                Campus virtual
               </Button>
-            )}
+            </div>
             <div className={styles.menuFooter}>
               <ul className={styles.menuSecondary} role="list">
-                {SECONDARY_NAV.map((item) => (
+                {SECONDARY_NAV.filter((item) => item.to !== sitio.campusUrl).map((item) => (
                   <li key={item.to}>
                     {item.external ? (
                       <a href={item.to} target="_blank" rel="noopener noreferrer">

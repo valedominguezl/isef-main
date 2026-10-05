@@ -1,7 +1,7 @@
 @use '@/styles/mixins' as *;
 
 .page {
-  padding-top: calc(var(--nav-height) + var(--space-12));
+  padding-top: calc(var(--header-h) + var(--space-12));
   min-height: 80svh;
 }
 

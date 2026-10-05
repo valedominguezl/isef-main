@@ -1,6 +1,7 @@
+import { FilePen, Receipt, Stethoscope } from 'lucide-react';
 import heroImg from '@/assets/media/inscripciones/main.webp';
 import heroSm from '@/assets/media/inscripciones/main-800.webp';
-import { aranceles, faq, inscripciones, sitio } from '@/content';
+import { aranceles, faq, inscripciones, sitio, inscripcionesVigentes } from '@/content';
 import { whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import { track } from '@/lib/analytics';
@@ -12,6 +13,9 @@ import Button from '@/components/ui/Button';
 import Accordion from '@/components/ui/Accordion';
 import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
 import styles from './InscripcionesPage.module.scss';
+
+/** Ícono de cada paso (planilla, exámenes médicos, pago), como en el sitio original. */
+const STEP_ICONS = [FilePen, Stethoscope, Receipt];
 
 export function Component() {
   const preguntas = faq.preguntas.filter((p) => /inscrib|requisit|secundario|cuota|present/i.test(p.pregunta));
@@ -37,18 +41,23 @@ export function Component() {
         imageSmall={heroSm}
         image={heroImg}
         title="Inscripciones"
-        subtitle={sitio.inscripciones.abiertas ? sitio.inscripciones.texto : 'Toda la información para inscribirte'}
+        subtitle={inscripcionesVigentes() ? sitio.inscripciones.texto : 'Toda la información para inscribirte'}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Inscripciones' }]}
       />
 
       <Section labelledBy="req-title">
         <SectionHeader id="req-title" title="Requisitos *a presentar*" lead={<Markdown text={inscripciones.intro} />} />
         <RevealGroup className={styles.steps} as="ol">
-          {inscripciones.pasos.map((p, i) => (
+          {inscripciones.pasos.map((p, i) => {
+            const Icon = STEP_ICONS[i % STEP_ICONS.length];
+            return (
             <RevealItem key={p.titulo} as="li" className={styles.step}>
-              <span className={styles.stepNum} aria-hidden>
-                {String(i + 1).padStart(2, '0')}
-              </span>
+              <div className={styles.stepHead}>
+                <span className={styles.stepIcon} aria-hidden>
+                  <Icon />
+                </span>
+                <span className={styles.stepNum}>Paso {i + 1}</span>
+              </div>
               <h3>{p.titulo}</h3>
               <Markdown text={p.descripcion} className={styles.stepText} />
               {p.archivo && (
@@ -56,7 +65,6 @@ export function Component() {
                   href={p.archivo}
                   download
                   icon="download"
-                  variant={i % 2 ? 'accent' : 'primary'}
                   onClick={() => track('file_download', { archivo: p.archivo })}
                 >
                   {p.archivoTexto ?? 'Descargar'}
@@ -68,7 +76,8 @@ export function Component() {
                 </Button>
               )}
             </RevealItem>
-          ))}
+            );
+          })}
         </RevealGroup>
         <p className={styles.where}>
           Presentá la documentación en la <a href="/contacto#sedes">sede que te corresponda</a> antes del{' '}

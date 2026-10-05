@@ -165,7 +165,7 @@ export const sitioSchema = z.object({
   campusUrl: z.string().url(),
   whatsapp: telefono,
   email: z.string().email(),
-  inscripciones: z.object({ abiertas: z.boolean(), texto: z.string() }),
+  inscripciones: z.object({ abiertas: z.boolean(), texto: z.string(), inicio: isoDate.optional(), cierre: isoDate.optional() }),
   estadisticas: z.array(z.object({ valor: z.number(), prefijo: z.string(), etiqueta: z.string() })),
   telefonos: z.array(
     z.object({ area: z.string(), sede: z.string().optional(), descripcion: z.string(), numeros: z.array(telefono) }),

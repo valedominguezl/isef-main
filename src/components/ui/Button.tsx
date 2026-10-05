@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Download, ExternalLink } from 'lucide-react';
 import styles from './Button.module.scss';
 
-type Variant = 'primary' | 'accent' | 'dark' | 'outline' | 'outline-light' | 'light' | 'ghost';
+type Variant = 'primary' | 'dark' | 'outline' | 'outline-light' | 'light' | 'ghost';
 type IconKind = 'arrow' | 'download' | 'external' | 'none';
 
 interface BaseProps {
@@ -34,7 +34,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>(function Button(props, ref) 
     <>
       {leading}
       <span>{children}</span>
-      {Icon && <Icon className={styles.icon} size={18} aria-hidden />}
+      {Icon && <Icon className={[styles.icon, icon === 'arrow' && styles.arrow].filter(Boolean).join(' ')} size={18} aria-hidden />}
     </>
   );
 

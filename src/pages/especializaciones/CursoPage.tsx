@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { AlertTriangle, CalendarDays, CircleDollarSign, ClipboardCheck, Clock, MonitorPlay } from 'lucide-react';
-import { cursos, disertantes, etiquetaVigente, getCurso, nombreCompleto, sitio, yaComenzo } from '@/content';
+import { cursos, disertantes, etiquetasCurso, getCurso, nombreCompleto, sitio, yaComenzo } from '@/content';
 import { formatDate, whatsappUrl } from '@/lib/format';
 import { excerpt, toPlainText } from '@/lib/markdown';
 import { track } from '@/lib/analytics';
@@ -91,7 +91,11 @@ export function Component() {
         }
       >
         <div className={styles.badges}>
-          {etiquetaVigente(curso) && <Badge tone="white">{etiquetaVigente(curso)}</Badge>}
+          {etiquetasCurso(curso).map((e) => (
+            <Badge key={e.texto} tone={e.tono}>
+              {e.texto}
+            </Badge>
+          ))}
           {dis.length > 0 && <Badge tone="light">Con {dis.map(nombreCompleto).join(' y ')}</Badge>}
         </div>
       </PageHero>

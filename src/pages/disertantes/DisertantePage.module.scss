@@ -2,7 +2,7 @@
 
 .header {
   position: relative;
-  padding: calc(var(--nav-height) + var(--space-10)) var(--gutter) var(--space-16);
+  padding: calc(var(--header-h) + var(--space-10)) var(--gutter) var(--space-16);
   background: var(--surface-fx);
   overflow: hidden;
   isolation: isolate;

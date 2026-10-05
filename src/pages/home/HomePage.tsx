@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarClock, Clock, MapPin, Search, Wallet } from 'lucide-react';
+import { CalendarClock, Clock, GraduationCap, Landmark, ShieldCheck, Wallet } from 'lucide-react';
 import heroImg from '@/assets/media/home/hero.webp';
 import heroSm from '@/assets/media/home/hero-800.webp';
 import introImg from '@/assets/media/home/intro.webp';
 import especImg from '@/assets/media/home/especializaciones.webp';
 import cuotaImg from '@/assets/media/aranceles/main.webp';
-import { aranceles, cursos, faq, inscripciones, novedadesRecientes, plan, sitio } from '@/content';
-import { formatPhone, normalize, whatsappUrl } from '@/lib/format';
+import { aranceles, cursos, faq, inscripciones, novedadesRecientes, plan, sitio, inscripcionesVigentes } from '@/content';
+import { normalize, whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import Seo from '@/components/seo/Seo';
 import PageHero from '@/components/ui/PageHero';
@@ -18,33 +18,44 @@ import Button from '@/components/ui/Button';
 import Carousel from '@/components/ui/Carousel';
 import Accordion from '@/components/ui/Accordion';
 import CountUp from '@/components/ui/CountUp';
+import SearchField from '@/components/ui/SearchField';
+import { useDebounced } from '@/lib/useDebounced';
 import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
-import { WhatsAppIcon } from '@/components/ui/Icons';
 import NewsCard from '@/components/cards/NewsCard';
 import CourseCard from '@/components/cards/CourseCard';
+import SedeCard from '@/components/cards/SedeCard';
 import styles from './HomePage.module.scss';
+
+/** Íconos de fondo de cada número (mismo orden que sitio.estadisticas). */
+const STAT_ICONS = [ShieldCheck, Landmark, GraduationCap];
 
 function Faq() {
   const [q, setQ] = useState('');
   const [showAll, setShowAll] = useState(false);
+  const query = useDebounced(q);
   const items = useMemo(() => {
-    const n = normalize(q.trim());
+    const n = normalize(query.trim());
     return faq.preguntas
       .map((p, i) => ({ ...p, i }))
       .filter((p) => !n || normalize(`${p.pregunta} ${toPlainText(p.respuesta)}`).includes(n));
-  }, [q]);
-  const visible = q || showAll ? items : items.slice(0, 6);
+  }, [query]);
+  const visible = query || showAll ? items : items.slice(0, 6);
 
   return (
     <Section id="faq" tone="tint" width="default" labelledBy="faq-title">
       <SectionHeader id="faq-title" title="Preguntas *frecuentes*" align="center" lead="Lo que más nos consultan antes de inscribirse." />
-      <div className={styles.faqSearch}>
-        <Search size={18} aria-hidden />
-        <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar en las preguntas…" aria-label="Buscar en las preguntas frecuentes" />
-      </div>
+      <SearchField
+        className={styles.faqSearch}
+        value={q}
+        onChange={setQ}
+        pending={q !== query}
+        label="Buscar en las preguntas frecuentes"
+        placeholder="Buscar en las preguntas…"
+      />
       {visible.length ? (
         <Accordion
-          className={styles.faqList}
+          key={query}
+          className={[styles.faqList, q !== query && styles.pending].filter(Boolean).join(' ')}
           variant="card"
           items={visible.map((p) => ({ id: `faq-${p.i}`, title: p.pregunta, content: <Markdown text={p.respuesta} /> }))}
         />
@@ -53,7 +64,7 @@ function Faq() {
           No encontramos preguntas sobre eso. <a href={whatsappUrl(sitio.whatsapp)}>Escribinos por WhatsApp</a> y te respondemos.
         </p>
       )}
-      {!q && items.length > 6 && (
+      {!query && items.length > 6 && (
         <div className={styles.center}>
           <Button variant="outline" icon="none" onClick={() => setShowAll((v) => !v)} aria-expanded={showAll}>
             {showAll ? 'Ver menos preguntas' : `Ver todas las preguntas (${items.length})`}
@@ -90,8 +101,8 @@ export function Component() {
         title={`Desde ${sitio.fundacion}, *abriendo caminos*`}
         subtitle="Título oficial con validez nacional, especializaciones gratuitas con científicos de renombre internacional y la cuota más baja del país."
         actions={
-          sitio.inscripciones.abiertas ? (
-            <Button to="/inscripciones" variant="outline-light" size="lg">
+          inscripcionesVigentes() ? (
+            <Button to="/inscripciones" variant="outline-light" size="lg" leading={<span aria-hidden>🚀</span>}>
               {sitio.inscripciones.texto}
             </Button>
           ) : (
@@ -108,64 +119,54 @@ export function Component() {
           El I.S.E.F. en números
         </h2>
         <RevealGroup className={styles.stats}>
-          {sitio.estadisticas.map((s) => (
+          {sitio.estadisticas.map((s, i) => {
+            const Icon = STAT_ICONS[i % STAT_ICONS.length];
+            return (
             <RevealItem key={s.etiqueta} className={styles.stat}>
+              <Icon className={styles.statIcon} aria-hidden />
               <strong>
                 <CountUp to={s.valor} prefix={s.prefijo} />
               </strong>
               <span className={styles.statLabel}>{s.etiqueta}</span>
             </RevealItem>
-          ))}
+            );
+          })}
         </RevealGroup>
       </Section>
 
-      {/* Inscripción: lo que la persona viene a buscar */}
+      {/* Inscripción: lo que la persona viene a buscar (los pasos están en /inscripciones) */}
       <Section id="inscribite" labelledBy="insc-title">
         <div className={styles.enroll}>
-          <div className={styles.enrollIntro}>
-            <SectionHeader id="insc-title" title="Inscribite en *3 pasos*" lead="Todo lo que necesitás para empezar a cursar el profesorado." />
-            <dl className={styles.facts}>
-              <div>
-                <CalendarClock aria-hidden />
-                <dt>Plazo para presentar requisitos</dt>
-                <dd>Hasta el {inscripciones.fechaLimiteRequisitos}</dd>
-              </div>
-              <div>
-                <Clock aria-hidden />
-                <dt>Cursado</dt>
-                <dd>{plan.duracion}, presencial · lunes a viernes de 07:30 a 13:30 h</dd>
-              </div>
-              <div>
-                <Wallet aria-hidden />
-                <dt>Cuota</dt>
-                <dd>
-                  Sin matrícula ni gastos extra ·{' '}
-                  <a href={consultaCuota} target="_blank" rel="noopener noreferrer">
-                    consultá el valor por WhatsApp
-                  </a>
-                </dd>
-              </div>
-            </dl>
-          </div>
-          <RevealGroup className={styles.steps} as="ol">
-            {inscripciones.pasos.map((p, i) => (
-              <RevealItem key={p.titulo} as="li" className={styles.step}>
-                <span className={styles.stepNum} aria-hidden>
-                  {i + 1}
-                </span>
+          <SectionHeader id="insc-title" title="*Inscribite* en el profesorado" lead="Todo lo que necesitás saber para empezar a cursar." />
+          <div className={styles.enrollBody}>
+              <dl className={styles.facts}>
                 <div>
-                  <h3>{p.titulo}</h3>
-                  <Markdown text={p.descripcion} />
+                  <CalendarClock aria-hidden />
+                  <dt>Plazo para presentar requisitos</dt>
+                  <dd>Hasta el {inscripciones.fechaLimiteRequisitos}</dd>
                 </div>
-              </RevealItem>
-            ))}
-            <RevealItem as="li" className={styles.stepCta}>
-              <Button to="/inscripciones">Inscribite</Button>
-              <Button href={whatsappUrl(sitio.whatsapp, 'Hola! Quiero información para inscribirme.')} variant="ghost" icon="external" leading={<WhatsAppIcon size={18} />}>
-                Consultar por WhatsApp
+                <div>
+                  <Clock aria-hidden />
+                  <dt>Cursado</dt>
+                  <dd>{plan.duracion}, presencial · lunes a viernes de 07:30 a 13:30 h</dd>
+                </div>
+                <div>
+                  <Wallet aria-hidden />
+                  <dt>Cuota</dt>
+                  <dd>
+                    Sin matrícula ni gastos extra ·{' '}
+                    <a href={consultaCuota} target="_blank" rel="noopener noreferrer">
+                      consultá el valor por WhatsApp
+                    </a>
+                  </dd>
+                </div>
+              </dl>
+            <Reveal className={styles.enrollCta}>
+              <Button to="/inscripciones" size="lg">
+                Inscribite
               </Button>
-            </RevealItem>
-          </RevealGroup>
+            </Reveal>
+          </div>
         </div>
       </Section>
 
@@ -209,6 +210,7 @@ export function Component() {
           reverse
           title="Las *especializaciones*"
           image={especImg}
+          imageFit="cutout"
           imageAlt="Clase práctica de entrenamiento de la fuerza"
           actions={<Button to="/especializaciones">Ver todas las especializaciones</Button>}
         >
@@ -269,29 +271,8 @@ export function Component() {
         />
         <RevealGroup className={styles.sedes}>
           {sitio.sedes.map((s) => (
-            <RevealItem key={s.nombre} as="article" className={styles.sede}>
-              <div className={`${styles.sedeHead} on-dark`}>
-                <p>{s.tipo}</p>
-                <h3>{s.nombre}</h3>
-              </div>
-              <ul role="list" className={styles.sedeList}>
-                <li>
-                  <MapPin aria-hidden />
-                  <a href={s.mapaUrl} target="_blank" rel="noopener noreferrer">
-                    {s.direccion}
-                  </a>
-                </li>
-                <li>
-                  <WhatsAppIcon aria-hidden />
-                  <a href={whatsappUrl(s.telefono)} target="_blank" rel="noopener noreferrer">
-                    WhatsApp {formatPhone(s.telefono)}
-                  </a>
-                </li>
-                <li>
-                  <Clock aria-hidden />
-                  <span>{s.horario}</span>
-                </li>
-              </ul>
+            <RevealItem key={s.nombre}>
+              <SedeCard sede={s} />
             </RevealItem>
           ))}
         </RevealGroup>
@@ -299,25 +280,6 @@ export function Component() {
 
       <Faq />
 
-      {/* CTA final */}
-      <Section tone="dark" width="default" spacing="sm">
-        <Reveal className={styles.cta}>
-          <div>
-            <h2>
-              ¿Querés ser <span className="em-accent">profe</span>?
-            </h2>
-            <p>Te acompañamos en todo el proceso de inscripción. Escribinos y te respondemos a la brevedad.</p>
-          </div>
-          <div className={styles.ctaActions}>
-            <Button to="/inscripciones" variant="light">
-              Inscribite
-            </Button>
-            <Button href={whatsappUrl(sitio.whatsapp, 'Hola! Quiero información para inscribirme.')} variant="outline-light" icon="external">
-              WhatsApp
-            </Button>
-          </div>
-        </Reveal>
-      </Section>
     </>
   );
 }

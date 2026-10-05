@@ -8,13 +8,10 @@ export default function Dashboard() {
   const { entries: cur } = useEntries('content/cursos');
   const { entries: dis } = useEntries('content/disertantes');
   const { entries: cvs } = useEntries('content/cv');
-  const today = new Date().toISOString().slice(0, 10);
 
   // Chequeos de salud del contenido
   const alerts: { text: string; to: string }[] = [];
   cur?.forEach((c) => {
-    if (c.data.etiqueta && c.data.fechaInicio && String(c.data.fechaInicio) < today)
-      alerts.push({ text: `"${c.data.titulo}" ya empezó (${c.data.fechaInicio}) pero sigue con la etiqueta "${c.data.etiqueta}".`, to: `/admin/c/cursos/${c.slug}` });
     if (!c.data.imagen) alerts.push({ text: `"${c.data.titulo}" no tiene imagen.`, to: `/admin/c/cursos/${c.slug}` });
   });
   dis?.forEach((d) => {

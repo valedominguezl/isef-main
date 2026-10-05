@@ -105,7 +105,7 @@ export function Component() {
           <div className={styles.printBrand}>
             <img src={logo} alt="" width={40} height={40} />
             <span>
-              {sitio.nombreLargo} · Currículum normalizado
+              {sitio.nombreLargo} · Currículum
             </span>
           </div>
           <div className={styles.profile}>

@@ -2,7 +2,7 @@
   min-height: 80svh;
   display: flex;
   align-items: center;
-  padding-top: calc(var(--nav-height) + var(--space-12));
+  padding-top: calc(var(--header-h) + var(--space-12));
 
   > div {
     display: flex;

@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Clock, ExternalLink, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { sitio } from '@/content';
 import { formatPhone, whatsappUrl } from '@/lib/format';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
 import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
-import Button from '@/components/ui/Button';
 import { RevealGroup, RevealItem } from '@/components/ui/Reveal';
+import SedeCard from '@/components/cards/SedeCard';
 import styles from './ContactoPage.module.scss';
 
 /** El iframe de Google Maps se carga recién al hacer clic (privacidad + rendimiento). */
@@ -68,28 +68,8 @@ export function Component() {
         <SectionHeader id="sedes-title" title="Nuestras *sedes*" lead="Cómo llegar a cada una." />
         <RevealGroup className={styles.sedes}>
           {sitio.sedes.map((s) => (
-            <RevealItem key={s.nombre} as="article" className={styles.sedeCard}>
-              <div className={`${styles.sedeHead} on-dark`}>
-                <p>{s.tipo}</p>
-                <h3>{s.nombre}</h3>
-              </div>
-              <Mapa src={s.mapaEmbed} title={`Mapa de la sede ${s.nombre}`} />
-              <div className={styles.sedeBody}>
-                <p>
-                  <MapPin size={18} aria-hidden /> {s.direccion}
-                </p>
-                <p>
-                  <Clock size={18} aria-hidden /> {s.horario}
-                </p>
-                <Button href={s.mapaUrl} variant="outline" size="sm" icon="external">
-                  Cómo llegar
-                </Button>
-                {s.facebook && (
-                  <a href={s.facebook} target="_blank" rel="noopener noreferrer" className={styles.fb}>
-                    Facebook de la sede <ExternalLink size={14} aria-hidden />
-                  </a>
-                )}
-              </div>
+            <RevealItem key={s.nombre}>
+              <SedeCard sede={s} media={<Mapa src={s.mapaEmbed} title={`Mapa de la sede ${s.nombre}`} />} />
             </RevealItem>
           ))}
         </RevealGroup>

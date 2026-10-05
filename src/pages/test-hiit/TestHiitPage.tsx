@@ -9,7 +9,7 @@ export function Component() {
   return (
     <>
       <Seo title="Test HIIT" description="Prueba de interferencia Stroop del proyecto de investigación HIIT del I.S.E.F. San Luis." noindex />
-      <div style={{ paddingTop: 'var(--nav-height)', minHeight: '100svh' }}>{mounted && <StroopTest />}</div>
+      <div style={{ paddingTop: 'var(--header-h)', minHeight: '100svh' }}>{mounted && <StroopTest />}</div>
     </>
   );
 }
