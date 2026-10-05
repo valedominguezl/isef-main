@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'node-html-parser';
-import sharp from 'sharp';
+import sharp, { type OverlayOptions } from 'sharp';
 import type { SearchDoc } from '../src/features/search/types';
 
 const DIST = path.resolve('dist');
@@ -187,7 +187,7 @@ async function ogCard(out: string, base: string | undefined, eyebrow: string, ti
     .join('')}<text x="190" y="104" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#ffffff">I.S.E.F. San Luis</text></svg>`;
   const bg = base && fs.existsSync(path.join('public', base)) ? sharp(path.join('public', base)).resize(1200, 630, { fit: 'cover' }) : sharp({ create: { width: 1200, height: 630, channels: 3, background: '#160c45' } });
   fs.mkdirSync(path.dirname(out), { recursive: true });
-  const layers: sharp.OverlayOptions[] = [{ input: Buffer.from(svg) }, { input: logo, left: 72, top: 52 }];
+  const layers: OverlayOptions[] = [{ input: Buffer.from(svg) }, { input: logo, left: 72, top: 52 }];
   if (portrait && fs.existsSync(path.join('public', portrait))) {
     const d = 340;
     const mask = Buffer.from(`<svg width="${d}" height="${d}"><circle cx="${d / 2}" cy="${d / 2}" r="${d / 2}" fill="#fff"/></svg>`);
