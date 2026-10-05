@@ -93,7 +93,9 @@ Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20�
 | `duration-reveal` | 1100 ms | Aparición al hacer scroll (sube 24 px + fade) |
 | stagger | 120 ms | Grillas de tarjetas, cabeceras |
 
-Es una web institucional: las **entradas son lentas y elegantes** (como el sitio original), las respuestas a una acción son cortas. Patrones: cabecera de cada página con entrada escalonada (en la home el título entra desde la izquierda), reveal al entrar en pantalla (`<Reveal>`), fundido de 600 ms al cambiar de página, fotos de bandas fijas al desplazarse (parallax, solo escritorio), menú móvil que baja como cortina, hover de botones por opacidad + flecha que avanza 4 px, buscador que espera a que se deje de escribir (280 ms) y atenúa los resultados viejos, brillo de esqueleto en fotos que cargan. Todo respeta `prefers-reduced-motion`. Librería: **Motion** (motion.dev) con `LazyMotion`.
+Es una web institucional: las **entradas son lentas y elegantes** (como el sitio original), las respuestas a una acción son cortas. Patrones: cabecera de cada página con entrada escalonada (en la home el título entra desde la izquierda), reveal al entrar en pantalla (`<Reveal>`), **sin fundido entre páginas** (la página anterior queda hasta que la nueva está lista: nunca un pantallazo blanco), fotos de bandas fijas al desplazarse (parallax, solo escritorio), menú móvil que se abre como un círculo que crece desde fuera de la pantalla con fondo de vidrio translúcido, hover de botones por opacidad (solo la flecha avanza; descargar/externo no se mueven), buscadores que esperan a que se deje de escribir (`useDebounced` + `SearchField`), esqueletos con brillo en fotos y en el panel. Todo respeta `prefers-reduced-motion`. Librería: **Motion** (motion.dev) con `LazyMotion`.
+
+**Navbar:** blanco opaco y fijo (no se esconde al bajar); nombre en peso regular; página activa con pastilla tenue; "Campus virtual" como botón con borde al lado de "Inscribite". Arriba, la franja de cierre de inscripciones con cuenta regresiva cuando hay fecha de cierre.
 
 ---
 
