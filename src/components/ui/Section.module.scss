@@ -22,6 +22,10 @@
   max-width: var(--container-prose);
 }
 
+.w-narrow {
+  max-width: var(--container-narrow);
+}
+
 .w-default {
   max-width: var(--container);
 }

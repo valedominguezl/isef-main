@@ -52,6 +52,20 @@
   margin-top: var(--space-2);
 }
 
+/* Con el ancho estándar se sabe cuántas entran (2 desde md, 3 desde xl): sin controles desde el HTML
+   prerenderizado, así no aparecen y desaparecen al cargar el JS */
+@include up($bp-md) {
+  .carousel[data-count='2'] .controls {
+    display: none;
+  }
+}
+
+@include up($bp-xl) {
+  .carousel[data-count='3'] .controls {
+    display: none;
+  }
+}
+
 .dots {
   display: flex;
   flex-wrap: wrap;

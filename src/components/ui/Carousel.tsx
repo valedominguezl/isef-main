@@ -12,13 +12,15 @@ interface CarouselProps {
   showDots?: boolean;
   tone?: 'light' | 'dark';
   className?: string;
+  /** false si el ancho de las slides se cambia por CSS (className): no se ocultan los controles de antemano. */
+  standardWidth?: boolean;
 }
 
 /**
  * Carrusel liviano con scroll-snap nativo (sin Swiper): táctil, con teclado,
  * botones y puntos. Funciona sin JS (scroll horizontal) y no bloquea el render.
  */
-export default function Carousel({ children, label, slideWidth, gap, showDots = true, tone = 'light', className }: CarouselProps) {
+export default function Carousel({ children, label, slideWidth, gap, showDots = true, tone = 'light', className, standardWidth = true }: CarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const slides = Children.toArray(children);
   const [active, setActive] = useState(0);
@@ -65,6 +67,7 @@ export default function Carousel({ children, label, slideWidth, gap, showDots = 
       role="region"
       aria-roledescription="carrusel"
       aria-label={label}
+      data-count={standardWidth && !slideWidth ? slides.length : undefined}
       style={{ ...(slideWidth ? { '--slide-w': slideWidth } : {}), ...(gap ? { '--slide-gap': gap } : {}) } as React.CSSProperties}
     >
       <div

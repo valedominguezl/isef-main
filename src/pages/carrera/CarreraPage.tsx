@@ -48,7 +48,7 @@ function Galeria() {
 
   return (
     <>
-      <Carousel label="Galería de lugares de práctica" className={styles.gallery}>
+      <Carousel label="Galería de lugares de práctica" className={styles.gallery} standardWidth={false}>
         {imgs.map((g, i) => (
           <figure key={g.imagen} className={styles.photo}>
             <button type="button" onClick={() => setIndex(i)} aria-label={`Ampliar foto: ${g.lugar}`}>

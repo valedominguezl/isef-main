@@ -8,7 +8,8 @@ Sitio del profesorado (isefsanluis.net). React 18 + TS + Vite 6, **prerenderizad
 - `src/components/ui/*` → sistema de diseño (Button, Section, SectionHeader, PageHero, Feature, Accordion, Carousel, Dialog, Reveal…). `src/components/cards/*` tarjetas.
 - `src/styles/tokens.scss` ↔ `design/tokens.json` + `design/DESIGN.md` (sistema de diseño; mantener sincronizados).
 - `src/features/search` (buscador, índice generado en el build), `consent` (cookies + GA4/GTM), `test-hiit` (protocolo de investigación: **no cambiar su lógica**).
-- `src/admin/*` → panel /admin (config declarativa en `admin/config.ts`; storage local en dev / GitHub API en prod).
+- `src/components/layout/AmbientShapes.tsx` → formas lila de fondo (solo en secciones claras, esquivan tarjetas y botones; reglas en DESIGN.md).
+- `src/admin/*` → panel /admin (config declarativa en `admin/config.ts`; storage local en dev / GitHub API en prod). En prod está detrás de Cloudflare Access. Deploy, Access y VPS del campus: `docs/DEPLOY.md`.
 - `worker/index.ts` → única función del servidor (Cloudflare, gratis): `/api/fotos` (fotos de dominio público para el panel); el resto del sitio es estático.
 - `scripts/` → `prerender.ts` (SSG + sitemap + robots + search-index), `validate-content.ts`, `check-case.mjs`, `health.mjs`, `optimize-images.ts`, `serve-dist.mjs`.
 

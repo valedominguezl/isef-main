@@ -12,3 +12,6 @@ dist-ssr
 .impeccable/
 # Emulador de Cloudflare (npx wrangler pages dev)
 .wrangler/
+
+# Copias de trabajo de agentes (git worktree)
+.claude/worktrees/

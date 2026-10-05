@@ -36,7 +36,7 @@ export function Component() {
       />
       <PageHero image={textos.hero.imagen} title={textos.hero.titulo} subtitle={textos.hero.subtitulo} breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Contacto' }]} />
 
-      <Section labelledBy="tel-title">
+      <Section width="narrow" labelledBy="tel-title">
         <SectionHeader id="tel-title" title={textos.telefonos.titulo} lead={<Markdown text={textos.telefonos.texto} />} />
         <RevealGroup as="ul" className={styles.directory}>
           {filas.map((t) => (
@@ -65,7 +65,7 @@ export function Component() {
         </RevealGroup>
       </Section>
 
-      <Section id="sedes" tone="tint" width="wide" labelledBy="sedes-title">
+      <Section id="sedes" tone="tint" width="narrow" labelledBy="sedes-title">
         <SectionHeader id="sedes-title" title={textos.sedes.titulo} lead={<Markdown text={textos.sedes.texto} />} />
         <CardGrid reveal cols={2}>
           {sitio.sedes.map((s) => (

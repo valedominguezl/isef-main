@@ -16,7 +16,7 @@ export default function CollectionList() {
   const { key = '' } = useParams();
   const col = getCollection(key);
   const { entries, error } = useEntries(col?.dir);
-  const { pending, mediaUrl, stage } = useAdmin();
+  const { pending, mediaUrl, stage, pendingData } = useAdmin();
   const [q, setQ] = useState('');
   const linkedQuick = useLinkedQuick(col);
   const toast = useToast();
@@ -48,7 +48,9 @@ export default function CollectionList() {
   /** Cambia una opción básica desde la lista: queda como cambio pendiente (se publica con "Publicar") y se puede deshacer. */
   const toggle = (e: { path: string; data: Record<string, unknown> }, t: QuickToggle, value: boolean) => {
     const title = String(e.data[col.titleField] ?? '');
-    const undo = stage([{ path: e.path, content: `${JSON.stringify({ ...e.data, [t.name]: value }, null, 2)}\n`, encoding: 'utf8', label: title }]);
+    // Sobre lo último tocado: dos opciones seguidas no se pisan aunque la lista todavía no se refrescó
+    const base = pendingData(e.path) ?? e.data;
+    const undo = stage([{ path: e.path, content: `${JSON.stringify({ ...base, [t.name]: value }, null, 2)}\n`, encoding: 'utf8', label: title }]);
     toast.show({ text: avisoDe(t, value, title), undo });
   };
   const imgField = col.fields.find((f) => f.type === 'image')?.name;

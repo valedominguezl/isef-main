@@ -22,7 +22,7 @@ export interface LinkedQuick {
 export function useLinkedQuick(col: CollectionConfig | undefined) {
   const target = col?.syncWith ? getCollection(col.syncWith.collection) : undefined;
   const { entries } = useEntries(target?.dir);
-  const { stage } = useAdmin();
+  const { stage, pendingData } = useAdmin();
   const toast = useToast();
 
   return (data: Obj): LinkedQuick | null => {
@@ -40,7 +40,9 @@ export function useLinkedQuick(col: CollectionConfig | undefined) {
       data: e.data,
       titulo,
       onChange: (q, value) => {
-        const undo = stage([{ path: e.path, content: `${JSON.stringify({ ...e.data, [q.name]: value }, null, 2)}\n`, encoding: 'utf8', label: titulo }]);
+        // Sobre lo último tocado del curso (no lo que había al cargar la lista)
+        const base = pendingData(e.path) ?? e.data;
+        const undo = stage([{ path: e.path, content: `${JSON.stringify({ ...base, [q.name]: value }, null, 2)}\n`, encoding: 'utf8', label: titulo }]);
         toast.show({ text: avisoDe(q, value, titulo), undo });
       },
     };

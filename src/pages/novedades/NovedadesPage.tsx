@@ -40,7 +40,7 @@ export function Component() {
         subtitle={textos.hero.subtitulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Novedades' }]}
       />
-      <Section width="wide">
+      <Section width="narrow">
         {cats.length > 1 && (
           <ChipGroup
             label="Filtrar por categoría"

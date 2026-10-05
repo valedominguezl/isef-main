@@ -6,7 +6,7 @@ export type Tone = 'default' | 'tint' | 'subtle' | 'dark' | 'brand' | 'ink';
 interface SectionProps {
   id?: string;
   tone?: Tone;
-  width?: 'prose' | 'default' | 'wide' | 'full';
+  width?: 'prose' | 'narrow' | 'default' | 'wide' | 'full';
   /** Imagen de fondo con overlay oscuro de marca (fuerza tono oscuro). Se carga en diferido. */
   image?: string;
   spacing?: 'sm' | 'md' | 'lg';
