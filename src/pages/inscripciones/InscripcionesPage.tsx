@@ -127,9 +127,10 @@ export function Component() {
       </Section>
 
       {preguntas.length > 0 && (
-        <Section tone="tint" width="prose" labelledBy="dudas-title">
+        <Section tone="tint" labelledBy="dudas-title">
           <SectionHeader id="dudas-title" title={textos.dudas.titulo} align="center" />
-          <Accordion items={preguntas.map((p) => ({ title: p.pregunta, content: <Markdown text={p.respuesta} /> }))} />
+          {/* Misma grilla de tarjetas a dos columnas que las preguntas del inicio */}
+          <Accordion variant="card" className={styles.faqList} items={preguntas.map((p) => ({ title: p.pregunta, content: <Markdown text={p.respuesta} /> }))} />
           <div className={styles.center}>
             <Button href={whatsappUrl(sitio.whatsapp, 'Hola! Tengo una consulta sobre la inscripción.')} variant="outline" icon="external">
               ¿Otra consulta? Escribinos
