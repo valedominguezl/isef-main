@@ -19,7 +19,7 @@ Leé **solo** `docs/MAPA.md` → sección "Qué hacer ahora". No leas el código
 | 🔴 chequeos fallan | Arreglar tipos/lint/contenido/imports | `npm run check` |
 | 🔴 vulnerabilidades altas/críticas | `npm audit`, `npm audit fix`; majors: evaluar y avisar | skill `security-review` si hubo cambios de código |
 | `[codigo]` (≥25 archivos o ≥30 commits desde la última) | Revisar SOLO lo cambiado: `git diff <commit-de-la-última> --stat` | skills `code-review`, `simplify`; arquitectura: `improve-codebase-architecture` |
-| `[seguridad]` (>60 días) | Revisar: tokens/secretos en el repo, `.htaccess`, datos personales en `content/` y `public/`, dependencias | skill `security-review` |
+| `[seguridad]` (>60 días) | Revisar: tokens/secretos en el repo, `public/_headers` y `_redirects`, datos personales en `content/` y `public/`, dependencias | skill `security-review` |
 | `[contenido]` | Avisar al usuario las alertas (cursos con etiqueta vieja, CVs vacíos, novedades viejas). Editar `content/*.json` solo si lo pide | — |
 | `[diseno]` (≥15 archivos de UI o >120 días) | `/impeccable audit` (incluye su detector: `impeccable detect --json src/...`) + capturas desktop/móvil + axe-core; animaciones: `review-animations`; comparar con `design/DESIGN.md` | skills `impeccable`, `review-animations`, `web-design-guidelines`; Playwright, axe-core |
 | SEO (cada ~3 meses o tras cambiar rutas/contenido masivo) | `seo-audit` sobre el build (`npm run preview`); datos estructurados: `seo-schema`; local: `seo-local` | skills `seo-*` |

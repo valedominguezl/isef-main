@@ -3,7 +3,7 @@
  * metadatos SEO, CSS de la ruta y datos de hidratación. Además escribe sitemap.xml,
  * robots.txt, 404.html y search-index.json (índice del buscador).
  *
- * Producción: Apache sirve /ruta → /ruta.html (ver public/.htaccess).
+ * Producción: Cloudflare Pages sirve /ruta → /ruta.html (reglas en public/_redirects y _headers).
  */
 import fs from 'node:fs';
 import path from 'node:path';
