@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { AlertTriangle, ArrowRight, GraduationCap, Newspaper, Plus, Users } from 'lucide-react';
 import { useEntries } from '../useEntries';
+import InscripcionesCard from './InscripcionesCard';
+import { Sk } from './Skeleton';
 import styles from '../Admin.module.scss';
 
 export default function Dashboard() {
@@ -33,15 +35,16 @@ export default function Dashboard() {
     <>
       <div className={styles.pageHead}>
         <div>
-          <h1>Hola 👋</h1>
-          <p className={styles.help}>Desde acá podés actualizar todo el contenido del sitio sin tocar código.</p>
+          <h1>Hola</h1>
+          <p className={styles.help}>Desde acá actualizás todo el contenido del sitio.</p>
         </div>
       </div>
+      <InscripcionesCard />
       <div className={styles.stats}>
         {cards.map(({ label, n, icon: Icon, to, add }) => (
           <div key={label} className={styles.statCard}>
             <Icon size={22} />
-            <strong>{n ?? '…'}</strong>
+            <strong>{n ?? <Sk w={48} h={36} />}</strong>
             <span>{label}</span>
             <div>
               <Link to={to}>
@@ -58,7 +61,12 @@ export default function Dashboard() {
         <h2>
           <AlertTriangle size={18} /> Para revisar {alerts.length > 0 && <span className={styles.badge}>{alerts.length}</span>}
         </h2>
-        {alerts.length ? (
+        {!cur || !dis || !nov ? (
+          <div className={styles.skStack} aria-busy="true">
+            <Sk w="70%" h={14} />
+            <Sk w="55%" h={14} />
+          </div>
+        ) : alerts.length ? (
           <ul className={styles.alerts}>
             {alerts.map((a, i) => (
               <li key={i}>
@@ -69,7 +77,7 @@ export default function Dashboard() {
             ))}
           </ul>
         ) : (
-          <p className={styles.help}>Todo en orden ✨</p>
+          <p className={styles.help}>Todo en orden.</p>
         )}
       </section>
     </>

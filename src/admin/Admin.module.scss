@@ -15,8 +15,17 @@
   text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color var(--duration-fast), box-shadow var(--duration-fast), color var(--duration-fast);
+  transition:
+    background-color var(--duration-slow) var(--ease-standard),
+    border-color var(--duration-slow) var(--ease-standard),
+    color var(--duration-slow) var(--ease-standard),
+    opacity var(--duration-slow) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
   @include focus-ring;
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
 
   &:disabled {
     opacity: 0.5;
@@ -28,21 +37,22 @@
   @extend %btn;
   background: var(--gradient-primary);
   color: white !important;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 10px 15px rgb(0 0 0 / 0.1);
 
   &:hover:not(:disabled) {
-    box-shadow: var(--shadow-brand);
+    opacity: 0.9;
   }
 }
 
 .btnSecondary {
   @extend %btn;
-  background: white;
-  color: var(--ink-800);
-  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-primary-strong);
+  border: 1px solid var(--violet-300);
 
   &:hover {
-    background: var(--ink-50);
+    background: var(--violet-50);
+    color: var(--violet-700);
   }
 }
 
@@ -70,13 +80,16 @@
   flex: none;
   width: 34px;
   height: 34px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   color: var(--ink-600);
+  transition:
+    background-color var(--duration-slow) var(--ease-standard),
+    color var(--duration-slow) var(--ease-standard);
   @include focus-ring;
 
   &:hover:not(:disabled) {
-    background: var(--ink-100);
-    color: var(--ink-900);
+    background: var(--violet-50);
+    color: var(--violet-700);
   }
 
   &:disabled {
@@ -85,14 +98,25 @@
 }
 
 /* ── Layout ──────────────────────────────────────────────── */
+/* El panel es interfaz: todo en sans (el sitio usa serif solo para leer párrafos largos) */
+.shell,
+.login {
+  p,
+  li,
+  dd {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+  }
+}
+
 .shell {
   display: grid;
   min-height: 100svh;
-  background: var(--ink-25);
+  background: var(--color-bg);
 
   @include up($bp-lg) {
     grid-template-columns: 264px 1fr;
-    background: linear-gradient(90deg, var(--ink-950) 264px, var(--ink-25) 264px);
+    background: linear-gradient(90deg, var(--color-bg-tint) 264px, var(--color-bg) 264px);
   }
 }
 
@@ -102,16 +126,8 @@
   flex-direction: column;
   gap: var(--space-6);
   padding: var(--space-5);
-  background: var(--ink-950);
-  color: white;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto;
-    height: 3px;
-    background: var(--gradient-brand);
-  }
+  background: var(--color-bg-tint);
+  color: var(--color-text);
 
   @include up($bp-lg) {
     position: sticky;
@@ -135,35 +151,37 @@
       align-items: center;
       gap: var(--space-3);
       padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-md);
-      color: rgb(255 255 255 / 0.72);
+      border-radius: var(--radius-pill);
+      color: var(--ink-700);
       font-family: var(--font-sans);
       font-size: var(--text-sm);
       text-decoration: none;
+      transition:
+        background-color var(--duration-slow) var(--ease-standard),
+        color var(--duration-slow) var(--ease-standard);
       @include focus-ring;
 
       &:hover {
-        background: rgb(255 255 255 / 0.06);
-        color: white;
+        background: color-mix(in srgb, var(--violet-500) 8%, transparent);
+        color: var(--ink-900);
       }
     }
   }
 }
 
+/* Sección actual: pastilla blanca, como la página activa del navbar del sitio */
 .navActive {
-  background: rgb(119 97 255 / 0.22) !important;
-  color: white !important;
-  box-shadow: inset 3px 0 0 var(--violet-400);
+  background: var(--color-surface) !important;
+  color: var(--violet-700) !important;
+  font-weight: var(--weight-medium);
+  box-shadow: var(--shadow-xs);
 }
 
 .navGroup {
   margin: var(--space-4) 0 var(--space-1) var(--space-3);
   font-family: var(--font-sans) !important;
-  font-size: 11px !important;
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: rgb(255 255 255 / 0.4) !important;
+  font-size: var(--text-xs) !important;
+  color: var(--color-text-muted) !important;
 
   @include down($bp-lg) {
     display: none;
@@ -174,7 +192,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  color: white;
+  color: var(--color-text);
   text-decoration: none;
 
   span {
@@ -184,16 +202,17 @@
   }
 
   strong {
-    color: white;
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
   }
 
   small {
     font-size: var(--text-xs);
-    color: rgb(255 255 255 / 0.55);
+    color: var(--color-text-muted);
   }
 
   &:hover {
-    color: white;
+    color: var(--color-text);
   }
 }
 
@@ -209,16 +228,19 @@
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-md);
-    color: rgb(255 255 255 / 0.6);
+    border-radius: var(--radius-pill);
+    color: var(--ink-600);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     text-decoration: none;
     text-align: left;
+    transition:
+      background-color var(--duration-slow) var(--ease-standard),
+      color var(--duration-slow) var(--ease-standard);
 
     &:hover {
-      color: white;
-      background: rgb(255 255 255 / 0.06);
+      color: var(--ink-900);
+      background: color-mix(in srgb, var(--violet-500) 8%, transparent);
     }
   }
 }
@@ -230,20 +252,39 @@
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--z-nav);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-6);
-  background: rgb(251 250 255 / 0.9);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-border);
+  min-height: 64px;
+  padding: var(--space-3) var(--space-8);
+  background: rgb(255 255 255 / 0.85);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px -18px rgb(24 22 31 / 0.2);
 }
 
 .content {
-  padding: var(--space-8) var(--space-6) var(--space-20);
-  max-width: 1280px;
+  padding: var(--space-8) var(--space-8) var(--space-20);
+  max-width: var(--container);
+}
+
+/* Cada pantalla entra suave; la barra lateral y la superior quedan quietas */
+.viewIn {
+  animation: viewIn var(--duration-slow) var(--ease-emphasized) both;
+}
+
+@keyframes viewIn {
+  from {
+    opacity: 0.35;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewIn {
+    animation: none;
+  }
 }
 
 .pageHead {
@@ -256,7 +297,7 @@
 
   h1 {
     font-size: var(--text-h2);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-light);
   }
 }
 
@@ -324,9 +365,9 @@
   height: 20px;
   padding: 0 6px;
   border-radius: var(--radius-pill);
-  background: var(--coral-500);
+  background: var(--violet-600);
   color: white;
-  font-size: 11px;
+  font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
 }
 
@@ -365,10 +406,13 @@
 .statCard,
 .panel {
   padding: var(--space-6);
-  border-radius: var(--radius-lg);
-  background: white;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-xs);
+}
+
+.panel + .panel {
+  margin-top: var(--space-6);
 }
 
 .statCard {
@@ -382,9 +426,9 @@
 
   strong {
     font-family: var(--font-sans);
-    font-size: 2.5rem;
-    font-weight: var(--weight-semibold);
-    line-height: 1.1;
+    font-size: var(--text-h1);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-tight);
   }
 
   span {
@@ -490,6 +534,8 @@
     text-decoration: none;
     @include focus-ring(-2px);
 
+    transition: background-color var(--duration-slow) var(--ease-standard);
+
     &:hover {
       background: var(--violet-50);
     }
@@ -549,8 +595,8 @@
 }
 
 .tagWarn {
-  background: var(--coral-50);
-  color: var(--coral-700);
+  background: var(--violet-50);
+  color: var(--violet-700);
 }
 
 /* ── Editor ─────────────────────────────────────────────── */
@@ -584,6 +630,9 @@
     font-family: var(--font-sans);
     font-weight: var(--weight-medium);
     color: var(--ink-600);
+    transition:
+      border-color var(--duration-slow) var(--ease-standard),
+      color var(--duration-slow) var(--ease-standard);
     @include focus-ring(-2px);
 
     &[aria-selected='true'] {
@@ -604,9 +653,7 @@
   margin-bottom: var(--space-3);
   font-family: var(--font-sans) !important;
   font-size: var(--text-xs) !important;
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
+  font-weight: var(--weight-medium);
   color: var(--color-text-muted) !important;
 }
 
@@ -646,7 +693,7 @@
   color: var(--ink-800);
 
   span {
-    color: var(--coral-600);
+    color: var(--danger-500);
   }
 }
 
@@ -684,7 +731,9 @@
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--ink-900);
-  transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+  transition:
+    border-color var(--duration-slow) var(--ease-standard),
+    box-shadow var(--duration-slow) var(--ease-standard);
 
   &:focus {
     outline: none;
@@ -801,7 +850,16 @@ textarea.input {
     background: white;
     font-family: var(--font-sans);
     font-size: var(--text-sm);
+    transition:
+      background-color var(--duration-slow) var(--ease-standard),
+      border-color var(--duration-slow) var(--ease-standard),
+      color var(--duration-slow) var(--ease-standard);
     @include focus-ring;
+
+    &:hover:not([aria-pressed='true']) {
+      border-color: var(--violet-400);
+      color: var(--violet-700);
+    }
 
     &[aria-pressed='true'] {
       background: var(--violet-600);
@@ -816,15 +874,18 @@ textarea.input {
   flex-direction: column;
   gap: var(--space-4);
   padding: var(--space-5);
-  border: 1px solid var(--color-border);
+  border: none;
   border-radius: var(--radius-lg);
-  background: white;
+  background: var(--color-bg-tint);
 
   legend {
-    padding: 0 var(--space-2);
+    float: left; /* deja la leyenda dentro del recuadro */
+    width: 100%;
+    margin-bottom: var(--space-2);
     font-family: var(--font-sans);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     font-weight: var(--weight-semibold);
+    color: var(--color-text);
   }
 }
 
@@ -844,7 +905,7 @@ textarea.input {
 .repeater {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
   align-items: stretch;
 
   > button {
@@ -853,16 +914,48 @@ textarea.input {
 }
 
 .repItem {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: white;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  overflow: hidden;
+  transition:
+    border-color var(--duration-slow) var(--ease-standard),
+    box-shadow var(--duration-slow) var(--ease-standard);
+}
+
+/* Abierto: borde violeta y cabecera tintada → se ve claramente qué elemento se está editando */
+.repOpen {
+  border-color: var(--violet-300);
+  box-shadow: var(--shadow-sm);
+
+  > .repHead {
+    background: var(--violet-50);
+  }
+}
+
+.repError {
+  border-color: var(--danger-500) !important;
 }
 
 .repHead {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: var(--space-1);
   padding: var(--space-1) var(--space-2);
+  transition: background-color var(--duration-slow) var(--ease-standard);
+}
+
+/* Lista dentro de otra: un nivel más adentro, más compacta */
+.repNested {
+  gap: var(--space-2);
+
+  .repItem {
+    border-radius: var(--radius-md);
+  }
+
+  .repToggle {
+    font-size: var(--text-sm);
+  }
 }
 
 .repToggle {
@@ -874,8 +967,9 @@ textarea.input {
   padding: var(--space-2);
   text-align: left;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   font-weight: var(--weight-medium);
+  border-radius: var(--radius-md);
   @include focus-ring(-2px);
 
   span {
@@ -889,17 +983,22 @@ textarea.input {
   }
 }
 
-.rot {
-  rotate: 180deg;
+.chevron {
+  flex: none;
+  color: var(--violet-600);
+  transition: rotate var(--duration-slow) var(--ease-emphasized);
+
+  [aria-expanded='true'] > & {
+    rotate: 180deg;
+  }
 }
 
 .repBody {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding: var(--space-4);
-  border-top: 1px solid var(--color-border);
-  background: var(--ink-25);
+  padding: var(--space-5);
+  background: var(--color-bg-subtle);
 }
 
 .md {
@@ -1014,9 +1113,16 @@ textarea.input {
 .drawerBackdrop {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: var(--z-overlay);
   background: rgb(13 12 18 / 0.45);
   backdrop-filter: blur(3px);
+  animation: fadeIn var(--duration-slow) var(--ease-standard);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
 }
 
 .drawer {
@@ -1121,10 +1227,7 @@ textarea.input {
   place-items: center;
   min-height: 100svh;
   padding: var(--space-4);
-  background:
-    radial-gradient(circle at 15% 20%, rgb(119 97 255 / 0.35), transparent 45%),
-    radial-gradient(circle at 85% 80%, rgb(255 85 78 / 0.28), transparent 45%),
-    var(--ink-950);
+  background: var(--surface-fx);
 }
 
 .loginCard {
@@ -1139,11 +1242,11 @@ textarea.input {
 
   h1 {
     font-size: var(--text-h3);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-light);
   }
 
   .btnPrimary {
-    min-height: 46px;
+    min-height: 48px;
     margin-top: var(--space-2);
   }
 }
@@ -1175,4 +1278,241 @@ textarea.input {
 
 .slugField {
   margin-bottom: var(--space-5);
+}
+
+/* ── Secciones del formulario ───────────────────────────── */
+/* Plegado animado: la fila del grid va de 0fr a 1fr */
+.collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-slow) var(--ease-emphasized);
+
+  &[data-open] {
+    grid-template-rows: 1fr;
+  }
+}
+
+.collapseInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Cada bloque del formulario es una tarjeta con título (grupos, listas y campos sueltos) */
+.section,
+.fieldsCard {
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+}
+
+.fieldsCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6);
+}
+
+.section {
+  transition:
+    border-color var(--duration-slow) var(--ease-standard),
+    box-shadow var(--duration-slow) var(--ease-standard);
+}
+
+.sectionOpen {
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-xl);
+  text-align: left;
+  font-family: var(--font-sans);
+  transition: background-color var(--duration-slow) var(--ease-standard);
+  @include focus-ring(-3px);
+
+  &:hover {
+    background: var(--color-bg-tint);
+  }
+
+  strong {
+    display: block;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+  }
+
+  small {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+}
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+/* ── Inscripciones (inicio del panel) ───────────────────── */
+.inscCard {
+  margin-bottom: var(--space-8);
+  transition:
+    border-color var(--duration-slow) var(--ease-standard),
+    box-shadow var(--duration-slow) var(--ease-standard);
+
+  h2 {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-h4);
+    font-weight: var(--weight-semibold);
+  }
+}
+
+.inscOn {
+  border-color: var(--violet-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.inscHead {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-4);
+
+  @include up($bp-md) {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
+.inscIcon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.inscBody {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+
+  @include up($bp-md) {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+  }
+
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+}
+
+/* ── Esqueletos de carga ────────────────────────────────── */
+.sk {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--ink-50) 25%, var(--ink-100) 50%, var(--ink-50) 75%) 0 0 / 200% 100%;
+  animation: skShimmer 1.4s linear infinite;
+}
+
+@keyframes skShimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.skStack {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.skRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+}
+
+.skCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+}
+
+.skSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-16);
+}
+
+.skSideItem {
+  height: 32px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--violet-500) 10%, transparent);
+  animation: skPulse 1.4s var(--ease-standard) infinite alternate;
+}
+
+@keyframes skPulse {
+  to {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk,
+  .skSideItem {
+    animation: none;
+  }
+}
+
+/* ── Importar CV desde PDF ──────────────────────────────── */
+.cvImport {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-tint);
+
+  > div {
+    flex: 1 1 22rem;
+  }
+
+  strong {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-semibold);
+  }
+}
+
+.cvPrivacy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--success-500);
+}
+
+.cvMsg {
+  flex-basis: 100%;
+  margin-bottom: 0;
 }

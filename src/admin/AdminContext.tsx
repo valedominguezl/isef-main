@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { GitHubStore, LocalStore, loadPending, savePending, type Change, type ContentStore } from './store';
+import { clearAdminCache } from './useEntries';
 
 export const REPO = { owner: 'valedominguezl', repo: 'isef-main', branch: 'main' };
 const TOKEN_KEY = 'isef-admin-token';
@@ -8,6 +9,8 @@ type Deploy = { status: string; conclusion: string | null; url: string; createdA
 
 interface AdminCtx {
   store: ContentStore | null;
+  /** Verificando una sesión guardada: se muestra el esqueleto del panel, no el login. */
+  checking: boolean;
   user: string | null;
   mode: 'local' | 'github';
   login: (token: string, remember: boolean) => Promise<void>;
@@ -36,8 +39,10 @@ function readToken() {
 }
 
 export function AdminProvider({ children }: { children: ReactNode }) {
-  const [store, setStore] = useState<ContentStore | null>(null);
-  const [user, setUser] = useState<string | null>(null);
+  const devLocal = import.meta.env.DEV && localStorage.getItem('isef-admin-mode') !== 'github';
+  const [store, setStore] = useState<ContentStore | null>(() => (devLocal ? new LocalStore() : null));
+  const [user, setUser] = useState<string | null>(devLocal ? 'modo local' : null);
+  const [checking, setChecking] = useState(() => !devLocal && Boolean(readToken()));
   const [pending, setPending] = useState<Change[]>([]);
   const [publishing, setPublishing] = useState(false);
   const [deploy, setDeploy] = useState<Deploy>(null);
@@ -46,11 +51,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   // Restaurar sesión y cambios pendientes
   useEffect(() => {
     setPending(loadPending());
-    if (import.meta.env.DEV && localStorage.getItem('isef-admin-mode') !== 'github') {
-      setStore(new LocalStore());
-      setUser('modo local');
-      return;
-    }
+    if (devLocal) return;
     const token = readToken();
     if (token) {
       const gh = new GitHubStore({ ...REPO, token });
@@ -62,9 +63,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         .catch(() => {
           sessionStorage.removeItem(TOKEN_KEY);
           localStorage.removeItem(TOKEN_KEY);
-        });
+        })
+        .finally(() => setChecking(false));
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const login = useCallback(async (token: string, remember: boolean) => {
     const gh = new GitHubStore({ ...REPO, token: token.trim() });
@@ -76,6 +78,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
+    clearAdminCache();
     sessionStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(TOKEN_KEY);
     setStore(null);
@@ -149,6 +152,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AdminCtx>(
     () => ({
       store,
+      checking,
       user,
       mode: store?.kind ?? (import.meta.env.DEV ? 'local' : 'github'),
       login,
@@ -164,7 +168,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       mediaUrl,
       version,
     }),
-    [store, user, login, logout, useLocal, pending, stage, discard, publish, publishing, deploy, refreshDeploy, mediaUrl, version],
+    [store, checking, user, login, logout, useLocal, pending, stage, discard, publish, publishing, deploy, refreshDeploy, mediaUrl, version],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

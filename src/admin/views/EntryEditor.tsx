@@ -8,9 +8,11 @@ import SpeakerCard from '@/components/cards/SpeakerCard';
 import type { Curso, Disertante, Novedad } from '@/content/schema';
 import { useAdmin } from '../AdminContext';
 import { getCollection, type Field } from '../config';
-import { clean, FieldRenderer, useDebounced, type Errors, type RefOption } from '../fields/Fields';
+import { clean, FieldRenderer, Section, useDebounced, type Errors, type RefOption } from '../fields/Fields';
 import { slugify } from '../image';
 import { useEntries, useFile } from '../useEntries';
+import { SkeletonForm, SkeletonHead } from './Skeleton';
+import CvPdfImport from './CvPdfImport';
 import styles from '../Admin.module.scss';
 
 type Obj = Record<string, unknown>;
@@ -27,19 +29,49 @@ export function validate(schema: ZodTypeAny, data: unknown): { ok: true; value: 
 }
 
 /** Formulario genérico + barra de guardado. Reutilizado por colecciones y singletons. */
-export function FormBody({ fields, draft, setDraft, errors, entrySlug, refs }: { fields: Field[]; draft: Obj; setDraft: (d: Obj) => void; errors: Errors; entrySlug: string; refs: Record<string, RefOption[]> }) {
+type FormProps = { fields: Field[]; draft: Obj; setDraft: (d: Obj) => void; errors: Errors; entrySlug: string; refs: Record<string, RefOption[]> };
+
+/** Campos que ya se dibujan como sección propia (tarjeta con título). */
+const isBlock = (f: Field) => f.type === 'group' || f.type === 'repeater' || f.type === 'section';
+
+/**
+ * Formulario: los campos sueltos consecutivos van juntos en una tarjeta; grupos, listas y secciones
+ * son tarjetas con título. Así siempre se ve en qué bloque se está editando.
+ */
+export function FormBody({ fields, draft, setDraft, errors, entrySlug, refs }: FormProps) {
+  const render = (f: Field) =>
+    f.type === 'section' ? (
+      <Section key={f.name} title={f.label} help={f.help} collapsed={f.collapsed}>
+        {f.fields.map(render)}
+      </Section>
+    ) : (
+      <FieldRenderer key={f.name} field={f} value={draft[f.name]} onChange={(v) => setDraft({ ...draft, [f.name]: v })} errors={errors} path={f.name} entrySlug={entrySlug} refs={refs} />
+    );
+  const blocks: Field[][] = [];
+  for (const f of fields) {
+    const last = blocks[blocks.length - 1];
+    if (!isBlock(f) && last && !isBlock(last[0])) last.push(f);
+    else blocks.push([f]);
+  }
   return (
     <div className={styles.form}>
-      {fields.map((f) => (
-        <FieldRenderer key={f.name} field={f} value={draft[f.name]} onChange={(v) => setDraft({ ...draft, [f.name]: v })} errors={errors} path={f.name} entrySlug={entrySlug} refs={refs} />
-      ))}
+      {blocks.map((b) =>
+        isBlock(b[0]) ? (
+          render(b[0])
+        ) : (
+          <div key={b[0].name} className={styles.fieldsCard}>
+            {b.map(render)}
+          </div>
+        ),
+      )}
     </div>
   );
 }
 
-export function useRefs() {
-  const { entries: dis } = useEntries('content/disertantes');
-  const { entries: cur } = useEntries('content/cursos');
+/** Opciones para campos de referencia. `enabled=false` evita leer colecciones que el formulario no usa. */
+export function useRefs(enabled = true) {
+  const { entries: dis } = useEntries(enabled ? 'content/disertantes' : undefined);
+  const { entries: cur } = useEntries(enabled ? 'content/cursos' : undefined);
   return useMemo(
     () => ({
       disertantes: (dis ?? []).map((d) => ({ value: d.slug, label: `${d.data.titulo ?? ''} ${d.data.nombre}`.trim() })),
@@ -106,7 +138,13 @@ export default function EntryEditor() {
 
   const preview = useDebounced(draft, 200);
   if (!col) return <p>Colección desconocida.</p>;
-  if (!draft) return <p className={styles.help}>Cargando…</p>;
+  if (!draft)
+    return (
+      <>
+        <SkeletonHead />
+        <SkeletonForm />
+      </>
+    );
 
   const update = (d: Obj) => {
     setDraft(d);
@@ -189,7 +227,7 @@ export default function EntryEditor() {
             Perfil
           </button>
           <button type="button" role="tab" aria-selected={tab === 'cv'} onClick={() => setParams({ tab: 'cv' })}>
-            Currículum normalizado {Object.keys(cvErrors).length > 0 && <span className={styles.badge}>!</span>}
+            Currículum {Object.keys(cvErrors).length > 0 && <span className={styles.badge}>!</span>}
           </button>
         </div>
       )}
@@ -217,6 +255,16 @@ export default function EntryEditor() {
             </div>
             {!isNew && <p className={styles.help}>La URL no se puede cambiar para no romper enlaces compartidos.</p>}
           </div>
+          {tab === 'cv' && cvDraft && (
+            <CvPdfImport
+              onImport={(cv) => {
+                setCvDraft({ ...cvDraft, ...cv, disertante: slug });
+                setDirty(true);
+                setSaved(null);
+              }}
+              hasItems={((cvDraft.secciones as { items?: unknown[] }[] | undefined) ?? []).some((s) => s.items?.length)}
+            />
+          )}
           {tab === 'cv' && cvDraft ? (
             <FormBody
               fields={cvCol.fields}

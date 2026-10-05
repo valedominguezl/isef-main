@@ -95,12 +95,23 @@ async function page(url: string, out = fileFor(url)) {
   return html as string;
 }
 
-function shell(url: string, title: string, out = fileFor(url)) {
+function shell(url: string, title: string, out = fileFor(url), placeholder = '') {
   const doc = template
     .replace('<!--app-head-->', `<title>${title} | ${sitio.nombre}</title>\n<meta name="robots" content="noindex, nofollow">`)
-    .replace('<div id="root"><!--app-html--></div>', '<div id="root" data-shell="1"></div>');
+    .replace('<div id="root"><!--app-html--></div>', `<div id="root" data-shell="1">${placeholder}</div>`);
   write(out, doc);
 }
+
+/** Esqueleto estático del panel mientras llega el JS (React lo reemplaza al montar): sin pantalla en blanco. */
+const ADMIN_BOOT = `<style>
+.boot{display:grid;min-height:100svh;background:var(--color-bg)}
+.boot i{display:block;border-radius:10px;background:linear-gradient(90deg,var(--ink-50) 25%,var(--ink-100) 50%,var(--ink-50) 75%) 0 0/200% 100%;animation:bootSk 1.4s linear infinite}
+.boot aside{display:none;background:var(--color-bg-tint);padding:96px 20px;gap:12px;flex-direction:column}
+.boot main{padding:104px 32px;display:flex;flex-direction:column;gap:16px;max-width:1200px}
+@media(min-width:1024px){.boot{grid-template-columns:264px 1fr}.boot aside{display:flex}}
+@keyframes bootSk{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.boot i{animation:none}}
+</style><div class="boot" aria-busy="true" aria-label="Cargando el panel"><aside>${'<i style="height:32px"></i>'.repeat(7)}</aside><main><i style="width:260px;height:36px"></i><i style="width:180px;height:14px"></i><i style="height:160px;margin-top:16px;border-radius:24px"></i><i style="height:220px;border-radius:24px"></i></main></div>`;
 
 // ── Rutas ─────────────────────────────────────────────────────────────
 const staticRoutes = ['/', '/carrera', '/especializaciones', '/novedades', '/inscripciones', '/contacto', '/privacidad', ...(aranceles.visible ? ['/aranceles'] : [])];
@@ -114,7 +125,7 @@ const rendered: Record<string, string> = {};
 for (const url of [...staticRoutes, ...dynamicRoutes]) rendered[url] = await page(url);
 await page('/buscar');
 await page('/404', path.join(DIST, '404.html'));
-shell('/admin', 'Administración');
+shell('/admin', 'Administración', fileFor('/admin'), ADMIN_BOOT);
 shell('/test-hiit', 'Test HIIT');
 shell('/hijos.htm', 'Conferencias', path.join(DIST, 'hijos.htm'));
 

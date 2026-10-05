@@ -25,6 +25,22 @@ interface FieldProps {
   refs: Record<string, RefOption[]>;
 }
 
+/** Contenido plegable con animación de altura (grid 0fr → 1fr). Se monta al abrir por primera vez. */
+function Collapse({ open, children }: { open: boolean; children: ReactNode }) {
+  const [mounted, setMounted] = useState(open);
+  useEffect(() => {
+    if (open) setMounted(true);
+  }, [open]);
+  return (
+    <div className={styles.collapse} data-open={open || undefined} aria-hidden={!open}>
+      <div className={styles.collapseInner}>{mounted && children}</div>
+    </div>
+  );
+}
+
+/** Profundidad de anidamiento según la ruta del campo ("secciones.0.items.2.titulo" → 2). */
+const depthOf = (path: string) => path.split('.').filter((p) => /^\d+$/.test(p)).length;
+
 function Wrapper({ field, error, children, htmlFor, counter }: { field: Field; error?: string; children: ReactNode; htmlFor?: string; counter?: ReactNode }) {
   return (
     <div className={[styles.field, error && styles.fieldError].filter(Boolean).join(' ')}>
@@ -218,16 +234,17 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
     const arr = Object.values(it).find(Array.isArray) as unknown[] | undefined;
     return arr ? ` · ${arr.length}` : '';
   };
+  const nested = depthOf(path) > 0;
   return (
-    <div className={styles.repeater}>
+    <div className={[styles.repeater, nested && styles.repNested].filter(Boolean).join(' ')}>
       {items.map((it, i) => {
         const isOpen = open.has(i);
         const hasErr = Object.keys(errors).some((k) => k.startsWith(`${path}.${i}.`));
         return (
-          <div key={i} className={[styles.repItem, hasErr && styles.fieldError].filter(Boolean).join(' ')}>
+          <div key={i} className={[styles.repItem, isOpen && styles.repOpen, hasErr && styles.repError].filter(Boolean).join(' ')}>
             <div className={styles.repHead}>
               <button type="button" className={styles.repToggle} onClick={() => toggle(i)} aria-expanded={isOpen}>
-                <ChevronDown size={16} className={isOpen ? styles.rot : undefined} />
+                <ChevronDown size={18} className={styles.chevron} />
                 <span>
                   {titleOf(it, i)}
                   <small>{count(it)}</small>
@@ -250,7 +267,7 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
                 <Trash2 size={16} />
               </button>
             </div>
-            {isOpen && (
+            <Collapse open={isOpen}>
               <div className={styles.repBody}>
                 {field.fields.map((f) => (
                   <FieldRenderer
@@ -265,7 +282,7 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
                   />
                 ))}
               </div>
-            )}
+            </Collapse>
           </div>
         );
       })}
@@ -401,34 +418,79 @@ export function FieldRenderer(props: FieldProps) {
         </Wrapper>
       );
     }
-    case 'group': {
-      const obj = (value as Obj | undefined) ?? {};
-      return (
-        <fieldset className={styles.group}>
-          <legend>{field.label}</legend>
-          {field.help && <p className={styles.help}>{field.help}</p>}
-          {field.fields.map((f) => (
-            <FieldRenderer
-              key={f.name}
-              field={f}
-              value={obj[f.name]}
-              onChange={(v) => onChange({ ...obj, [f.name]: v })}
-              errors={errors}
-              path={`${path}.${f.name}`}
-              entrySlug={entrySlug}
-              refs={refs}
-            />
-          ))}
-        </fieldset>
-      );
-    }
+    case 'group':
+      return <GroupField {...props} field={field} />;
+    case 'section':
+      return null; // la arma FormBody (agrupa campos del mismo nivel)
     case 'repeater':
-      return (
+      // Una lista de primer nivel es una sección del formulario; anidada, un campo más
+      return depthOf(path) === 0 && !path.includes('.') ? (
+        <Section title={field.label} help={field.help} error={error}>
+          <Repeater {...props} field={field} />
+        </Section>
+      ) : (
         <Wrapper field={field} error={error}>
           <Repeater {...props} field={field} />
         </Wrapper>
       );
   }
+}
+
+/** Sección del formulario: tarjeta con título claro, plegable. */
+export function Section({ title, help, error, collapsed, children }: { title: string; help?: string; error?: string; collapsed?: boolean; children: ReactNode }) {
+  const [open, setOpen] = useState(!collapsed);
+  return (
+    <section className={[styles.section, open && styles.sectionOpen, error && styles.repError].filter(Boolean).join(' ')}>
+      <button type="button" className={styles.sectionHead} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
+        <span>
+          <strong>{title}</strong>
+          {help && <small>{help}</small>}
+        </span>
+        <ChevronDown size={20} className={styles.chevron} />
+      </button>
+      <Collapse open={open}>
+        <div className={styles.sectionBody}>
+          {children}
+          {error && (
+            <p className={styles.error} role="alert">
+              {error}
+            </p>
+          )}
+        </div>
+      </Collapse>
+    </section>
+  );
+}
+
+function GroupField(props: FieldProps & { field: Extract<Field, { type: 'group' }> }) {
+  const { field, value, onChange, errors, path, entrySlug, refs } = props;
+  const obj = (value as Obj | undefined) ?? {};
+  const body = field.fields.map((f) => (
+    <FieldRenderer
+      key={f.name}
+      field={f}
+      value={obj[f.name]}
+      onChange={(v) => onChange({ ...obj, [f.name]: v })}
+      errors={errors}
+      path={`${path}.${f.name}`}
+      entrySlug={entrySlug}
+      refs={refs}
+    />
+  ));
+  // Grupo de primer nivel: sección plegable. Dentro de una lista: recuadro simple con título.
+  if (!path.includes('.'))
+    return (
+      <Section title={field.label} help={field.help} collapsed={field.collapsed}>
+        {body}
+      </Section>
+    );
+  return (
+    <fieldset className={styles.group}>
+      <legend>{field.label}</legend>
+      {field.help && <p className={styles.help}>{field.help}</p>}
+      {body}
+    </fieldset>
+  );
 }
 
 function Counter({ n, max }: { n: number; max: number }) {

@@ -8,11 +8,22 @@ export interface Entry {
   data: Record<string, unknown>;
 }
 
+/**
+ * Caché en memoria por ruta: al volver a una vista ya visitada se muestra al instante
+ * y se actualiza por detrás (sin pantallas vacías entre vistas).
+ */
+const cache = new Map<string, unknown>();
+export const clearAdminCache = () => cache.clear();
+
 /** Lista y lee todas las entradas de una carpeta (aplicando cambios pendientes). */
 export function useEntries(dir: string | undefined) {
   const { store, pending, version } = useAdmin();
-  const [entries, setEntries] = useState<Entry[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const key = `dir:${dir}`;
+  const [state, setState] = useState<{ key: string; entries: Entry[] | null; error: string | null }>(() => ({
+    key,
+    entries: (cache.get(key) as Entry[] | undefined) ?? null,
+    error: null,
+  }));
 
   useEffect(() => {
     if (!store || !dir) return;
@@ -26,9 +37,10 @@ export function useEntries(dir: string | undefined) {
             return { slug: f.name.replace(/\.json$/, ''), path: f.path, data: raw ? (JSON.parse(raw) as Record<string, unknown>) : {} };
           }),
         );
-        if (!cancel) setEntries(out);
+        cache.set(key, out);
+        if (!cancel) setState({ key, entries: out, error: null });
       } catch (e) {
-        if (!cancel) setError((e as Error).message);
+        if (!cancel) setState((s) => ({ key, entries: s.key === key ? s.entries : null, error: (e as Error).message }));
       }
     })();
     return () => {
@@ -36,21 +48,34 @@ export function useEntries(dir: string | undefined) {
     };
   }, [store, dir, version]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return { entries, error };
+  // Si cambió la carpeta, no mostrar las entradas de la anterior: usar la caché de la nueva (o nada)
+  const current = state.key === key ? state : { entries: (cache.get(key) as Entry[] | undefined) ?? null, error: null };
+  return { entries: current.entries, error: current.error };
 }
 
+/** Lee un archivo JSON. `undefined` = cargando · `null` = no existe · `{error}` en el segundo valor si falló. */
 export function useFile(path: string | undefined) {
   const { store, pending, version } = useAdmin();
-  const [data, setData] = useState<Record<string, unknown> | null | undefined>(undefined);
+  const key = `file:${path}`;
+  const [state, setState] = useState<{ key: string; data: Record<string, unknown> | null | undefined }>(() => ({
+    key,
+    data: cache.get(key) as Record<string, unknown> | null | undefined,
+  }));
   useEffect(() => {
     if (!store || !path) return;
     let cancel = false;
-    readWithPending(store, pending, path).then((raw) => {
-      if (!cancel) setData(raw ? (JSON.parse(raw) as Record<string, unknown>) : null);
-    });
+    readWithPending(store, pending, path)
+      .then((raw) => {
+        const data = raw ? (JSON.parse(raw) as Record<string, unknown>) : null;
+        cache.set(key, data);
+        if (!cancel) setState({ key, data });
+      })
+      .catch(() => {
+        if (!cancel) setState({ key, data: null });
+      });
     return () => {
       cancel = true;
     };
   }, [store, path, version]); // eslint-disable-line react-hooks/exhaustive-deps
-  return data;
+  return state.key === key ? state.data : (cache.get(key) as Record<string, unknown> | null | undefined);
 }

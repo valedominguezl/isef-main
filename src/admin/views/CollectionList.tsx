@@ -5,6 +5,7 @@ import { normalize } from '@/lib/format';
 import { useAdmin } from '../AdminContext';
 import { getCollection } from '../config';
 import { useEntries } from '../useEntries';
+import { SkeletonRows } from './Skeleton';
 import styles from '../Admin.module.scss';
 
 export default function CollectionList() {
@@ -29,7 +30,7 @@ export default function CollectionList() {
       <div className={styles.pageHead}>
         <div>
           <h1>{col.label}</h1>
-          <p className={styles.help}>{entries ? `${entries.length} en total` : 'Cargando…'}</p>
+          <p className={styles.help}>{entries ? `${entries.length} en total` : ' '}</p>
         </div>
         <Link to={`/admin/c/${col.key}/nueva`} className={styles.btnPrimary}>
           <Plus size={18} /> {col.newLabel}
@@ -40,6 +41,7 @@ export default function CollectionList() {
         <input type="search" placeholder={`Buscar en ${col.label.toLowerCase()}…`} value={q} onChange={(e) => setQ(e.target.value)} aria-label="Buscar" />
       </label>
       {error && <p className={styles.error}>{error}</p>}
+      {!entries && !error && <SkeletonRows />}
       <ul className={styles.rows}>
         {list.map((e) => {
           const isPending = pending.some((p) => p.path === e.path);

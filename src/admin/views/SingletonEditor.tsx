@@ -6,7 +6,11 @@ import { getSingleton } from '../config';
 import { clean, type Errors } from '../fields/Fields';
 import { useFile } from '../useEntries';
 import { FormBody, useRefs, validate } from './EntryEditor';
+import { SkeletonForm, SkeletonHead } from './Skeleton';
+import type { Field } from '../config';
 import styles from '../Admin.module.scss';
+
+const usesRefs = (fields: Field[]): boolean => fields.some((f) => f.type === 'reference' || ('fields' in f && usesRefs(f.fields)));
 
 type Obj = Record<string, unknown>;
 
@@ -15,17 +19,24 @@ export default function SingletonEditor() {
   const cfg = getSingleton(key);
   const loaded = useFile(cfg?.file);
   const { stage } = useAdmin();
-  const refs = useRefs();
+  const refs = useRefs(cfg ? usesRefs(cfg.fields) : false);
   const [draft, setDraft] = useState<Obj | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [saved, setSaved] = useState<string | null>(null);
 
   useEffect(() => {
-    if (loaded) setDraft(loaded);
+    // null = el archivo todavía no existe: se empieza vacío en vez de quedar cargando
+    if (loaded !== undefined) setDraft(loaded ?? {});
   }, [loaded]);
 
   if (!cfg) return <p>Sección desconocida.</p>;
-  if (!draft) return <p className={styles.help}>Cargando…</p>;
+  if (!draft)
+    return (
+      <>
+        <SkeletonHead />
+        <SkeletonForm />
+      </>
+    );
 
   const save = () => {
     const res = validate(cfg.schema, clean(draft));

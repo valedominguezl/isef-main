@@ -30,7 +30,9 @@ export type Field =
   | { type: 'file'; name: string; label: string; help?: string; folder: string; accept: string }
   | { type: 'list'; name: string; label: string; help?: string; itemLabel?: string; max?: number }
   | { type: 'reference'; name: string; label: string; help?: string; collection: 'disertantes' | 'cursos'; multiple: boolean }
-  | { type: 'group'; name: string; label: string; help?: string; fields: Field[]; optional?: boolean }
+  | { type: 'group'; name: string; label: string; help?: string; fields: Field[]; optional?: boolean; collapsed?: boolean }
+  /** Solo visual: agrupa campos del mismo nivel en una tarjeta plegable (no cambia el JSON). */
+  | { type: 'section'; name: string; label: string; help?: string; fields: Field[]; collapsed?: boolean }
   | { type: 'repeater'; name: string; label: string; help?: string; itemLabel: string; fields: Field[]; titleField?: string; collapsed?: boolean };
 
 export interface CollectionConfig {
@@ -185,7 +187,7 @@ export const COLLECTIONS: CollectionConfig[] = [
         itemLabel: 'Sección',
         titleField: 'tipo',
         collapsed: true,
-        help: 'Formato normalizado: todas las secciones son iguales para todos los disertantes. Las vacías no se muestran.',
+        help: 'Las secciones vacías no se muestran en el sitio.',
         fields: [
           { type: 'select', name: 'tipo', label: 'Tipo de sección', options: opt(CV_SECCIONES), required: true },
           { type: 'text', name: 'titulo', label: 'Título personalizado', help: 'Solo para "Otros antecedentes".' },
@@ -213,7 +215,7 @@ export const SINGLETONS: SingletonConfig[] = [
   {
     key: 'sitio',
     label: 'Datos del instituto',
-    description: 'Teléfonos, sedes, redes, estadísticas y estado de inscripciones.',
+    description: 'Inscripciones, teléfonos, sedes y redes sociales.',
     file: 'content/sitio.json',
     schema: sitioSchema,
     sitePath: '/contacto',
@@ -229,15 +231,6 @@ export const SINGLETONS: SingletonConfig[] = [
           { type: 'text', name: 'texto', label: 'Texto del botón principal' },
         ],
       },
-      { type: 'text', name: 'whatsapp', label: 'WhatsApp principal', help: 'Solo números con código de país: 5492664564435' },
-      { type: 'email', name: 'email', label: 'Correo de contacto' },
-      { type: 'url', name: 'campusUrl', label: 'URL del campus virtual' },
-      { type: 'textarea', name: 'descripcion', label: 'Descripción para Google', max: 200, rows: 3 },
-      { type: 'repeater', name: 'estadisticas', label: 'Números del inicio', itemLabel: 'Dato', titleField: 'etiqueta', fields: [
-        { type: 'number', name: 'valor', label: 'Valor' },
-        { type: 'text', name: 'prefijo', label: 'Prefijo', placeholder: '+' },
-        { type: 'text', name: 'etiqueta', label: 'Etiqueta' },
-      ] },
       { type: 'repeater', name: 'telefonos', label: 'Teléfonos por área', itemLabel: 'Área', titleField: 'area', collapsed: true, fields: [
         { type: 'text', name: 'area', label: 'Área', required: true },
         { type: 'text', name: 'sede', label: 'Sede (opcional)' },
@@ -257,19 +250,37 @@ export const SINGLETONS: SingletonConfig[] = [
         { type: 'number', name: 'lng', label: 'Longitud', step: 0.000001 },
         { type: 'url', name: 'facebook', label: 'Facebook de la sede' },
       ] },
-      { type: 'repeater', name: 'redes', label: 'Redes sociales', itemLabel: 'Red', titleField: 'etiqueta', fields: [
+      { type: 'repeater', name: 'redes', label: 'Redes sociales', itemLabel: 'Red', titleField: 'etiqueta', collapsed: true, fields: [
         { type: 'select', name: 'red', label: 'Red', options: opt({ facebook: 'Facebook', instagram: 'Instagram', youtube: 'YouTube', tiktok: 'TikTok' }) },
         { type: 'text', name: 'etiqueta', label: 'Etiqueta' },
         { type: 'url', name: 'url', label: 'URL' },
       ] },
-      { type: 'text', name: 'nombre', label: 'Nombre corto' },
-      { type: 'text', name: 'nombreLargo', label: 'Nombre completo' },
-      { type: 'text', name: 'fundacion', label: 'Año de fundación' },
-      { type: 'url', name: 'url', label: 'URL del sitio' },
-      { type: 'group', name: 'analytics', label: 'Analítica', fields: [
-        { type: 'text', name: 'ga4', label: 'ID de Google Analytics 4' },
-        { type: 'text', name: 'gtm', label: 'ID de Google Tag Manager' },
-      ] },
+      {
+        type: 'section',
+        name: 'avanzado',
+        label: 'Otros datos del sitio',
+        help: 'WhatsApp principal, correo, campus, números del inicio y datos técnicos. Casi nunca cambian.',
+        collapsed: true,
+        fields: [
+          { type: 'text', name: 'whatsapp', label: 'WhatsApp principal', help: 'Solo números con código de país: 5492664564435' },
+          { type: 'email', name: 'email', label: 'Correo de contacto' },
+          { type: 'url', name: 'campusUrl', label: 'URL del campus virtual' },
+          { type: 'textarea', name: 'descripcion', label: 'Descripción para Google', max: 200, rows: 3 },
+          { type: 'repeater', name: 'estadisticas', label: 'Números del inicio', itemLabel: 'Dato', titleField: 'etiqueta', fields: [
+            { type: 'number', name: 'valor', label: 'Valor' },
+            { type: 'text', name: 'prefijo', label: 'Prefijo', placeholder: '+' },
+            { type: 'text', name: 'etiqueta', label: 'Etiqueta' },
+          ] },
+          { type: 'text', name: 'nombre', label: 'Nombre corto' },
+          { type: 'text', name: 'nombreLargo', label: 'Nombre completo' },
+          { type: 'text', name: 'fundacion', label: 'Año de fundación' },
+          { type: 'url', name: 'url', label: 'URL del sitio' },
+          { type: 'group', name: 'analytics', label: 'Analítica', fields: [
+            { type: 'text', name: 'ga4', label: 'ID de Google Analytics 4' },
+            { type: 'text', name: 'gtm', label: 'ID de Google Tag Manager' },
+          ] },
+        ],
+      },
     ],
   },
   {

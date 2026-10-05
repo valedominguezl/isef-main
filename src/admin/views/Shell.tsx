@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { BookOpen, CheckCircle2, CircleDashed, ExternalLink, GraduationCap, LayoutDashboard, LogOut, Newspaper, Settings2, UploadCloud, Users, XCircle } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { useAdmin } from '../AdminContext';
@@ -26,6 +26,7 @@ function DeployPill() {
 export default function Shell({ children }: { children: ReactNode }) {
   const { user, logout, pending } = useAdmin();
   const [drawer, setDrawer] = useState(false);
+  const { pathname } = useLocation();
   const link = ({ isActive }: { isActive: boolean }) => (isActive ? styles.navActive : undefined);
 
   return (
@@ -76,7 +77,10 @@ export default function Shell({ children }: { children: ReactNode }) {
             {pending.length ? `Publicar ${pending.length} cambio${pending.length > 1 ? 's' : ''}` : 'Sin cambios pendientes'}
           </button>
         </header>
-        <div className={styles.content}>{children}</div>
+        {/* Entrada suave de cada pantalla (la barra lateral y la superior no se mueven) */}
+        <div key={pathname} className={`${styles.content} ${styles.viewIn}`}>
+          {children}
+        </div>
       </div>
       <PendingDrawer open={drawer} onClose={() => setDrawer(false)} />
     </div>
