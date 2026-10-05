@@ -1,0 +1,12 @@
+// Cloudflare Workers (solo archivos estáticos): sirve dist/ con las reglas de public/_redirects y _headers.
+// Build en Cloudflare: npm run check && npm run build · Deploy: npx wrangler deploy
+{
+  "name": "isef-sanluis",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    // /ruta → ruta.html; /ruta/ y /ruta.html redirigen a /ruta
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

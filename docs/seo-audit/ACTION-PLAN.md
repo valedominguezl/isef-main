@@ -4,7 +4,7 @@
 | Prioridad | Acción | Estado |
 |---|---|---|
 | Crítica | Publicar el build nuevo (resuelve HTML vacío, títulos únicos, soft-404) | ⏳ al hacer push |
-| Crítica | Servidor: era nginx (ignoraba el .htaccess); se migra a Cloudflare Pages con `public/_redirects` y `_headers` | ✅ |
+| Crítica | Servidor: era nginx (ignoraba el .htaccess); se migra a Cloudflare (Workers, estáticos) con `public/_redirects` y `_headers` | ✅ |
 | Alta | Purgar la caché de Cloudflare después de cada deploy (o regla "Bypass cache" para HTML) | ⏳ |
 | Alta | Google Search Console: verificar el dominio (registro TXT en Cloudflare), enviar `sitemap.xml`, inspeccionar `/`, `/carrera`, `/inscripciones` | ⏳ |
 | Alta | Revisar en Search Console → Páginas que las URLs viejas pasen a "Redirigida" | ⏳ |

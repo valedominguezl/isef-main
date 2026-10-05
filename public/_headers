@@ -1,5 +1,5 @@
-# I.S.E.F. San Luis — cabeceras de Cloudflare Pages
-# HTML y datos: Pages ya manda "max-age=0, must-revalidate" + ETag (siempre revalida).
+# I.S.E.F. San Luis — cabeceras de Cloudflare (Workers, archivos estáticos)
+# HTML y datos: Cloudflare ya manda "max-age=0, must-revalidate" + ETag (siempre revalida).
 
 /*
   X-Content-Type-Options: nosniff
@@ -18,8 +18,6 @@
 /docs/*
   Cache-Control: public, max-age=604800
 
-# Vistas previas (*.pages.dev): fuera de Google, solo cuenta isefsanluis.net
-https://:project.pages.dev/*
-  X-Robots-Tag: noindex
-https://:version.:project.pages.dev/*
+# Vistas previas (*.workers.dev): fuera de Google, solo cuenta isefsanluis.net
+https://:version.:subdomain.workers.dev/*
   X-Robots-Tag: noindex

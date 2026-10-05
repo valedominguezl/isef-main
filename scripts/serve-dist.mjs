@@ -1,5 +1,5 @@
 /**
- * Servidor estático que imita producción (Cloudflare Pages): /ruta → /ruta.html, sin .html ni
+ * Servidor estático que imita producción (Cloudflare, ver wrangler.jsonc): /ruta → /ruta.html, sin .html ni
  * barra final, redirecciones de dist/_redirects y 404.html.
  * Uso: npm run preview  (después de npm run build)
  */

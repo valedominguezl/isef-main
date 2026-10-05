@@ -1,6 +1,6 @@
 name: Deploy
 
-# El sitio lo publica Cloudflare Pages en cada push a main (historial y rollback en su panel).
+# El sitio lo publica Cloudflare (Workers Builds) en cada push a main: historial y rollback en su panel.
 # Este workflow verifica cada push (el panel /admin muestra su estado) y dispara el rebuild semanal.
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
-      - name: Disparar build en Cloudflare Pages
+      - name: Disparar build en Cloudflare
         env:
-          HOOK: ${{ secrets.CF_PAGES_DEPLOY_HOOK }}
+          HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
         run: curl -fsS -X POST "$HOOK"
