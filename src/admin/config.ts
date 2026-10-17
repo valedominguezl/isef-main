@@ -352,7 +352,7 @@ export const COLLECTIONS: CollectionConfig[] = [
         fields: [
           { type: 'text', name: 'firmante', label: 'Nombre', required: true },
           { type: 'text', name: 'cargo', label: 'Cargo', required: true },
-          { type: 'text', name: 'resolucion', label: 'Resoluciones (debajo del nombre del instituto)', placeholder: RESOLUCION, help: 'Vacío = las de la plantilla actual (gris).' },
+          { type: 'text', name: 'resolucion', label: 'Resoluciones (debajo del nombre del instituto)', placeholder: RESOLUCION, help: 'Vacío = las vigentes (texto gris). Las mismas figuran en «Plan de estudios» del sitio.' },
         ],
       },
       {
