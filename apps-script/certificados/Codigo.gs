@@ -2,7 +2,7 @@
  * Certificados del I.S.E.F. San Luis — Apps Script publicado como aplicación web desde adriandomnguez@gmail.com.
  *
  * Lo llama SOLO el Worker de isefsanluis.net (con la clave compartida). Hace tres cosas:
- *   1. Lee las respuestas de los Google Forms (nombre, DNI, mail y nota del cuestionario).
+ *   1. Lee las respuestas de los Google Forms desde su planilla de respuestas (nombre, DNI, mail y nota).
  *   2. Manda cada certificado por Gmail con el PDF adjunto (lo arma el panel /admin).
  *   3. Guarda la firma escaneada del rector (la sube el panel; no está en el repositorio público).
  *   4. Guarda el registro de certificados emitidos en la planilla «Certificados emitidos» (la crea sola),
@@ -48,61 +48,84 @@ function salida(o) {
 
 /* ───────────────────────── Respuestas del formulario ───────────────────────── */
 
-const CON_PUNTOS = {
-  MULTIPLE_CHOICE: 'asMultipleChoiceItem',
-  CHECKBOX: 'asCheckboxItem',
-  LIST: 'asListItem',
-  TEXT: 'asTextItem',
-  PARAGRAPH_TEXT: 'asParagraphTextItem',
-  SCALE: 'asScaleItem',
-  DATE: 'asDateItem',
-  DATETIME: 'asDateTimeItem',
-  TIME: 'asTimeItem',
-  DURATION: 'asDurationItem',
-};
-const SIN_RESPUESTA = ['PAGE_BREAK', 'SECTION_HEADER', 'IMAGE', 'VIDEO'];
+/*
+ * Se leen de la PLANILLA de respuestas del formulario (una sola lectura, 1–2 s). Leer respuesta por respuesta
+ * con FormApp tarda más de un minuto con 20 personas. Si el formulario no tiene planilla vinculada, se crea una
+ * (Google la llena con todas las respuestas anteriores).
+ */
 
-function puntosTotales(items) {
-  let total = 0;
-  items.forEach(function (i) {
-    const metodo = CON_PUNTOS[String(i.getType())];
-    if (!metodo) return;
-    try {
-      const item = i[metodo]();
-      if (item.getPoints) total += item.getPoints() || 0;
-    } catch (e) {
-      /* tipo sin puntaje */
-    }
-  });
-  return total;
+/** ID de un link de Forms, sea el de edición (/d/ID) o el publicado (/d/e/ID). */
+function idDeForm(url) {
+  const m = String(url || '').match(/\/d\/(?:e\/)?([\w-]+)/);
+  return m ? m[1] : '';
 }
+
+function planillaDeRespuestas(form) {
+  let id = null;
+  try {
+    if (form.getDestinationType() === FormApp.DestinationType.SPREADSHEET) id = form.getDestinationId();
+  } catch (e) {
+    id = null;
+  }
+  if (!id) {
+    const ss = SpreadsheetApp.create('Respuestas — ' + (form.getTitle() || 'formulario de certificados'));
+    form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
+    SpreadsheetApp.flush();
+    id = ss.getId();
+  }
+  const ss = SpreadsheetApp.openById(id);
+  const publicado = idDeForm(form.getPublishedUrl());
+  const editado = form.getId();
+  const hojas = ss.getSheets();
+  for (let k = 0; k < hojas.length; k++) {
+    const f = idDeForm(hojas[k].getFormUrl());
+    if (f && (f === publicado || f === editado)) return hojas[k];
+  }
+  // Recién vinculada: la hoja puede tardar un instante en marcarse
+  return hojas[0];
+}
+
+const RE_PUNTAJE = /puntuaci|puntaje|score/i;
+const RE_MAIL_COL = /correo|e-?mail/i;
 
 function respuestas(formId) {
   const form = FormApp.openById(formId);
-  const items = form.getItems();
-  const preguntas = items
-    .filter(function (i) {
-      return SIN_RESPUESTA.indexOf(String(i.getType())) < 0;
-    })
-    .map(function (i) {
-      return i.getTitle();
-    });
-  const quiz = form.isQuiz();
-  const maximo = quiz ? puntosTotales(items) : null;
-  const lista = form.getResponses().map(function (r) {
-    const campos = {};
-    r.getItemResponses().forEach(function (ir) {
-      const v = ir.getResponse();
-      campos[ir.getItem().getTitle()] = Array.isArray(v) ? v.join(', ') : String(v);
-    });
-    let puntaje = null;
-    if (quiz) {
-      puntaje = r.getGradableItemResponses().reduce(function (s, g) {
-        return s + (g.getScore() || 0);
-      }, 0);
-    }
-    return { id: r.getId(), fecha: r.getTimestamp().toISOString(), email: r.getRespondentEmail() || '', puntaje: puntaje, maximo: maximo, campos: campos };
+  const valores = planillaDeRespuestas(form).getDataRange().getValues();
+  const titulos = (valores[0] || []).map(function (t) {
+    return String(t).trim();
   });
+  // Columna 0 = marca temporal; las de mail y puntuación las agrega Google según el formulario
+  const colPuntaje = titulos.findIndex(function (t) {
+    return RE_PUNTAJE.test(t);
+  });
+  const colMail = form.collectsEmail()
+    ? titulos.findIndex(function (t, k) {
+        return k > 0 && RE_MAIL_COL.test(t);
+      })
+    : -1;
+  const preguntas = titulos.filter(function (t, k) {
+    return k > 0 && k !== colPuntaje && t;
+  });
+  const lista = [];
+  for (let n = 1; n < valores.length; n++) {
+    const fila = valores[n];
+    if (!(fila[0] instanceof Date)) continue; // fila vacía
+    const campos = {};
+    titulos.forEach(function (t, k) {
+      if (k > 0 && k !== colPuntaje && t) campos[t] = fila[k] instanceof Date ? fila[k].toISOString() : String(fila[k]);
+    });
+    // «95 / 100» (como lo escribe Forms) o un número suelto
+    let puntaje = null;
+    let maximo = null;
+    if (colPuntaje >= 0) {
+      const m = String(fila[colPuntaje]).match(/(-?\d+(?:[.,]\d+)?)\s*\/\s*(\d+(?:[.,]\d+)?)/);
+      if (m) {
+        puntaje = Number(m[1].replace(',', '.'));
+        maximo = Number(m[2].replace(',', '.'));
+      }
+    }
+    lista.push({ id: 'fila-' + (n + 1), fecha: fila[0].toISOString(), email: colMail >= 0 ? String(fila[colMail]).trim() : '', puntaje: puntaje, maximo: maximo, campos: campos });
+  }
   return { titulo: form.getTitle(), preguntas: preguntas, respuestas: lista, cuota: MailApp.getRemainingDailyQuota() };
 }
 
