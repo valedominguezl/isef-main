@@ -41,6 +41,7 @@ export const routes: RouteObject[] = [
       { path: 'aranceles', lazy: () => import('@/pages/aranceles/ArancelesPage') },
       { path: 'privacidad', lazy: () => import('@/pages/privacidad/PrivacidadPage') },
       { path: 'buscar', handle: solid, lazy: () => import('@/pages/buscar/BuscarPage') },
+      { path: 'verificar', handle: solid, lazy: () => import('@/pages/verificar/VerificarPage') },
       { path: 'test-hiit', handle: { ...solid, hideWhatsApp: true }, lazy: () => import('@/pages/test-hiit/TestHiitPage') },
       { path: 'hijos.htm', lazy: () => import('@/pages/conferencias/ConferenciasPage') },
       { path: 'admin/*', handle: { bare: true }, lazy: () => import('@/admin/AdminPage') },

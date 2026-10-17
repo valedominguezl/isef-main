@@ -17,6 +17,7 @@ const exists = (p?: string) => !p || fs.existsSync(path.join('public', p));
 const slugs: Record<string, Set<string>> = {};
 for (const [name, { dir, schema }] of Object.entries(collections)) {
   slugs[name] = new Set();
+  if (!fs.existsSync(dir)) continue;
   for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.json'))) {
     const file = `${dir}/${f}`;
     const slug = f.replace(/\.json$/, '');

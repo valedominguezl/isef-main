@@ -35,6 +35,7 @@ const PAGE_MODULE: [RegExp, string][] = [
   [/^\/aranceles$/, 'src/pages/aranceles/ArancelesPage.tsx'],
   [/^\/privacidad$/, 'src/pages/privacidad/PrivacidadPage.tsx'],
   [/^\/buscar$/, 'src/pages/buscar/BuscarPage.tsx'],
+  [/^\/verificar$/, 'src/pages/verificar/VerificarPage.tsx'],
   [/^\/404$/, 'src/pages/NotFoundPage.tsx'],
 ];
 
@@ -126,6 +127,7 @@ const dynamicRoutes = [
 const rendered: Record<string, string> = {};
 for (const url of [...staticRoutes, ...dynamicRoutes]) rendered[url] = await page(url);
 await page('/buscar');
+await page('/verificar');
 await page('/404', path.join(DIST, '404.html'));
 shell('/admin', 'Administración', fileFor('/admin'), ADMIN_BOOT);
 shell('/test-hiit', 'Test HIIT');
@@ -172,7 +174,7 @@ const urls = [...staticRoutes, ...dynamicRoutes]
 fs.writeFileSync(path.join(DIST, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
 fs.writeFileSync(
   path.join(DIST, 'robots.txt'),
-  `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /buscar\nDisallow: /hijos.htm\nDisallow: /test-hiit\n\nSitemap: ${sitio.url}/sitemap.xml\n`,
+  `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /buscar\nDisallow: /verificar\nDisallow: /hijos.htm\nDisallow: /test-hiit\n\nSitemap: ${sitio.url}/sitemap.xml\n`,
 );
 
 // ── Imágenes para compartir (Open Graph) con el título de cada página ───

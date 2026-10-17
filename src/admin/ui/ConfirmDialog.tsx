@@ -10,6 +10,8 @@ export interface ConfirmOptions {
   body?: string;
   confirmLabel?: string;
   icon?: LucideIcon;
+  /** 'accion' = botón violeta (enviar, publicar); por defecto es una eliminación (rojo). */
+  tono?: 'peligro' | 'accion';
 }
 
 type Ask = (o: ConfirmOptions) => Promise<boolean>;
@@ -41,7 +43,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
   );
 }
 
-function Dialog({ title, body, confirmLabel = 'Eliminar', icon: Icon = Trash2, onClose }: ConfirmOptions & { onClose: (ok: boolean) => void }) {
+function Dialog({ title, body, confirmLabel = 'Eliminar', icon: Icon = Trash2, tono = 'peligro', onClose }: ConfirmOptions & { onClose: (ok: boolean) => void }) {
   const ids = { title: useId(), body: useId() };
   const box = useRef<HTMLDivElement>(null);
   const cancel = useRef<HTMLButtonElement>(null);
@@ -98,7 +100,7 @@ function Dialog({ title, body, confirmLabel = 'Eliminar', icon: Icon = Trash2, o
         animate={{ opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: EASE_IN } }}
         exit={{ opacity: 0, scale: 0.98, y: 6, transition: { duration: 0.2, ease: EASE_OUT } }}
       >
-        <span className={styles.dialogIcon} aria-hidden>
+        <span className={[styles.dialogIcon, tono === 'accion' && styles.dialogIconAccion].filter(Boolean).join(' ')} aria-hidden>
           <Icon size={22} />
         </span>
         <div>
@@ -109,7 +111,7 @@ function Dialog({ title, body, confirmLabel = 'Eliminar', icon: Icon = Trash2, o
           <Button ref={cancel} variant="secondary" icon={X} onClick={() => onClose(false)}>
             Cancelar
           </Button>
-          <Button variant="danger" solid icon={Icon} onClick={() => onClose(true)}>
+          <Button variant={tono === 'accion' ? 'primary' : 'danger'} solid={tono !== 'accion'} icon={Icon} onClick={() => onClose(true)}>
             {confirmLabel}
           </Button>
         </div>

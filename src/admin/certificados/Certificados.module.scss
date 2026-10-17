@@ -1,0 +1,271 @@
+@use '@/styles/mixins' as *;
+
+/* ── Vista previa del PDF ── */
+.vista {
+  position: relative;
+  border-radius: var(--radius-md);
+  background: var(--ink-50);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  aspect-ratio: 297 / 210;
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: opacity var(--duration-slow) var(--ease-standard);
+  }
+
+  &[data-estado='cargando'] canvas {
+    opacity: 0;
+  }
+}
+
+.vistaError {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* ── Envíos ── */
+.envios {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+
+  h2 {
+    margin-bottom: var(--space-1);
+  }
+}
+
+.progreso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink-700);
+}
+
+.barra {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--violet-50);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--gradient-primary);
+    transition: width var(--duration-slow) var(--ease-standard);
+  }
+}
+
+.aviso {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--violet-50);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--violet-700);
+}
+
+.herramientas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  > label {
+    flex: 1 1 280px;
+    margin-bottom: 0;
+  }
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+
+  button {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-pill);
+    background: white;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--ink-700);
+    transition:
+      background-color var(--duration-slow) var(--ease-standard),
+      border-color var(--duration-slow) var(--ease-standard);
+    @include focus-ring;
+
+    &:hover {
+      border-color: var(--violet-300);
+    }
+
+    &[aria-pressed='true'] {
+      border-color: var(--violet-400);
+      background: var(--violet-50);
+      color: var(--violet-700);
+      font-weight: var(--weight-semibold);
+    }
+  }
+}
+
+.tablaCaja {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: white;
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+
+  th {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--ink-50);
+    font-weight: var(--weight-semibold);
+    color: var(--ink-700);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: var(--space-3) var(--space-4);
+    vertical-align: middle;
+  }
+
+  tr + tr td {
+    border-top: 1px solid var(--color-border);
+  }
+
+  tbody tr {
+    transition: background-color var(--duration-slow) var(--ease-standard);
+
+    &[data-trabajando] {
+      background: var(--violet-50);
+    }
+  }
+
+  td strong {
+    display: block;
+    font-weight: var(--weight-semibold);
+    color: var(--ink-900);
+  }
+
+  td small {
+    display: block;
+    margin-top: 2px;
+    color: var(--color-text-muted);
+  }
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.acciones > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.falla {
+  color: var(--danger-500) !important;
+}
+
+.estado {
+  display: inline-flex;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+}
+
+.ok {
+  background: color-mix(in srgb, var(--success-500) 14%, white);
+  color: color-mix(in srgb, var(--success-500) 70%, black);
+}
+
+.info {
+  background: var(--ink-100);
+  color: var(--ink-700);
+}
+
+.pend {
+  background: var(--violet-50);
+  color: var(--violet-700);
+}
+
+.gris {
+  background: var(--ink-50);
+  color: var(--ink-500);
+}
+
+.alerta {
+  background: color-mix(in srgb, var(--warning-500) 16%, white);
+  color: color-mix(in srgb, var(--warning-500) 60%, black);
+}
+
+.vacio {
+  padding: var(--space-8) var(--space-4);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-sans);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.oculto {
+  @include visually-hidden;
+}
+
+.editar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── Firma escaneada (pestaña de datos) ── */
+.datos {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.firma {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.firmaAcciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

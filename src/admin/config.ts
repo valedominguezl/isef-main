@@ -3,9 +3,10 @@
  * Para agregar un campo nuevo: sumarlo al esquema (src/content/schema.ts) y acá.
  */
 import type { ZodTypeAny } from 'zod';
-import { CircleHelp, FileText, GraduationCap, Images, Library, Newspaper, Receipt, Settings2, Users, Video, type LucideIcon } from 'lucide-react';
+import { Award, CircleHelp, FileText, GraduationCap, Images, Library, Newspaper, Receipt, Settings2, Users, Video, type LucideIcon } from 'lucide-react';
 import {
   arancelesSchema,
+  certificadoSchema,
   conferenciasSchema,
   cursoSchema,
   cvSchema,
@@ -21,7 +22,17 @@ import { CV_SECCIONES, NOVEDAD_CATEGORIAS } from '@/content/constants';
 import { PAGINAS } from './paginasConfig';
 
 export type Field =
-  | { type: 'text' | 'url' | 'email'; name: string; label: string; help?: string; placeholder?: string; required?: boolean; max?: number }
+  | {
+      type: 'text' | 'url' | 'email';
+      name: string;
+      label: string;
+      help?: string;
+      placeholder?: string;
+      required?: boolean;
+      max?: number;
+      /** Sugerencias de otra colección (se elige de la lista o se escribe a mano). */
+      sugerencias?: 'cursos' | 'disertantes';
+    }
   | { type: 'textarea'; name: string; label: string; help?: string; placeholder?: string; max?: number; rows?: number; required?: boolean }
   | { type: 'markdown'; name: string; label: string; help?: string; placeholder?: string; rows?: number }
   | { type: 'number'; name: string; label: string; help?: string; step?: number }
@@ -86,7 +97,7 @@ export interface CollectionConfig {
   sitePath?: (slug: string) => string;
   /** Carpeta de medios por defecto y valores iniciales. */
   defaults: () => Record<string, unknown>;
-  preview?: 'curso' | 'novedad' | 'disertante';
+  preview?: 'curso' | 'novedad' | 'disertante' | 'certificado';
   hidden?: boolean;
   /** Opciones básicas: arriba de todo del editor y en cada fila de la lista. */
   quick?: QuickToggle[];
@@ -284,6 +295,79 @@ export const COLLECTIONS: CollectionConfig[] = [
               { type: 'text', name: 'institucion', label: 'Institución' },
               { type: 'text', name: 'detalle', label: 'Detalle' },
             ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'certificados',
+    label: 'Certificados',
+    singular: 'certificado',
+    newLabel: 'Nuevo certificado',
+    icon: Award,
+    dir: 'content/certificados',
+    schema: certificadoSchema,
+    titleField: 'titulo',
+    subtitle: (e) => `${e.tipo === 'asistencia' ? 'Asistencia' : 'Aprobación'} · ${String(e.fecha ?? '').split('-').reverse().join('/')}`,
+    sort: (a, b) => String(b.fecha).localeCompare(String(a.fecha)),
+    preview: 'certificado',
+    defaults: () => ({ titulo: '', tipo: 'aprobacion', formulario: '', actividad: '', fecha: today(), firmante: 'Dr. Antonino Merenda', cargo: 'Rector' }),
+    fields: [
+      { type: 'text', name: 'titulo', label: 'Nombre (solo para el panel)', required: true, placeholder: 'Neuroeducación · La atención en los alumnos', max: 90 },
+      {
+        type: 'url',
+        name: 'formulario',
+        label: 'Link del Google Form',
+        required: true,
+        placeholder: 'https://docs.google.com/forms/d/…/edit',
+        help: 'El formulario tiene que ser de adriandomnguez@gmail.com (o estar compartido con esa cuenta como editor).',
+      },
+      { type: 'select', name: 'tipo', label: 'Tipo', required: true, options: [{ value: 'aprobacion', label: 'Aprobación (con la nota del cuestionario)' }, { value: 'asistencia', label: 'Asistencia (sin nota)' }] },
+      { type: 'date', name: 'fecha', label: 'Fecha del certificado', required: true },
+      {
+        type: 'section',
+        name: 'textoCert',
+        label: 'Texto del certificado',
+        fields: [
+          { type: 'text', name: 'actividad', label: 'Actividad', required: true, placeholder: 'la clase teórica «La atención en los alumnos»', help: 'Lo que va entre « » sale en cursiva.' },
+          {
+            type: 'text',
+            name: 'programa',
+            label: 'Curso o programa',
+            placeholder: 'Elegí un curso de la lista o escribilo',
+            sugerencias: 'cursos',
+            help: 'Al hacer clic se despliegan los cursos cargados; también se puede escribir otro.',
+          },
+          { type: 'text', name: 'dictadoPor', label: 'Dictado por', placeholder: 'Elegí un disertante o escribilo', sugerencias: 'disertantes' },
+          { type: 'text', name: 'cargaHoraria', label: 'Carga horaria (opcional)', placeholder: '4 horas reloj' },
+        ],
+      },
+      {
+        type: 'section',
+        name: 'firmaCert',
+        label: 'Firma',
+        fields: [
+          { type: 'text', name: 'firmante', label: 'Nombre', required: true },
+          { type: 'text', name: 'cargo', label: 'Cargo', required: true },
+        ],
+      },
+      {
+        type: 'section',
+        name: 'avanzado',
+        label: 'Formulario y mail',
+        collapsed: true,
+        fields: [
+          { type: 'number', name: 'notaMinima', label: 'Nota mínima para aprobar (%)', help: 'Vacío = todos figuran como aprobados.' },
+          { type: 'text', name: 'preguntaNombre', label: 'Pregunta del nombre', help: 'Solo si no se detecta sola: el título exacto de la pregunta.' },
+          { type: 'text', name: 'preguntaDni', label: 'Pregunta del DNI', help: 'Solo si no se detecta sola.' },
+          { type: 'text', name: 'asunto', label: 'Asunto del mail', placeholder: 'Tu certificado: {actividad}' },
+          {
+            type: 'textarea',
+            name: 'mensaje',
+            label: 'Mensaje del mail',
+            rows: 7,
+            help: 'Vacío = mensaje estándar. Se pueden usar {nombre}, {nombreCompleto}, {actividad}, {codigo} y {verificar} (link para verificar).',
           },
         ],
       },

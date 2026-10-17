@@ -92,6 +92,11 @@
   color: var(--danger-500);
 }
 
+.dialogIconAccion {
+  background: var(--violet-50);
+  color: var(--violet-600);
+}
+
 .dialogActions {
   grid-column: 1 / -1;
   display: flex;

@@ -94,6 +94,36 @@ export const novedadSchema = z.object({
   publicado: z.boolean().default(true),
 });
 
+/* ------------------------------- Certificados ------------------------------ */
+/**
+ * Una actividad que emite certificados (solo la configuración: los datos de cada persona quedan en el
+ * Google Form y en el registro del Apps Script, nunca en este repositorio público).
+ */
+export const certificadoSchema = z.object({
+  /** Nombre interno en el panel. */
+  titulo: z.string().min(3),
+  tipo: z.enum(['aprobacion', 'asistencia']),
+  /** Link (o ID) del Google Form de donde salen las personas. */
+  formulario: z.string().regex(/^(https:\/\/docs\.google\.com\/forms\/d\/)?[\w-]{20,}/, 'Pegá el link del formulario de Google'),
+  /** «la clase teórica «La atención en los alumnos»» */
+  actividad: z.string().min(3),
+  /** «Curso Internacional de Neuroeducación» */
+  programa: z.string().optional(),
+  dictadoPor: z.string().optional(),
+  cargaHoraria: z.string().optional(),
+  /** Fecha que figura en el certificado. */
+  fecha: isoDate,
+  /** Porcentaje mínimo para que figure como aprobado (vacío = todos). */
+  notaMinima: z.number().min(0).max(100).optional(),
+  /** Título exacto de las preguntas del formulario (vacío = se detectan solas). */
+  preguntaNombre: z.string().optional(),
+  preguntaDni: z.string().optional(),
+  asunto: z.string().optional(),
+  mensaje: z.string().optional(),
+  firmante: z.string().min(3),
+  cargo: z.string().min(2),
+});
+
 /* ------------------------------- Singletons -------------------------------- */
 export const faqSchema = z.object({
   preguntas: z.array(z.object({ pregunta: z.string().min(5), respuesta: markdown })),
@@ -253,6 +283,7 @@ export type Disertante = z.infer<typeof disertanteSchema>;
 export type Cv = z.infer<typeof cvSchema>;
 export type CvItem = z.infer<typeof cvItemSchema>;
 export type Novedad = z.infer<typeof novedadSchema>;
+export type Certificado = z.infer<typeof certificadoSchema>;
 export type Faq = z.infer<typeof faqSchema>;
 export type Plan = z.infer<typeof planSchema>;
 export type Inscripciones = z.infer<typeof inscripcionesSchema>;
@@ -267,6 +298,7 @@ export const collections = {
   disertantes: { dir: 'content/disertantes', schema: disertanteSchema },
   cv: { dir: 'content/cv', schema: cvSchema },
   novedades: { dir: 'content/novedades', schema: novedadSchema },
+  certificados: { dir: 'content/certificados', schema: certificadoSchema },
 } as const;
 
 export const singletons = {

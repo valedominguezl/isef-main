@@ -328,7 +328,23 @@ export function FieldRenderer(props: FieldProps) {
     case 'email':
       return (
         <Wrapper field={field} error={error} htmlFor={id} counter={field.max ? <Counter n={str.length} max={field.max} /> : null}>
-          <input id={id} type={field.type === 'text' ? 'text' : field.type} className={styles.input} value={str} placeholder={field.placeholder} onChange={(e) => onChange(e.target.value)} />
+          <input
+            id={id}
+            type={field.type === 'text' ? 'text' : field.type}
+            className={styles.input}
+            value={str}
+            placeholder={field.placeholder}
+            onChange={(e) => onChange(e.target.value)}
+            list={field.type === 'text' && field.sugerencias ? `${id}-lista` : undefined}
+            autoComplete={field.type === 'text' && field.sugerencias ? 'off' : undefined}
+          />
+          {field.type === 'text' && field.sugerencias && (
+            <datalist id={`${id}-lista`}>
+              {(refs[field.sugerencias] ?? []).map((o) => (
+                <option key={o.value} value={o.label} />
+              ))}
+            </datalist>
+          )}
         </Wrapper>
       );
     case 'textarea':

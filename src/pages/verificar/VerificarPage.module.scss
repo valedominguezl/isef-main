@@ -1,0 +1,122 @@
+@use '@/styles/mixins' as *;
+
+.page {
+  padding-top: calc(var(--header-h) + var(--space-12));
+  min-height: 80svh;
+}
+
+.icono {
+  color: var(--violet-500);
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-size: var(--text-h2);
+}
+
+.lead {
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-8) 0 var(--space-6);
+
+  input {
+    flex: 1 1 240px;
+    min-height: 52px;
+    padding: 0 var(--space-5);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    transition:
+      border-color var(--duration-slow) var(--ease-standard),
+      box-shadow var(--duration-slow) var(--ease-standard);
+
+    &::placeholder {
+      letter-spacing: 0.08em;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--violet-400);
+      box-shadow: 0 0 0 4px var(--violet-100);
+    }
+  }
+
+  button {
+    min-height: 52px;
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--gradient-primary);
+    color: white;
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    transition:
+      $press-transition,
+      opacity var(--duration-slow) var(--ease-standard);
+    @include focus-ring;
+    @include press-bounce;
+
+    &:disabled {
+      opacity: 0.7;
+    }
+  }
+}
+
+.resultado {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+
+  > svg {
+    flex: none;
+  }
+
+  p + p {
+    margin-top: var(--space-1);
+  }
+}
+
+.valido > svg {
+  color: var(--success-500);
+}
+
+.invalido > svg {
+  color: var(--warning-500);
+}
+
+.estado {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-900);
+}
+
+.nombre {
+  font-family: var(--font-serif);
+  font-size: var(--text-h3);
+  font-style: italic;
+  color: var(--color-text);
+}
+
+.meta {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.error {
+  font-family: var(--font-sans);
+  color: var(--color-text-muted);
+}

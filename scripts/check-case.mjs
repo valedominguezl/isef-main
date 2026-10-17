@@ -45,7 +45,8 @@ function walk(dir) {
       const re = /(?:from\s+|import\s*\(\s*|@use\s+|url\()\s*['"]([^'"]+)['"]/g;
       let m;
       while ((m = re.exec(src))) {
-        const target = resolve(p, m[1]);
+        // Los sufijos de Vite (?url, ?raw) no son parte del archivo
+        const target = resolve(p, m[1].replace(/\?.*$/, ''));
         if (!target || /\*/.test(m[1])) continue;
         if (!fs.existsSync(target)) {
           // los parciales SCSS (_mixins) y módulos de node se ignoran

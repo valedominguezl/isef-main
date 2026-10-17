@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
-import { ArrowLeft, ExternalLink, FileText, RotateCw, Save, Trash2, UserRound } from 'lucide-react';
+import { ArrowLeft, ExternalLink, FileText, RotateCw, Save, Send, Settings2, Trash2, UserRound } from 'lucide-react';
 import type { ZodTypeAny } from 'zod';
 import CourseCard from '@/components/cards/CourseCard';
 import NewsCard from '@/components/cards/NewsCard';
 import SpeakerCard from '@/components/cards/SpeakerCard';
-import type { Curso, Disertante, Novedad } from '@/content/schema';
+import type { Certificado, Curso, Disertante, Novedad } from '@/content/schema';
 import { useAdmin } from '../AdminContext';
 import { getCollection, type Field, type QuickToggle } from '../config';
 import { clean, FieldRenderer, Section, useDebounced, type Errors, type RefOption } from '../fields/Fields';
@@ -23,6 +23,11 @@ import { novedadDeCurso } from '../novedadDeCurso';
 import styles from '../Admin.module.scss';
 
 type Obj = Record<string, unknown>;
+
+// Certificados: pdf-lib y las fuentes se bajan solo al abrir esa sección
+const Envios = lazy(() => import('../certificados/Envios'));
+const VistaCertificado = lazy(() => import('../certificados/VistaDatos'));
+const certParaVista = (d: Obj) => import('../certificados/Vista').then((m) => m.certParaVista(d as Partial<Certificado>));
 
 export function validate(schema: ZodTypeAny, data: unknown): { ok: true; value: Obj } | { ok: false; errors: Errors } {
   // Campo faltante → mensaje propio; el resto usa el mensaje del esquema (o el de zod)
@@ -127,7 +132,10 @@ export default function EntryEditor() {
   const cvCol = getCollection('cv')!;
   const isDis = key === 'disertantes';
   const { data: cvLoaded } = useFile(isDis && !isNew ? `content/cv/${slugParam}.json` : undefined);
-  const tab = params.get('tab') === 'cv' && isDis ? 'cv' : 'main';
+  const isCert = key === 'certificados';
+  // Certificados: al elegir un curso de la lista se completa «Dictado por» con sus disertantes
+  const { entries: cursos } = useEntries(isCert ? 'content/cursos' : undefined);
+  const tab = params.get('tab') === 'cv' && isDis ? 'cv' : isCert && !isNew && params.get('tab') !== 'datos' ? 'envios' : 'main';
 
   const [draft, setDraft] = useState<Obj | null>(null);
   const [cvDraft, setCvDraft] = useState<Obj | null>(null);
@@ -188,6 +196,11 @@ export default function EntryEditor() {
   const title = String(draft[col.titleField] || '') || (isNew ? col.newLabel : slugParam);
 
   const update = (d: Obj) => {
+    if (isCert && d.programa !== draft.programa && !String(d.dictadoPor ?? '').trim()) {
+      const curso = cursos?.find((c) => c.data.titulo === d.programa);
+      const nombres = ((curso?.data.disertantes as string[] | undefined) ?? []).map((slug) => refs.disertantes.find((o) => o.value === slug)?.label).filter(Boolean);
+      if (nombres.length) d = { ...d, dictadoPor: nombres.join(' y ') };
+    }
     setDraft(d);
     setDirty(true);
   };
@@ -209,6 +222,7 @@ export default function EntryEditor() {
       });
       if (cvRes && !cvRes.ok && res.ok && !slugError) setParams({ tab: 'cv' });
       else if (tab === 'cv') setParams({});
+      else if (tab === 'envios') setParams({ tab: 'datos' });
       return;
     }
     setErrors({});
@@ -303,6 +317,17 @@ export default function EntryEditor() {
         </div>
       </div>
 
+      {isCert && !isNew && (
+        <div className={styles.tabs} role="tablist">
+          <button type="button" role="tab" aria-selected={tab === 'envios'} onClick={() => setParams({})}>
+            <Send size={18} aria-hidden /> Personas y envíos
+          </button>
+          <button type="button" role="tab" aria-selected={tab === 'main'} onClick={() => setParams({ tab: 'datos' })}>
+            <Settings2 size={18} aria-hidden /> Datos del certificado {Object.keys(mainErrors).length > 0 && <span className={styles.badge}>!</span>}
+          </button>
+        </div>
+      )}
+
       {/* Opciones básicas (visible, destacado, este año…): lo primero que se ve */}
       {col.quick &&
         tab === 'main' &&
@@ -330,6 +355,9 @@ export default function EntryEditor() {
         </div>
       )}
 
+      {tab === 'envios' ? (
+        <CertEnvios draft={draft} slug={slugParam} onCompletar={() => setParams({ tab: 'datos' })} />
+      ) : (
       <div className={styles.editor}>
         <div>
           {tab === 'cv' && cvDraft && (
@@ -361,15 +389,51 @@ export default function EntryEditor() {
         </div>
         {col.preview && (
           <aside className={styles.preview} aria-label="Vista previa">
-            <p className={styles.previewLabel}>Así se ve en el sitio</p>
+            <p className={styles.previewLabel}>{col.preview === 'certificado' ? 'Así sale el certificado (persona de muestra)' : 'Así se ve en el sitio'}</p>
             <div className={styles.previewCard}>
               {col.preview === 'curso' && <CourseCard curso={card<Curso>({ disertantes: [], temario: [] }, 'imagen')} />}
               {col.preview === 'novedad' && <NewsCard novedad={card<Novedad>({}, 'imagen')} />}
               {col.preview === 'disertante' && <SpeakerCard disertante={card<Disertante>({ destacados: [] }, 'foto')} />}
+              {col.preview === 'certificado' && <CertVista draft={p} />}
             </div>
           </aside>
         )}
       </div>
+      )}
     </>
   );
+}
+
+/** Pestaña «Personas y envíos»: necesita los datos del certificado completos y guardados. */
+function CertEnvios({ draft, slug, onCompletar }: { draft: Obj; slug: string; onCompletar: () => void }) {
+  const col = getCollection('certificados')!;
+  const res = validate(col.schema, clean(draft));
+  if (!res.ok)
+    return (
+      <div className={styles.errorBox} role="alert">
+        <p>Faltan datos del certificado (por ejemplo, el link del formulario) para poder leer las respuestas.</p>
+        <Button variant="ghost" icon={Settings2} onClick={onCompletar}>
+          Completar los datos
+        </Button>
+      </div>
+    );
+  return (
+    <Suspense fallback={<SkeletonForm />}>
+      <Envios cert={res.value as Certificado} slug={slug} />
+    </Suspense>
+  );
+}
+
+/** Vista previa del PDF mientras se editan los datos (con una persona de muestra). */
+function CertVista({ draft }: { draft: Obj }) {
+  const [cert, setCert] = useState<Certificado | null>(null);
+  const clave = JSON.stringify(draft);
+  useEffect(() => {
+    let vivo = true;
+    void certParaVista(JSON.parse(clave) as Obj).then((c) => vivo && setCert(c));
+    return () => {
+      vivo = false;
+    };
+  }, [clave]);
+  return <Suspense fallback={null}>{cert && <VistaCertificado cert={cert} />}</Suspense>;
 }
