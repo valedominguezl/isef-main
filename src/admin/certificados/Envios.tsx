@@ -57,11 +57,11 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
   const [vista, setVista] = useState<Persona | null>(null);
   const [editando, setEditando] = useState<Persona | null>(null);
 
-  const cargar = useCallback(async () => {
+  const cargar = useCallback(async (fresco = false) => {
     setCargando(true);
     setError(null);
     try {
-      const [r, e] = await Promise.all([api.certRespuestas(form), api.certEmitidos(form)]);
+      const [r, e] = await Promise.all([api.certRespuestas(form, fresco), api.certEmitidos(form)]);
       setRespuestas(r);
       setEmitidos(e);
       setCuota(r.cuota);
@@ -236,7 +236,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
             </p>
           </div>
           <div className={adm.headActions}>
-            <Button variant="ghost" icon={RotateCw} spin={cargando} onClick={() => void cargar()} disabled={cargando || ocupado}>
+            <Button variant="ghost" icon={RotateCw} spin={cargando} onClick={() => void cargar(true)} disabled={cargando || ocupado}>
               Actualizar
             </Button>
             {lote ? (

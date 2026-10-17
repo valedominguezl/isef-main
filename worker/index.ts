@@ -120,7 +120,7 @@ async function certificados(req: Request, url: URL, env: Env): Promise<Response>
   const form = url.searchParams.get('form') ?? '';
   if (url.pathname === '/api/certificados/respuestas' && req.method === 'GET') {
     if (!FORM_ID.test(form)) return error(400, 'Formulario inválido.');
-    return script(env, 'respuestas', { form });
+    return script(env, 'respuestas', { form, fresco: url.searchParams.get('fresco') === '1' });
   }
   if (url.pathname === '/api/certificados/emitidos' && req.method === 'GET') {
     if (!FORM_ID.test(form)) return error(400, 'Formulario inválido.');

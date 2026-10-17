@@ -59,7 +59,8 @@ export interface Emision {
 export interface AdminApi {
   buscarFotos: (q: string, signal?: AbortSignal) => Promise<FotoStock[]>;
   descargarFoto: (url: string, signal?: AbortSignal) => Promise<Blob>;
-  certRespuestas: (formulario: string) => Promise<RespuestasForm>;
+  /** `fresco`: vuelve a leer la corrección del cuestionario (si no, el Apps Script usa la guardada). */
+  certRespuestas: (formulario: string, fresco?: boolean) => Promise<RespuestasForm>;
   certEmitidos: (formulario: string) => Promise<Emitido[]>;
   certEmitir: (e: Emision) => Promise<{ cuota: number }>;
   /** Firma escaneada (PNG en base64) o null si todavía no se cargó. */
@@ -101,7 +102,7 @@ export function createApi(getToken: () => string | null): AdminApi {
 function api(call: (path: string, init?: RequestInit) => Promise<Response>): AdminApi {
   const form = (f: string) => `form=${encodeURIComponent(f)}`;
   return {
-    certRespuestas: async (f) => (await call(`/api/certificados/respuestas?${form(f)}`)).json() as Promise<RespuestasForm>,
+    certRespuestas: async (f, fresco) => (await call(`/api/certificados/respuestas?${form(f)}${fresco ? '&fresco=1' : ''}`)).json() as Promise<RespuestasForm>,
     certEmitidos: async (f) => ((await (await call(`/api/certificados/emitidos?${form(f)}`)).json()) as { emitidos: Emitido[] }).emitidos ?? [],
     certEmitir: async (e) => (await call('/api/certificados/emitir', { method: 'POST', body: JSON.stringify(e) })).json() as Promise<{ cuota: number }>,
     certFirma: async () => ((await (await call('/api/certificados/firma')).json()) as { png: string | null }).png ?? null,
