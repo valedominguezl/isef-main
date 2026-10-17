@@ -279,7 +279,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
             </p>
           </div>
           <div className={adm.headActions}>
-            <Button variant="ghost" icon={RotateCw} spin={cargando} onClick={() => void cargar(true)} disabled={cargando || ocupado}>
+            <Button variant="ghost" icon={RotateCw} spin={cargando} onClick={() => void cargar()} disabled={cargando || ocupado}>
               Actualizar
             </Button>
             <Button variant="secondary" icon={UserPlus} onClick={() => setAgregando('nueva')} disabled={!respuestas || ocupado}>
