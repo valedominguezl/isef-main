@@ -28,8 +28,11 @@ const ESTADO: Record<Estado, { texto: string; cls: string }> = {
 
 const fechaHora = (iso: string) => new Date(iso).toLocaleString('es-AR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-/** Texto de la actividad para el registro y la página de verificación. */
-const actividadDe = (c: Certificado) => [c.programa?.trim(), c.actividad.replace(/[«»]/g, '').trim()].filter(Boolean).join(' · ');
+/** Texto de la actividad para el registro y la página de verificación: «La clase teórica «…», Curso …». */
+const actividadDe = (c: Certificado) => {
+  const a = c.actividad.trim();
+  return [a.charAt(0).toUpperCase() + a.slice(1), c.programa?.trim()].filter(Boolean).join(', ');
+};
 
 /**
  * Personas que completaron el formulario → vista previa, corrección y envío del certificado por mail.
@@ -56,6 +59,13 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
   const detener = useRef(false);
   const [vista, setVista] = useState<Persona | null>(null);
   const [editando, setEditando] = useState<Persona | null>(null);
+  // Código que va a tener cada certificado todavía no emitido (se ve en la vista previa y se usa al emitir)
+  const [codigosNuevos, setCodigosNuevos] = useState<Record<string, string>>({});
+  const codigoDe = (clave: string) => emitidoDe.get(clave)?.codigo ?? codigosNuevos[clave] ?? nuevoCodigo();
+  const abrirVista = (p: Persona) => {
+    if (!emitidoDe.get(p.clave) && !codigosNuevos[p.clave]) setCodigosNuevos((c) => ({ ...c, [p.clave]: nuevoCodigo() }));
+    setVista(p);
+  };
 
   const cargar = useCallback(async (fresco = false) => {
     setCargando(true);
@@ -103,7 +113,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
   /** Genera el PDF con el código de siempre (o uno nuevo), lo registra y, si `mail`, lo manda. */
   const emitir = async (p: Persona, mail: boolean) => {
     const previo = emitidoDe.get(p.clave);
-    const codigo = previo?.codigo ?? nuevoCodigo();
+    const codigo = codigoDe(p.clave);
     const nota = cert.tipo === 'aprobacion' ? p.nota : null;
     const bytes = await generarCertificado(cert, { nombre: p.nombre, dni: p.dni, nota, codigo }, firma);
     const r = await api.certEmitir({
@@ -338,7 +348,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
                         </td>
                         <td className={s.acciones}>
                           <div>
-                          <IconButton icon={Eye} label={`Ver el certificado de ${p.nombre}`} tip="Vista previa" onClick={() => setVista(p)} />
+                          <IconButton icon={Eye} label={`Ver el certificado de ${p.nombre}`} tip="Vista previa" onClick={() => abrirVista(p)} />
                           <IconButton icon={Pencil} label={`Corregir los datos de ${p.nombre}`} tip="Corregir datos" onClick={() => setEditando(p)} disabled={trabajando || ocupado} />
                           <IconButton icon={Download} label={`Descargar el certificado de ${p.nombre}`} tip="Descargar PDF" onClick={() => void descargar(p)} disabled={trabajando || ocupado || !p.aprobado} />
                           <IconButton
@@ -390,10 +400,11 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
           )
         }
       >
+        {vista && !emitidoDe.get(vista.clave) && <p className={s.notaVista}>El código de verificación queda registrado cuando se envía o se descarga.</p>}
         {vista && (
           <Vista
             cert={cert}
-            datos={{ nombre: vista.nombre, dni: vista.dni, nota: cert.tipo === 'aprobacion' ? vista.nota : null, codigo: emitidoDe.get(vista.clave)?.codigo ?? 'ISEF-XXXX-XXXX' }}
+            datos={{ nombre: vista.nombre, dni: vista.dni, nota: cert.tipo === 'aprobacion' ? vista.nota : null, codigo: emitidoDe.get(vista.clave)?.codigo ?? codigosNuevos[vista.clave] ?? 'ISEF-····-····' }}
             firma={firma}
             firmaVersion={firmaVersion}
             etiqueta={`Vista previa del certificado de ${vista.nombre}`}

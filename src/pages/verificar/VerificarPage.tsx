@@ -93,7 +93,7 @@ export function Component() {
                 <p className={styles.nombre}>{res.nombre}</p>
                 <p>{res.actividad}</p>
                 <p className={styles.meta}>
-                  Emitido el {formatDate(res.fecha)} · Código {res.codigo}
+                  Fecha del certificado: {formatDate(res.fecha)} · Código {res.codigo}
                 </p>
               </div>
             </div>
