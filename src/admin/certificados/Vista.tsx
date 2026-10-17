@@ -19,6 +19,7 @@ export function certParaVista(c: Partial<Certificado>): Certificado {
     ...(c.programa ? { programa: c.programa } : {}),
     ...(c.dictadoPor ? { dictadoPor: c.dictadoPor } : {}),
     ...(c.cargaHoraria ? { cargaHoraria: c.cargaHoraria } : {}),
+    ...(c.resolucion ? { resolucion: c.resolucion } : {}),
   };
 }
 

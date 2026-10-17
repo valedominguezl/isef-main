@@ -5,6 +5,7 @@
  *   GET  /api/certificados/respuestas?form= → respuestas del Google Form (vía el Apps Script del instituto)
  *   GET  /api/certificados/emitidos?form=   → certificados ya emitidos de esa actividad
  *   POST /api/certificados/emitir           → registra un certificado y, si trae mail, lo manda por Gmail
+ *   POST /api/certificados/agregado         → agrega/corrige o quita una persona que no está en el formulario
  *   GET/POST /api/certificados/firma        → firma escaneada del rector (guardada en el Apps Script, no en el repo)
  *   GET  /api/verificar?c=…                 → PÚBLICA: valida un código de certificado (página /verificar)
  * Gratis: no usa servicios pagos. Exige la contraseña del panel (token de GitHub con permiso de escritura),
@@ -93,7 +94,7 @@ async function descargarFoto(url: string): Promise<Response> {
 
 /* ───────────────────────── Certificados (Apps Script) ───────────────────────── */
 
-type Accion = 'respuestas' | 'emitidos' | 'emitir' | 'verificar' | 'firma' | 'guardarFirma';
+type Accion = 'respuestas' | 'emitidos' | 'emitir' | 'verificar' | 'firma' | 'guardarFirma' | 'agregar' | 'quitar';
 
 /** Reenvía el pedido al Apps Script con la clave (que nunca llega al navegador). */
 async function script(env: Env, accion: Accion, datos: Record<string, unknown>): Promise<Response> {
@@ -132,6 +133,13 @@ async function certificados(req: Request, url: URL, env: Env): Promise<Response>
     const e = (await req.json().catch(() => null)) as Record<string, unknown> | null;
     if (!e || !FORM_ID.test(String(e.formulario ?? '')) || !/^ISEF-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(String(e.codigo ?? ''))) return error(400, 'Datos incompletos.');
     return script(env, 'emitir', { emision: e });
+  }
+  if (url.pathname === '/api/certificados/agregado' && req.method === 'POST') {
+    const d = (await req.json().catch(() => null)) as { quitar?: boolean; formulario?: string; clave?: string; nombre?: string } | null;
+    if (!d || !FORM_ID.test(String(d.formulario ?? '')) || !String(d.clave ?? '').trim()) return error(400, 'Datos incompletos.');
+    if (d.quitar) return script(env, 'quitar', { formulario: d.formulario, clave: d.clave });
+    if (!String(d.nombre ?? '').trim()) return error(400, 'Falta el nombre.');
+    return script(env, 'agregar', { persona: d });
   }
   if (url.pathname === '/api/certificados/firma') {
     if (req.method === 'GET') return script(env, 'firma', {});

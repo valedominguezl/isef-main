@@ -19,6 +19,7 @@ arma el PDF              /api/certificados/*        lee el Form · manda el mail
 - **El límite de Gmail** con una cuenta común es de 100 mails por día. "Enviar a todos" se corta al llegar al límite y los que faltan quedan pendientes para el día siguiente.
 - **La verificación** funciona así: cada certificado lleva un código `ISEF-XXXX-XXXX` (al azar, no se puede adivinar) y un QR que lleva a `isefsanluis.net/verificar?c=…`. Esa página muestra nombre, actividad y fecha, nunca el DNI ni el mail.
 - **Si se reenvía**, el certificado mantiene el mismo código.
+- **Personas que no completaron el formulario:** se suman con «Agregar persona» y quedan en la hoja «Agregados» de la planilla de registro.
 - **Las correcciones a mano** (nombre con tildes, nota, mail) se guardan en el navegador de quien las hace. El formulario no se modifica.
 
 ## Instalación (una sola vez, unos 10 minutos)

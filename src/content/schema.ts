@@ -30,6 +30,8 @@ export const cursoSchema = z.object({
   creado: isoDate.optional(),
   modalidad: z.string().optional(),
   duracion: z.string().optional(),
+  /** Carga horaria total («12 horas reloj»): la usan los certificados. */
+  cargaHoraria: z.string().optional(),
   costo: z.string().optional(),
   descripcion: markdown.optional(),
   importante: markdown.optional(),
@@ -107,8 +109,10 @@ export const certificadoSchema = z.object({
   formulario: z.string().regex(/^(https:\/\/docs\.google\.com\/forms\/d\/)?[\w-]{20,}/, 'Pegá el link del formulario de Google'),
   /** «la clase teórica «La atención en los alumnos»» */
   actividad: z.string().min(3),
-  /** «Curso Internacional de Neuroeducación» */
+  /** «Curso Internacional de Neuroeducación» (de la lista de cursos o escrito a mano). */
   programa: z.string().optional(),
+  /** Curso del sitio elegido en «Curso o programa» (si se eligió de la lista). */
+  curso: slug.optional(),
   dictadoPor: z.string().optional(),
   cargaHoraria: z.string().optional(),
   /** Fecha que figura en el certificado. */
@@ -122,6 +126,8 @@ export const certificadoSchema = z.object({
   mensaje: z.string().optional(),
   firmante: z.string().min(3),
   cargo: z.string().min(2),
+  /** Resoluciones bajo el nombre del instituto (vacío = las de siempre, ver RESOLUCION en el panel). */
+  resolucion: z.string().optional(),
 });
 
 /* ------------------------------- Singletons -------------------------------- */

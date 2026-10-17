@@ -4,16 +4,12 @@
  */
 import type { Certificado } from '@/content/schema';
 import sitio from '@content/sitio.json';
-import { formatDate } from '@/lib/format';
 
-export type Estilo = 'normal' | 'negrita' | 'cursiva';
+export type Estilo = 'normal' | 'negrita' | 'cursiva' | 'negritaCursiva';
 export interface Tramo {
   texto: string;
   estilo: Estilo;
 }
-
-/** «2026-10-13» → «13 de octubre de 2026». */
-export const fechaLarga = (iso: string) => formatDate(iso);
 
 /** «17012491» → «17.012.491»; si no son solo números, queda como vino. */
 export function formatoDni(dni: string) {
@@ -33,41 +29,50 @@ function alPrograma(programa: string) {
   return /^(jornada|diplomatura|especializaci|capacitaci|conferencia|tecnicatura|clase|charla|formaci)/i.test(programa) ? `a la ` : 'al ';
 }
 
-/** Lo que va entre «comillas» queda en cursiva. */
-function conCursivas(texto: string): Tramo[] {
-  return texto
-    .split(/(«[^»]*»)/)
-    .filter(Boolean)
-    .map((t) => ({ texto: t, estilo: t.startsWith('«') ? 'cursiva' : 'normal' }));
-}
+export const notaTexto = (nota: number) => `${Math.round(nota)}%`;
 
-export const notaTexto = (nota: number) => `${Math.round(nota)} %`;
+/** «la clase teórica «La atención…»» → con comillas “ ” como en el certificado original. */
+const comillas = (t: string) => t.replace(/«/g, '“').replace(/»/g, '”');
 
-/** Cuerpo del certificado: «aprobó con el 95 % la evaluación de…». */
-export function cuerpo(c: Certificado, nota: number | null | undefined): Tramo[] {
+/** Resoluciones que van debajo del nombre del instituto si la actividad no indica otras. */
+export const RESOLUCION = 'Resolución N.º 04-ME-2022 · Resolución Ministerial Nacional N.º 324/2023';
+
+/** «El rector del Instituto Superior de Educación Física “San Luis”, Dr. Antonino Merenda, certifica que:» */
+export const encabezado = (c: Certificado) => `El ${c.cargo.trim().toLowerCase()} del Instituto Superior de Educación Física “San Luis”, ${c.firmante.trim()}, certifica que:`;
+
+/**
+ * Bloque de abajo, igual al certificado de siempre:
+ * «D.N.I.: 17.012.491, ha asistido a la clase teórica “La atención en los alumnos”, correspondiente al
+ *  *Curso Internacional de Neuroeducación*, dictado por el Dr. Roberto Rosler, habiendo aprobado con el 95%.»
+ */
+export function cuerpo(c: Certificado, dni: string | undefined, nota: number | null | undefined): Tramo[] {
   const t: Tramo[] = [];
   const n = (texto: string) => t.push({ texto, estilo: 'normal' });
-  const b = (texto: string) => t.push({ texto, estilo: 'negrita' });
-  if (c.tipo === 'aprobacion') {
-    n('aprobó');
-    if (nota != null) {
-      n(' con el ');
-      b(notaTexto(nota));
-    }
-    n(' la evaluación de ');
-  } else {
-    n('asistió a ');
-  }
-  t.push(...conCursivas(c.actividad.trim()));
+  const b = (texto: string, estilo: Estilo = 'negrita') => t.push({ texto, estilo });
+  if (dni?.trim()) {
+    n('D.N.I.: ');
+    b(formatoDni(dni));
+    n(', ha asistido a ');
+  } else n('Ha asistido a ');
+  n(comillas(c.actividad.trim()));
   if (c.programa?.trim()) {
     n(`, correspondiente ${alPrograma(c.programa.trim())}`);
-    b(c.programa.trim());
+    b(c.programa.trim(), 'negritaCursiva');
   }
   if (c.dictadoPor?.trim()) n(`, dictado por ${conArticulo(c.dictadoPor.trim())}`);
   if (c.cargaHoraria?.trim()) n(`, con una carga horaria de ${c.cargaHoraria.trim()}`);
+  if (c.tipo === 'aprobacion') {
+    if (nota != null) {
+      n(', habiendo aprobado con el ');
+      b(notaTexto(nota));
+    } else n(', habiendo aprobado la evaluación');
+  }
   n('.');
   return t;
 }
+
+/** «2026-10-13» → «13-10-2026» (como en el certificado original). */
+export const fechaCorta = (iso: string) => iso.split('-').reverse().join('-');
 
 export const titulo = (c: Certificado) => (c.tipo === 'aprobacion' ? 'Certificado de aprobación' : 'Certificado de asistencia');
 

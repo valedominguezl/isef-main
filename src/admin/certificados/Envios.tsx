@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type InputHTMLAttributes } from 'react';
-import { CheckCircle2, Download, Eye, Mail, MailWarning, Pencil, RotateCcw, RotateCw, Search, Send, Square } from 'lucide-react';
+import { CheckCircle2, Download, Eye, Mail, MailWarning, Pencil, RotateCcw, RotateCw, Search, Send, Square, Trash2, UserPlus } from 'lucide-react';
 import { normalize } from '@/lib/format';
 import type { Certificado } from '@/content/schema';
 import { useAdmin } from '../AdminContext';
@@ -8,7 +8,7 @@ import { Button, IconButton } from '../ui/Button';
 import Modal from '../ui/Modal';
 import { useConfirm } from '../ui/ConfirmDialog';
 import { useToast } from '../ui/Toaster';
-import { armarPersonas, conAjuste, estadoDe, guardarAjustes, idFormulario, leerAjustes, type Ajuste, type Estado, type Persona } from './datos';
+import { armarPersonas, claveDe, conAjuste, estadoDe, guardarAjustes, idFormulario, leerAjustes, type Ajuste, type Estado, type Persona } from './datos';
 import { aBase64, generarCertificado } from './pdf';
 import { ASUNTO, completar, MENSAJE, nombreArchivo, notaTexto, nuevoCodigo } from './texto';
 import Vista from './Vista';
@@ -59,6 +59,8 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
   const detener = useRef(false);
   const [vista, setVista] = useState<Persona | null>(null);
   const [editando, setEditando] = useState<Persona | null>(null);
+  /** Persona agregada a mano que se está cargando ('nueva') o corrigiendo. */
+  const [agregando, setAgregando] = useState<Persona | 'nueva' | null>(null);
   // Código que va a tener cada certificado todavía no emitido (se ve en la vista previa y se usa al emitir)
   const [codigosNuevos, setCodigosNuevos] = useState<Record<string, string>>({});
   const codigoDe = (clave: string) => emitidoDe.get(clave)?.codigo ?? codigosNuevos[clave] ?? nuevoCodigo();
@@ -86,7 +88,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
     void cargar();
   }, [cargar]);
 
-  const armado = respuestas ? armarPersonas(cert, respuestas.preguntas, respuestas.respuestas) : null;
+  const armado = respuestas ? armarPersonas(cert, respuestas.preguntas, respuestas.respuestas, respuestas.agregados ?? []) : null;
   const personas = (armado?.lista ?? []).map((p) => conAjuste(p, ajustes[p.clave], cert));
   const emitidoDe = new Map(emitidos.map((e) => [e.clave, e]));
   const conEstado = personas.map((p) => ({ p, e: emitidoDe.get(p.clave), estado: estadoDe(p, emitidoDe.get(p.clave)) }));
@@ -227,6 +229,28 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
     guardarAjustes(slug, next);
   };
 
+  /** Guarda una persona agregada a mano (nueva o corregida) en el registro de Google. */
+  const guardarAgregado = async (d: Datos, previa: Persona | null) => {
+    const clave = claveDe(d.dni, d.email);
+    if (!d.nombre.trim()) throw new Error('Falta el nombre.');
+    if (!clave) throw new Error('Poné el DNI o el mail.');
+    if (clave !== previa?.clave && personas.some((x) => x.clave === clave)) throw new Error('Esa persona ya está en la lista.');
+    const nueva = { clave, nombre: d.nombre.trim(), dni: d.dni.trim(), email: d.email.trim(), nota: cert.tipo === 'aprobacion' ? d.nota : null };
+    await api.certAgregar(form, nueva);
+    if (previa && previa.clave !== clave) await api.certQuitar(form, previa.clave);
+    setRespuestas((r) => (r ? { ...r, agregados: [...(r.agregados ?? []).filter((a) => a.clave !== clave && a.clave !== previa?.clave), nueva] } : r));
+    toast.show({ text: previa ? `Se corrigieron los datos de ${nueva.nombre}.` : `Se agregó a ${nueva.nombre}.`, icon: CheckCircle2 });
+  };
+
+  const quitarAgregado = async (p: Persona) => {
+    const ok = await confirm({ title: `¿Quitar a ${p.nombre} de la lista?`, body: 'Si ya se le envió el certificado, sigue siendo válido.', confirmLabel: 'Quitar' });
+    if (!ok) return;
+    await conAviso(p, async () => {
+      await api.certQuitar(form, p.clave);
+      setRespuestas((r) => (r ? { ...r, agregados: (r.agregados ?? []).filter((a) => a.clave !== p.clave) } : r));
+    });
+  };
+
   const ocupado = lote !== null;
   const sinPreguntas = armado && (!armado.preguntas.nombre || !armado.preguntas.dni);
 
@@ -248,6 +272,9 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
           <div className={adm.headActions}>
             <Button variant="ghost" icon={RotateCw} spin={cargando} onClick={() => void cargar(true)} disabled={cargando || ocupado}>
               Actualizar
+            </Button>
+            <Button variant="secondary" icon={UserPlus} onClick={() => setAgregando('nueva')} disabled={!respuestas || ocupado}>
+              Agregar persona
             </Button>
             {lote ? (
               <Button variant="secondary" icon={Square} onClick={() => (detener.current = true)}>
@@ -337,6 +364,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
                             {p.email || 'sin mail'}
                             {p.intentos > 1 && ` · ${p.intentos} intentos (se toma el mejor)`}
                             {ajustes[p.clave] && ' · corregido a mano'}
+                            {p.manual && ' · agregada a mano'}
                           </small>
                           {falla && <small className={s.falla}>{falla}</small>}
                         </td>
@@ -349,7 +377,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
                         <td className={s.acciones}>
                           <div>
                           <IconButton icon={Eye} label={`Ver el certificado de ${p.nombre}`} tip="Vista previa" onClick={() => abrirVista(p)} />
-                          <IconButton icon={Pencil} label={`Corregir los datos de ${p.nombre}`} tip="Corregir datos" onClick={() => setEditando(p)} disabled={trabajando || ocupado} />
+                          <IconButton icon={Pencil} label={`Corregir los datos de ${p.nombre}`} tip="Corregir datos" onClick={() => (p.manual ? setAgregando(p) : setEditando(p))} disabled={trabajando || ocupado} />
                           <IconButton icon={Download} label={`Descargar el certificado de ${p.nombre}`} tip="Descargar PDF" onClick={() => void descargar(p)} disabled={trabajando || ocupado || !p.aprobado} />
                           <IconButton
                             icon={estado === 'enviado' ? RotateCcw : Mail}
@@ -358,6 +386,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
                             onClick={() => void enviarUno(p, estado === 'enviado')}
                             disabled={trabajando || ocupado || estado === 'no-aprobado' || estado === 'sin-mail' || cuota === 0}
                           />
+                          {p.manual && <IconButton icon={Trash2} label={`Quitar a ${p.nombre} de la lista`} tip="Quitar de la lista" onClick={() => void quitarAgregado(p)} disabled={trabajando || ocupado} />}
                           </div>
                         </td>
                       </tr>
@@ -367,7 +396,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
               </table>
             </div>
           ) : (
-            <p className={s.vacio}>{personas.length ? 'No hay personas con ese filtro.' : 'Todavía nadie completó el formulario.'}</p>
+            <p className={s.vacio}>{personas.length ? 'No hay personas con ese filtro.' : 'Todavía nadie completó el formulario. Podés sumar personas con «Agregar persona».'}</p>
           )}
         </>
       )}
@@ -411,6 +440,18 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
           />
         )}
       </Modal>
+
+      {agregando && (
+        <AgregarPersona
+          persona={agregando === 'nueva' ? null : agregando}
+          conNota={cert.tipo === 'aprobacion'}
+          onClose={() => setAgregando(null)}
+          onSave={async (d) => {
+            await guardarAgregado(d, agregando === 'nueva' ? null : agregando);
+            setAgregando(null);
+          }}
+        />
+      )}
 
       {editando && (
         <EditarPersona
@@ -475,6 +516,62 @@ function EditarPersona({ persona, original, conNota, onClose, onSave }: { person
         {campo('email', 'Mail', { type: 'email' })}
         {conNota && campo('nota', 'Nota (%)', { type: 'number', min: 0, max: 100 })}
         <p className={adm.help}>Los cambios se guardan en este navegador y se usan al generar y enviar. El formulario no se modifica.</p>
+        <button type="submit" hidden />
+      </form>
+    </Modal>
+  );
+}
+
+type Datos = { nombre: string; dni: string; email: string; nota: number | null };
+
+/** Sumar (o corregir) a alguien que no completó el formulario. Queda guardado en la planilla de Google. */
+function AgregarPersona({ persona, conNota, onClose, onSave }: { persona: Persona | null; conNota: boolean; onClose: () => void; onSave: (d: Datos) => Promise<void> }) {
+  const [v, setV] = useState({ nombre: persona?.nombre ?? '', dni: persona?.dni ?? '', email: persona?.email ?? '', nota: persona?.nota == null ? '' : String(persona.nota) });
+  const [error, setError] = useState<string | null>(null);
+  const [guardando, setGuardando] = useState(false);
+  const guardar = async () => {
+    setGuardando(true);
+    setError(null);
+    try {
+      const nota = v.nota.trim() === '' ? null : Math.max(0, Math.min(100, Number(v.nota)));
+      await onSave({ nombre: v.nombre, dni: v.dni, email: v.email, nota: nota != null && Number.isNaN(nota) ? null : nota });
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setGuardando(false);
+    }
+  };
+  const campo = (k: keyof typeof v, label: string, extra: Partial<InputHTMLAttributes<HTMLInputElement>> = {}) => (
+    <label className={adm.field}>
+      <span className={adm.label}>{label}</span>
+      <input className={adm.input} value={v[k]} onChange={(e) => setV({ ...v, [k]: e.target.value })} {...extra} />
+    </label>
+  );
+  return (
+    <Modal
+      open
+      onClose={onClose}
+      title={persona ? 'Corregir persona agregada' : 'Agregar persona'}
+      icon={UserPlus}
+      actions={
+        <Button variant="primary" icon={CheckCircle2} spin={guardando} disabled={guardando} onClick={() => void guardar()}>
+          {persona ? 'Guardar' : 'Agregar'}
+        </Button>
+      }
+    >
+      <form
+        className={s.editar}
+        onSubmit={(e) => {
+          e.preventDefault();
+          void guardar();
+        }}
+      >
+        {campo('nombre', 'Nombre y apellido (como sale en el certificado)', { autoFocus: true })}
+        {campo('dni', 'DNI', { inputMode: 'numeric' })}
+        {campo('email', 'Mail (adonde se envía)', { type: 'email' })}
+        {conNota && campo('nota', 'Nota (%) — opcional', { type: 'number', min: 0, max: 100 })}
+        {error && <p className={adm.error}>{error}</p>}
+        <p className={adm.help}>Para alguien que no completó el formulario. Se guarda en la planilla de registro de Google (no en el sitio).</p>
         <button type="submit" hidden />
       </form>
     </Modal>

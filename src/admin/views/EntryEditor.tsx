@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
-import { ArrowLeft, ExternalLink, FileText, RotateCw, Save, Send, Settings2, Trash2, UserRound } from 'lucide-react';
+import { ArrowLeft, ExternalLink, FileText, RotateCw, Save, Send, Settings2, Trash2, UserRound, WandSparkles } from 'lucide-react';
 import type { ZodTypeAny } from 'zod';
 import CourseCard from '@/components/cards/CourseCard';
 import NewsCard from '@/components/cards/NewsCard';
@@ -19,6 +19,7 @@ import Notice from './Notice';
 import { Button } from '../ui/Button';
 import DeleteButton from '../ui/DeleteButton';
 import { useToast } from '../ui/Toaster';
+import { useConfirm } from '../ui/ConfirmDialog';
 import { novedadDeCurso } from '../novedadDeCurso';
 import styles from '../Admin.module.scss';
 
@@ -123,6 +124,7 @@ export default function EntryEditor() {
   const navigate = useNavigate();
   const { stage, mediaUrl } = useAdmin();
   const toast = useToast();
+  const confirm = useConfirm();
   const refs = useRefs();
   const { data: loaded, error: loadError } = useFile(isNew || !col ? undefined : `${col.dir}/${slugParam}.json`);
   // Solo al crear: para no pisar una entrada que ya existe con el mismo título
@@ -196,13 +198,38 @@ export default function EntryEditor() {
   const title = String(draft[col.titleField] || '') || (isNew ? col.newLabel : slugParam);
 
   const update = (d: Obj) => {
-    if (isCert && d.programa !== draft.programa && !String(d.dictadoPor ?? '').trim()) {
+    if (isCert && d.programa !== draft.programa) {
       const curso = cursos?.find((c) => c.data.titulo === d.programa);
-      const nombres = ((curso?.data.disertantes as string[] | undefined) ?? []).map((slug) => refs.disertantes.find((o) => o.value === slug)?.label).filter(Boolean);
-      if (nombres.length) d = { ...d, dictadoPor: nombres.join(' y ') };
+      // El curso vinculado sigue lo que dice «Curso o programa»
+      const { curso: _previo, ...resto } = d;
+      d = curso ? { ...resto, curso: curso.slug } : resto;
+      if (curso) void completarDesdeCurso(d, curso.data);
     }
     setDraft(d);
     setDirty(true);
+  };
+
+  /** Certificados: al elegir un curso, ofrece completar disertantes, carga horaria y nombre con sus datos. */
+  const completarDesdeCurso = async (d: Obj, curso: Obj) => {
+    const nombres = ((curso.disertantes as string[] | undefined) ?? []).map((slug) => refs.disertantes.find((o) => o.value === slug)?.label).filter(Boolean);
+    const datos: [string, string, string][] = [
+      ['dictadoPor', 'Dictado por', nombres.join(' y ')],
+      ['cargaHoraria', 'Carga horaria', String(curso.cargaHoraria ?? '')],
+      ['titulo', 'Nombre', String(d.titulo ?? '').trim() ? '' : String(curso.titulo ?? '')],
+    ];
+    const cambios = datos.filter(([k, , v]) => v.trim() && String(d[k] ?? '').trim() !== v);
+    if (!cambios.length) return;
+    const ok = await confirm({
+      title: `¿Completar con los datos de «${String(curso.titulo)}»?`,
+      body: cambios.map(([, label, v]) => `${label}: ${v}`).join(' · '),
+      confirmLabel: 'Completar',
+      icon: WandSparkles,
+      tono: 'accion',
+    });
+    if (!ok) return;
+    const antes = Object.fromEntries(cambios.map(([k]) => [k, d[k]]));
+    setDraft((prev) => (prev ? { ...prev, ...Object.fromEntries(cambios.map(([k, , v]) => [k, v])) } : prev));
+    toast.show({ text: `Se completó: ${cambios.map(([, label]) => label.toLowerCase()).join(', ')}.`, undo: () => setDraft((prev) => (prev ? { ...prev, ...antes } : prev)) });
   };
 
   const save = () => {

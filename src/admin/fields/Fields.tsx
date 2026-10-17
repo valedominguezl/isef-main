@@ -7,6 +7,7 @@ import type { Field } from '../config';
 import { Button, IconButton } from '../ui/Button';
 import DeleteButton from '../ui/DeleteButton';
 import StockPhotoPicker from './StockPhotoPicker';
+import Combobox from './Combobox';
 import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
 
@@ -326,6 +327,12 @@ export function FieldRenderer(props: FieldProps) {
     case 'text':
     case 'url':
     case 'email':
+      if (field.type === 'text' && field.sugerencias)
+        return (
+          <Wrapper field={field} error={error} htmlFor={id}>
+            <Combobox id={id} value={str} onChange={onChange} opciones={(refs[field.sugerencias] ?? []).map((o) => o.label)} placeholder={field.placeholder} />
+          </Wrapper>
+        );
       return (
         <Wrapper field={field} error={error} htmlFor={id} counter={field.max ? <Counter n={str.length} max={field.max} /> : null}>
           <input
@@ -335,16 +342,7 @@ export function FieldRenderer(props: FieldProps) {
             value={str}
             placeholder={field.placeholder}
             onChange={(e) => onChange(e.target.value)}
-            list={field.type === 'text' && field.sugerencias ? `${id}-lista` : undefined}
-            autoComplete={field.type === 'text' && field.sugerencias ? 'off' : undefined}
           />
-          {field.type === 'text' && field.sugerencias && (
-            <datalist id={`${id}-lista`}>
-              {(refs[field.sugerencias] ?? []).map((o) => (
-                <option key={o.value} value={o.label} />
-              ))}
-            </datalist>
-          )}
         </Wrapper>
       );
     case 'textarea':

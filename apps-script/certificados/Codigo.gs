@@ -29,6 +29,12 @@ function doPost(e) {
         return salida(emitir(p.emision));
       case 'verificar':
         return salida(verificar(p.codigo));
+      case 'agregar':
+        agregar(p.persona);
+        return salida({ ok: true });
+      case 'quitar':
+        quitar(p.formulario, p.clave);
+        return salida({ ok: true });
       case 'firma':
         return salida({ png: leerFirma() });
       case 'guardarFirma':
@@ -189,7 +195,7 @@ function respuestas(formId, fresco) {
   }
   // El título interno del formulario puede estar vacío: se usa el nombre de la planilla («… (respuestas)»)
   const titulo = form.getTitle() || hojaResp.getParent().getName().replace(/\s*\((respuestas|responses)\)\s*$/i, '');
-  return { titulo: titulo, preguntas: preguntas, respuestas: lista, cuota: MailApp.getRemainingDailyQuota() };
+  return { titulo: titulo, preguntas: preguntas, respuestas: lista, agregados: agregados(formId), cuota: MailApp.getRemainingDailyQuota() };
 }
 
 /* ───────────────────────── Registro de emitidos ───────────────────────── */
@@ -255,6 +261,59 @@ function emitir(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+/* ───────────────────────── Personas agregadas a mano ───────────────────────── */
+// Quienes no completaron el formulario pero también reciben certificado (hoja «Agregados» del registro).
+const AGREGADOS = 'Agregados';
+
+function hojaAgregados() {
+  const ss = hoja().getParent();
+  let h = ss.getSheetByName(AGREGADOS);
+  if (!h) {
+    h = ss.insertSheet(AGREGADOS);
+    h.appendRow(['Formulario', 'Clave', 'Nombre', 'DNI', 'Email', 'Nota', 'Agregado']);
+    h.setFrozenRows(1);
+    h.getRange('A:E').setNumberFormat('@');
+  }
+  return h;
+}
+
+function agregados(form) {
+  const h = hoja().getParent().getSheetByName(AGREGADOS);
+  if (!h) return [];
+  return h
+    .getDataRange()
+    .getValues()
+    .slice(1)
+    .filter(function (r) {
+      return r[0] === form;
+    })
+    .map(function (r) {
+      return { clave: String(r[1]), nombre: r[2], dni: String(r[3]), email: r[4], nota: r[5] === '' ? null : Number(r[5]), fecha: iso(r[6]) };
+    });
+}
+
+function agregar(p) {
+  if (!p || !p.formulario || !p.clave || !p.nombre) throw new Error('Faltan datos de la persona.');
+  const h = hojaAgregados();
+  const v = h.getDataRange().getValues();
+  const fila = [p.formulario, p.clave, p.nombre, p.dni || '', p.email || '', p.nota == null ? '' : p.nota, new Date()];
+  for (let k = 1; k < v.length; k++) {
+    if (v[k][0] === p.formulario && String(v[k][1]) === p.clave) {
+      fila[6] = v[k][6] || fila[6];
+      h.getRange(k + 1, 1, 1, fila.length).setValues([fila]);
+      return;
+    }
+  }
+  h.appendRow(fila);
+}
+
+function quitar(form, clave) {
+  const h = hoja().getParent().getSheetByName(AGREGADOS);
+  if (!h) return;
+  const v = h.getDataRange().getValues();
+  for (let k = v.length - 1; k >= 1; k--) if (v[k][0] === form && String(v[k][1]) === clave) h.deleteRow(k + 1);
 }
 
 /** Para la página pública /verificar: solo nombre, actividad y fecha (nunca DNI ni mail). */

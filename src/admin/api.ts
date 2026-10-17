@@ -23,10 +23,21 @@ export interface RespuestaForm {
   campos: Record<string, string>;
 }
 
+/** Persona agregada a mano (no completó el formulario). */
+export interface Agregado {
+  clave: string;
+  nombre: string;
+  dni: string;
+  email: string;
+  nota: number | null;
+  fecha?: string | null;
+}
+
 export interface RespuestasForm {
   titulo: string;
   preguntas: string[];
   respuestas: RespuestaForm[];
+  agregados?: Agregado[];
   /** Mails que Gmail todavía deja mandar hoy. */
   cuota: number;
 }
@@ -64,6 +75,8 @@ export interface AdminApi {
   certEmitidos: (formulario: string) => Promise<Emitido[]>;
   certEmitir: (e: Emision) => Promise<{ cuota: number }>;
   /** Firma escaneada (PNG en base64) o null si todavía no se cargó. */
+  certAgregar: (formulario: string, p: Agregado) => Promise<void>;
+  certQuitar: (formulario: string, clave: string) => Promise<void>;
   certFirma: () => Promise<string | null>;
   certGuardarFirma: (png: string | null) => Promise<void>;
 }
@@ -105,6 +118,12 @@ function api(call: (path: string, init?: RequestInit) => Promise<Response>): Adm
     certRespuestas: async (f, fresco) => (await call(`/api/certificados/respuestas?${form(f)}${fresco ? '&fresco=1' : ''}`)).json() as Promise<RespuestasForm>,
     certEmitidos: async (f) => ((await (await call(`/api/certificados/emitidos?${form(f)}`)).json()) as { emitidos: Emitido[] }).emitidos ?? [],
     certEmitir: async (e) => (await call('/api/certificados/emitir', { method: 'POST', body: JSON.stringify(e) })).json() as Promise<{ cuota: number }>,
+    certAgregar: async (formulario, p) => {
+      await call('/api/certificados/agregado', { method: 'POST', body: JSON.stringify({ formulario, ...p }) });
+    },
+    certQuitar: async (formulario, clave) => {
+      await call('/api/certificados/agregado', { method: 'POST', body: JSON.stringify({ formulario, clave, quitar: true }) });
+    },
     certFirma: async () => ((await (await call('/api/certificados/firma')).json()) as { png: string | null }).png ?? null,
     certGuardarFirma: async (png) => {
       await call('/api/certificados/firma', { method: 'POST', body: JSON.stringify({ png }) });
@@ -119,7 +138,16 @@ const demoEmitidos = new Map<string, Emitido>();
 let demoCuota = 100;
 const espera = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const FIRMA_DEMO = 'isef-cert-firma-demo';
-const certDemo: Pick<AdminApi, 'certRespuestas' | 'certEmitidos' | 'certEmitir' | 'certFirma' | 'certGuardarFirma'> = {
+const demoAgregados = new Map<string, Agregado>();
+const certDemo: Pick<AdminApi, 'certRespuestas' | 'certEmitidos' | 'certEmitir' | 'certFirma' | 'certGuardarFirma' | 'certAgregar' | 'certQuitar'> = {
+  async certAgregar(_f, p) {
+    await espera(300);
+    demoAgregados.set(p.clave, { ...p, fecha: new Date().toISOString() });
+  },
+  async certQuitar(_f, clave) {
+    await espera(300);
+    demoAgregados.delete(clave);
+  },
   async certFirma() {
     try {
       return localStorage.getItem(FIRMA_DEMO);
@@ -155,6 +183,7 @@ const certDemo: Pick<AdminApi, 'certRespuestas' | 'certEmitidos' | 'certEmitir' 
         r('4', '2026-10-13T12:26:16Z', 'lucia@example.com', 'Lucía Fernández', '41222333', 35),
         r('5', '2026-10-13T12:29:07Z', '', 'Sofía Martínez Castro', '39555111', 90),
       ],
+      agregados: [...demoAgregados.values()],
       cuota: demoCuota,
     };
   },

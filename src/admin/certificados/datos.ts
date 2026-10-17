@@ -3,7 +3,7 @@
  * una por DNI (o mail), con su mejor intento, el nombre prolijo y si aprobó.
  */
 import type { Certificado } from '@/content/schema';
-import type { Emitido, RespuestaForm } from '../api';
+import type { Agregado, Emitido, RespuestaForm } from '../api';
 
 export interface Persona {
   /** DNI solo con números (o el mail si no hay DNI): identifica a la persona en el registro. */
@@ -15,6 +15,8 @@ export interface Persona {
   intentos: number;
   fecha: string;
   aprobado: boolean;
+  /** Agregada a mano desde el panel (no completó el formulario). */
+  manual?: boolean;
 }
 
 /** Lo que se corrige a mano antes de enviar (queda guardado en este navegador). */
@@ -46,7 +48,12 @@ export function nombreProlijo(s: string) {
 
 const soloNumeros = (s: string) => s.replace(/\D/g, '');
 
-export function armarPersonas(cert: Certificado, preguntas: string[], respuestas: RespuestaForm[]) {
+/** Clave de una persona: el DNI solo con números o, si no hay, el mail. */
+export const claveDe = (dni: string, email: string) => dni.replace(/\D/g, '') || email.trim().toLowerCase();
+
+const aprueba = (cert: Certificado, nota: number | null) => cert.tipo !== 'aprobacion' || cert.notaMinima == null || (nota ?? 0) >= cert.notaMinima;
+
+export function armarPersonas(cert: Certificado, preguntas: string[], respuestas: RespuestaForm[], agregados: Agregado[] = []) {
   const q = detectarPreguntas(cert, preguntas);
   const porClave = new Map<string, { mejor: RespuestaForm; nota: number | null; intentos: number }>();
   for (const r of respuestas) {
@@ -68,8 +75,12 @@ export function armarPersonas(cert: Certificado, preguntas: string[], respuestas
     nota: nota == null ? null : Math.round(nota),
     intentos,
     fecha: r.fecha,
-    aprobado: cert.tipo !== 'aprobacion' || cert.notaMinima == null || (nota ?? 0) >= cert.notaMinima,
+    aprobado: aprueba(cert, nota),
   }));
+  // Agregados a mano (si la persona también está en el formulario, manda el formulario)
+  for (const a of agregados)
+    if (!porClave.has(a.clave))
+      lista.push({ clave: a.clave, nombre: a.nombre, dni: a.dni, email: a.email, nota: a.nota, intentos: 0, fecha: a.fecha ?? '', aprobado: aprueba(cert, a.nota), manual: true });
   lista.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
   return { lista, preguntas: q };
 }

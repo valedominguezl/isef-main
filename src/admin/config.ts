@@ -20,6 +20,7 @@ import {
 } from '@/content/schema';
 import { CV_SECCIONES, NOVEDAD_CATEGORIAS } from '@/content/constants';
 import { PAGINAS } from './paginasConfig';
+import { ASUNTO, MENSAJE, RESOLUCION } from './certificados/texto';
 
 export type Field =
   | {
@@ -183,6 +184,7 @@ export const COLLECTIONS: CollectionConfig[] = [
       { type: 'date', name: 'creado', label: 'Publicado el', help: 'Muestra «¡Nuevo!» durante 6 meses desde esta fecha.' },
       { type: 'text', name: 'modalidad', label: 'Modalidad', placeholder: 'Online por Zoom / Presencial en la sede principal' },
       { type: 'text', name: 'duracion', label: 'Duración y horario', placeholder: '5 encuentros, jueves de 19 a 21 h' },
+      { type: 'text', name: 'cargaHoraria', label: 'Carga horaria total', placeholder: '12 horas reloj', help: 'Para los certificados: se completa sola al elegir este curso.' },
       { type: 'text', name: 'costo', label: 'Costo', placeholder: 'Gratuito para alumnos' },
       { type: 'markdown', name: 'descripcion', label: 'Descripción', rows: 10 },
       {
@@ -329,46 +331,57 @@ export const COLLECTIONS: CollectionConfig[] = [
         type: 'section',
         name: 'textoCert',
         label: 'Texto del certificado',
+        help: 'Elegí el curso primero: completa solo «Dictado por» y la carga horaria.',
         fields: [
-          { type: 'text', name: 'actividad', label: 'Actividad', required: true, placeholder: 'la clase teórica «La atención en los alumnos»', help: 'Lo que va entre « » sale en cursiva.' },
           {
             type: 'text',
             name: 'programa',
             label: 'Curso o programa',
-            placeholder: 'Elegí un curso de la lista o escribilo',
+            placeholder: 'Elegí un curso cargado o escribí otro',
             sugerencias: 'cursos',
-            help: 'Al hacer clic se despliegan los cursos cargados; también se puede escribir otro.',
           },
-          { type: 'text', name: 'dictadoPor', label: 'Dictado por', placeholder: 'Elegí un disertante o escribilo', sugerencias: 'disertantes' },
-          { type: 'text', name: 'cargaHoraria', label: 'Carga horaria (opcional)', placeholder: '4 horas reloj' },
+          { type: 'text', name: 'actividad', label: 'Actividad', required: true, placeholder: 'la clase teórica «La atención en los alumnos»', help: 'Va después de «ha asistido a…». Lo que pongas entre « » sale entre comillas.' },
+          { type: 'text', name: 'dictadoPor', label: 'Dictado por', placeholder: 'Elegí un disertante o escribí otro nombre', sugerencias: 'disertantes' },
+          { type: 'text', name: 'cargaHoraria', label: 'Carga horaria (opcional)', placeholder: '4 horas reloj', help: 'Si el curso la tiene cargada, se completa sola.' },
         ],
       },
       {
         type: 'section',
         name: 'firmaCert',
-        label: 'Firma',
+        label: 'Firma y encabezado',
         fields: [
           { type: 'text', name: 'firmante', label: 'Nombre', required: true },
           { type: 'text', name: 'cargo', label: 'Cargo', required: true },
+          { type: 'text', name: 'resolucion', label: 'Resoluciones (debajo del nombre del instituto)', placeholder: RESOLUCION, help: 'Vacío = las de la plantilla actual (gris).' },
         ],
       },
       {
         type: 'section',
-        name: 'avanzado',
-        label: 'Formulario y mail',
+        name: 'mailCert',
+        label: 'Mail que recibe cada persona',
+        help: 'El certificado va adjunto. Si dejás esto vacío se usa el texto de ejemplo (gris).',
         collapsed: true,
         fields: [
-          { type: 'number', name: 'notaMinima', label: 'Nota mínima para aprobar (%)', help: 'Vacío = todos figuran como aprobados.' },
-          { type: 'text', name: 'preguntaNombre', label: 'Pregunta del nombre', help: 'Solo si no se detecta sola: el título exacto de la pregunta.' },
-          { type: 'text', name: 'preguntaDni', label: 'Pregunta del DNI', help: 'Solo si no se detecta sola.' },
-          { type: 'text', name: 'asunto', label: 'Asunto del mail', placeholder: 'Tu certificado: {actividad}' },
+          { type: 'text', name: 'asunto', label: 'Asunto', placeholder: ASUNTO.replace('{actividad}', 'Curso Internacional de Neuroeducación') },
           {
             type: 'textarea',
             name: 'mensaje',
-            label: 'Mensaje del mail',
-            rows: 7,
-            help: 'Vacío = mensaje estándar. Se pueden usar {nombre}, {nombreCompleto}, {actividad}, {codigo} y {verificar} (link para verificar).',
+            label: 'Mensaje',
+            rows: 8,
+            placeholder: MENSAJE,
+            help: 'Palabras que se reemplazan solas: {nombre} (primer nombre), {nombreCompleto}, {actividad}, {codigo} y {verificar} (link para verificar).',
           },
+        ],
+      },
+      {
+        type: 'section',
+        name: 'ajustesForm',
+        label: 'Ajustes avanzados (casi nunca hacen falta)',
+        collapsed: true,
+        fields: [
+          { type: 'number', name: 'notaMinima', label: 'Nota mínima para aprobar (%)', help: 'Si la ponés, quienes tengan menos figuran como «No aprobó» y no se les envía. Vacío = todos aprueban.' },
+          { type: 'text', name: 'preguntaNombre', label: 'Pregunta del formulario con el nombre', help: 'Solo si el panel avisa que no la encuentra: copiá el título exacto de la pregunta.' },
+          { type: 'text', name: 'preguntaDni', label: 'Pregunta del formulario con el DNI', help: 'Igual que la anterior.' },
         ],
       },
     ],
