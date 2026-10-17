@@ -132,6 +132,18 @@ function parrafo(page: PDFPage, tramos: Tramo[], f: Fuentes, xMm: number, yMm: n
       actual += ancho(p);
     }
   }
+  // Sin una palabra sola en la última línea: si queda muy corta, baja también la última palabra de la anterior
+  const ultima = lineas[lineas.length - 1];
+  const previa = lineas[lineas.length - 2];
+  const anchoLinea = (l: typeof ultima) => l.reduce((t, x) => t + ancho(x), 0);
+  if (previa && anchoLinea(ultima) < maxMm * MM * 0.2) {
+    const k = previa.map((x) => x.texto === ' ').lastIndexOf(true);
+    if (k > 0) {
+      const palabra = previa.splice(k + 1);
+      const espacio = previa.pop()!;
+      lineas[lineas.length - 1] = [...palabra, espacio, ...ultima];
+    }
+  }
   let y = yMm;
   lineas.forEach((linea, i) => {
     y = yMm + i * interlinea;
@@ -216,9 +228,9 @@ export async function generarCertificado(cert: Certificado, d: DatosCertificado,
 
   const fx = 239;
   if (firma) {
-    // La firma entra en una caja de 62 × 25 mm apoyada sobre la línea (la cruza un poco, como una firma real)
+    // La firma entra en una caja de 66 × 30 mm apoyada sobre la línea (la cruza un poco, como una firma real)
     const img = await pdf.embedPng(firma);
-    const k = Math.min((62 * MM) / img.width, (25 * MM) / img.height);
+    const k = Math.min((66 * MM) / img.width, (30 * MM) / img.height);
     page.drawImage(img, { x: fx * MM - (img.width * k) / 2, y: Y(184), width: img.width * k, height: img.height * k });
   }
   page.drawLine({ start: { x: (fx - 32) * MM, y: Y(181) }, end: { x: (fx + 32) * MM, y: Y(181) }, thickness: 0.8, color: C.tinta });

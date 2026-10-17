@@ -52,18 +52,20 @@ export function useFirma(api: AdminApi) {
 
 /**
  * Saca el fondo de la foto o escaneo de la firma y recorta lo que sobra.
- * Si la tinta es azul, se queda solo con lo azul (así desaparece el texto impreso que la cruza);
- * si no, usa lo oscuro. Devuelve un PNG transparente de hasta 1200 px de ancho.
+ * Si la tinta es azul, se queda solo con lo azul (así desaparece el texto impreso que la cruza) y une los
+ * pequeños cortes que deja ese texto; si no, usa lo oscuro. Las imágenes chicas se agrandan al doble antes,
+ * para que el trazo quede suave. Devuelve un PNG transparente de hasta 1200 px de ancho.
  */
 export async function limpiarFirma(archivo: File): Promise<ArrayBuffer> {
   const img = await createImageBitmap(archivo);
-  const escala = Math.min(1, 1600 / img.width);
+  const escala = img.width < 900 ? 2 : Math.min(1, 1600 / img.width);
   const w = Math.round(img.width * escala);
   const h = Math.round(img.height * escala);
   const c = document.createElement('canvas');
   c.width = w;
   c.height = h;
   const ctx = c.getContext('2d', { willReadFrequently: true })!;
+  ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(img, 0, 0, w, h);
   const datos = ctx.getImageData(0, 0, w, h);
   const p = datos.data;
@@ -71,15 +73,22 @@ export async function limpiarFirma(archivo: File): Promise<ArrayBuffer> {
   let azules = 0;
   for (let i = 0; i < p.length; i += 4) if (azulDe(i) > 40) azules++;
   const tintaAzul = azules > (w * h) / 500;
-  let [x0, y0, x1, y1] = [w, h, 0, 0];
-  for (let i = 0; i < p.length; i += 4) {
+  // 1) Tinta → opacidad (umbral suave para no perder los trazos finos)
+  const a = new Float32Array(w * h);
+  for (let k = 0, i = 0; k < w * h; k++, i += 4) {
     const oscuro = 255 - (p[i] + p[i + 1] + p[i + 2]) / 3;
-    const a = Math.max(0, Math.min(255, tintaAzul ? (azulDe(i) - 18) * 4 : (oscuro - 60) * 2.5));
-    // Tinta pareja (azul o casi negra) y el resto transparente
-    [p[i], p[i + 1], p[i + 2], p[i + 3]] = tintaAzul ? [38, 44, 140, a] : [31, 27, 58, a];
-    if (a > 40) {
-      const px = (i / 4) % w;
-      const py = Math.floor(i / 4 / w);
+    a[k] = Math.max(0, Math.min(255, tintaAzul ? (azulDe(i) - 10) * 3.2 : (oscuro - 50) * 2.5));
+  }
+  // 2) Cierre (dilatar y erosionar): une los cortes donde el texto impreso cruza el trazo azul
+  const cerrado = tintaAzul ? cerrar(a, w, h, 3) : a;
+  let [x0, y0, x1, y1] = [w, h, 0, 0];
+  for (let k = 0; k < w * h; k++) {
+    const v = 255 * Math.pow(Math.max(a[k], cerrado[k] * 0.92) / 255, 0.55); // tinta pareja
+    const i = k * 4;
+    [p[i], p[i + 1], p[i + 2], p[i + 3]] = tintaAzul ? [34, 40, 138, v] : [31, 27, 58, v];
+    if (v > 40) {
+      const px = k % w;
+      const py = Math.floor(k / w);
       x0 = Math.min(x0, px);
       y0 = Math.min(y0, py);
       x1 = Math.max(x1, px);
@@ -94,7 +103,33 @@ export async function limpiarFirma(archivo: File): Promise<ArrayBuffer> {
   const k = Math.min(1, 1200 / cw);
   final.width = Math.round(cw * k);
   final.height = Math.round(ch * k);
-  final.getContext('2d')!.drawImage(c, cx, cy, cw, ch, 0, 0, final.width, final.height);
+  const fctx = final.getContext('2d')!;
+  fctx.filter = 'blur(0.5px)';
+  fctx.drawImage(c, cx, cy, cw, ch, 0, 0, final.width, final.height);
   const blob = await new Promise<Blob>((ok, mal) => final.toBlob((b) => (b ? ok(b) : mal(new Error('No se pudo procesar la imagen'))), 'image/png'));
   return blob.arrayBuffer();
+}
+
+/** Cierre morfológico con un disco de radio `r` (máximo y después mínimo de los vecinos). */
+function cerrar(src: Float32Array, w: number, h: number, r: number) {
+  const pasar = (de: Float32Array, max: boolean) => {
+    const out = new Float32Array(w * h);
+    for (let y = 0; y < h; y++)
+      for (let x = 0; x < w; x++) {
+        let v = max ? 0 : 255;
+        for (let dy = -r; dy <= r; dy++) {
+          const yy = y + dy;
+          if (yy < 0 || yy >= h) continue;
+          for (let dx = -r; dx <= r; dx++) {
+            const xx = x + dx;
+            if (xx < 0 || xx >= w || dx * dx + dy * dy > r * r) continue;
+            const s = de[yy * w + xx];
+            v = max ? Math.max(v, s) : Math.min(v, s);
+          }
+        }
+        out[y * w + x] = v;
+      }
+    return out;
+  };
+  return pasar(pasar(src, true), false);
 }

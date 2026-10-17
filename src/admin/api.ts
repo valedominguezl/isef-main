@@ -38,6 +38,8 @@ export interface RespuestasForm {
   preguntas: string[];
   respuestas: RespuestaForm[];
   agregados?: Agregado[];
+  /** Certificados ya emitidos de este formulario (las versiones nuevas del Apps Script los mandan acá). */
+  emitidos?: Emitido[];
   /** Mails que Gmail todavía deja mandar hoy. */
   cuota: number;
 }
@@ -184,6 +186,7 @@ const certDemo: Pick<AdminApi, 'certRespuestas' | 'certEmitidos' | 'certEmitir' 
         r('5', '2026-10-13T12:29:07Z', '', 'Sofía Martínez Castro', '39555111', 90),
       ],
       agregados: [...demoAgregados.values()],
+      emitidos: [...demoEmitidos.values()],
       cuota: demoCuota,
     };
   },

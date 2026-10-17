@@ -95,40 +95,60 @@ const RE_PUNTAJE = /puntuaci|puntaje|score/i;
 const RE_MAIL_COL = /correo|e-?mail/i;
 
 /*
- * Respuestas correctas del cuestionario (opción múltiple, casillas y desplegables), para poner la nota cuando la
- * planilla no trae la columna de puntuación. Leerlas tarda unos segundos: quedan en caché 6 horas
- * («Actualizar» en el panel las vuelve a leer). Las preguntas de texto con puntaje no se pueden corregir acá.
+ * Lo que no cambia de un formulario (título, si es cuestionario, dónde está su planilla y la clave de corrección)
+ * queda en caché 6 horas: así cada carga lee solo la planilla, sin abrir el formulario (que es lo lento).
+ * «Actualizar» en el panel lo vuelve a leer.
  */
-function claveDeCorreccion(form, fresco) {
+function infoDelForm(formId, fresco) {
   const cache = CacheService.getScriptCache();
-  const k = 'correccion-' + form.getId();
+  const k = 'form2-' + formId;
   const guardada = fresco ? null : cache.get(k);
   if (guardada) return JSON.parse(guardada);
+  const form = FormApp.openById(formId);
+  const hojaResp = planillaDeRespuestas(form);
+  const quiz = form.isQuiz();
+  // Clave de corrección: preguntas de opción múltiple, casillas y desplegables con puntaje y respuesta correcta
   const preguntas = [];
+  let conPuntos = 0;
+  const tipos = [];
   form.getItems().forEach(function (i) {
     const tipo = String(i.getType());
+    tipos.push(tipo);
+    if (!quiz) return;
     const it = tipo === 'MULTIPLE_CHOICE' ? i.asMultipleChoiceItem() : tipo === 'CHECKBOX' ? i.asCheckboxItem() : tipo === 'LIST' ? i.asListItem() : null;
     if (!it) return;
     const puntos = it.getPoints() || 0;
     if (!puntos) return;
+    conPuntos++;
     const correctas = [];
     it.getChoices().forEach(function (c) {
       if (c.isCorrectAnswer()) correctas.push(String(c.getValue()).trim());
     });
     if (correctas.length) preguntas.push({ titulo: i.getTitle().trim(), puntos: puntos, correctas: correctas, varias: tipo === 'CHECKBOX' });
   });
-  const clave = {
-    preguntas: preguntas,
-    maximo: preguntas.reduce(function (s, p) {
-      return s + p.puntos;
-    }, 0),
+  const info = {
+    titulo: form.getTitle(),
+    quiz: quiz,
+    mail: form.collectsEmail(),
+    planilla: hojaResp.getParent().getId(),
+    hoja: hojaResp.getSheetId(),
+    clave: quiz
+      ? {
+          preguntas: preguntas,
+          maximo: preguntas.reduce(function (t, x) {
+            return t + x.puntos;
+          }, 0),
+        }
+      : null,
+    tipos: tipos,
+    conPuntos: conPuntos,
   };
   try {
-    cache.put(k, JSON.stringify(clave), 21600);
+    cache.put(k, JSON.stringify(info), 21600);
   } catch (e) {
     /* demasiado grande para la caché: se recalcula cada vez */
   }
-  return clave;
+  return info;
 }
 
 /** Puntaje de una fila según la clave (como Forms: todo o nada por pregunta). */
@@ -150,8 +170,12 @@ function corregir(clave, campos) {
 }
 
 function respuestas(formId, fresco) {
-  const form = FormApp.openById(formId);
-  const hojaResp = planillaDeRespuestas(form);
+  const info = infoDelForm(formId, fresco);
+  const ss = SpreadsheetApp.openById(info.planilla);
+  const hojaResp =
+    ss.getSheets().filter(function (h) {
+      return h.getSheetId() === info.hoja;
+    })[0] || ss.getSheets()[0];
   const valores = hojaResp.getDataRange().getValues();
   const titulos = (valores[0] || []).map(function (t) {
     return String(t).trim();
@@ -160,7 +184,7 @@ function respuestas(formId, fresco) {
   const colPuntaje = titulos.findIndex(function (t) {
     return RE_PUNTAJE.test(t);
   });
-  const colMail = form.collectsEmail()
+  const colMail = info.mail
     ? titulos.findIndex(function (t, k) {
         return k > 0 && RE_MAIL_COL.test(t);
       })
@@ -168,8 +192,9 @@ function respuestas(formId, fresco) {
   const preguntas = titulos.filter(function (t, k) {
     return k > 0 && k !== colPuntaje && t;
   });
-  // Sin columna de puntuación (pasa si la planilla se vinculó antes de activar el cuestionario): se corrige acá
-  const clave = colPuntaje < 0 && form.isQuiz() ? claveDeCorreccion(form, fresco) : null;
+  // La columna de puntuación puede no estar (planilla vinculada antes de activar el cuestionario) o venir vacía
+  // (calificaciones «para publicar más tarde»): en esos casos se corrige acá con la clave del cuestionario.
+  const clave = info.clave;
   const lista = [];
   for (let n = 1; n < valores.length; n++) {
     const fila = valores[n];
@@ -182,25 +207,49 @@ function respuestas(formId, fresco) {
     let puntaje = null;
     let maximo = null;
     if (colPuntaje >= 0) {
-      const m = String(fila[colPuntaje]).match(/(-?\d+(?:[.,]\d+)?)\s*\/\s*(\d+(?:[.,]\d+)?)/);
+      const v = fila[colPuntaje];
+      const m = String(v).match(/(-?\d+(?:[.,]\d+)?)\s*\/\s*(\d+(?:[.,]\d+)?)/);
       if (m) {
         puntaje = Number(m[1].replace(',', '.'));
         maximo = Number(m[2].replace(',', '.'));
+      } else if (typeof v === 'number' && clave && clave.maximo) {
+        puntaje = v;
+        maximo = clave.maximo;
       }
-    } else if (clave && clave.maximo) {
+    }
+    if (puntaje === null && clave && clave.maximo) {
       puntaje = corregir(clave, campos);
       maximo = clave.maximo;
     }
     lista.push({ id: 'fila-' + (n + 1), fecha: fila[0].toISOString(), email: colMail >= 0 ? String(fila[colMail]).trim() : '', puntaje: puntaje, maximo: maximo, campos: campos });
   }
-  // El título interno del formulario puede estar vacío: se usa el nombre de la planilla («… (respuestas)»)
-  const titulo = form.getTitle() || hojaResp.getParent().getName().replace(/\s*\((respuestas|responses)\)\s*$/i, '');
-  return { titulo: titulo, preguntas: preguntas, respuestas: lista, agregados: agregados(formId), cuota: MailApp.getRemainingDailyQuota() };
+  // Para revisar por qué no sale la nota (sin datos personales)
+  const diagnostico = {
+    cuestionario: info.quiz,
+    columnaPuntaje: colPuntaje >= 0 ? titulos[colPuntaje] : null,
+    ejemploPuntaje: colPuntaje >= 0 && valores[1] ? String(valores[1][colPuntaje]) : null,
+    preguntasConPuntos: info.conPuntos,
+    preguntasConClave: clave ? clave.preguntas.length : null,
+    puntajeMaximo: clave ? clave.maximo : null,
+    tiposDePregunta: info.tipos,
+  };
+  return {
+    titulo: info.titulo,
+    preguntas: preguntas,
+    respuestas: lista,
+    agregados: agregados(formId),
+    emitidos: emitidos(formId),
+    cuota: MailApp.getRemainingDailyQuota(),
+    diagnostico: diagnostico,
+  };
 }
 
 /* ───────────────────────── Registro de emitidos ───────────────────────── */
 
+let registroAbierto = null;
+
 function hoja() {
+  if (registroAbierto) return registroAbierto;
   const props = PropertiesService.getScriptProperties();
   const id = props.getProperty('REGISTRO');
   let ss = null;
@@ -220,7 +269,8 @@ function hoja() {
     h.setFrozenRows(1);
     h.getRange('A:I').setNumberFormat('@'); // DNI, clave y fecha como texto (que Sheets no los convierta)
   }
-  return ss.getSheetByName(HOJA);
+  registroAbierto = ss.getSheetByName(HOJA);
+  return registroAbierto;
 }
 
 const iso = function (v) {

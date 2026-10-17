@@ -26,6 +26,9 @@ const ESTADO: Record<Estado, { texto: string; cls: string }> = {
   'sin-mail': { texto: 'Sin mail válido', cls: s.alerta },
 };
 
+/** Lo ya leído de cada formulario queda en memoria mientras el panel está abierto: cambiar de pestaña no recarga. */
+const memoria = new Map<string, { respuestas: RespuestasForm; emitidos: Emitido[]; cuota: number | null }>();
+
 const fechaHora = (iso: string) => new Date(iso).toLocaleString('es-AR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
 /** Texto de la actividad para el registro y la página de verificación: «La clase teórica «…», Curso …». */
@@ -45,11 +48,12 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
   const form = idFormulario(cert.formulario);
   const { firma, version: firmaVersion } = useFirma(api);
 
-  const [respuestas, setRespuestas] = useState<RespuestasForm | null>(null);
-  const [emitidos, setEmitidos] = useState<Emitido[]>([]);
+  const guardado = memoria.get(form);
+  const [respuestas, setRespuestas] = useState<RespuestasForm | null>(guardado?.respuestas ?? null);
+  const [emitidos, setEmitidos] = useState<Emitido[]>(guardado?.emitidos ?? []);
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
-  const [cuota, setCuota] = useState<number | null>(null);
+  const [cuota, setCuota] = useState<number | null>(guardado?.cuota ?? null);
   const [ajustes, setAjustes] = useState(() => leerAjustes(slug));
   const [filtro, setFiltro] = useState<Filtro>('todos');
   const [q, setQ] = useState('');
@@ -73,9 +77,10 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
     setCargando(true);
     setError(null);
     try {
-      const [r, e] = await Promise.all([api.certRespuestas(form, fresco), api.certEmitidos(form)]);
+      // Una sola llamada: el Apps Script ya devuelve los emitidos junto con las respuestas
+      const r = await api.certRespuestas(form, fresco);
       setRespuestas(r);
-      setEmitidos(e);
+      setEmitidos(r.emitidos ?? (await api.certEmitidos(form)));
       setCuota(r.cuota);
     } catch (e) {
       setError((e as Error).message);
@@ -85,8 +90,12 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
   }, [api, form]);
 
   useEffect(() => {
-    void cargar();
-  }, [cargar]);
+    if (!memoria.has(form)) void cargar();
+  }, [cargar, form]);
+
+  useEffect(() => {
+    if (respuestas) memoria.set(form, { respuestas, emitidos, cuota });
+  }, [form, respuestas, emitidos, cuota]);
 
   const armado = respuestas ? armarPersonas(cert, respuestas.preguntas, respuestas.respuestas, respuestas.agregados ?? []) : null;
   const personas = (armado?.lista ?? []).map((p) => conAjuste(p, ajustes[p.clave], cert));
@@ -259,7 +268,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
       <section className={adm.panel} aria-labelledby="cert-resumen">
         <div className={s.cabecera}>
           <div>
-            <h2 id="cert-resumen">{respuestas?.titulo ?? 'Formulario'}</h2>
+            <h2 id="cert-resumen">{respuestas?.titulo || cert.titulo}</h2>
             <p className={adm.help}>
               {respuestas
                 ? `${personas.length} persona${personas.length === 1 ? '' : 's'} · ${cuenta((x) => x.estado === 'enviado')} enviados · ${porEnviar.length} por enviar`
