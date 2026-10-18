@@ -9,7 +9,7 @@ import styles from './CourseCard.module.scss';
 
 interface Props {
   curso: WithSlug<Curso>;
-  headingLevel?: 2 | 3;
+  headingLevel?: 2 | 3 | 4;
   size?: 'md' | 'lg';
 }
 

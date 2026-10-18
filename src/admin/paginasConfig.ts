@@ -43,11 +43,14 @@ function hero({ subtitulo = true, ayudaSubtitulo, ayudaFoto, help, actual }: { s
   };
 }
 
-/** Bloque editorial: título + texto (Markdown) + foto opcional. */
+/**
+ * Bloque editorial: título + texto (Markdown) + foto opcional. Con `alt`, la foto se ve como imagen
+ * (no de fondo) y lleva descripción para lectores de pantalla.
+ */
 function bloque(
   name: string,
   label: string,
-  { texto = true, foto, actual, rows = 4, help }: { texto?: boolean; foto?: string; actual?: string; rows?: number; help?: string } = {},
+  { texto = true, foto, actual, rows = 4, help, alt }: { texto?: boolean; foto?: string; actual?: string; rows?: number; help?: string; alt?: boolean } = {},
 ): Field {
   return {
     type: 'group',
@@ -59,6 +62,17 @@ function bloque(
       { type: 'text', name: 'titulo', label: 'Título', max: 90 },
       ...(texto ? [{ type: 'markdown', name: 'texto', label: 'Texto', rows } satisfies Field] : []),
       ...(foto ? [{ type: 'image', name: 'imagen', label: 'Foto', folder: 'paginas', maxWidth: 1600, actual, help: foto } satisfies Field] : []),
+      ...(foto && alt
+        ? [
+            {
+              type: 'text',
+              name: 'imagenAlt',
+              label: 'Descripción de la foto',
+              max: 160,
+              help: 'Qué se ve, en una frase (la leen quienes usan lector de pantalla). Completala si cambiás la foto.',
+            } satisfies Field,
+          ]
+        : []),
     ],
   };
 }
@@ -99,11 +113,12 @@ export const PAGINAS: PaginaConfig[] = [
   pagina('inicio', 'Inicio', 'Página de inicio', '/', House, [
     hero({ ayudaSubtitulo: 'El botón de abajo cambia solo según las inscripciones.', actual: fotoInicio }),
     bloque('inscribite', '«Inscribite en el profesorado»', { rows: 2, help: 'Las fechas y datos de cursado salen de Inscripciones y del Plan de estudios.' }),
-    bloque('bienvenida', '«Te damos la bienvenida»', { foto: 'Se recorta en 4:3.', actual: fotoInicioBienvenida }),
+    bloque('bienvenida', '«Te damos la bienvenida»', { foto: 'Se recorta en 4:3.', actual: fotoInicioBienvenida, alt: true }),
     bloque('novedades', '«Las últimas noticias»', { rows: 2 }),
     bloque('especializaciones', '«Las especializaciones»', {
       foto: 'PNG sin fondo (con transparencia). Solo se ve en computadoras.',
       actual: fotoInicioEspec,
+      alt: true,
     }),
     bloque('cuota', '«La cuota más competitiva»', { foto: 'Va de fondo, oscurecida.', rows: 3, actual: fotoAranceles }),
     bloque('sedes', '«Conocé nuestras sedes»', { rows: 2, help: 'Las sedes se cargan en Configuración → Datos del instituto.' }),
@@ -111,7 +126,7 @@ export const PAGINAS: PaginaConfig[] = [
   ]),
   pagina('carrera', 'La carrera', 'Página de la carrera', '/carrera', School, [
     hero({ actual: fotoCarrera }),
-    bloque('intro', '«Te necesitan, profe»', { foto: 'Se recorta en 4:3.', rows: 6, actual: fotoCarreraIntro }),
+    bloque('intro', '«Te necesitan, profe»', { foto: 'Se recorta en 4:3.', rows: 6, actual: fotoCarreraIntro, alt: true }),
     bloque('especializaciones', '«Algunas de nuestras especializaciones»', {
       rows: 2,
       help: 'Los cursos que aparecen se eligen en cada curso con «Mostrar en la página La carrera».',
@@ -124,7 +139,7 @@ export const PAGINAS: PaginaConfig[] = [
   ]),
   pagina('especializaciones', 'Especializaciones', 'Página de especializaciones', '/especializaciones', Microscope, [
     hero({ actual: fotoEspec }),
-    bloque('intro', '«Siempre con las últimas novedades»', { foto: 'Se recorta en 4:3.', rows: 8, actual: fotoEspecIntro }),
+    bloque('intro', '«Siempre con las últimas novedades»', { foto: 'Se recorta en 4:3.', rows: 8, actual: fotoEspecIntro, alt: true }),
     bloque('disertantes', '«Conocé a los disertantes»', { rows: 2 }),
   ]),
   pagina('inscripciones', 'Inscripciones', 'Página de inscripciones', '/inscripciones', ClipboardList, [

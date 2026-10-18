@@ -60,6 +60,15 @@ Para que el blanco no sea plano: círculos y píldoras lila con un halo violeta 
 - `#7761FF` **solo** en texto ≥ 24 px (o 19 px bold) o decorativo. Para texto chico usar `violet-600`.
 - Texto blanco sobre coral: usar `coral-700` o el gradiente de acento.
 - Párrafos: `ink-700` sobre blanco; en fondos oscuros, blanco al 90 % (secundario 75 %). Sin transparencias más fuertes.
+- Verde para texto: `success-700` (#0B6B35), nunca suelto.
+
+### Foco y accesibilidad
+- Contorno de foco `--color-focus` (violeta) que pasa a **blanco** en `.on-dark`, el navbar sobre foto/degradé y el acordeón de marca. Tarjetas-enlace: contorno `violet-600` solo con teclado (mixin `card-focus`, `:has(:focus-visible)`). Campos de texto: borde + anillo de 1 px `violet-600`.
+- Menú móvil y buscador: el resto de la página queda `inert` mientras están abiertos y el foco vuelve al botón que los abrió (`useModalFocus`). Botones que se deshabilitan sin salir de la pantalla (flechas del carrusel, «Verificar») usan `aria-disabled` para no perder el foco.
+- Enlaces que abren otra pestaña lo avisan a lectores de pantalla (`Button`, `IconButton`, Markdown y el footer lo hacen solos). Resultados filtrados: un `role="status"` siempre montado con la cantidad.
+- Atajo del buscador: solo Ctrl/⌘+K (el botón Buscar muestra «Ctrl K» o «⌘K»). Nada de atajos de una sola tecla: se disparan sin querer con dictado por voz (WCAG 2.1.4).
+- Controles táctiles de 44 px como mínimo (`@media (pointer: coarse)`). Nada se mueve sin fin (el cartel del calendario se balancea y se queda quieto).
+- Fotos editables desde el panel con su «Descripción de la foto» (`imagenAlt`; `altFoto()` en `src/content/paginas.ts`).
 
 ---
 
@@ -88,6 +97,8 @@ Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20�
 - Un solo ancho de contenido: **1400 px**, el mismo borde que el navbar y el footer (texto largo 72ch). Excepción: páginas de tarjetas de borde a borde (contacto, novedades) usan `Section width="narrow"` (1120 px) para que las formas de fondo tengan lugar. Gutter 16→48 px. Los bloques internos llenan el contenedor (nada de anchos máximos sueltos) y las grillas de dos columnas usan las proporciones de `Feature` (1.15fr / 1fr) para que las columnas coincidan entre secciones.
 - Radios: 6 · 10 (botones, inputs) · 16 · **24 (tarjetas)** · pill.
 - Sombras suaves; botones con la sombra del original (`0 10px 15px rgb(0 0 0/.1)`).
+- **Tarjetas blancas** (disertantes, sedes, preguntas frecuentes, novedades planas, conferencias, pasos de inscripción, datos de la carrera y del curso, resultado de /verificar): mixin `card-surface` → borde `--color-border-card` (violet-200) y una sola sombra `--shadow-card` teñida con el índigo del footer (`--shadow-card-hover` al pasar el mouse si son enlace). Con el borde gris de antes casi no se separaban del fondo teñido.
+- **Retratos de disertantes** sobre un degradé lila (violet-50 → 100) con `mix-blend-mode: multiply`: el fondo blanco de las fotos se funde con el lila.
 - **Hover solo en lo clickeable.** Tarjetas informativas sin sombra ni elevación al pasar el mouse.
 - Fotos de `Feature`: lado de afuera en píldora (radio 10rem), como el original.
 
@@ -100,9 +111,14 @@ Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20�
 | `ease-standard` | `cubic-bezier(.25,.1,.25,1)` (ease) | Hover, transiciones de color |
 | `ease-bounce` | `cubic-bezier(.34,1.56,.64,1)` | Crecimiento de botones al pasar el mouse (rebote leve) |
 | `scale-hover` / `scale-press` | 1.04 / 0.97 | Hover y presión de todo lo que es botón (valen 1 con reducir movimiento) |
+| `scale-press-card` | 0.99 | Tarjetas-enlace al tocarlas (confirma el toque en celular antes de navegar) |
+| `scale-image` / `duration-image` | 1.04 / 1200 ms | La foto de una tarjeta-enlace se acerca al pasar el mouse (igual en todas) |
 | `duration-base` / `slow` | 300 / 500 ms | Hover y cambios de estado (sin saltos) |
-| `duration-reveal` | 1100 ms | Aparición al hacer scroll (sube 24 px + fade) |
+| `duration-reveal` | 1100 ms | Aparición al hacer scroll (sube 24 px + fade). Las cabeceras (PageHero, disertante, 404) usan los mismos valores |
 | stagger | 120 ms | Grillas de tarjetas, cabeceras |
+| resultados (`results-in`) | 500 ms, 12 px, 50 ms entre ítems (tope 8) | Lo que cambia por un filtro o una búsqueda: respuesta corta, no la entrada lenta de scroll |
+
+En JS, las curvas y duraciones de Motion salen de `src/lib/motion.ts` (espejo de estos tokens): nada de arreglos `[0.25, …]` sueltos.
 
 Es una web institucional: las **entradas son lentas y elegantes** (como el sitio original), las respuestas a una acción son cortas. Patrones: cabecera de cada página con entrada escalonada (en la home el título entra desde la izquierda), reveal al entrar en pantalla (`<Reveal>`), **sin fundido entre páginas** (la página anterior queda hasta que la nueva está lista: nunca un pantallazo blanco), fotos de bandas fijas al desplazarse (parallax, solo escritorio), menú móvil que se abre como un círculo que crece desde fuera de la pantalla con fondo de vidrio translúcido, buscadores que esperan a que se deje de escribir (`useDebounced` + `SearchField`), esqueletos con brillo en fotos y en el panel. Todo respeta `prefers-reduced-motion`. Librería: **Motion** (motion.dev) con `LazyMotion`.
 
@@ -111,10 +127,15 @@ Es una web institucional: las **entradas son lentas y elegantes** (como el sitio
 - *Tarjetas-enlace* (CourseCard, NewsCard, SpeakerCard): `card-hover` (sube 2 px + sombra) y la foto se acerca lentamente.
 - *Enlaces de texto*: subrayado tenue que se completa (`a` global); los que no van subrayados (footer, migas, menú) usan `underline-on-hover` (el subrayado aparece con fundido).
 - *Filas y disparadores* (acordeón, resultados, filas del admin, pestañas): tinte violeta suave de fondo o color. Nada de rojo; hover solo en lo clickeable.
+- *Solo con mouse*: todo hover que cambia fondo, color o posición va dentro de `@media (hover: hover)` (mixin `hover`); en pantallas táctiles quedaba «pegado» después de tocar. Los desplazamientos (flechas que avanzan, fotos que se acercan) además piden `pointer: fine` y respetan reducir movimiento.
+
+**Resultados que cambian por una acción** (filtros de especializaciones/novedades, buscadores de preguntas, conferencias, CV «ver todos»): mixin `results-in` (cada ítem con `--i` para el escalonado) y `results-pending` (los resultados viejos se atenúan mientras se escribe). Novedades usa la entrada lenta (`Reveal`) solo en la primera carga.
+
+**Reducir movimiento:** queda el fundido, se va el desplazamiento. `MotionConfig reducedMotion="user"` no anula un `transform` escrito como texto (lo usamos para que vaya por la GPU), así que `Reveal`, `RevealItem` y el menú lo resuelven con `useReducedMotion`; el círculo del menú pasa a fundido y el carrusel salta sin desplazamiento suave.
 
 **Abrir y cerrar:** todo lo que aparece también se va animado (`AnimatePresence` o clase `closing`). Entrada 350–500 ms con `ease-emphasized` (fundido + 8–24 px o escala .98), salida más rápida (200–300 ms, `ease-exit`). `Dialog` (y el visor de fotos) mantiene el `<dialog>` abierto hasta que termina la salida; buscador, aviso de cookies, cajón de cambios y avisos del admin con Motion; acordeones y plegables animan altura + opacidad. El menú móvil conserva su círculo (clip-path).
 
-**Navbar:** transparente sobre la foto, blanca en páginas claras y con el degradé al pasar la cabecera. Links en peso regular; el activo en semibold con una barra de 2 px (`currentColor`) debajo; en los demás la barra crece desde la izquierda al pasar el mouse (500 ms, `ease-emphasized`). Buscar, Inscribite, Campus virtual y Menú comparten alto (40 px, 44 táctil), radio 10 y texto 14 px. Arriba, la franja de cierre de inscripciones con cuenta regresiva cuando hay fecha de cierre.
+**Navbar:** transparente sobre la foto, blanca en páginas claras y con el degradé al pasar la cabecera. Links en peso regular; el activo en semibold con una barra de 2 px (`currentColor`) debajo; en los demás la barra crece desde la izquierda al pasar el mouse (500 ms, `ease-emphasized`). Buscar, Inscribite, Campus virtual y Menú comparten alto (40 px, 44 táctil), radio 10 y texto 14 px. Campus virtual aparece desde 1280 px; antes se llega desde el menú, así que el botón Menú sigue visible hasta 1279 px (entre 1024 y 1279, Buscar y Menú van solo con ícono y los links más juntos para que entre el nombre completo). Con el menú abierto se oculta el aviso de cookies (el vidrio lo dejaría ver). Arriba, la franja de cierre de inscripciones con cuenta regresiva cuando hay fecha de cierre.
 
 ---
 
@@ -126,8 +147,8 @@ Es una web institucional: las **entradas son lentas y elegantes** (como el sitio
 | `SectionHeader` | align start/center | Título con énfasis + bajada |
 | `PageHero` | md · lg · full; start/center | Imagen + overlay; breadcrumbs |
 | `Feature` | normal · reverse | Texto + imagen con el lado de afuera en píldora |
-| `Accordion` | card · brand · plain | Accesible, animación de altura |
-| `Carousel` | light · dark | Scroll-snap nativo (sin librerías) |
+| `Accordion` | card · brand · plain | Accesible, animación de altura. `brand` usa violet-600 → 700 (no el degradé de botón): el texto blanco chico llega a AA |
+| `Carousel` | light · dark | Scroll-snap nativo (sin librerías). Puntos inactivos violet-400 (3:1), activo violet-500 y más largo |
 | `Badge` | violet · white · neutral · light · success | `white` para «¡Nuevo!» sobre fotos |
 | `Dialog` | sm · md · lg · full; default · dark | `<dialog>` nativo; entra y sale animado (clase `closing`) |
 | `ChipGroup` (`Chips.tsx`) | align start · center; chip «Todos» opcional; `count` por opción | Filtros en píldora (`role="group"` + `aria-pressed`). Activo: relleno `violet-600`; hover: borde `violet-400`, tinte `violet-50` y crecimiento con rebote. Tocar el activo lo apaga |

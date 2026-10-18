@@ -299,16 +299,13 @@ export function Component() {
             )}
 
             {(curso.importante || curso.condiciones) && (
-              <Reveal
-                as="section"
-                className={styles.block}
-                aria-label="Condiciones de aprobación"
-              >
+              <Reveal as="section" className={styles.block}>
+                {/* h2: son secciones hermanas de «Temario» y «Conferencias pasadas», no subtítulos de ellas */}
                 {curso.condiciones && (
                   <div className={styles.callout}>
                     <ClipboardCheck aria-hidden />
                     <div>
-                      <h3>Condiciones de aprobación</h3>
+                      <h2>Condiciones de aprobación</h2>
                       <Prose text={curso.condiciones} />
                     </div>
                   </div>
@@ -317,7 +314,7 @@ export function Component() {
                   <div className={[styles.callout, styles.warn].join(" ")}>
                     <AlertTriangle aria-hidden />
                     <div>
-                      <h3>Importante</h3>
+                      <h2>Importante</h2>
                       <Prose text={curso.importante} />
                     </div>
                   </div>

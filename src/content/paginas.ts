@@ -109,8 +109,14 @@ export const PAGINAS_POR_DEFECTO = {
 } satisfies Record<PaginaKey, Textos>;
 
 type PorDefecto = typeof PAGINAS_POR_DEFECTO;
-/** Página resuelta: todos los textos presentes + la foto del panel si se cargó una. */
-export type PaginaResuelta<K extends PaginaKey> = { [B in keyof PorDefecto[K]]: PorDefecto[K][B] & { imagen?: string } };
+/** Página resuelta: todos los textos presentes + la foto del panel (y su descripción) si se cargó una. */
+export type PaginaResuelta<K extends PaginaKey> = { [B in keyof PorDefecto[K]]: PorDefecto[K][B] & { imagen?: string; imagenAlt?: string } };
+
+/**
+ * Texto alternativo de una foto editable: la descripción cargada en el panel; si cambiaron la foto
+ * sin describirla, vacío (mejor que describir la foto anterior); si no, la descripción de la original.
+ */
+export const altFoto = (b: { imagen?: string; imagenAlt?: string }, original: string) => b.imagenAlt ?? (b.imagen ? '' : original);
 
 const lleno = (v: unknown): v is string => typeof v === 'string' && v.trim() !== '';
 const esObjeto = (v: unknown): v is Record<string, unknown> => Boolean(v) && typeof v === 'object' && !Array.isArray(v);

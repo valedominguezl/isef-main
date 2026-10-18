@@ -26,6 +26,7 @@
 
   strong {
     font-weight: var(--weight-semibold);
+    color: inherit; /* la regla global de strong lo pintaba casi negro sobre el violeta */
   }
 }
 

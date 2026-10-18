@@ -176,7 +176,7 @@ export default function AmbientShapes() {
   }, [pathname]);
 
   return (
-    <div ref={ref} className={styles.layer} aria-hidden>
+    <div ref={ref} className={`${styles.layer} no-print`} aria-hidden>
       {shapes.map((s, i) => {
         const h = s.kind === 'circle' ? s.w : s.w * 0.35;
         const dir = s.side === 'left' ? 1 : -1;

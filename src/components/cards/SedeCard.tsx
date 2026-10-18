@@ -42,6 +42,7 @@ export default function SedeCard({ sede, media, headingLevel = 3 }: Props) {
             <WhatsAppIcon aria-hidden />
             <a href={whatsappUrl(sede.telefono)} target="_blank" rel="noopener noreferrer">
               {formatPhone(sede.telefono)}
+              <span className="sr-only"> (WhatsApp, se abre en otra pestaña)</span>
             </a>
           </li>
           <li>

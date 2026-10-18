@@ -1,3 +1,4 @@
+/* Reposo: oculta y en cero, sin transición (se reinicia mientras no se ve) */
 .bar {
   position: fixed;
   inset: 0 0 auto;
@@ -7,12 +8,24 @@
   transform: scaleX(0);
   transform-origin: left;
   opacity: 0;
-  transition: opacity 300ms 200ms, transform 300ms;
+  transition: none;
   pointer-events: none;
 }
 
+/* Cargando: avanza rápido al principio y se frena cerca del 80 % */
 .active {
   opacity: 1;
   transform: scaleX(0.8);
-  transition: transform 8s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 100ms;
+  transition:
+    transform 8s cubic-bezier(0.1, 0.8, 0.2, 1),
+    opacity var(--duration-fast);
+}
+
+/* Listo: completa hasta el final y después se desvanece */
+.done {
+  opacity: 0;
+  transform: scaleX(1);
+  transition:
+    transform 200ms var(--ease-out),
+    opacity var(--duration-base) var(--ease-exit) 150ms;
 }

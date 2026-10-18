@@ -1,6 +1,7 @@
 import { useId, useState, type ReactNode } from 'react';
 import { AnimatePresence, m } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
+import { EASE_EMPHASIZED, EASE_EXIT } from '@/lib/motion';
 import styles from './Accordion.module.scss';
 
 export interface AccordionItem {
@@ -62,8 +63,8 @@ export default function Accordion({ items, variant = 'card', multiple = true, de
                   className={styles.panel}
                   // Abre suave (altura + fundido); cierra un poco más rápido
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
-                  exit={{ height: 0, opacity: 0, transition: { duration: 0.28, ease: [0.4, 0, 0.2, 1] } }}
+                  animate={{ height: 'auto', opacity: 1, transition: { duration: 0.4, ease: EASE_EMPHASIZED } }}
+                  exit={{ height: 0, opacity: 0, transition: { duration: 0.28, ease: EASE_EXIT } }}
                 >
                   <div className={styles.body}>{item.content}</div>
                 </m.div>

@@ -13,6 +13,7 @@
   grid-template-columns: 1fr auto;
   grid-template-areas:
     'area go'
+    'desc go'
     'num go';
   align-items: center;
   gap: var(--space-1) var(--space-4);
@@ -36,6 +37,9 @@
 
   &:hover {
     color: var(--color-text);
+  }
+
+  @include hover {
     background: var(--violet-100);
   }
 }
@@ -53,19 +57,12 @@
   color: var(--color-text-muted);
 }
 
-/* Una sola línea para que todas las filas midan lo mismo (el texto completo queda en el title) */
+/* Dice a qué número escribir: visible también en celular, hasta 2 líneas (el texto completo queda en el title) */
 .desc {
   grid-area: desc;
-  display: none;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   font-size: var(--text-sm);
   color: var(--color-text-muted);
-
-  @include up($bp-md) {
-    display: block;
-  }
+  @include line-clamp(2);
 }
 
 .num {
@@ -88,15 +85,35 @@
   color: var(--violet-600);
   transition:
     transform var(--duration-slow) var(--ease-emphasized),
+    $press-transition,
     background-color var(--duration-slow) var(--ease-standard),
     color var(--duration-slow) var(--ease-standard),
     border-color var(--duration-slow) var(--ease-standard);
 
-  .row:hover & {
-    transform: translate(2px, -2px);
-    background: var(--violet-500);
-    border-color: var(--violet-500);
-    color: white;
+  @media (hover: hover) {
+    .row:hover & {
+      background: var(--violet-500);
+      border-color: var(--violet-500);
+      color: white;
+    }
+  }
+
+  /* La flecha sale hacia afuera (abre WhatsApp): solo con mouse y sin «reducir movimiento» */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .row:hover & {
+      transform: translate(2px, -2px);
+    }
+  }
+
+  /* Al tocar la fila (celular), la flecha se hunde como un botón */
+  .row:active & {
+    scale: var(--scale-press);
+    transition:
+      transform var(--duration-slow) var(--ease-emphasized),
+      scale var(--duration-fast) var(--ease-out),
+      background-color var(--duration-slow) var(--ease-standard),
+      color var(--duration-slow) var(--ease-standard),
+      border-color var(--duration-slow) var(--ease-standard);
   }
 }
 

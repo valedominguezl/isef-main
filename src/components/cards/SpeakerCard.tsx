@@ -10,7 +10,8 @@ export default function SpeakerCard({ disertante, headingLevel = 3 }: { disertan
   return (
     <article className={styles.card}>
       <div className={styles.photo}>
-        {disertante.foto && <img src={disertante.foto} alt={`Retrato de ${nombre}`} loading="lazy" decoding="async" width={320} height={320} />}
+        {/* alt vacío: el nombre está justo debajo (el lector de pantalla lo diría dos veces) */}
+        {disertante.foto && <img src={disertante.foto} alt="" loading="lazy" decoding="async" width={320} height={320} />}
       </div>
       <div className={styles.body}>
         <p className={styles.area}>{disertante.especialidad}</p>

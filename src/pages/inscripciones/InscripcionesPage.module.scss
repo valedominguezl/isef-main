@@ -19,8 +19,7 @@
   gap: var(--space-4);
   padding: var(--space-8) var(--space-6) var(--space-6);
   border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  @include card-surface;
   overflow: hidden;
 
   h3 {
@@ -108,7 +107,7 @@
   text-align: center;
   /* Cartel colgado que se balancea (como el sitio original). Usa `rotate` para no chocar con el transform de Reveal */
   transform-origin: 50% -36px;
-  animation: swing 1.4s ease-in-out infinite alternate;
+  animation: swing 9s ease-in-out 1s both;
 
   /* Hilos: suben desde las esquinas del cartel hasta el clavo (forma de /\) */
   &::before {
@@ -156,12 +155,34 @@
   }
 }
 
+/* Se balancea unas veces y se queda quieto (WCAG 2.2.2: nada se mueve sin fin) */
 @keyframes swing {
-  from {
+  0% {
+    rotate: 0deg;
+  }
+  8% {
     rotate: 3deg;
   }
-  to {
+  22% {
     rotate: -3deg;
+  }
+  36% {
+    rotate: 2.2deg;
+  }
+  50% {
+    rotate: -1.6deg;
+  }
+  64% {
+    rotate: 1deg;
+  }
+  78% {
+    rotate: -0.5deg;
+  }
+  90% {
+    rotate: 0.2deg;
+  }
+  100% {
+    rotate: 0deg;
   }
 }
 

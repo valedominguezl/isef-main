@@ -3,7 +3,7 @@
 .banner {
   position: fixed;
   inset: auto var(--space-4) var(--space-4) var(--space-4);
-  z-index: var(--z-overlay);
+  z-index: calc(var(--z-overlay) - 1); /* sobre la página y el navbar, pero debajo del menú móvil (--z-overlay) */
   display: grid;
   grid-template-columns: auto 1fr;
   gap: var(--space-3) var(--space-4);
@@ -18,6 +18,11 @@
 
   @include up($bp-lg) {
     grid-template-columns: auto 1fr auto;
+  }
+
+  /* Con el menú móvil abierto (translúcido) el aviso se vería detrás: se oculta hasta que se cierre */
+  :global(html[data-menu='abierto']) & {
+    visibility: hidden;
   }
 }
 
@@ -100,9 +105,13 @@
   width: 46px;
   height: 26px;
   border-radius: var(--radius-pill);
-  background: var(--ink-200);
+  /* Apagado: gris medio con borde (el ink-200 de antes daba 1,4:1 sobre blanco y no se distinguía) */
+  background: var(--ink-400);
+  box-shadow: inset 0 0 0 1px var(--ink-500);
   cursor: pointer;
-  transition: background-color var(--duration-base);
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
   @include focus-ring;
 
   &::after {
@@ -120,6 +129,7 @@
 
   &:checked {
     background: var(--violet-500);
+    box-shadow: none;
 
     &::after {
       transform: translateX(20px);

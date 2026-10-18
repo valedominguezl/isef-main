@@ -28,14 +28,24 @@ type IconButtonProps = BaseProps &
 export default function IconButton({ label, children, size = 'md', variant = 'ghost', tone = 'default', className, ...rest }: IconButtonProps) {
   const cls = [styles.btn, styles[size], styles[variant], styles[tone], className].filter(Boolean).join(' ');
   if ('href' in rest && rest.href != null) {
+    const a = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
     return (
-      <a className={cls} aria-label={label} {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}>
+      <a className={cls} aria-label={a.target === '_blank' ? `${label} (se abre en otra pestaña)` : label} {...a}>
         {children}
       </a>
     );
   }
+  // `disabled` se traduce a aria-disabled: el botón sigue enfocable (el foco no salta al body al llegar al borde)
+  const { disabled, onClick, ...b } = rest as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
-    <button type="button" className={cls} aria-label={label} {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}>
+    <button
+      type="button"
+      className={cls}
+      aria-label={label}
+      aria-disabled={disabled || undefined}
+      onClick={disabled ? undefined : onClick}
+      {...b}
+    >
       {children}
     </button>
   );

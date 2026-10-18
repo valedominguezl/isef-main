@@ -37,6 +37,16 @@ body {
 #contenido {
   position: relative;
   isolation: isolate;
+
+  /* Destino del enlace «Saltar al contenido»: recibe el foco sin dibujar un contorno alrededor de toda la página */
+  &:focus {
+    outline: none;
+  }
+}
+
+/* Con el aviso de cookies abierto, lo que se enfoca con Tab no queda escondido detrás */
+html:has([data-cookie-banner]) {
+  scroll-padding-bottom: 240px;
 }
 
 img,
@@ -198,8 +208,9 @@ img[loading='lazy']:not([data-loaded]) {
   }
 }
 
-/* Superficies oscuras: invierten la paleta de texto de los hijos */
+/* Superficies oscuras: invierten la paleta de texto de los hijos (y el foco pasa a blanco: el violeta no se ve) */
 .on-dark {
+  --color-focus: white;
   color: var(--color-on-dark);
 
   p,
@@ -236,8 +247,29 @@ img[loading='lazy']:not([data-loaded]) {
   color: var(--color-primary); /* sin rojo: el acento de texto es el violeta de marca */
 }
 
+/* Animaciones de resultados (mixin results-in) */
+@keyframes resultsIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes resultsFade {
+  from {
+    opacity: 0;
+  }
+}
+
 @media print {
   .no-print {
     display: none !important;
+  }
+
+  /* Lo que todavía no había entrado en pantalla (Reveal) se imprime igual */
+  [style*='opacity: 0'],
+  [style*='opacity:0'] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

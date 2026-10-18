@@ -56,7 +56,9 @@ export default function Carousel({ children, label, slideWidth, gap, showDots = 
   const goTo = (i: number) => {
     const el = trackRef.current;
     const item = el?.children[i] as HTMLElement | undefined;
-    if (el && item) el.scrollTo({ left: item.offsetLeft - el.offsetLeft, behavior: 'smooth' });
+    // Con «reducir movimiento» salta directo (scrollTo con smooth ignora el scroll-behavior de global.scss)
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (el && item) el.scrollTo({ left: item.offsetLeft - el.offsetLeft, behavior: reduce ? 'auto' : 'smooth' });
   };
 
   const step = (dir: 1 | -1) => goTo(Math.max(0, Math.min(slides.length - 1, active + dir)));

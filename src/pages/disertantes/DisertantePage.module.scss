@@ -8,11 +8,12 @@
   isolation: isolate;
 }
 
-/* Entrada escalonada, igual que las cabeceras del resto del sitio */
+/* Entrada escalonada, igual que las cabeceras del resto del sitio (mismos valores que <Reveal>: 1100 ms, 24 px, 120 ms).
+   Duración fija: --duration-reveal vale 0 con «reducir movimiento» y ahí igual queremos el fundido. */
 .headerInner > :not(.profile),
 .photo,
 .identity > * {
-  animation: headIn 1.2s var(--ease-emphasized) both;
+  animation: headIn 1100ms var(--ease-emphasized) both;
 }
 
 @for $i from 1 through 6 {
@@ -24,7 +25,7 @@
 @keyframes headIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
 }
 
@@ -221,10 +222,15 @@
     text-decoration-color var(--duration-base) var(--ease-standard);
   @include focus-ring;
 
-  &:hover {
+  @include hover {
     color: var(--violet-800);
     text-decoration-color: currentColor;
   }
+}
+
+/* «Ver los N antecedentes»: los que aparecen entran escalonados (antes, de golpe) */
+.expanded > li:nth-child(n + 13) {
+  @include results-in;
 }
 
 /* ── Impresión / PDF: formato estándar A4 ── */

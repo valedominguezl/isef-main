@@ -42,15 +42,26 @@ $bp-xl: 1280px;
   overflow: hidden;
 }
 
-/* Solo para tarjetas que son enlaces: un hover en algo no clickeable promete una acción que no existe */
+/* Hover solo con mouse: en pantallas táctiles el :hover queda "pegado" después de tocar */
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+/* Solo para tarjetas que son enlaces: un hover en algo no clickeable promete una acción que no existe.
+   Al tocarla (celular) o presionarla se hunde apenas: confirma el toque antes de navegar. */
 @mixin card-hover {
   transition:
     transform var(--duration-slow) var(--ease-emphasized),
-    box-shadow var(--duration-slow) var(--ease-standard);
+    box-shadow var(--duration-slow) var(--ease-standard),
+    scale var(--duration-base) var(--ease-out);
 
   @media (hover: hover) {
     &:hover {
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--card-shadow-hover, var(--shadow-md));
     }
   }
 
@@ -59,6 +70,50 @@ $bp-xl: 1280px;
       transform: translateY(-2px);
     }
   }
+
+  &:active {
+    scale: var(--scale-press-card);
+    transition:
+      transform var(--duration-slow) var(--ease-emphasized),
+      box-shadow var(--duration-slow) var(--ease-standard),
+      scale var(--duration-fast) var(--ease-out);
+  }
+}
+
+/* Tarjeta blanca (enlace o informativa): borde lila y la sombra común. Las tarjetas-enlace suman card-hover. */
+@mixin card-surface {
+  --card-shadow-hover: var(--shadow-card-hover);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Contorno de foco de una tarjeta-enlace: solo con teclado (no al hacer clic) */
+@mixin card-focus($color: var(--violet-600)) {
+  &:has(:focus-visible) {
+    outline: 2px solid $color;
+    outline-offset: 3px;
+  }
+}
+
+/*
+ * Resultados que cambian por una acción (filtros, buscadores): respuesta corta, igual en todo el sitio.
+ * Cada ítem entra con fundido + 12 px, escalonado 50 ms con tope en 8. El índice va en --i.
+ * Distinto de <Reveal> (entradas lentas al hacer scroll): esto responde a un clic.
+ */
+@mixin results-in {
+  animation: resultsIn var(--duration-slow) var(--ease-emphasized) both;
+  animation-delay: calc(min(var(--i, 0), 8) * 50ms);
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-name: resultsFade;
+  }
+}
+
+/* Resultados viejos atenuados mientras se espera que termine de escribir */
+@mixin results-pending {
+  opacity: 0.5;
+  transition: opacity var(--duration-base) var(--ease-standard);
 }
 
 /*

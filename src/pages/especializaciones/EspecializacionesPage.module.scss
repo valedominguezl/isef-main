@@ -18,10 +18,16 @@
   font-size: var(--text-sm);
   color: var(--color-text-muted);
 
+  p {
+    font: inherit;
+    color: inherit;
+  }
+
   button {
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
+    min-height: 44px; /* área táctil mínima */
     color: var(--color-link);
     font-weight: var(--weight-medium);
     @include underline-on-hover(var(--violet-800));
@@ -29,28 +35,9 @@
   }
 }
 
-/* Al filtrar, los resultados aparecen escalonados (solo opacidad, no bloquea la interacción) */
+/* Al filtrar, los resultados aparecen escalonados (receta común: no bloquea la interacción) */
 .results li {
-  animation: gridIn 700ms var(--ease-emphasized) both;
-}
-
-@keyframes gridIn {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .results li {
-    animation-name: gridFade;
-  }
-}
-
-@keyframes gridFade {
-  from {
-    opacity: 0;
-  }
+  @include results-in;
 }
 
 .empty {
@@ -74,7 +61,7 @@
 }
 
 .pending {
-  opacity: 0.5;
+  @include results-pending;
 }
 
 /* Este año / ediciones anteriores */

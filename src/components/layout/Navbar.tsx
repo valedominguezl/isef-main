@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
-import { AnimatePresence, m } from 'motion/react';
+import { AnimatePresence, m, useReducedMotion } from 'motion/react';
 import { ExternalLink, Menu, Search, X } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { sitio, inscripcionesVigentes } from '@/content';
 import { useSearch } from '@/features/search/SearchContext';
+import { DURATION, EASE_EMPHASIZED, EASE_EXIT } from '@/lib/motion';
+import { useModalFocus } from '@/lib/useModalFocus';
 import { socialIcon, socialLabel } from '../ui/Icons';
 import Button from '../ui/Button';
 import { MAIN_NAV, SECONDARY_NAV } from './nav';
@@ -12,6 +14,29 @@ import InscripcionesAviso from './InscripcionesAviso';
 import styles from './Navbar.module.scss';
 
 export type NavTheme = 'overlay' | 'solid';
+
+/** Curva del menú (tipo cajón de iOS): el círculo arranca rápido y se asienta suave. */
+const EASE_MENU = [0.32, 0.72, 0, 1] as const;
+const CIRCLE_FROM = 'circle(0px at calc(100% + 120px) -120px)';
+const CIRCLE_TO = 'circle(170vmax at calc(100% + 120px) -120px)';
+
+/** Entrada escalonada de lo que hay dentro del menú (links, botones y pie). */
+const menuItem = {
+  hidden: { opacity: 0, transform: 'translateY(16px)' },
+  show: { opacity: 1, transform: 'translateY(0px)', transition: { duration: 0.7, ease: EASE_EMPHASIZED } },
+};
+/** Con «reducir movimiento»: solo fundido (el `transform` como texto no lo anula MotionConfig). */
+const menuItemFade = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: menuItem.show.transition },
+};
+/** Igual, con la demora como `custom` (botones y pie, después del último link). */
+const conDemora = (v: typeof menuItem | typeof menuItemFade) => ({
+  hidden: v.hidden,
+  show: (delay: number) => ({ ...v.show, transition: { ...v.show.transition, delay } }),
+});
+const MENU_DELAY = 0.2;
+const MENU_STAGGER = 0.06;
 
 /**
  * Como el sitio original: transparente sobre la foto de cabecera ('overlay') o blanca en páginas
@@ -22,9 +47,17 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [pastHero, setPastHero] = useState(false);
   const [hidden, setHidden] = useState(false);
+  // La página no tiene foto de cabecera (p. ej. un 404 dentro de una ruta con foto): se trata como 'solid'
+  const [lightTop, setLightTop] = useState(false);
   const header = useRef<HTMLElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
   const { open: openSearch } = useSearch();
+  const reduceMotion = useReducedMotion();
+  useModalFocus(menuOpen, menu, { restoreFocus: false });
+  // Tecla del atajo según el sistema (el HTML prerenderizado dice «Ctrl K»; en Mac cambia al cargar)
+  const [mac, setMac] = useState(false);
+  useEffect(() => setMac(/Mac|iPhone|iPad/.test(navigator.platform)), []);
 
   useEffect(() => setMenuOpen(false), [pathname]);
 
@@ -45,9 +78,11 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
       frame = 0;
       const y = window.scrollY;
       const navH = header.current?.offsetHeight ?? 72;
-      // La cabecera de la página es el primer bloque de <main>: el degradé aparece cuando la barra la deja atrás
-      const hero = document.getElementById('contenido')?.firstElementChild;
+      // La cabecera de la página es el primer bloque visible de <main>: no cuentan la capa de AmbientShapes
+      // (aria-hidden, ocupa todo el alto) ni el <script> JSON-LD de cada página. El degradé aparece cuando la barra la deja atrás
+      const hero = document.getElementById('contenido')?.querySelector(':scope > :not([aria-hidden], script, style, template)');
       setPastHero(hero ? hero.getBoundingClientRect().bottom <= navH : y > 700);
+      setLightTop(hero?.getAttribute('data-surface') === 'light');
       if (y <= navH) setHidden(false);
       else if (Math.abs(y - lastY) > 4) setHidden(y > lastY);
       lastY = y;
@@ -63,17 +98,27 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
     };
   }, [pathname]);
 
-  const tone = pastHero ? styles.brandBg : theme === 'solid' ? styles.light : styles.clear;
-  const onLight = !pastHero && theme === 'solid';
+  // Con inscripciones abiertas, «Inscribite ya» (abajo) reemplaza al link
+  const menuLinks = [{ label: 'Inicio', to: '/' }, ...MAIN_NAV.filter((item) => !(item.to === '/inscripciones' && inscripcionesVigentes()))];
+  const menuTail = MENU_DELAY + MENU_STAGGER * menuLinks.length;
+  const item = reduceMotion ? menuItemFade : menuItem;
+  const tailItem = conDemora(item);
+
+  const solid = theme === 'solid' || lightTop;
+  const tone = pastHero ? styles.brandBg : solid ? styles.light : styles.clear;
+  const onLight = !pastHero && solid;
 
   useEffect(() => {
     if (!menuOpen) return;
-    const prev = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
+    const html = document.documentElement;
+    const prev = html.style.overflow;
+    html.style.overflow = 'hidden';
+    html.dataset.menu = 'abierto'; // el aviso de cookies se oculta: el menú es translúcido y se vería detrás
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
     window.addEventListener('keydown', onKey);
     return () => {
-      document.documentElement.style.overflow = prev;
+      html.style.overflow = prev;
+      delete html.dataset.menu;
       window.removeEventListener('keydown', onKey);
     };
   }, [menuOpen]);
@@ -82,7 +127,7 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
     <>
       <header
         ref={header}
-        className={[styles.header, tone, hidden && !menuOpen && styles.hidden].filter(Boolean).join(' ')}
+        className={[styles.header, tone, hidden && !menuOpen && styles.hidden, 'no-print'].filter(Boolean).join(' ')}
         onFocusCapture={() => setHidden(false)}
       >
         <InscripcionesAviso />
@@ -107,10 +152,12 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
           </ul>
 
           <div className={styles.actions}>
-            <button type="button" className={styles.search} onClick={openSearch} aria-label="Buscar en el sitio (atajo: /)">
+            <button type="button" className={styles.search} onClick={openSearch} aria-label="Buscar en el sitio" aria-keyshortcuts="Control+K Meta+K">
               <Search size={20} aria-hidden />
               <span className={styles.searchLabel}>Buscar</span>
-              <kbd className={styles.kbd}>/</kbd>
+              <kbd className={styles.kbd} aria-hidden>
+                {mac ? '⌘K' : 'Ctrl K'}
+              </kbd>
             </button>
             {inscripcionesVigentes() && (
               <Button to="/inscripciones" size="sm" icon="none" variant={pastHero ? 'light' : 'primary'} className={styles.cta}>
@@ -146,16 +193,25 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
       <AnimatePresence>
         {menuOpen && (
           <m.div
+            ref={menu}
             id="menu-movil"
             className={`${styles.menu} on-dark`}
             role="dialog"
             aria-modal="true"
             aria-label="Menú"
             // Círculo que crece desde fuera de la pantalla (arriba a la derecha): no se ve el punto de origen.
-            // Cierra más rápido de lo que abre.
-            initial={{ clipPath: 'circle(0px at calc(100% + 120px) -120px)' }}
-            animate={{ clipPath: 'circle(170vmax at calc(100% + 120px) -120px)', transition: { duration: 0.7, ease: [0.32, 0.72, 0, 1] } }}
-            exit={{ clipPath: 'circle(0px at calc(100% + 120px) -120px)', transition: { duration: 0.45, ease: [0.32, 0.72, 0, 1] } }}
+            // Cierra más rápido de lo que abre. Con «reducir movimiento», solo fundido.
+            {...(reduceMotion
+              ? {
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1, transition: { duration: DURATION.base } },
+                  exit: { opacity: 0, transition: { duration: 0.2, ease: EASE_EXIT } },
+                }
+              : {
+                  initial: { clipPath: CIRCLE_FROM },
+                  animate: { clipPath: CIRCLE_TO, transition: { duration: 0.7, ease: EASE_MENU } },
+                  exit: { clipPath: CIRCLE_FROM, transition: { duration: 0.45, ease: EASE_MENU } },
+                })}
           >
             <div className={styles.menuTop}>
               <Link to="/" className={styles.brand}>
@@ -171,24 +227,18 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
               role="list"
               initial="hidden"
               animate="show"
-              variants={{ show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } } }}
+              variants={{ show: { transition: { staggerChildren: MENU_STAGGER, delayChildren: MENU_DELAY } } }}
             >
-              {/* Con inscripciones abiertas, «Inscribite ya» (abajo) reemplaza al link */}
-              {[{ label: 'Inicio', to: '/' }, ...MAIN_NAV.filter((item) => !(item.to === '/inscripciones' && inscripcionesVigentes()))].map((item) => (
-                <m.li
-                  key={item.to}
-                  variants={{
-                    hidden: { opacity: 0, transform: 'translateY(16px)' },
-                    show: { opacity: 1, transform: 'translateY(0px)', transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
-                  }}
-                >
-                  <NavLink to={item.to} end={item.to === '/'} className={({ isActive }) => (isActive ? styles.menuActive : undefined)}>
-                    {item.label}
+              {menuLinks.map((link) => (
+                <m.li key={link.to} variants={item}>
+                  <NavLink to={link.to} end={link.to === '/'} className={({ isActive }) => (isActive ? styles.menuActive : undefined)}>
+                    {link.label}
                   </NavLink>
                 </m.li>
               ))}
             </m.ul>
-            <div className={styles.menuCtas}>
+            {/* Botones y pie siguen el escalonado de los links (antes aparecían de golpe con el círculo) */}
+            <m.div className={styles.menuCtas} initial="hidden" animate="show" variants={tailItem} custom={menuTail}>
               {inscripcionesVigentes() && (
                 <Button to="/inscripciones" variant="light" size="lg" leading={<span aria-hidden>🚀</span>}>
                   Inscribite ya
@@ -197,14 +247,15 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
               <Button href={sitio.campusUrl} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" icon="none">
                 Campus virtual
               </Button>
-            </div>
-            <div className={styles.menuFooter}>
+            </m.div>
+            <m.div className={styles.menuFooter} initial="hidden" animate="show" variants={tailItem} custom={menuTail + MENU_STAGGER}>
               <ul className={styles.menuSecondary} role="list">
                 {SECONDARY_NAV.filter((item) => item.to !== sitio.campusUrl).map((item) => (
                   <li key={item.to}>
                     {item.external ? (
                       <a href={item.to} target="_blank" rel="noopener noreferrer">
                         {item.label} <ExternalLink size={14} aria-hidden />
+                        <span className="sr-only"> (se abre en otra pestaña)</span>
                       </a>
                     ) : (
                       <Link to={item.to}>{item.label}</Link>
@@ -217,14 +268,14 @@ export default function Navbar({ theme = 'overlay' }: { theme?: NavTheme }) {
                   const Icon = socialIcon[r.red];
                   return (
                     <li key={r.url}>
-                      <a href={r.url} target="_blank" rel="noopener noreferrer" aria-label={`${socialLabel[r.red]}: ${r.etiqueta}`}>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" aria-label={`${socialLabel[r.red]}: ${r.etiqueta} (se abre en otra pestaña)`}>
                         <Icon size={20} />
                       </a>
                     </li>
                   );
                 })}
               </ul>
-            </div>
+            </m.div>
           </m.div>
         )}
       </AnimatePresence>

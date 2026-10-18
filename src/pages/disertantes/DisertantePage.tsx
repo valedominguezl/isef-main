@@ -44,9 +44,9 @@ function CvSection({ titulo, items }: { titulo: string; items: CvItem[] }) {
       <h2 className={styles.sectionTitle}>
         {titulo} <small>{items.length}</small>
       </h2>
-      <ol className={[styles.timeline, !dated && styles.undated].filter(Boolean).join(' ')} role="list">
+      <ol className={[styles.timeline, !dated && styles.undated, all && styles.expanded].filter(Boolean).join(' ')} role="list">
         {items.map((it, i) => (
-          <li key={i} className={!all && i >= LIMIT ? styles.extra : undefined}>
+          <li key={i} className={!all && i >= LIMIT ? styles.extra : undefined} style={i >= LIMIT ? ({ '--i': i - LIMIT } as React.CSSProperties) : undefined}>
             {dated && <span className={styles.period}>{it.periodo ?? ''}</span>}
             <div className={styles.entry}>
               <p className={styles.entryTitle}>{it.titulo}</p>

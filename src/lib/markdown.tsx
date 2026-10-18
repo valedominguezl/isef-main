@@ -29,6 +29,7 @@ export function inline(text: string, keyPrefix = ''): ReactNode[] {
           ) : (
             <a key={key} href={safe} target={safe.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
               {label}
+              {safe.startsWith('http') && <span className="sr-only"> (se abre en otra pestaña)</span>}
             </a>
           ),
         );

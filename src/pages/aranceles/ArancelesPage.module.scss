@@ -24,8 +24,9 @@
     font-weight: var(--weight-regular);
   }
 
+  /* violet-600 liso (antes cada celda repetía el degradé y arrancaba en #7761FF, sin contraste AA) */
   thead th {
-    background: var(--gradient-primary);
+    background: var(--violet-600);
     color: white;
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);
@@ -55,8 +56,6 @@
   color: var(--violet-700);
   font-weight: var(--weight-semibold) !important;
   font-size: var(--text-sm);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .note {

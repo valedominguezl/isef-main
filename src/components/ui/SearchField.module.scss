@@ -14,13 +14,14 @@
     border-color var(--duration-slow) var(--ease-standard),
     box-shadow var(--duration-slow) var(--ease-standard);
 
-  &:hover {
+  @include hover {
     border-color: var(--violet-300);
   }
 
+  /* Foco visible (3:1 contra el fondo): borde y anillo violet-600 */
   &:focus-within {
-    border-color: var(--violet-400);
-    box-shadow: 0 0 0 4px var(--violet-100);
+    border-color: var(--violet-600);
+    box-shadow: 0 0 0 1px var(--violet-600);
   }
 
   input {
@@ -73,6 +74,30 @@
 
 .dotsOn {
   opacity: 1;
+}
+
+/* Ocultos: sin animación de fondo (no gastar cuadros en algo invisible) */
+.dots:not(.dotsOn) i {
+  animation-play-state: paused;
+}
+
+.clear {
+  display: grid;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    visibility 0s linear var(--duration-fast);
+
+  &[data-visible='false'] {
+    opacity: 0;
+    transform: scale(0.85);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  &[data-visible='true'] {
+    transition-delay: 0s;
+  }
 }
 
 @keyframes dot {

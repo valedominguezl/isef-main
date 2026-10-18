@@ -2,6 +2,7 @@ import { FilePen, Receipt, Stethoscope } from 'lucide-react';
 import heroImg from '@/assets/media/inscripciones/main.webp';
 import heroSm from '@/assets/media/inscripciones/main-800.webp';
 import { Fragment } from 'react';
+import { Link } from 'react-router';
 import { faq, inscripciones, paginas, sitio, inscripcionesVigentes } from '@/content';
 import { whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
@@ -97,7 +98,7 @@ export function Component() {
           })}
         </RevealGroup>
         <p className={styles.where}>
-          Presentá la documentación en la <a href="/contacto#sedes">sede que te corresponda</a> antes del{' '}
+          Presentá la documentación en la <Link to="/contacto#sedes">sede que te corresponda</Link> antes del{' '}
           <strong>{inscripciones.fechaLimiteRequisitos}</strong>.
         </p>
       </Section>

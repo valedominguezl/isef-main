@@ -57,10 +57,10 @@
   height: 32px;
   border-radius: var(--radius-pill);
   transition:
-    transform 300ms var(--ease-emphasized),
+    transform var(--duration-base) var(--ease-emphasized),
     $press-transition,
-    background-color var(--duration-base),
-    color var(--duration-base);
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
 }
 
 /* El chevron es el "botón" del acordeón: mismo crecimiento con rebote que el resto */
@@ -70,8 +70,14 @@
   }
 }
 
+/* La presión responde al instante (como press-bounce), sin heredar los 300 ms con rebote */
 .trigger:active .chevron {
   scale: var(--scale-press);
+  transition:
+    transform var(--duration-base) var(--ease-emphasized),
+    scale var(--duration-fast) var(--ease-out),
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
 }
 
 .open .chevron {
@@ -92,21 +98,21 @@
 
 /* Variante tarjeta: fondo blanco con borde */
 .card .item {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-xs);
+  @include card-surface;
 }
 
 .card .trigger {
   color: var(--color-text);
 
-  &:hover {
+  @include hover {
     background: var(--color-bg-tint);
   }
 }
 
-.card .item:not(.open) .trigger:hover .chevron {
-  background: var(--violet-100);
+@media (hover: hover) {
+  .card .item:not(.open) .trigger:hover .chevron {
+    background: var(--violet-100);
+  }
 }
 
 .card .chevron {
@@ -125,13 +131,20 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Degradé un tono más profundo que el de los botones: el texto blanco chico (horas) llega a AA (≈6:1) */
 .brand .trigger {
-  background: var(--gradient-primary);
+  --color-focus: white; /* el contorno violeta no se ve sobre el degradé */
+  background: linear-gradient(90deg, var(--violet-600), var(--violet-700));
   color: white;
 
-  &:hover {
+  @include hover {
     filter: brightness(1.06);
   }
+}
+
+.brand .meta {
+  opacity: 1;
+  color: var(--color-on-dark-body);
 }
 
 .brand .chevron {
@@ -156,7 +169,7 @@
 .plain .trigger {
   padding-inline: 0;
 
-  &:hover {
+  @include hover {
     color: var(--violet-700);
   }
 }

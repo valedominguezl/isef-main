@@ -27,6 +27,7 @@
 
 /* Sobre la foto de cabecera */
 .clear {
+  --color-focus: white; /* el violeta no se ve sobre la foto ni sobre el degradé */
   color: white;
   background-color: transparent;
 }
@@ -40,6 +41,7 @@
 
 /* Pasada la cabecera */
 .brandBg {
+  --color-focus: white;
   color: white;
   background-color: transparent;
   box-shadow: 0 10px 15px 0 rgb(0 0 0 / 0.1);
@@ -119,11 +121,18 @@
 }
 
 .link {
+  --link-px: var(--space-3);
   position: relative;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--link-px);
+  white-space: nowrap;
+
+  // Entre lg y xl también está el botón Menú: links más juntos para que entren con el nombre completo
+  @media (max-width: ($bp-xl - 0.02px)) {
+    --link-px: var(--space-2);
+  }
   color: inherit;
   text-decoration: none;
   font-family: var(--font-sans);
@@ -148,8 +157,8 @@
   &::after {
     content: '';
     position: absolute;
-    left: var(--space-3);
-    right: var(--space-3);
+    left: var(--link-px);
+    right: var(--link-px);
     bottom: 2px;
     height: 2px;
     border-radius: 2px;
@@ -161,6 +170,10 @@
 
   &:hover {
     color: inherit;
+  }
+
+  /* Solo con mouse: en tablets la barra quedaba pegada después de tocar */
+  @include hover {
     opacity: 1;
 
     &::after {
@@ -246,8 +259,21 @@
 }
 
 .searchLabel {
+  // Entre lg y xl conviven los links y el botón Menú: Buscar queda solo con el ícono
   @include down($bp-md) {
     @include visually-hidden;
+  }
+
+  @media (min-width: $bp-lg) and (max-width: ($bp-xl - 0.02px)) {
+    @include visually-hidden;
+  }
+}
+
+@media (min-width: $bp-lg) and (max-width: ($bp-xl - 0.02px)) {
+  .search {
+    min-width: var(--nav-btn-h);
+    justify-content: center;
+    padding-inline: var(--space-2);
   }
 }
 
@@ -259,7 +285,7 @@
   border-radius: 4px;
   opacity: 0.8;
 
-  @include down($bp-lg) {
+  @include down($bp-xl) {
     display: none;
   }
 }
@@ -296,7 +322,19 @@
 }
 
 .menuBtn {
+  // Campus virtual recién entra desde xl: hasta ahí el menú es el acceso al campus.
+  // Entre lg y xl los links ya están a la vista, así que queda solo el ícono.
   @include up($bp-lg) {
+    min-width: var(--nav-btn-h);
+    justify-content: center;
+    padding-inline: var(--space-2);
+
+    span {
+      @include visually-hidden;
+    }
+  }
+
+  @include up($bp-xl) {
     display: none;
   }
 

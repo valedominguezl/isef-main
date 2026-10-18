@@ -397,7 +397,7 @@ a.pill {
 
 .pillOk {
   background: color-mix(in srgb, var(--success-500) 12%, white);
-  color: #0b6b35;
+  color: var(--success-700);
 }
 
 .pillBad {
@@ -443,7 +443,7 @@ a.pill {
 
 .notice {
   background: color-mix(in srgb, var(--success-500) 10%, white);
-  color: #0b6b35 !important;
+  color: var(--success-700) !important;
   border: 1px solid color-mix(in srgb, var(--success-500) 30%, white);
 }
 

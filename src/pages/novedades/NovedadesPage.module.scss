@@ -4,6 +4,16 @@
   margin-bottom: var(--space-8);
 }
 
+/* Después de filtrar: respuesta corta (receta común), no la entrada lenta de scroll */
+.item {
+  display: flex;
+  @include results-in;
+
+  > * {
+    flex: 1;
+  }
+}
+
 /* La primera novedad (sin filtro) ocupa todo el ancho */
 .first {
   @include up($bp-md) {

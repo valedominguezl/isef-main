@@ -40,6 +40,7 @@
   --ink-950: #0d0c12;
 
   --success-500: #12a150;
+  --success-700: #0b6b35; /* texto verde sobre fondos claros (AA) */
   --warning-500: #c98a00;
   --danger-500: #d93636;
 
@@ -57,6 +58,7 @@
   --color-surface: var(--ink-0);
   --color-border: var(--ink-100);
   --color-border-strong: var(--ink-200);
+  --color-border-card: var(--violet-200); /* tarjetas blancas: se separan del fondo con tinte violeta y las formas lila */
   --color-text: var(--ink-900);
   --color-text-body: var(--ink-700);
   --color-text-muted: var(--ink-600);
@@ -144,6 +146,9 @@
   --shadow-md: 0 10px 24px -6px rgb(24 22 31 / 0.12), 0 2px 6px rgb(24 22 31 / 0.05);
   --shadow-lg: 0 24px 48px -12px rgb(24 22 31 / 0.22);
   --shadow-brand: 0 14px 32px -10px rgb(119 97 255 / 0.55);
+  /* Tarjetas blancas: una sola sombra para todas, teñida con el índigo del footer (y una más marcada al pasar el mouse) */
+  --shadow-card: 0 1px 2px rgb(60 49 130 / 0.08), 0 12px 32px -16px rgb(60 49 130 / 0.28);
+  --shadow-card-hover: 0 2px 4px rgb(60 49 130 / 0.08), 0 20px 40px -16px rgb(60 49 130 / 0.36);
 
   /* ── Movimiento ──────────────────────────────────────────── */
   --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1); /* ease: hovers y cambios de color */
@@ -153,9 +158,12 @@
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* rebote leve: hover y presión de botones */
   --scale-hover: 1.04; /* todo lo que es botón crece apenas al pasar el mouse */
   --scale-press: 0.97; /* …y se hunde al presionar */
+  --scale-press-card: 0.99; /* tarjetas-enlace al tocarlas (0.97 es mucho para 400 px) */
+  --scale-image: 1.04; /* la foto de una tarjeta-enlace se acerca al pasar el mouse */
   --duration-fast: 150ms;
   --duration-base: 300ms;
   --duration-slow: 500ms;
+  --duration-image: 1200ms;
   --duration-reveal: 1100ms;
 
   /* ── Capas ───────────────────────────────────────────────── */
@@ -173,5 +181,7 @@
     --duration-reveal: 0ms;
     --scale-hover: 1; /* sin escala: queda solo el cambio de color */
     --scale-press: 1;
+    --scale-press-card: 1;
+    --scale-image: 1;
   }
 }

@@ -4,6 +4,7 @@ import { AnimatePresence, m } from 'motion/react';
 import { Cookie } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Dialog from '@/components/ui/Dialog';
+import { DURATION, EASE_EMPHASIZED, EASE_EXIT } from '@/lib/motion';
 import { useConsent } from './ConsentContext';
 import styles from './CookieBanner.module.scss';
 
@@ -38,12 +39,13 @@ export default function CookieBanner() {
       <AnimatePresence>
       {!decided && !settingsOpen && (
         <m.div
-          className={styles.banner}
+          className={`${styles.banner} no-print`}
           role="region"
           aria-label="Aviso de cookies"
+          data-cookie-banner
           initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } }}
-          exit={{ opacity: 0, y: 16, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } }}
+          animate={{ opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE_EMPHASIZED } }}
+          exit={{ opacity: 0, y: 16, transition: { duration: 0.25, ease: EASE_EXIT } }}
         >
           <Cookie className={styles.icon} size={28} aria-hidden />
           <p className={styles.text}>

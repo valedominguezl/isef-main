@@ -19,6 +19,8 @@ const textos = paginas.novedades;
 
 export function Component() {
   const [cat, setCat] = useState<Cat | null>(null);
+  // Primera carga: entrada lenta al hacer scroll (Reveal). Después de tocar un filtro: la receta corta de resultados
+  const [filtrado, setFiltrado] = useState(false);
   const cats = (Object.keys(NOVEDAD_CATEGORIAS) as Cat[]).filter((c) => novedades.some((n) => n.categoria === c));
   const list = cat ? novedades.filter((n) => n.categoria === cat) : novedades;
 
@@ -46,18 +48,34 @@ export function Component() {
             label="Filtrar por categoría"
             className={styles.filters}
             value={cat}
-            onChange={setCat}
+            onChange={(c) => {
+              setFiltrado(true);
+              setCat(c);
+            }}
             all={{ label: 'Todas' }}
             options={cats.map((c) => ({ value: c, label: NOVEDAD_CATEGORIAS[c] }))}
           />
         )}
-        <CardGrid reveal key={cat ?? 'all'}>
-          {list.map((n, i) => (
-            <RevealItem key={n.slug} className={i === 0 && !cat ? styles.first : undefined}>
-              <NewsCard novedad={n} variant={i === 0 && !cat ? 'overlay' : 'plain'} headingLevel={2} />
-            </RevealItem>
-          ))}
-        </CardGrid>
+        <p role="status" className="sr-only">
+          {filtrado ? `${list.length} novedad${list.length === 1 ? '' : 'es'}` : ''}
+        </p>
+        {filtrado ? (
+          <CardGrid key={cat ?? 'all'}>
+            {list.map((n, i) => (
+              <div key={n.slug} className={[styles.item, i === 0 && !cat && styles.first].filter(Boolean).join(' ')} style={{ '--i': i } as React.CSSProperties}>
+                <NewsCard novedad={n} variant={i === 0 && !cat ? 'overlay' : 'plain'} headingLevel={2} />
+              </div>
+            ))}
+          </CardGrid>
+        ) : (
+          <CardGrid reveal>
+            {list.map((n, i) => (
+              <RevealItem key={n.slug} className={i === 0 ? styles.first : undefined}>
+                <NewsCard novedad={n} variant={i === 0 ? 'overlay' : 'plain'} headingLevel={2} />
+              </RevealItem>
+            ))}
+          </CardGrid>
+        )}
       </Section>
     </>
   );

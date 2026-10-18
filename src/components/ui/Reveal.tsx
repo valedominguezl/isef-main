@@ -1,5 +1,6 @@
-import { m, type HTMLMotionProps } from 'motion/react';
+import { m, useReducedMotion, type HTMLMotionProps } from 'motion/react';
 import type { ReactNode } from 'react';
+import { DURATION, EASE_EMPHASIZED } from '@/lib/motion';
 
 interface RevealProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   children: ReactNode;
@@ -10,21 +11,29 @@ interface RevealProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
 }
 
 /** Curva suave del sitio original (sin arranque brusco). Entradas lentas: es una web institucional, no una herramienta. */
-const ease = [0.25, 0.46, 0.45, 0.94] as const;
-const duration = 1.1;
+const ease = EASE_EMPHASIZED;
+const duration = DURATION.reveal;
 
 /**
- * Aparición al entrar en pantalla (reemplaza los ~20 IntersectionObserver duplicados).
- * Respeta "reducir movimiento" vía <MotionConfig reducedMotion="user"> en App.
+ * Con «reducir movimiento», el desplazamiento es instantáneo y queda solo el fundido.
+ * (<MotionConfig reducedMotion="user"> anula x/y, pero no un `transform` escrito como texto,
+ * que usamos para que la animación vaya por la GPU.)
  */
+function useTransition(delay = 0) {
+  const reduce = useReducedMotion();
+  return { duration, ease, delay, ...(reduce && { transform: { duration: 0, delay } }) };
+}
+
+/** Aparición al entrar en pantalla (reemplaza los ~20 IntersectionObserver duplicados). */
 export default function Reveal({ children, delay = 0, y = 24, as = 'div', ...rest }: RevealProps) {
   const Comp = m[as] as typeof m.div;
+  const transition = useTransition(delay);
   return (
     <Comp
       initial={{ opacity: 0, transform: `translateY(${y}px)` }}
       whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-      transition={{ duration, ease, delay }}
+      transition={transition}
       {...rest}
     >
       {children}
@@ -50,12 +59,13 @@ export function RevealGroup({ children, className, stagger = 0.12, as = 'div' }:
 
 export function RevealItem({ children, className, as = 'div' }: { children: ReactNode; className?: string; as?: 'div' | 'li' | 'article' }) {
   const Comp = m[as] as typeof m.div;
+  const transition = useTransition();
   return (
     <Comp
       className={className}
       variants={{
         hidden: { opacity: 0, transform: 'translateY(24px)' },
-        show: { opacity: 1, transform: 'translateY(0px)', transition: { duration, ease } },
+        show: { opacity: 1, transform: 'translateY(0px)', transition },
       }}
     >
       {children}

@@ -12,7 +12,7 @@ export default function WhatsAppButton() {
       href={whatsappUrl(sitio.whatsapp, 'Hola! Quisiera hacer una consulta sobre el I.S.E.F.')}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Escribinos por WhatsApp"
+      aria-label="Escribinos por WhatsApp (se abre en otra pestaña)"
       onClick={() => track('whatsapp_click', { origen: 'flotante' })}
     >
       <WhatsAppIcon size={30} />

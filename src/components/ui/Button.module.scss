@@ -33,9 +33,12 @@
   /* Hover/presión estándar del sitio: crece apenas con rebote y se hunde al presionar */
   @include press-bounce;
 
-  /* El color se aclara apenas (como el original) y la flecha avanza */
   &:hover {
-    color: var(--btn-fg);
+    color: var(--btn-fg); /* gana sobre el a:hover global */
+  }
+
+  /* El color se aclara apenas (como el original) y la flecha avanza. Solo con mouse: al tocar quedaba pegado */
+  @include hover {
     opacity: 0.92;
   }
 
@@ -77,7 +80,7 @@
   --btn-border: var(--violet-300);
   box-shadow: none;
 
-  &:hover {
+  @include hover {
     --btn-bg: var(--violet-50);
     --btn-fg: var(--violet-700);
     opacity: 1;
@@ -91,7 +94,7 @@
   box-shadow: none;
   backdrop-filter: blur(6px);
 
-  &:hover {
+  @include hover {
     --btn-bg: white;
     --btn-fg: var(--ink-950);
     opacity: 1;
@@ -104,9 +107,9 @@
   box-shadow: none;
   padding-inline: var(--space-2);
 
-  &:hover {
+  @include hover {
+    --btn-fg: var(--violet-800);
     opacity: 1;
-    color: var(--violet-800);
   }
 }
 

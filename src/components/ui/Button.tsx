@@ -48,15 +48,15 @@ const Button = forwardRef<HTMLElement, ButtonProps>(function Button(props, ref) 
   }
   if ('href' in rest && rest.href) {
     const external = /^https?:/.test(rest.href);
+    const a = rest as React.AnchorHTMLAttributes<HTMLAnchorElement>;
+    const newTab = (a.target ?? (external ? '_blank' : undefined)) === '_blank';
     return (
-      <a
-        ref={ref as React.Ref<HTMLAnchorElement>}
-        className={cls}
-        target={external ? '_blank' : undefined}
-        rel={external ? 'noopener noreferrer' : undefined}
-        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-      >
+      <a ref={ref as React.Ref<HTMLAnchorElement>} className={cls} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined} {...a}>
         {content}
+        {/* Avisos para lectores de pantalla: abre otra pestaña / qué tipo de archivo se descarga */}
+        {newTab && <span className="sr-only"> (se abre en otra pestaña)</span>}
+        {a.download != null && a.download !== false && /\.docx?$/i.test(a.href ?? '') && <span className="sr-only"> (archivo de Word)</span>}
+        {a.download != null && a.download !== false && /\.pdf$/i.test(a.href ?? '') && <span className="sr-only"> (PDF)</span>}
       </a>
     );
   }

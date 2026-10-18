@@ -6,6 +6,11 @@
   background: var(--color-footer); /* índigo del sitio original */
   overflow: hidden;
   isolation: isolate;
+
+  /* En celular, el botón flotante de WhatsApp tapaba la última línea: aire extra abajo */
+  @include down($bp-md) {
+    padding-bottom: calc(var(--space-8) + 72px);
+  }
 }
 
 .inner {
@@ -101,17 +106,16 @@
   }
 }
 
+/* Títulos de columna en texto normal (sin mayúsculas espaciadas, DESIGN.md) */
 .title {
   margin-bottom: var(--space-5);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
+  letter-spacing: 0;
 
   small {
+    font-size: var(--text-sm);
     font-weight: var(--weight-regular);
-    letter-spacing: 0;
-    text-transform: none;
     color: var(--color-on-dark-muted);
   }
 }

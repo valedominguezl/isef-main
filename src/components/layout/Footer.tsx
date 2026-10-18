@@ -14,7 +14,7 @@ export default function Footer() {
   const year = TODAY.slice(0, 4);
 
   return (
-    <footer className={`${styles.footer} on-dark`}>
+    <footer className={`${styles.footer} on-dark no-print`}>
       <div className={styles.inner}>
         <div className={styles.brandCol}>
           <Link to="/" className={styles.brand}>
@@ -69,6 +69,7 @@ export default function Footer() {
                 {i.external ? (
                   <a href={i.to} target="_blank" rel="noopener noreferrer">
                     {i.label} <ExternalLink size={12} aria-hidden />
+                    <span className="sr-only"> (se abre en otra pestaña)</span>
                   </a>
                 ) : (
                   <Link to={i.to}>{i.label}</Link>
@@ -88,12 +89,14 @@ export default function Footer() {
                 <MapPin size={16} aria-hidden />
                 <a href={s.mapaUrl} target="_blank" rel="noopener noreferrer">
                   {s.direccion}
+                  <span className="sr-only"> (abre el mapa en otra pestaña)</span>
                 </a>
               </li>
               <li>
                 <Phone size={16} aria-hidden />
                 <a href={whatsappUrl(s.telefono)} target="_blank" rel="noopener noreferrer">
                   WhatsApp {formatPhone(s.telefono)}
+                  <span className="sr-only"> (se abre en otra pestaña)</span>
                 </a>
               </li>
             </ul>

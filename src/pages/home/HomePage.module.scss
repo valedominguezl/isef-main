@@ -161,18 +161,12 @@
   margin: 0 auto var(--space-8);
 }
 
-/* Resultados nuevos: fundido corto; mientras se escribe, los anteriores quedan atenuados */
+/* Resultados nuevos: la receta común de filtros; mientras se escribe, los anteriores quedan atenuados */
 .faqList {
-  animation: listIn var(--duration-slow) var(--ease-standard);
+  @include results-in;
   transition: opacity var(--duration-base) var(--ease-standard);
 }
 
 .pending {
-  opacity: 0.5;
-}
-
-@keyframes listIn {
-  from {
-    opacity: 0;
-  }
+  @include results-pending;
 }

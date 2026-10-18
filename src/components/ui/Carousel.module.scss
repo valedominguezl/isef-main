@@ -86,21 +86,24 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: var(--violet-300); /* 200 se perdía sobre las formas lila del fondo */
+    background: var(--violet-400); /* 3:1 sobre blanco (el 300 daba 2,1:1; el 200 se perdía sobre las formas lila) */
     clip-path: inset(0 9px round 999px);
-    transition: clip-path 300ms var(--ease-emphasized), background-color var(--duration-base);
+    transition:
+      clip-path var(--duration-base) var(--ease-emphasized),
+      background-color var(--duration-base) var(--ease-standard);
   }
 
-  &:hover:not(.dotActive)::before {
-    background: var(--violet-400);
+  @media (hover: hover) {
+    &:hover:not(.dotActive)::before {
+      background: var(--violet-500);
+    }
   }
 
-  // Área táctil mínima sin agrandar el punto
-
+  // Área táctil mínima (28 × 44) sin agrandar el punto
   &::after {
     content: '';
     position: absolute;
-    inset: -10px;
+    inset: -17px 0;
   }
 }
 
@@ -125,8 +128,10 @@
     background: rgb(255 255 255 / 0.3);
   }
 
-  .dot:hover:not(.dotActive)::before {
-    background: rgb(255 255 255 / 0.6);
+  @media (hover: hover) {
+    .dot:hover:not(.dotActive)::before {
+      background: rgb(255 255 255 / 0.6);
+    }
   }
 
   .dotActive::before {

@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Plus, X } from 'lucide-react';
 import heroImg from '@/assets/media/especializaciones/main.webp';
 import heroSm from '@/assets/media/especializaciones/main-800.webp';
 import introImg from '@/assets/media/especializaciones/intro.webp';
 import { cursos, disertantes, nombreCompleto, paginas } from '@/content';
+import { altFoto } from '@/content/paginas';
 import { normalize } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
@@ -38,6 +39,12 @@ export function Component() {
   const [todosDis, setTodosDis] = useState(false);
   const DIS_INICIALES = 3;
   const query = useDebounced(q);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const masRef = useRef<HTMLDivElement>(null);
+  // Al mostrar el resto de los disertantes, el foco pasa al primero nuevo (el botón desaparece)
+  useEffect(() => {
+    if (todosDis) masRef.current?.querySelector('a')?.focus({ preventScroll: true });
+  }, [todosDis]);
   const list = useMemo(() => {
     const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
     return searchable.filter((s) => (!dis || s.curso.disertantes.includes(dis)) && terms.every((t) => s.text.includes(t))).map((s) => s.curso);
@@ -81,7 +88,7 @@ export function Component() {
       />
 
       <Section>
-        <Feature title={textos.intro.titulo} image={textos.intro.imagen ?? introImg} imageAlt="Clase de especialización">
+        <Feature title={textos.intro.titulo} image={textos.intro.imagen ?? introImg} imageAlt={altFoto(textos.intro, 'Clase de especialización')}>
           <Prose text={textos.intro.texto} />
         </Feature>
       </Section>
@@ -97,13 +104,15 @@ export function Component() {
         </CardGrid>
         {/* El resto aparece al pedirlo, con la misma entrada escalonada */}
         {todosDis && (
-          <CardGrid reveal dense className={styles.speakersMore}>
-            {disertantes.slice(DIS_INICIALES).map((d) => (
-              <RevealItem key={d.slug}>
-                <SpeakerCard disertante={d} />
-              </RevealItem>
-            ))}
-          </CardGrid>
+          <div ref={masRef}>
+            <CardGrid reveal dense className={styles.speakersMore}>
+              {disertantes.slice(DIS_INICIALES).map((d) => (
+                <RevealItem key={d.slug}>
+                  <SpeakerCard disertante={d} />
+                </RevealItem>
+              ))}
+            </CardGrid>
+          </div>
         )}
         {!todosDis && disertantes.length > DIS_INICIALES && (
           <div className={styles.more}>
@@ -118,7 +127,7 @@ export function Component() {
         <SectionHeader id="cursos-title" align="center" title="Nuestras *especializaciones*" lead="Toda la información detallada de cada curso: temario, modalidad, fechas y disertantes." />
 
         <Reveal className={styles.filters}>
-          <SearchField value={q} onChange={setQ} pending={q !== query} label="Buscar cursos" placeholder="Buscar por tema, disertante o contenido del temario…" />
+          <SearchField inputRef={searchRef} value={q} onChange={setQ} pending={q !== query} label="Buscar cursos" placeholder="Buscar por tema, disertante o contenido del temario…" />
           <ChipGroup
             label="Filtrar por disertante"
             align="center"
@@ -129,20 +138,22 @@ export function Component() {
           />
         </Reveal>
 
-        <p className={styles.count} aria-live="polite">
-          {list.length === cursos.length ? `${list.length} cursos` : `${list.length} de ${cursos.length} cursos`}
+        {/* Solo el texto es región viva (el botón queda afuera: si no, también se anunciaba) */}
+        <div className={styles.count}>
+          <p role="status">{list.length === cursos.length ? `${list.length} cursos` : `${list.length} de ${cursos.length} cursos`}</p>
           {(q || dis) && (
             <button
               type="button"
               onClick={() => {
                 setQ('');
                 setDis(null);
+                searchRef.current?.focus(); // el botón desaparece: el foco vuelve al buscador
               }}
             >
               <X size={14} aria-hidden /> Limpiar filtros
             </button>
           )}
-        </p>
+        </div>
 
         {list.length ? (
           grupos.map((g) => (
@@ -150,8 +161,9 @@ export function Component() {
               {g.titulo && <h3 className={styles.groupTitle}>{g.titulo}</h3>}
               <CardGrid as="ul" role="list" className={[styles.results, q !== query && styles.pending].filter(Boolean).join(' ')} key={`${dis ?? 'todos'}|${query}`}>
                 {g.cursos.map((c, i) => (
-                  <li key={c.slug} style={{ animationDelay: `${Math.min(i, 8) * 70}ms` }}>
-                    <CourseCard curso={c} />
+                  <li key={c.slug} style={{ '--i': i } as React.CSSProperties}>
+                    {/* Con títulos de grupo (h3), cada curso baja a h4 */}
+                    <CourseCard curso={c} headingLevel={g.titulo ? 4 : 3} />
                   </li>
                 ))}
               </CardGrid>

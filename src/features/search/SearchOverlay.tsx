@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { AnimatePresence, m } from 'motion/react';
 import { ArrowRight, CornerDownLeft, Search, X } from 'lucide-react';
 import { track } from '@/lib/analytics';
+import { EASE_EMPHASIZED, EASE_EXIT } from '@/lib/motion';
+import { useModalFocus } from '@/lib/useModalFocus';
 import { loadIndex, search, snippet, type Hit } from './engine';
 import Highlight from './Highlight';
 import { TYPE_LABELS, TYPE_ORDER } from './types';
@@ -24,7 +26,10 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  // El resto de la página queda inerte mientras está abierto; al cerrar, el foco vuelve a donde estaba
+  useModalFocus(open, overlayRef);
 
   useEffect(() => {
     if (!open) return;
@@ -101,11 +106,12 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
     <AnimatePresence>
       {open && (
         <m.div
+          ref={overlayRef}
           key="buscador"
           className={styles.overlay}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
-          exit={{ opacity: 0, transition: { duration: 0.22, ease: [0.4, 0, 1, 1] } }}
+          animate={{ opacity: 1, transition: { duration: 0.35, ease: EASE_EMPHASIZED } }}
+          exit={{ opacity: 0, transition: { duration: 0.22, ease: EASE_EXIT } }}
           role="dialog"
           aria-modal="true"
           aria-label="Buscar en el sitio"
@@ -117,19 +123,23 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
           <m.div
             className={styles.panel}
             initial={{ opacity: 0, y: -12, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
-            exit={{ opacity: 0, y: -8, scale: 0.98, transition: { duration: 0.2, ease: [0.4, 0, 1, 1] } }}
+            animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: EASE_EMPHASIZED } }}
+            exit={{ opacity: 0, y: -8, scale: 0.98, transition: { duration: 0.2, ease: EASE_EXIT } }}
           >
             <div className={styles.bar}>
               <Search className={styles.barIcon} size={26} aria-hidden />
+              {/* Combobox: el foco queda en el campo y las flechas recorren los resultados (aria-activedescendant) */}
               <input
                 ref={inputRef}
                 className={styles.input}
                 type="search"
+                role="combobox"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="¿Qué estás buscando?"
                 aria-label="Buscar en el sitio"
+                aria-expanded={flat.length > 0}
+                aria-autocomplete="list"
                 aria-controls="search-results"
                 aria-activedescendant={flat[active] ? `sr-${flat[active].id}` : undefined}
                 autoComplete="off"
@@ -141,14 +151,12 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
               </button>
             </div>
 
-            <div
-              className={[styles.results, pending && styles.pending].filter(Boolean).join(' ')}
-              id="search-results"
-              ref={listRef}
-              role="listbox"
-              aria-label="Resultados"
-              aria-busy={pending}
-            >
+            {/* Siempre montado: el lector de pantalla anuncia cuántos resultados hay al dejar de escribir */}
+            <p role="status" className="sr-only">
+              {settled.trim() && !pending ? (flat.length ? `${hits.length} resultados para ${settled.trim()}` : `Sin resultados para ${settled.trim()}`) : ''}
+            </p>
+
+            <div className={[styles.results, pending && styles.pending].filter(Boolean).join(' ')} ref={listRef} aria-busy={pending}>
               {/* Primera búsqueda: esqueleto mientras llegan los resultados */}
               {pending && !settled.trim() && (
                 <div className={styles.skeleton} aria-hidden>
@@ -172,12 +180,13 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
                   </div>
                   <div>
                     <p className={styles.groupTitle}>Accesos rápidos</p>
+                    {/* Navegan: son enlaces, no botones */}
                     <ul className={styles.quick} role="list">
                       {ACCESOS.map((a) => (
                         <li key={a.url}>
-                          <button type="button" onClick={() => go(a.url)}>
+                          <Link to={a.url} onClick={onClose}>
                             {a.label} <ArrowRight size={18} aria-hidden />
-                          </button>
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -191,19 +200,24 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
                 </p>
               )}
 
+              {/* Listbox solo con los resultados (agrupados por tipo); las opciones no van en el orden de Tab */}
+              <div id="search-results" role="listbox" aria-label="Resultados">
               {settled.trim() && groups.map((g) => (
-                <div key={g.type + settled} className={styles.group}>
-                  <p className={styles.groupTitle}>{TYPE_LABELS[g.type]}</p>
-                  <ul role="list">
+                <div key={g.type + settled} className={styles.group} role="group" aria-labelledby={`sg-${g.type}`}>
+                  <p className={styles.groupTitle} id={`sg-${g.type}`}>
+                    {TYPE_LABELS[g.type]}
+                  </p>
+                  <ul role="none">
                     {g.items.map((h) => {
                       idx += 1;
                       const i = idx;
                       return (
-                        <li key={h.id}>
+                        <li key={h.id} role="none">
                           <button
                             id={`sr-${h.id}`}
                             type="button"
                             role="option"
+                            tabIndex={-1}
                             aria-selected={i === active}
                             data-active={i === active}
                             className={styles.hit}
@@ -227,6 +241,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
                   </ul>
                 </div>
               ))}
+              </div>
             </div>
 
             {settled.trim() && (

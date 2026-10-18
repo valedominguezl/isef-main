@@ -27,9 +27,13 @@ export function Component() {
       <PageHero image={textos.hero.imagen} title={textos.hero.titulo} subtitle={textos.hero.subtitulo} />
       <Section width="wide">
         <SearchField className={styles.search} value={q} onChange={setQ} pending={q !== query} label="Buscar conferencias" placeholder="Buscar conferencias…" />
-        <CardGrid>
-          {list.map((g) => (
-            <article key={g.titulo} className={styles.card}>
+        <p role="status" className="sr-only">
+          {query ? `${list.length} grabación${list.length === 1 ? '' : 'es'}` : ''}
+        </p>
+        {/* key: cada búsqueda vuelve a montar la grilla y las tarjetas entran con la receta común de filtros */}
+        <CardGrid key={query} className={q !== query ? styles.pending : undefined}>
+          {list.map((g, i) => (
+            <article key={g.titulo} className={styles.card} style={{ '--i': i } as React.CSSProperties}>
               <p className={styles.sub}>{g.subtitulo}</p>
               <h2>{g.titulo}</h2>
               <ul role="list">
@@ -38,6 +42,7 @@ export function Component() {
                     <a href={e.url} target="_blank" rel="noopener noreferrer">
                       {/\.pdf$/i.test(e.url) ? <FileText size={16} aria-hidden /> : <PlayCircle size={16} aria-hidden />}
                       {e.nombre}
+                      <span className="sr-only"> (se abre en otra pestaña)</span>
                     </a>
                   </li>
                 ))}

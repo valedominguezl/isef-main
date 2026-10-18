@@ -249,7 +249,8 @@ export const sitioSchema = z.object({
  */
 const opcional = z.string().optional();
 const heroPagina = z.object({ titulo: opcional, subtitulo: opcional, imagen: mediaPath.optional() }).optional();
-const bloquePagina = z.object({ titulo: opcional, texto: markdown.optional(), imagen: mediaPath.optional() }).optional();
+/** imagenAlt: descripción de la foto cargada desde el panel (texto alternativo para lectores de pantalla). */
+const bloquePagina = z.object({ titulo: opcional, texto: markdown.optional(), imagen: mediaPath.optional(), imagenAlt: opcional }).optional();
 const tituloPagina = z.object({ titulo: opcional }).optional();
 
 export const paginaSchemas = {

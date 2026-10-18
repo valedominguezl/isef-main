@@ -19,12 +19,10 @@ export function SearchProvider({ children }: { children: ReactNode }) {
   }, []);
   const close = useCallback(() => setOpen(false), []);
 
-  // Atajos: "/" o Ctrl/Cmd + K
+  // Atajo: Ctrl/Cmd + K. Sin atajos de una sola tecla («/»): se disparan sin querer con dictado por voz (WCAG 2.1.4)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const el = e.target as HTMLElement;
-      const typing = el?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el?.tagName);
-      if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || (e.key === '/' && !typing)) {
+      if (e.key.toLowerCase() === 'k' && (e.metaKey || e.ctrlKey)) {
         if (location.pathname.startsWith('/admin') || location.pathname.startsWith('/test-hiit')) return;
         e.preventDefault();
         open();

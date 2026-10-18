@@ -75,7 +75,7 @@
     color: var(--violet-600);
   }
 
-  h3 {
+  h2 {
     font-size: var(--text-h4);
     font-weight: var(--weight-semibold);
     margin-bottom: var(--space-2);
@@ -96,7 +96,9 @@
   flex-direction: column;
   gap: var(--space-5);
 
-  @include up($bp-lg) {
+  /* Fija al bajar solo si la ventana es alta: con varios disertantes la columna puede medir más que
+     la pantalla y la parte de abajo quedaba sin verse hasta el final de la página */
+  @media (min-width: $bp-lg) and (min-height: 860px) {
     position: sticky;
     top: calc(var(--header-h) + var(--space-6));
   }
@@ -108,9 +110,7 @@
   gap: var(--space-5);
   padding: var(--space-6);
   border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-md);
+  @include card-surface;
 }
 
 .asideTitle {
@@ -178,6 +178,9 @@
 
     &:hover {
       color: inherit;
+    }
+
+    @include hover {
       background: var(--color-bg-tint);
 
       em {
@@ -247,6 +250,9 @@
 
     &:hover {
       color: var(--color-text);
+    }
+
+    @include hover {
       background: var(--violet-100);
     }
   }
@@ -280,7 +286,9 @@
   color: var(--violet-600);
   transition: transform var(--duration-slow) var(--ease-emphasized);
 
-  .history a:hover & {
-    transform: translate(2px, -2px);
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .history a:hover & {
+      transform: translate(2px, -2px);
+    }
   }
 }

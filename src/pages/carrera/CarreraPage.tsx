@@ -8,6 +8,7 @@ import sanLuisLogo from '@/assets/validez/sanLuis.webp';
 import argentinaLogo from '@/assets/validez/argentina.webp';
 import mercosurLogo from '@/assets/validez/mercosur.webp';
 import { cursos, galeria, paginas, plan } from '@/content';
+import { altFoto } from '@/content/paginas';
 import { Markdown } from '@/lib/markdown';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
 import Prose from '@/components/ui/Prose';
@@ -42,9 +43,14 @@ function Galeria() {
   // Última foto abierta: el visor la sigue mostrando mientras se cierra con su animación de salida
   const [last, setLast] = useState(0);
   if (index != null && index !== last) setLast(index);
+  // Sentido del último paso: la foto nueva entra desde el lado hacia el que se avanza
+  const [dir, setDir] = useState(1);
   const imgs = galeria.imagenes;
   const current = imgs[index ?? last];
-  const step = (d: number) => setIndex((i) => (i == null ? i : (i + d + imgs.length) % imgs.length));
+  const step = (d: number) => {
+    setDir(d);
+    setIndex((i) => (i == null ? i : (i + d + imgs.length) % imgs.length));
+  };
 
   return (
     <>
@@ -73,7 +79,7 @@ function Galeria() {
           >
             {/* Marco de proporción fija: el visor no cambia de tamaño entre fotos verticales y horizontales */}
             <div className={styles.frame}>
-              <img key={current.imagen} className={styles.swap} src={current.imagen} alt={current.lugar} />
+              <img key={current.imagen} className={styles.swap} src={current.imagen} alt={current.lugar} style={{ '--dir': dir } as React.CSSProperties} />
             </div>
             <div className={`${styles.lightboxBar} on-dark`}>
               <IconButton label="Foto anterior" tone="light" onClick={() => step(-1)}>
@@ -135,7 +141,7 @@ export function Component() {
         <Feature
           title={textos.intro.titulo}
           image={textos.intro.imagen ?? introImg}
-          imageAlt="Profesor de educación física trabajando con alumnos"
+          imageAlt={altFoto(textos.intro, 'Profesor de educación física trabajando con alumnos')}
           actions={<Button to="/especializaciones">Ver talleres</Button>}
         >
           <Prose text={textos.intro.texto} />

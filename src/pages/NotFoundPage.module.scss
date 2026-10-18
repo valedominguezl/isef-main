@@ -11,6 +11,36 @@
   }
 }
 
+/* Entrada escalonada como la cabecera de las demás páginas (1100 ms, 24 px, 120 ms) */
+.page > div > * {
+  animation: in 1100ms var(--ease-emphasized) both;
+
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{0.1 + ($i - 1) * 0.12}s;
+    }
+  }
+}
+
+@keyframes in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page > div > * {
+    animation-name: fade;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
 .code {
   font-family: var(--font-sans) !important;
   font-size: clamp(5rem, 14vw, 9rem) !important;

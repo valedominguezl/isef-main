@@ -58,19 +58,22 @@ export function Component() {
           </div>
         </form>
 
+        {/* Siempre montado (aunque vacío): una región viva que aparece junto con su texto casi no se anuncia */}
+        <p className={styles.summary} role="status">
+          {q &&
+            hits &&
+            (hits.length ? (
+              <>
+                {hits.length} resultado{hits.length === 1 ? '' : 's'} para <strong>“{q}”</strong>
+              </>
+            ) : (
+              <>
+                No hay resultados para <strong>“{q}”</strong>. Revisá la ortografía o probá con términos más generales.
+              </>
+            ))}
+        </p>
         {q && hits && (
           <>
-            <p className={styles.summary} aria-live="polite">
-              {hits.length ? (
-                <>
-                  {hits.length} resultado{hits.length === 1 ? '' : 's'} para <strong>“{q}”</strong>
-                </>
-              ) : (
-                <>
-                  No hay resultados para <strong>“{q}”</strong>. Revisá la ortografía o probá con términos más generales.
-                </>
-              )}
-            </p>
             {hits.length > 0 && (
               <ChipGroup
                 label="Filtrar resultados"
@@ -95,6 +98,7 @@ export function Component() {
                       {external ? (
                         <a href={h.url} target="_blank" rel="noopener noreferrer">
                           {Title}
+                          <span className="sr-only"> (se abre en otra pestaña)</span>
                         </a>
                       ) : (
                         <Link to={h.url}>{Title}</Link>

@@ -6,6 +6,7 @@ import introImg from '@/assets/media/home/intro.webp';
 import especImg from '@/assets/media/home/especializaciones.webp';
 import cuotaImg from '@/assets/media/aranceles/main.webp';
 import { aranceles, cursos, faq, inscripciones, novedadesRecientes, paginas, plan, sitio, inscripcionesVigentes } from '@/content';
+import { altFoto } from '@/content/paginas';
 import { normalize, whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import Seo from '@/components/seo/Seo';
@@ -56,6 +57,10 @@ function Faq() {
         label="Buscar en las preguntas frecuentes"
         placeholder="Buscar en las preguntas…"
       />
+      {/* Anuncia cuántas preguntas quedaron al filtrar (siempre montado, solo para lectores de pantalla) */}
+      <p role="status" className="sr-only">
+        {query ? (items.length ? `${items.length} pregunta${items.length === 1 ? '' : 's'} sobre «${query}»` : `No hay preguntas sobre «${query}»`) : ''}
+      </p>
       {visible.length ? (
         <Accordion
           key={query}
@@ -179,7 +184,7 @@ export function Component() {
         <Feature
           title={textos.bienvenida.titulo}
           image={textos.bienvenida.imagen ?? introImg}
-          imageAlt="Vista aérea del predio del profesorado con las sierras de San Luis"
+          imageAlt={altFoto(textos.bienvenida, 'Vista aérea del predio del profesorado con las sierras de San Luis')}
           actions={<Button to="/carrera">Conocé la carrera</Button>}
         >
           <Prose text={textos.bienvenida.texto} />
@@ -212,7 +217,7 @@ export function Component() {
           title={textos.especializaciones.titulo}
           image={textos.especializaciones.imagen ?? especImg}
           imageFit="cutout"
-          imageAlt="Clase práctica de entrenamiento de la fuerza"
+          imageAlt={altFoto(textos.especializaciones, 'Clase práctica de entrenamiento de la fuerza')}
           actions={<Button to="/especializaciones">Ver todas las especializaciones</Button>}
         >
           <Prose text={textos.especializaciones.texto} />
