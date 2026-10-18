@@ -21,6 +21,7 @@ import DeleteButton from '../ui/DeleteButton';
 import { useToast } from '../ui/Toaster';
 import { useConfirm } from '../ui/ConfirmDialog';
 import { novedadDeCurso } from '../novedadDeCurso';
+import { enfocarPrimerError, useUnsavedGuard } from '../useUnsavedGuard';
 import styles from '../Admin.module.scss';
 
 type Obj = Record<string, unknown>;
@@ -107,15 +108,6 @@ export function useRefs(enabled = true) {
   );
 }
 
-function useUnsavedWarning(dirty: boolean) {
-  useEffect(() => {
-    if (!dirty) return;
-    const h = (e: BeforeUnloadEvent) => e.preventDefault();
-    window.addEventListener('beforeunload', h);
-    return () => window.removeEventListener('beforeunload', h);
-  }, [dirty]);
-}
-
 export default function EntryEditor() {
   const { key = '', slug: slugParam = '' } = useParams();
   const [params, setParams] = useSearchParams();
@@ -143,7 +135,7 @@ export default function EntryEditor() {
   const [cvDraft, setCvDraft] = useState<Obj | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [dirty, setDirty] = useState(false);
-  useUnsavedWarning(dirty);
+  const guard = useUnsavedGuard(dirty);
   const linkedQuick = useLinkedQuick(col);
   // Si el archivo se relee mientras hay cambios sin guardar, no pisar lo que se está editando
   const dirtyRef = useRef(dirty);
@@ -250,6 +242,7 @@ export default function EntryEditor() {
       if (cvRes && !cvRes.ok && res.ok && !slugError) setParams({ tab: 'cv' });
       else if (tab === 'cv') setParams({});
       else if (tab === 'envios') setParams({ tab: 'datos' });
+      enfocarPrimerError();
       return;
     }
     setErrors({});
@@ -272,6 +265,7 @@ export default function EntryEditor() {
         ])
       : undefined;
     setDirty(false);
+    guard.limpiar();
     toast.saved(conNovedad ? 'Guardado. También se creó su novedad. Falta publicar.' : undefined, undoNovedad);
     if (isNew) navigate(`/admin/c/${col.key}/${slug}`, { replace: true });
   };
@@ -295,6 +289,7 @@ export default function EntryEditor() {
       }),
     ]);
     setDirty(false);
+    guard.limpiar();
     navigate(`/admin/c/${col.key}`);
     toast.show({ text: `Se eliminó «${title}». Falta publicar.`, icon: Trash2, undo });
   };
@@ -344,15 +339,21 @@ export default function EntryEditor() {
         </div>
       </div>
 
+      {/* Pestañas = navegación por URL (?tab=): aria-current, no el patrón de tabs con flechas */}
       {isCert && !isNew && (
-        <div className={styles.tabs} role="tablist">
-          <button type="button" role="tab" aria-selected={tab === 'envios'} onClick={() => setParams({})}>
+        <nav className={styles.tabs} aria-label="Secciones del certificado">
+          <button type="button" aria-current={tab === 'envios' ? 'page' : undefined} onClick={() => setParams({})}>
             <Send size={18} aria-hidden /> Personas y envíos
           </button>
-          <button type="button" role="tab" aria-selected={tab === 'main'} onClick={() => setParams({ tab: 'datos' })}>
-            <Settings2 size={18} aria-hidden /> Datos del certificado {Object.keys(mainErrors).length > 0 && <span className={styles.badge}>!</span>}
+          <button type="button" aria-current={tab === 'main' ? 'page' : undefined} onClick={() => setParams({ tab: 'datos' })}>
+            <Settings2 size={18} aria-hidden /> Datos del certificado{' '}
+            {Object.keys(mainErrors).length > 0 && (
+              <span className={styles.badge}>
+                !<span className="sr-only"> (hay campos para corregir)</span>
+              </span>
+            )}
           </button>
-        </div>
+        </nav>
       )}
 
       {/* Opciones básicas (visible, destacado, este año…): lo primero que se ve */}
@@ -372,14 +373,19 @@ export default function EntryEditor() {
       </Notice>
 
       {isDis && (
-        <div className={styles.tabs} role="tablist">
-          <button type="button" role="tab" aria-selected={tab === 'main'} onClick={() => setParams({})}>
+        <nav className={styles.tabs} aria-label="Secciones del disertante">
+          <button type="button" aria-current={tab === 'main' ? 'page' : undefined} onClick={() => setParams({})}>
             <UserRound size={18} aria-hidden /> Perfil
           </button>
-          <button type="button" role="tab" aria-selected={tab === 'cv'} onClick={() => setParams({ tab: 'cv' })}>
-            <FileText size={18} aria-hidden /> Currículum {Object.keys(cvErrors).length > 0 && <span className={styles.badge}>!</span>}
+          <button type="button" aria-current={tab === 'cv' ? 'page' : undefined} onClick={() => setParams({ tab: 'cv' })}>
+            <FileText size={18} aria-hidden /> Currículum{' '}
+            {Object.keys(cvErrors).length > 0 && (
+              <span className={styles.badge}>
+                !<span className="sr-only"> (hay campos para corregir)</span>
+              </span>
+            )}
           </button>
-        </div>
+        </nav>
       )}
 
       {tab === 'envios' ? (
@@ -417,7 +423,8 @@ export default function EntryEditor() {
         {col.preview && (
           <aside className={styles.preview} aria-label="Vista previa">
             <p className={styles.previewLabel}>{col.preview === 'certificado' ? 'Así sale el certificado (persona de muestra)' : 'Así se ve en el sitio'}</p>
-            <div className={styles.previewCard}>
+            {/* inert: es solo para mirar (pointer-events: none no frenaba al Tab, que entraba a los links de la tarjeta) */}
+            <div className={styles.previewCard} inert>
               {col.preview === 'curso' && <CourseCard curso={card<Curso>({ disertantes: [], temario: [] }, 'imagen')} />}
               {col.preview === 'novedad' && <NewsCard novedad={card<Novedad>({}, 'imagen')} />}
               {col.preview === 'disertante' && <SpeakerCard disertante={card<Disertante>({ destacados: [] }, 'foto')} />}

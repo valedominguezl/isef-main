@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, m } from 'motion/react';
 import { FileJson, FileMinus, ImageIcon, LoaderCircle, Undo2, UploadCloud, X } from 'lucide-react';
+import { DURATION, enter, exit } from '@/lib/motion';
 import { useAdmin } from '../AdminContext';
 import type { Change } from '../store';
 import { Button, IconButton } from '../ui/Button';
@@ -26,7 +27,20 @@ export default function PendingDrawer({ open, onClose }: { open: boolean; onClos
     if (!open) return;
     const prev = document.activeElement as HTMLElement | null;
     panel.current?.focus();
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && !asking.current && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !asking.current) onClose();
+      // El foco no se escapa al panel de atrás: recorre el cajón y los avisos (su «Deshacer» tiene que seguir a mano;
+      // por eso no se usa inert)
+      if (e.key !== 'Tab' || asking.current || !panel.current) return;
+      const sel = 'button:not(:disabled), input:not(:disabled), a[href]';
+      const avisos = document.querySelector('[data-avisos]');
+      const f = [...panel.current.querySelectorAll<HTMLElement>(sel), ...(avisos?.querySelectorAll<HTMLElement>(sel) ?? [])];
+      if (!f.length) return;
+      e.preventDefault();
+      const i = f.indexOf(document.activeElement as HTMLElement);
+      const d = e.shiftKey ? -1 : 1;
+      f[i < 0 ? (d > 0 ? 0 : f.length - 1) : (i + d + f.length) % f.length].focus();
+    };
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('keydown', onKey);
@@ -72,8 +86,8 @@ export default function PendingDrawer({ open, onClose }: { open: boolean; onClos
           className={styles.drawerBackdrop}
           onMouseDown={(e) => e.target === e.currentTarget && onClose()}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
-          exit={{ opacity: 0, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } }}
+          animate={{ opacity: 1, transition: enter() }}
+          exit={{ opacity: 0, transition: exit(0.25) }}
         >
           <m.aside
             ref={panel}
@@ -83,8 +97,8 @@ export default function PendingDrawer({ open, onClose }: { open: boolean; onClos
             aria-modal="true"
             aria-label="Cambios pendientes"
             initial={{ x: 48, opacity: 0 }}
-            animate={{ x: 0, opacity: 1, transition: { duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] } }}
-            exit={{ x: 32, opacity: 0, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } }}
+            animate={{ x: 0, opacity: 1, transition: enter(0.45) }}
+            exit={{ x: 32, opacity: 0, transition: exit(0.25) }}
           >
             <header>
               <h2>
@@ -93,32 +107,42 @@ export default function PendingDrawer({ open, onClose }: { open: boolean; onClos
               <IconButton icon={X} label="Cerrar" size={18} onClick={onClose} />
             </header>
             {done && !pending.length ? (
-              <div className={styles.success}>
-                <UploadCloud size={32} />
+              // Momento que pasa pocas veces: entra con un fundido y el ícono con un rebote leve
+              <m.div className={styles.success} role="status" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1, transition: enter(DURATION.slow) }}>
+                <m.span initial={{ scale: 0.6 }} animate={{ scale: 1, transition: { type: 'spring', duration: 0.5, bounce: 0.3, delay: 0.1 } }}>
+                  <UploadCloud size={32} aria-hidden />
+                </m.span>
                 <p>
                   <strong>¡Publicado!</strong>{' '}
                   {mode === 'github' ? 'En 1 o 2 minutos los cambios estarán en el sitio.' : 'Los archivos se guardaron en tu disco. Hacé commit y push cuando quieras publicarlos.'}
                 </p>
-              </div>
+              </m.div>
             ) : pending.length ? (
               <>
                 <ul className={styles.pendingList}>
-                  {pending.map((p) => {
-                    const Icon = iconOf(p);
-                    return (
-                      <li key={p.path}>
-                        <Icon size={18} aria-hidden />
-                        <span>{'delete' in p ? <s>{p.label}</s> : p.label}</span>
-                        <IconButton icon={Undo2} label={`Descartar «${p.label}»`} onClick={() => discardOne(p)} />
-                      </li>
-                    );
-                  })}
+                  {/* Al descartar uno, se va achicándose (la lista no salta) */}
+                  <AnimatePresence initial={false}>
+                    {pending.map((p) => {
+                      const Icon = iconOf(p);
+                      return (
+                        <m.li key={p.path} style={{ overflow: 'hidden' }} exit={{ opacity: 0, height: 0, transition: exit(DURATION.fast) }}>
+                          <Icon size={18} aria-hidden />
+                          <span>{'delete' in p ? <s>{p.label}</s> : p.label}</span>
+                          <IconButton icon={Undo2} label={`Descartar «${p.label}»`} onClick={() => discardOne(p)} />
+                        </m.li>
+                      );
+                    })}
+                  </AnimatePresence>
                 </ul>
                 <label className={styles.label} htmlFor="commit-msg">
                   Descripción (opcional)
                 </label>
                 <input id="commit-msg" className={styles.input} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Ej.: nueva novedad sobre el curso de fuerza" />
-                {error && <p className={styles.error}>{error}</p>}
+                {error && (
+                  <p className={styles.error} role="alert">
+                    {error}
+                  </p>
+                )}
                 <div className={styles.drawerActions}>
                   <Button variant="danger" icon={X} onClick={discardAll}>
                     Descartar todo

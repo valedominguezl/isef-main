@@ -98,7 +98,11 @@ export default function StockPhotoPicker({ open, onClose, query, onPick }: Props
         </p>
       )}
 
-      <div aria-live="polite" aria-busy={estado.tipo === 'buscando'}>
+      {/* Región viva chica, solo con el resultado (antes envolvía toda la grilla) */}
+      <p role="status" className="sr-only">
+        {estado.tipo === 'listo' ? (estado.fotos.length ? `${estado.fotos.length} fotos` : 'No encontramos fotos') : estado.tipo === 'buscando' ? 'Buscando fotos…' : ''}
+      </p>
+      <div aria-busy={estado.tipo === 'buscando'}>
         {estado.tipo === 'buscando' && (
           <ul className={styles.stockGrid} aria-label="Buscando fotos…">
             {Array.from({ length: 8 }, (_, i) => (
@@ -116,11 +120,11 @@ export default function StockPhotoPicker({ open, onClose, query, onPick }: Props
         {estado.tipo === 'listo' && !estado.fotos.length && <p className={styles.stockEmpty}>No encontramos fotos. Probá con otras palabras.</p>}
         {estado.tipo === 'listo' && estado.fotos.length > 0 && (
           <ul className={styles.stockGrid}>
-            {estado.fotos.map((f) => {
+            {estado.fotos.map((f, i) => {
               const credito = [capital(f.fuente), f.autor].filter(Boolean).join(' · ');
               const cargando = elegida === f.url;
               return (
-                <li key={f.url}>
+                <li key={f.url} className={styles.resultIn} style={{ '--i': i } as React.CSSProperties}>
                   <button type="button" className={styles.stockFoto} onClick={() => elegir(f)} disabled={elegida !== null} aria-label={`Usar foto: ${credito}`} aria-busy={cargando}>
                     <img src={f.miniatura} alt="" loading="lazy" />
                     {cargando && (

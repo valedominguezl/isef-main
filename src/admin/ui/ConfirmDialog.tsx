@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, m } from 'motion/react';
 import { Trash2, X, type LucideIcon } from 'lucide-react';
+import { DURATION, EASE_OUT, exit } from '@/lib/motion';
 import { Button } from './Button';
 import styles from './Ui.module.scss';
 
@@ -23,9 +24,6 @@ export function useConfirm() {
   if (!c) throw new Error('useConfirm fuera de ConfirmProvider');
   return c;
 }
-
-const EASE_IN = [0.25, 0.46, 0.45, 0.94] as const;
-const EASE_OUT = [0.4, 0, 1, 1] as const;
 
 export function ConfirmProvider({ children }: { children: ReactNode }) {
   const [req, setReq] = useState<(ConfirmOptions & { resolve: (ok: boolean) => void }) | null>(null);
@@ -85,8 +83,9 @@ function Dialog({ title, body, confirmLabel = 'Eliminar', icon: Icon = Trash2, t
       className={styles.backdrop}
       onMouseDown={(e) => e.target === e.currentTarget && onClose(false)}
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { duration: 0.35, ease: EASE_IN } }}
-      exit={{ opacity: 0, transition: { duration: 0.2, ease: EASE_OUT } }}
+      // Más corto que los demás diálogos: aparece en medio de una tarea (borrar, enviar), decenas de veces por día
+      animate={{ opacity: 1, transition: { duration: DURATION.base, ease: EASE_OUT } }}
+      exit={{ opacity: 0, transition: exit() }}
     >
       <m.div
         ref={box}
@@ -96,9 +95,9 @@ function Dialog({ title, body, confirmLabel = 'Eliminar', icon: Icon = Trash2, t
         aria-labelledby={ids.title}
         aria-describedby={body ? ids.body : undefined}
         onKeyDown={onKeyDown}
-        initial={{ opacity: 0, scale: 0.96, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: EASE_IN } }}
-        exit={{ opacity: 0, scale: 0.98, y: 6, transition: { duration: 0.2, ease: EASE_OUT } }}
+        initial={{ opacity: 0, scale: 0.97, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0, transition: { duration: DURATION.base, ease: EASE_OUT } }}
+        exit={{ opacity: 0, scale: 0.98, y: 6, transition: exit() }}
       >
         <span className={[styles.dialogIcon, tono === 'accion' && styles.dialogIconAccion].filter(Boolean).join(' ')} aria-hidden>
           <Icon size={22} />

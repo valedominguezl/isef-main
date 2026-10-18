@@ -247,20 +247,6 @@ img[loading='lazy']:not([data-loaded]) {
   color: var(--color-primary); /* sin rojo: el acento de texto es el violeta de marca */
 }
 
-/* Animaciones de resultados (mixin results-in) */
-@keyframes resultsIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-}
-
-@keyframes resultsFade {
-  from {
-    opacity: 0;
-  }
-}
-
 @media print {
   .no-print {
     display: none !important;

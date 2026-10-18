@@ -33,7 +33,8 @@
 | `violet-700` | `#4A2FDB` | Hover, final de gradientes |
 | `coral-500` · **Acento** | `#FF554E` | Solo dentro del gradiente de marca (menú móvil). No como color suelto |
 | `color-footer` | `#3C3182` | Footer (índigo del sitio original) |
-| `ink-950` | `#0D0C12` | Solo visor de fotos y sidebar del admin. **Nada de secciones negras** |
+| `ink-950` | `#0D0C12` | Solo el visor de fotos. **Nada de secciones negras** (la barra lateral del panel es clara: `color-bg-tint`) |
+| `danger-700` | `#B42828` | Texto rojo sobre fondos claros (errores del panel). `danger-500` queda para bordes e íconos |
 | `ink-700` | `#403D52` | Texto de párrafos (10:1 sobre blanco) |
 | `ink-600` | `#57536B` | Texto secundario (`color-text-muted`) |
 
@@ -117,6 +118,8 @@ Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20�
 | `duration-reveal` | 1100 ms | Aparición al hacer scroll (sube 24 px + fade). Las cabeceras (PageHero, disertante, 404) usan los mismos valores |
 | stagger | 120 ms | Grillas de tarjetas, cabeceras |
 | resultados (`results-in`) | 500 ms, 12 px, 50 ms entre ítems (tope 8) | Lo que cambia por un filtro o una búsqueda: respuesta corta, no la entrada lenta de scroll |
+
+**Panel /admin (herramienta de uso diario):** lo frecuente responde más rápido que en el sitio. Dentro de `.shell`, `--duration-slow` vale 300 ms (hovers, filas); cambio de pantalla 150 ms (`viewIn`, fundido + 4 px); secciones plegables abren en 300 ms y cierran en 150 ms; confirmaciones 300 ms. Diálogos, cajones y avisos quedan como en el sitio. En celular, las secciones van en una fila deslizable y el botón ☰ abre el menú completo como cajón.
 
 En JS, las curvas y duraciones de Motion salen de `src/lib/motion.ts` (espejo de estos tokens): nada de arreglos `[0.25, …]` sueltos.
 

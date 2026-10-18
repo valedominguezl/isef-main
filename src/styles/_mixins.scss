@@ -108,6 +108,25 @@ $bp-xl: 1280px;
   @media (prefers-reduced-motion: reduce) {
     animation-name: resultsFade;
   }
+
+  /* Los @keyframes van dentro de cada módulo que usa el mixin: CSS Modules renombra el nombre de la
+     animación al del módulo, y unos @keyframes globales no coincidían (no animaba). Sass los saca a la raíz. */
+  @include results-keyframes;
+}
+
+@mixin results-keyframes {
+  @keyframes resultsIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  @keyframes resultsFade {
+    from {
+      opacity: 0;
+    }
+  }
 }
 
 /* Resultados viejos atenuados mientras se espera que termine de escribir */

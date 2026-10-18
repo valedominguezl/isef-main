@@ -4,6 +4,7 @@ import type { Certificado } from '@/content/schema';
 import { useAdmin } from '../AdminContext';
 import { Button } from '../ui/Button';
 import { useToast } from '../ui/Toaster';
+import { useConfirm } from '../ui/ConfirmDialog';
 import { useFirma } from './firma';
 import Vista from './Vista';
 import adm from '../Admin.module.scss';
@@ -13,6 +14,7 @@ import s from './Certificados.module.scss';
 export default function VistaDatos({ cert }: { cert: Certificado }) {
   const { api } = useAdmin();
   const toast = useToast();
+  const confirm = useConfirm();
   const { firma, version, error, guardar } = useFirma(api);
   const [ocupado, setOcupado] = useState(false);
   const input = useRef<HTMLInputElement>(null);
@@ -46,7 +48,16 @@ export default function VistaDatos({ cert }: { cert: Certificado }) {
             {firma ? 'Cambiar firma' : 'Subir firma'}
           </Button>
           {firma && (
-            <Button variant="ghost" icon={Trash2} disabled={ocupado} onClick={() => void cambiar(null)}>
+            <Button
+              variant="ghost"
+              icon={Trash2}
+              disabled={ocupado}
+              onClick={async () => {
+                // Afecta a todos los certificados: se pregunta antes
+                const ok = await confirm({ title: '¿Quitar la firma escaneada?', body: 'Los certificados salen sin firma hasta que subas otra.', confirmLabel: 'Quitar' });
+                if (ok) void cambiar(null);
+              }}
+            >
               Quitar
             </Button>
           )}

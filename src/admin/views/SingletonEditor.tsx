@@ -9,6 +9,7 @@ import { FormBody, useRefs, validate } from './EntryEditor';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
 import type { Field } from '../config';
 import Notice from './Notice';
+import { enfocarPrimerError, useUnsavedGuard } from '../useUnsavedGuard';
 import { Button } from '../ui/Button';
 import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
@@ -25,11 +26,14 @@ export default function SingletonEditor() {
   const refs = useRefs(cfg ? usesRefs(cfg.fields) : false);
   const [draft, setDraft] = useState<Obj | null>(null);
   const [errors, setErrors] = useState<Errors>({});
+  const [dirty, setDirty] = useState(false);
+  const guard = useUnsavedGuard(dirty);
   const toast = useToast();
 
   useEffect(() => {
     // null = el archivo todavía no existe: se empieza vacío en vez de quedar cargando
     if (loaded !== undefined) setDraft(loaded ?? {});
+    setDirty(false);
   }, [loaded]);
 
   if (!cfg) return <p>Sección desconocida.</p>;
@@ -54,10 +58,13 @@ export default function SingletonEditor() {
     const res = validate(cfg.schema, clean(draft));
     if (!res.ok) {
       setErrors(res.errors);
+      enfocarPrimerError();
       return;
     }
     setErrors({});
     stage([{ path: cfg.file, content: `${JSON.stringify(clean(draft), null, 2)}\n`, encoding: 'utf8', label: cfg.label }]);
+    setDirty(false);
+    guard.limpiar();
     toast.saved();
   };
 
@@ -91,7 +98,10 @@ export default function SingletonEditor() {
         <FormBody
           fields={cfg.fields}
           draft={draft}
-          setDraft={setDraft}
+          setDraft={(d) => {
+            setDraft(d);
+            setDirty(true);
+          }}
           errors={errors}
           entrySlug={cfg.key}
           refs={refs}

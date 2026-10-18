@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { AnimatePresence, m } from 'motion/react';
+import { enter, exit } from '@/lib/motion';
 import styles from '../Admin.module.scss';
 
 /**
@@ -13,16 +14,8 @@ export default function Notice({ show, ok = true, className, children }: { show:
         <m.div
           className={[styles.noticeWrap, className].filter(Boolean).join(' ')}
           initial={{ opacity: 0, height: 0 }}
-          animate={{
-            opacity: 1,
-            height: 'auto',
-            transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
-          }}
-          exit={{
-            opacity: 0,
-            height: 0,
-            transition: { duration: 0.25, ease: [0.4, 0, 1, 1] },
-          }}
+          animate={{ opacity: 1, height: 'auto', transition: enter() }}
+          exit={{ opacity: 0, height: 0, transition: exit(0.25) }}
         >
           <p className={ok ? styles.notice : styles.errorBox} role={ok ? 'status' : 'alert'}>
             {children}

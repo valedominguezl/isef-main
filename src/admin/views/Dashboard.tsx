@@ -43,15 +43,16 @@ export default function Dashboard() {
       <div className={styles.stats}>
         {cards.map(({ label, n, icon: Icon, to, add }) => (
           <div key={label} className={styles.statCard}>
-            <Icon size={22} />
+            <Icon size={22} aria-hidden />
             <strong>{n ?? <Sk w={48} h={36} />}</strong>
             <span>{label}</span>
             <div>
-              <Link to={to}>
-                Ver <ArrowRight size={14} />
+              {/* «Ver» y «Agregar» se repiten en cada tarjeta: el lector de pantalla dice de qué */}
+              <Link to={to} aria-label={`Ver ${label.toLowerCase()}`}>
+                Ver <ArrowRight size={14} aria-hidden />
               </Link>
-              <Link to={add}>
-                <Plus size={14} /> Agregar
+              <Link to={add} aria-label={`Agregar en ${label.toLowerCase()}`}>
+                <Plus size={14} aria-hidden /> Agregar
               </Link>
             </div>
           </div>
@@ -59,7 +60,7 @@ export default function Dashboard() {
       </div>
       <section className={styles.panel}>
         <h2>
-          <AlertTriangle size={18} /> Para revisar {alerts.length > 0 && <span className={styles.badge}>{alerts.length}</span>}
+          <AlertTriangle size={18} aria-hidden /> Para revisar {alerts.length > 0 && <span className={styles.badge}>{alerts.length}</span>}
         </h2>
         {!cur || !dis || !nov ? (
           <div className={styles.skStack} aria-busy="true">

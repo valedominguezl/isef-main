@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, m } from 'motion/react';
 import { CheckCircle2, Undo2, UploadCloud, X, type LucideIcon } from 'lucide-react';
+import { enter, exit } from '@/lib/motion';
 import { Button, IconButton } from './Button';
 import styles from './Ui.module.scss';
 
@@ -26,7 +27,9 @@ export function useToast() {
   return c;
 }
 
-const DURATION = 6000;
+/** Cuánto queda a la vista: más si tiene «Deshacer» o una acción (con teclado no se llegaba en 6 s). */
+const DURACION = 6000;
+const DURACION_CON_ACCION = 10000;
 const MAX = 3;
 type Item = ToastOptions & { id: number };
 
@@ -48,7 +51,7 @@ export function ToastProvider({ children, onOpenPending }: { children: ReactNode
   return (
     <Ctx.Provider value={api}>
       {children}
-      <ol className={styles.toasts} aria-live="polite" aria-label="Avisos">
+      <ol className={styles.toasts} aria-live="polite" aria-label="Avisos" data-avisos>
         <AnimatePresence initial={false}>
           {items.map((t) => (
             <Toast key={t.id} item={t} onDismiss={() => dismiss(t.id)} />
@@ -64,7 +67,7 @@ function Toast({ item, onDismiss }: { item: Item; onDismiss: () => void }) {
   const [paused, setPaused] = useState(false);
   useEffect(() => {
     if (paused) return;
-    const t = window.setTimeout(onDismiss, DURATION);
+    const t = window.setTimeout(onDismiss, undo || action ? DURACION_CON_ACCION : DURACION);
     return () => window.clearTimeout(t);
   }, [paused]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -78,8 +81,8 @@ function Toast({ item, onDismiss }: { item: Item; onDismiss: () => void }) {
     <m.li
       className={styles.toastWrap}
       initial={{ opacity: 0, y: 16, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
-      exit={{ opacity: 0, height: 0, marginTop: 0, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } }}
+      animate={{ opacity: 1, y: 0, scale: 1, transition: enter() }}
+      exit={{ opacity: 0, height: 0, marginTop: 0, transition: exit(0.25) }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}

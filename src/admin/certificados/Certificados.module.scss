@@ -16,8 +16,24 @@
     transition: opacity var(--duration-slow) var(--ease-standard);
   }
 
-  &[data-estado='cargando'] canvas {
-    opacity: 0;
+  /* Cargando: el mismo brillo que los esqueletos del panel (.sk en Admin.module.scss) */
+  &[data-estado='cargando'] {
+    background: linear-gradient(90deg, var(--ink-50) 25%, var(--ink-100) 50%, var(--ink-50) 75%) 0 0 / 200% 100%;
+    animation: vistaShimmer 1.4s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+
+    canvas {
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes vistaShimmer {
+  to {
+    background-position: -200% 0;
   }
 }
 
@@ -66,12 +82,16 @@
   background: var(--violet-50);
   overflow: hidden;
 
+  /* El avance llega en --p (0 a 1): se anima transform, no width (no recalcula el layout) */
   i {
     display: block;
+    width: 100%;
     height: 100%;
     border-radius: inherit;
     background: var(--gradient-primary);
-    transition: width var(--duration-slow) var(--ease-standard);
+    transform: scaleX(var(--p, 0));
+    transform-origin: left;
+    transition: transform var(--duration-slow) var(--ease-out);
   }
 }
 
@@ -103,36 +123,46 @@
   flex-wrap: wrap;
   gap: var(--space-2);
 
+  /* Mismo lenguaje que .chips del panel: activo con relleno violet-600, crece con rebote */
   button {
     padding: var(--space-2) var(--space-3);
     border: 1px solid var(--color-border-strong);
     border-radius: var(--radius-pill);
-    background: white;
+    background: var(--color-surface);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     color: var(--ink-700);
     transition:
+      $press-transition,
       background-color var(--duration-slow) var(--ease-standard),
-      border-color var(--duration-slow) var(--ease-standard);
+      border-color var(--duration-slow) var(--ease-standard),
+      color var(--duration-slow) var(--ease-standard);
     @include focus-ring;
+    @include press-bounce;
 
-    &:hover {
-      border-color: var(--violet-300);
+    @media (pointer: coarse) {
+      min-height: 44px;
+    }
+
+    @include hover {
+      &:not([aria-pressed='true']) {
+        border-color: var(--violet-400);
+        background: var(--violet-50);
+        color: var(--violet-700);
+      }
     }
 
     &[aria-pressed='true'] {
-      border-color: var(--violet-400);
-      background: var(--violet-50);
-      color: var(--violet-700);
-      font-weight: var(--weight-semibold);
+      border-color: var(--violet-600);
+      background: var(--violet-600);
+      color: white;
     }
   }
 }
 
 .tablaCaja {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: white;
+  @include card-surface;
+  border-radius: var(--radius-xl);
   overflow-x: auto;
 }
 
@@ -157,12 +187,13 @@
     vertical-align: middle;
   }
 
-  tr + tr td {
-    border-top: 1px solid var(--color-border);
-  }
-
+  /* Filas sin líneas: alternan con el tinte violeta (solo queda la línea bajo la cabecera) */
   tbody tr {
     transition: background-color var(--duration-slow) var(--ease-standard);
+
+    &:nth-child(even) {
+      background: var(--color-bg-tint);
+    }
 
     &[data-trabajando] {
       background: var(--violet-50);
@@ -180,6 +211,11 @@
     margin-top: 2px;
     color: var(--color-text-muted);
   }
+}
+
+/* Filas de la tabla de envíos al filtrar/buscar: entran escalonadas (--i) */
+.filaIn {
+  @include results-in;
 }
 
 .num {
@@ -201,7 +237,7 @@
   display: inline-flex;
   padding: 2px 10px;
   border-radius: var(--radius-pill);
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   white-space: nowrap;
 }

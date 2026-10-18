@@ -25,7 +25,9 @@
   /* Mismo hover/presión que los botones del sitio: crece con rebote y se hunde al presionar */
   @include press-bounce;
 
-  &:disabled {
+  /* aria-disabled se ve igual que disabled (no pierde el foco del teclado); press-bounce ya lo excluye */
+  &:disabled,
+  &[aria-disabled='true'] {
     opacity: 0.5;
     cursor: not-allowed;
   }
@@ -41,8 +43,10 @@
   color: white !important;
   box-shadow: 0 10px 15px rgb(0 0 0 / 0.1);
 
-  &:hover:not(:disabled) {
-    opacity: 0.92;
+  @include hover {
+    &:not(:disabled, [aria-disabled='true']) {
+      opacity: 0.92;
+    }
   }
 }
 
@@ -52,9 +56,11 @@
   color: var(--color-primary-strong);
   border: 1px solid var(--violet-300);
 
-  &:hover {
-    background: var(--violet-50);
-    color: var(--violet-700);
+  @include hover {
+    &:not(:disabled, [aria-disabled='true']) {
+      background: var(--violet-50);
+      color: var(--violet-700);
+    }
   }
 }
 
@@ -62,8 +68,10 @@
   @extend %btn;
   color: var(--violet-700);
 
-  &:hover {
-    background: var(--violet-50);
+  @include hover {
+    &:not(:disabled, [aria-disabled='true']) {
+      background: var(--violet-50);
+    }
   }
 }
 
@@ -71,8 +79,11 @@
   @extend %btn;
   color: var(--danger-500);
 
-  &:hover {
-    background: color-mix(in srgb, var(--danger-500) 8%, white);
+  @include hover {
+    &:not(:disabled, [aria-disabled='true']) {
+      background: color-mix(in srgb, var(--danger-500) 8%, white);
+      color: var(--danger-700); /* sobre el tinte rojo, el texto oscurece para seguir en AA */
+    }
   }
 }
 
@@ -91,13 +102,23 @@
   @include focus-ring;
   @include press-bounce;
 
-  &:hover:not(:disabled) {
-    background: var(--violet-50);
-    color: var(--violet-700);
+  /* Táctil: 44 px de blanco para el dedo */
+  @media (pointer: coarse) {
+    width: 44px;
+    height: 44px;
   }
 
-  &:disabled {
+  @include hover {
+    &:not(:disabled, [aria-disabled='true']) {
+      background: var(--violet-50);
+      color: var(--violet-700);
+    }
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
     opacity: 0.3;
+    cursor: not-allowed;
   }
 }
 
@@ -114,7 +135,11 @@
 }
 
 .shell {
+  /* El panel es una herramienta que se usa muchas veces por día: lo frecuente (hovers, secciones) responde
+     más rápido que en el sitio público (decisión 16 del Figma). Los diálogos y avisos quedan como en el sitio. */
+  --duration-slow: var(--duration-base);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   min-height: 100svh;
   background: var(--color-bg);
 
@@ -140,15 +165,16 @@
     overflow-y: auto;
   }
 
+  @include down($bp-lg) {
+    gap: var(--space-3);
+    padding-bottom: var(--space-2);
+    min-width: 0; /* sin esto la celda de la grilla se estira al ancho de la fila deslizable */
+  }
+
   nav {
     display: flex;
     flex-direction: column;
     gap: 2px;
-
-    @include down($bp-lg) {
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
 
     a {
       display: flex;
@@ -165,11 +191,97 @@
         color var(--duration-slow) var(--ease-standard);
       @include focus-ring;
 
-      &:hover {
+      @media (pointer: coarse) {
+        min-height: 44px;
+      }
+
+      @include hover {
         background: color-mix(in srgb, var(--violet-500) 8%, transparent);
         color: var(--ink-900);
       }
     }
+  }
+}
+
+/* Logo + botón ☰ (el botón solo existe en celular/tablet) */
+.sideTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.menuToggle {
+  @include up($bp-lg) {
+    display: none !important;
+  }
+}
+
+/* Celular/tablet: las secciones en una sola fila que se desliza de costado (decisión 14 del Figma).
+   El borde derecho se desvanece para avisar que sigue; el menú completo está en el botón ☰ */
+.navFila {
+  @include down($bp-lg) {
+    margin-inline: calc(var(--space-5) * -1);
+
+    nav {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-padding-inline: var(--space-5);
+      padding: 2px var(--space-5) var(--space-1);
+      scrollbar-width: none;
+      mask-image: linear-gradient(90deg, #000 85%, transparent);
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      a {
+        flex: none;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+/* En la fila del celular no van «Ver el sitio» ni «Salir»: están en el menú completo */
+.sidebar > .sideFoot {
+  @include down($bp-lg) {
+    display: none;
+  }
+}
+
+/* Menú completo del celular: cajón desde la izquierda sobre un fondo oscuro (entrada/salida: Motion) */
+.menuCajonFondo {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: rgb(13 12 18 / 0.45);
+
+  @include up($bp-lg) {
+    display: none;
+  }
+}
+
+.sidebar.menuCajon {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: min(320px, 86vw);
+  overflow-y: auto;
+  padding-bottom: var(--space-6);
+  box-shadow: var(--shadow-lg);
+
+  nav {
+    flex-direction: column;
+  }
+
+  .navGroup {
+    display: block;
+  }
+
+  .sideFoot {
+    display: flex;
   }
 }
 
@@ -242,7 +354,11 @@
       background-color var(--duration-slow) var(--ease-standard),
       color var(--duration-slow) var(--ease-standard);
 
-    &:hover {
+    @media (pointer: coarse) {
+      min-height: 44px;
+    }
+
+    @include hover {
       color: var(--ink-900);
       background: color-mix(in srgb, var(--violet-500) 8%, transparent);
     }
@@ -266,28 +382,44 @@
   background: rgb(255 255 255 / 0.85);
   backdrop-filter: blur(14px);
   box-shadow: 0 10px 30px -18px rgb(24 22 31 / 0.2);
+
+  @include down($bp-sm) {
+    padding-inline: var(--space-4);
+  }
 }
 
 .content {
   padding: var(--space-8) var(--space-8) var(--space-20);
   max-width: var(--container);
+
+  /* Celular: 16 px a los costados (32 px le comían el ancho a los formularios) */
+  @include down($bp-sm) {
+    padding-inline: var(--space-4);
+  }
 }
 
-/* Cada pantalla entra suave; la barra lateral y la superior quedan quietas */
+/* Cambio de pantalla casi imperceptible (pasa decenas de veces por día); la barra lateral y la superior quedan quietas */
 .viewIn {
-  animation: viewIn var(--duration-slow) var(--ease-emphasized) both;
+  animation: viewIn var(--duration-fast) var(--ease-out) both;
 }
 
 @keyframes viewIn {
   from {
-    opacity: 0.35;
-    transform: translateY(8px);
+    opacity: 0.5;
+    transform: translateY(4px);
   }
 }
 
+@keyframes viewFade {
+  from {
+    opacity: 0.5;
+  }
+}
+
+/* Reducir movimiento: queda el fundido, sin desplazamiento */
 @media (prefers-reduced-motion: reduce) {
   .viewIn {
-    animation: none;
+    animation-name: viewFade;
   }
 }
 
@@ -312,12 +444,10 @@
   gap: var(--space-2);
 }
 
-/* Separa la acción destructiva del resto (Ver en el sitio / Guardar) */
+/* Separa la acción destructiva del resto (Ver en el sitio / Guardar): solo aire, sin línea */
 .actionDivider {
-  align-self: stretch;
-  width: 1px;
-  margin: var(--space-1) var(--space-2);
-  background: var(--color-border-strong);
+  flex: none;
+  width: var(--space-3);
 }
 
 /* Celular: Guardar arriba a lo ancho; Eliminar y Ver en el sitio debajo, en puntas opuestas */
@@ -384,7 +514,7 @@
 a.pill {
   transition: filter var(--duration-base) var(--ease-standard);
 
-  &:hover {
+  @include hover {
     filter: brightness(0.96);
     text-decoration: underline;
   }
@@ -402,11 +532,16 @@ a.pill {
 
 .pillBad {
   background: color-mix(in srgb, var(--danger-500) 12%, white);
-  color: var(--danger-500);
+  color: var(--danger-700);
 }
 
 .spin {
   animation: spin 1.2s linear infinite;
+
+  /* Reducir movimiento: el ícono queda quieto (el texto de la pastilla ya dice qué pasa) */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 @keyframes spin {
@@ -449,7 +584,7 @@ a.pill {
 
 .errorBox {
   background: color-mix(in srgb, var(--danger-500) 8%, white);
-  color: var(--danger-500) !important;
+  color: var(--danger-700) !important;
   border: 1px solid color-mix(in srgb, var(--danger-500) 30%, white);
 }
 
@@ -464,12 +599,12 @@ a.pill {
   }
 }
 
+/* Tarjetas blancas: mismo borde lila y sombra que las del sitio */
 .statCard,
 .panel {
+  @include card-surface;
   padding: var(--space-6);
   border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
 }
 
 .panel + .panel {
@@ -522,17 +657,16 @@ a.pill {
   font-weight: var(--weight-semibold);
 }
 
+/* Sin líneas entre filas: se separan con aire y el tinte al pasar el mouse */
 .alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   list-style: none;
 
   li {
     display: flex;
     align-items: center;
-    padding-right: var(--space-3);
-  }
-
-  li + li {
-    border-top: 1px solid var(--color-border);
   }
 
   a {
@@ -541,14 +675,20 @@ a.pill {
     display: flex;
     justify-content: space-between;
     gap: var(--space-4);
-    padding: var(--space-3) 0;
+    padding: var(--space-3);
+    margin-inline: calc(-1 * var(--space-3)); /* el texto queda alineado con el título; el tinte sobresale */
+    border-radius: var(--radius-md);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     color: var(--ink-800);
     text-decoration: none;
-    transition: color var(--duration-base) var(--ease-standard);
+    transition:
+      background-color var(--duration-base) var(--ease-standard),
+      color var(--duration-base) var(--ease-standard);
+    @include focus-ring(-2px);
 
-    &:hover {
+    @include hover {
+      background: var(--violet-50);
       color: var(--violet-700);
     }
   }
@@ -564,8 +704,11 @@ a.pill {
   padding: 0 var(--space-3);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
-  background: white;
+  background: var(--color-surface);
   color: var(--ink-500);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 
   input {
     flex: 1;
@@ -578,28 +721,38 @@ a.pill {
     }
   }
 
+  /* Foco: anillo violet-600 de 2 px en total (≥ 3:1 contra el blanco), aparece al instante */
   &:focus-within {
-    border-color: var(--violet-400);
-    box-shadow: 0 0 0 3px var(--violet-100);
+    border-color: var(--violet-600);
+    box-shadow: 0 0 0 1px var(--violet-600);
   }
 }
 
+/* Tarjeta con las filas: sin líneas entre filas, se separan con aire y el tinte al pasar el mouse */
 .rows {
+  @include card-surface;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2);
   list-style: none;
-  border-radius: var(--radius-lg);
-  background: white;
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
   overflow: hidden;
 
   /* Fila: link a la entrada + opciones básicas (íconos) al costado */
   li {
     display: flex;
     align-items: center;
-    padding-right: var(--space-3);
-  }
+    padding-right: var(--space-2);
+    border-radius: var(--radius-lg);
+    transition: background-color var(--duration-slow) var(--ease-standard);
 
-  li + li {
-    border-top: 1px solid var(--color-border);
+    /* La fila entera se tiñe (también detrás de los íconos), no solo el enlace */
+    @media (hover: hover) {
+      &:has(> a:hover) {
+        background: var(--violet-50);
+      }
+    }
   }
 
   a {
@@ -608,16 +761,11 @@ a.pill {
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    padding: var(--space-3) var(--space-4);
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
     color: inherit;
     text-decoration: none;
     @include focus-ring(-2px);
-
-    transition: background-color var(--duration-slow) var(--ease-standard);
-
-    &:hover {
-      background: var(--violet-50);
-    }
   }
 }
 
@@ -663,7 +811,7 @@ a.pill {
   padding: 2px 8px;
   border-radius: var(--radius-pill);
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   white-space: nowrap;
 }
@@ -696,30 +844,33 @@ a.pill {
 .tabs {
   display: flex;
   gap: var(--space-1);
-  margin-bottom: var(--space-6);
-  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-6); /* sin línea de base: solo la barra de la pestaña activa */
 
-  button {
+  /* Navegación por URL (aria-current="page"): sirve igual si son botones o enlaces */
+  button,
+  a {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-3) var(--space-4);
-    margin-bottom: -1px;
     border-bottom: 2px solid transparent;
     font-family: var(--font-sans);
     font-weight: var(--weight-medium);
     color: var(--ink-600);
+    text-decoration: none;
     transition:
       border-color var(--duration-slow) var(--ease-standard),
       color var(--duration-slow) var(--ease-standard);
     @include focus-ring(-2px);
 
-    &:hover:not([aria-selected='true']) {
-      border-color: var(--violet-200);
-      color: var(--violet-700);
+    @include hover {
+      &:not([aria-current='page']) {
+        border-color: var(--violet-200);
+        color: var(--violet-700);
+      }
     }
 
-    &[aria-selected='true'] {
+    &[aria-current='page'] {
       border-color: var(--violet-500);
       color: var(--violet-700);
     }
@@ -797,8 +948,8 @@ a.pill {
 
 .counter {
   font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--ink-400);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
 }
 
 .over {
@@ -811,18 +962,19 @@ a.pill {
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
-  background: white;
+  background: var(--color-surface);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--ink-900);
   transition:
-    border-color var(--duration-slow) var(--ease-standard),
-    box-shadow var(--duration-slow) var(--ease-standard);
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 
+  /* Foco: anillo violet-600 de 2 px en total (≥ 3:1 contra el blanco), aparece al instante */
   &:focus {
     outline: none;
-    border-color: var(--violet-400);
-    box-shadow: 0 0 0 3px var(--violet-100);
+    border-color: var(--violet-600);
+    box-shadow: 0 0 0 1px var(--violet-600);
   }
 
   &:disabled {
@@ -866,8 +1018,17 @@ textarea.input {
   border-radius: var(--radius-pill);
   background: var(--ink-200);
   cursor: pointer;
-  transition: background-color var(--duration-base);
+  transition: background-color var(--duration-base) var(--ease-standard);
   @include focus-ring;
+
+  /* Táctil: zona de toque de 44 px de alto sin agrandar el interruptor */
+  @media (pointer: coarse) {
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -10px -2px;
+    }
+  }
 
   &::after {
     content: '';
@@ -880,6 +1041,11 @@ textarea.input {
     background: white;
     box-shadow: var(--shadow-sm);
     transition: transform var(--duration-base) var(--ease-emphasized);
+
+    /* Reducir movimiento: la perilla cambia de lado sin deslizarse (queda el fundido del color) */
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
   &:checked {
@@ -908,7 +1074,7 @@ textarea.input {
     padding: var(--space-1) var(--space-3);
     border-radius: var(--radius-pill);
     border: 1px solid var(--color-border-strong);
-    background: white;
+    background: var(--color-surface);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     transition:
@@ -919,10 +1085,16 @@ textarea.input {
     @include focus-ring;
     @include press-bounce;
 
-    &:hover:not([aria-pressed='true']) {
-      border-color: var(--violet-400);
-      background: var(--violet-50);
-      color: var(--violet-700);
+    @media (pointer: coarse) {
+      min-height: 44px;
+    }
+
+    @include hover {
+      &:not([aria-pressed='true']) {
+        border-color: var(--violet-400);
+        background: var(--violet-50);
+        color: var(--violet-700);
+      }
     }
 
     &[aria-pressed='true'] {
@@ -1039,7 +1211,7 @@ textarea.input {
     color var(--duration-base) var(--ease-standard);
   @include focus-ring(-2px);
 
-  &:hover {
+  @include hover {
     background: color-mix(in srgb, var(--violet-500) 8%, transparent);
     color: var(--violet-800);
   }
@@ -1051,14 +1223,14 @@ textarea.input {
   }
 
   small {
-    color: var(--ink-400);
+    color: var(--color-text-muted);
   }
 }
 
 .chevron {
   flex: none;
   color: var(--violet-600);
-  transition: rotate var(--duration-slow) var(--ease-emphasized);
+  transition: rotate var(--duration-base) var(--ease-out);
 
   [aria-expanded='true'] > & {
     rotate: 180deg;
@@ -1078,7 +1250,7 @@ textarea.input {
   flex-direction: column;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
-  background: white;
+  background: var(--color-surface);
   overflow: hidden;
 
   textarea {
@@ -1087,9 +1259,10 @@ textarea.input {
     box-shadow: none !important;
   }
 
+  /* Barra de herramientas y ayuda: se separan del texto con un fondo gris suave, sin líneas */
   > .help {
     padding: var(--space-2) var(--space-3);
-    border-top: 1px solid var(--color-border);
+    background: var(--ink-50);
   }
 }
 
@@ -1097,8 +1270,7 @@ textarea.input {
   display: flex;
   gap: 2px;
   padding: var(--space-1);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--ink-25);
+  background: var(--ink-50);
 
   button {
     display: inline-flex;
@@ -1116,7 +1288,11 @@ textarea.input {
     @include focus-ring;
     @include press-bounce;
 
-    &:hover {
+    @media (pointer: coarse) {
+      min-height: 44px;
+    }
+
+    @include hover {
       background: var(--violet-50);
       color: var(--violet-700);
     }
@@ -1133,6 +1309,11 @@ textarea.input {
     height: 32px;
     padding: 0;
     border-radius: var(--radius-sm);
+
+    @media (pointer: coarse) {
+      width: 44px;
+      height: 44px;
+    }
   }
 }
 
@@ -1158,6 +1339,7 @@ textarea.input {
 }
 
 .imagePreview {
+  position: relative; /* contiene el velo .stockBusy mientras se procesa la foto */
   display: grid;
   place-items: center;
   width: 200px;
@@ -1245,8 +1427,10 @@ textarea.input {
     object-fit: cover;
   }
 
-  &:hover:not(:disabled) {
-    box-shadow: 0 0 0 3px var(--violet-300);
+  @include hover {
+    &:not(:disabled) {
+      box-shadow: 0 0 0 3px var(--violet-300);
+    }
   }
 
   &:disabled {
@@ -1302,7 +1486,7 @@ textarea.input {
 
 .path {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-xs);
   color: var(--ink-500);
   word-break: break-all;
 }
@@ -1325,7 +1509,7 @@ textarea.input {
   gap: var(--space-4);
   width: min(100%, 460px);
   padding: var(--space-6);
-  background: white;
+  background: var(--color-surface);
   box-shadow: var(--shadow-lg);
   overflow-y: auto;
 
@@ -1352,24 +1536,22 @@ textarea.input {
   }
 }
 
+/* Cada cambio es una fila con tinte violeta; se separan con aire, sin líneas */
 .pendingList {
   list-style: none;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  gap: 2px;
 
   li {
     display: flex;
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-tint);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
-
-    + li {
-      border-top: 1px solid var(--color-border);
-    }
 
     > svg {
       flex: none;
@@ -1385,8 +1567,8 @@ textarea.input {
 
     small {
       font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--ink-400);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -1432,7 +1614,7 @@ textarea.input {
   width: min(100%, 440px);
   padding: var(--space-8);
   border-radius: var(--radius-xl);
-  background: white;
+  background: var(--color-surface);
   box-shadow: var(--shadow-lg);
 
   h1 {
@@ -1447,14 +1629,15 @@ textarea.input {
 }
 
 /* ── Secciones del formulario ───────────────────────────── */
-/* Plegado animado: la fila del grid va de 0fr a 1fr */
+/* Plegado animado: la fila del grid va de 0fr a 1fr. Abre en 300 ms y cierra más rápido (150 ms) */
 .collapse {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--duration-slow) var(--ease-emphasized);
+  transition: grid-template-rows var(--duration-fast) var(--ease-exit);
 
   &[data-open] {
     grid-template-rows: 1fr;
+    transition: grid-template-rows var(--duration-base) var(--ease-out);
   }
 }
 
@@ -1462,20 +1645,19 @@ textarea.input {
   min-height: 0;
   overflow: hidden;
   opacity: 0;
-  transition: opacity var(--duration-base) var(--ease-standard);
+  transition: opacity var(--duration-fast) var(--ease-exit);
 
   [data-open] > & {
     opacity: 1;
-    transition-duration: var(--duration-slow);
+    transition: opacity var(--duration-base) var(--ease-standard);
   }
 }
 
-/* Cada bloque del formulario es una tarjeta con título (grupos, listas y campos sueltos) */
+/* Cada bloque del formulario es una tarjeta blanca con título (grupos, listas y campos sueltos) */
 .section,
 .fieldsCard {
+  @include card-surface;
   border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-strong);
 }
 
 .fieldsCard {
@@ -1491,8 +1673,9 @@ textarea.input {
     box-shadow var(--duration-slow) var(--ease-standard);
 }
 
+/* Abierta: la sombra de tarjeta un poco más marcada */
 .sectionOpen {
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .sectionHead {
@@ -1508,7 +1691,7 @@ textarea.input {
   transition: background-color var(--duration-slow) var(--ease-standard);
   @include focus-ring(-3px);
 
-  &:hover {
+  @include hover {
     background: var(--color-bg-tint);
   }
 
@@ -1550,7 +1733,7 @@ textarea.input {
 
 .inscOn {
   border-color: var(--violet-300);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .inscHead {
@@ -1629,13 +1812,12 @@ textarea.input {
 }
 
 .skCard {
+  @include card-surface;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
   padding: var(--space-6);
   border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-strong);
 }
 
 .skSide {
@@ -1706,7 +1888,7 @@ textarea.input {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  color: var(--success-500);
+  color: var(--success-700);
 }
 
 .cvMsg {
@@ -1740,20 +1922,22 @@ textarea.input {
   padding: var(--space-2) var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
-  background: white;
+  background: var(--color-surface);
   color: var(--color-text-muted);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   cursor: pointer;
+  /* Lista completa: en modo compacto este botón también es .iconBtn y esta transición pisa la suya */
   transition:
+    $press-transition,
     border-color var(--duration-base) var(--ease-standard),
     background-color var(--duration-base) var(--ease-standard),
     color var(--duration-base) var(--ease-standard);
   @include press-bounce;
   @include focus-ring;
 
-  &:hover {
+  @include hover {
     border-color: var(--violet-300);
     color: var(--violet-700);
   }
@@ -1763,6 +1947,11 @@ textarea.input {
     width: 36px;
     min-height: 36px;
     padding: 0;
+
+    @media (pointer: coarse) {
+      width: 44px;
+      min-height: 44px;
+    }
   }
 }
 
@@ -1786,6 +1975,18 @@ textarea.input {
   align-self: center;
   margin-right: var(--space-1);
   color: var(--violet-500);
+}
+
+/* ── Resultados que cambian por una acción (buscar, filtrar) ── */
+/* Cada fila/ítem entra con fundido + 12 px, escalonado por --i (mixin results-in) */
+.resultIn {
+  @include results-in;
+}
+
+/* Foto recién cargada: solo fundido */
+.imgFade {
+  animation: resultsFade var(--duration-base) var(--ease-standard);
+  @include results-keyframes;
 }
 
 /* Error de carga con botón para reintentar */

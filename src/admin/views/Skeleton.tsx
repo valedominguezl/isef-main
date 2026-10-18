@@ -23,7 +23,7 @@ export function SkeletonRows({ n = 6 }: { n?: number }) {
       {Array.from({ length: n }, (_, i) => (
         <li key={i}>
           <span className={styles.skRow}>
-            <Sk w={56} h={42} r={8} />
+            <Sk w={56} h={42} r={10} />
             <span className={styles.skStack}>
               <Sk w={`${60 - (i % 3) * 10}%`} h={16} />
               <Sk w="35%" h={12} />

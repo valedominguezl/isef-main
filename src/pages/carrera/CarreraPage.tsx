@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BadgeCheck, CalendarDays, ChevronLeft, ChevronRight, Clock, GraduationCap, Hourglass, MapPin, Maximize2 } from 'lucide-react';
 import heroImg from '@/assets/media/carrera/main.webp';
 import heroSm from '@/assets/media/carrera/main-800.webp';
@@ -51,6 +51,18 @@ function Galeria() {
     setDir(d);
     setIndex((i) => (i == null ? i : (i + d + imgs.length) % imgs.length));
   };
+  // Flechas del teclado mientras el visor está abierto (antes solo andaban con el foco dentro de la foto)
+  const abierto = index != null;
+  useEffect(() => {
+    if (!abierto) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') step(1);
+      if (e.key === 'ArrowLeft') step(-1);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- step solo usa setters estables
+  }, [abierto]);
 
   return (
     <>
@@ -68,16 +80,11 @@ function Galeria() {
           </figure>
         ))}
       </Carousel>
-      <Dialog open={index != null} onClose={() => setIndex(null)} title={current?.lugar ?? 'Galería'} hideTitle size="lg" variant="dark">
+      {/* Pantalla completa: la foto lo más grande posible */}
+      <Dialog open={index != null} onClose={() => setIndex(null)} title={current?.lugar ?? 'Galería'} hideTitle size="full" variant="dark">
         {current && (
-          <div
-            className={styles.lightbox}
-            onKeyDown={(e) => {
-              if (e.key === 'ArrowRight') step(1);
-              if (e.key === 'ArrowLeft') step(-1);
-            }}
-          >
-            {/* Marco de proporción fija: el visor no cambia de tamaño entre fotos verticales y horizontales */}
+          <div className={styles.lightbox}>
+            {/* Marco 3:2 fijo y la foto recortada (cover): todas se ven con el mismo formato y el visor no cambia de tamaño */}
             <div className={styles.frame}>
               <img key={current.imagen} className={styles.swap} src={current.imagen} alt={current.lugar} style={{ '--dir': dir } as React.CSSProperties} />
             </div>

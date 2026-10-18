@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Link } from 'react-router';
 import { AnimatePresence, m } from 'motion/react';
 import type { LucideIcon } from 'lucide-react';
+import { DURATION, EASE_EXIT, EASE_OUT } from '@/lib/motion';
 import adm from '../Admin.module.scss';
 import styles from './Ui.module.scss';
 
@@ -46,6 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     return (
       <a href={href} target="_blank" rel="noreferrer" className={cls}>
         {inner}
+        <span className="sr-only"> (se abre en otra pestaña)</span>
       </a>
     );
   return (
@@ -59,13 +61,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
  * Va a document.body (las filas y tarjetas recortan lo que sobresale). Aparece al pasar el mouse
  * (con una pequeña espera) o al llegar con el teclado; se va con Escape, al hacer clic o al hacer scroll.
  */
+/** Cuándo se cerró el último tooltip: si pasás al botón de al lado enseguida, el nuevo aparece sin espera. */
+let ultimoCierre = 0;
+
 function useTooltip(label: string) {
   const [rect, setRect] = useState<DOMRect | null>(null);
+  // Sin animación: viene de otro tooltip o llegó con el teclado (lo que se usa seguido no se anima)
+  const [instant, setInstant] = useState(false);
   const timer = useRef<number>(undefined);
   const clear = () => window.clearTimeout(timer.current);
   const hide = () => {
     clear();
-    setRect(null);
+    setRect((r) => {
+      if (r) ultimoCierre = Date.now();
+      return null;
+    });
   };
   useEffect(() => {
     if (!rect) return;
@@ -78,11 +88,19 @@ function useTooltip(label: string) {
     onMouseEnter: (e: React.MouseEvent<HTMLElement>) => {
       const el = e.currentTarget;
       clear();
+      if (Date.now() - ultimoCierre < 300) {
+        setInstant(true);
+        setRect(el.getBoundingClientRect());
+        return;
+      }
+      setInstant(false);
       timer.current = window.setTimeout(() => setRect(el.getBoundingClientRect()), 350);
     },
     onMouseLeave: hide,
     onFocus: (e: React.FocusEvent<HTMLElement>) => {
-      if (e.currentTarget.matches(':focus-visible')) setRect(e.currentTarget.getBoundingClientRect());
+      if (!e.currentTarget.matches(':focus-visible')) return;
+      setInstant(true);
+      setRect(e.currentTarget.getBoundingClientRect());
     },
     onBlur: hide,
     onPointerDown: hide,
@@ -106,9 +124,9 @@ function useTooltip(label: string) {
                 <m.span
                   role="tooltip"
                   className={styles.tip}
-                  initial={{ opacity: 0, y: below ? -4 : 4 }}
-                  animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] } }}
-                  exit={{ opacity: 0, transition: { duration: 0.12, ease: [0.4, 0, 1, 1] } }}
+                  initial={instant ? false : { opacity: 0, y: below ? -4 : 4 }}
+                  animate={{ opacity: 1, y: 0, transition: { duration: DURATION.fast, ease: EASE_OUT } }}
+                  exit={{ opacity: 0, transition: { duration: instant ? 0 : 0.12, ease: EASE_EXIT } }}
                 >
                   {label}
                 </m.span>
@@ -132,8 +150,10 @@ type IconButtonProps = {
   fill?: string;
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'aria-label'>;
 
-export function IconButton({ icon: Icon, label, tip, size = 16, fill, className, type = 'button', ...rest }: IconButtonProps) {
+export function IconButton({ icon: Icon, label, tip, size = 16, fill, className, type = 'button', disabled, onClick, ...rest }: IconButtonProps) {
   const { handlers, bubble } = useTooltip(tip ?? label);
+  // `disabled` → aria-disabled: sigue enfocable (el foco no se cae al body) y el tooltip explica por qué
+  const off = disabled || rest['aria-disabled'] === true || rest['aria-disabled'] === 'true';
   return (
     <>
       <button
@@ -141,6 +161,8 @@ export function IconButton({ icon: Icon, label, tip, size = 16, fill, className,
         aria-label={label}
         className={[adm.iconBtn, className].filter(Boolean).join(' ')}
         {...rest}
+        aria-disabled={off || undefined}
+        onClick={off ? undefined : onClick}
         onMouseEnter={handlers.onMouseEnter}
         onMouseLeave={handlers.onMouseLeave}
         onFocus={handlers.onFocus}

@@ -12,6 +12,11 @@
   box-shadow: var(--shadow-lg);
   overflow: hidden;
 
+  /* El <dialog> en sí no es un control: sin contorno si recibe el foco (sí lo tienen sus botones) */
+  &:focus-visible {
+    outline: none;
+  }
+
   &::backdrop {
     background: rgb(13 12 18 / 0.6);
     backdrop-filter: blur(6px);
@@ -90,6 +95,7 @@
 }
 
 .dark {
+  --color-focus: white; /* el contorno violeta no se ve sobre el negro */
   background: var(--ink-950);
   color: white;
 }

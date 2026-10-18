@@ -189,21 +189,47 @@ div.gallery {
   }
 }
 
+/* Visor a pantalla completa: la foto ocupa todo lo que entra en 3:2 y la barra de abajo tiene alto fijo
+   (antes el nombre del lugar en 1 o 2 líneas cambiaba el alto del visor) */
 .lightbox {
-  display: flex;
-  flex-direction: column;
+  --bar-h: 96px;
+  display: grid;
+  grid-template-rows: auto var(--bar-h);
+  align-content: center; /* foto + barra juntas en el medio de la pantalla */
+  justify-items: center;
+  height: 100svh;
+  padding: var(--space-16) var(--gutter) 0;
+
+  /* Celular: la foto de borde a borde (en 3:2 es lo más grande que entra a lo ancho) */
+  @include down($bp-sm) {
+    padding-inline: 0;
+
+    .frame {
+      border-radius: 0;
+    }
+
+    .lightboxBar {
+      padding-inline: var(--space-3);
+    }
+  }
 }
 
+/* Mismo marco para todas: 3:2, tan grande como entre (ancho y alto), la foto recortada para llenarlo */
 .frame {
-  width: 100%;
+  position: relative;
+  width: min(100%, calc((100svh - var(--bar-h) - var(--space-16) - var(--space-4)) * 3 / 2), 1600px);
   aspect-ratio: 3 / 2;
-  max-height: 76svh;
-  background: black;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--ink-950);
 
+  /* absoluta: la foto no puede estirar el marco (eso pasaba con las que no eran 3:2) */
   img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
   }
 }
 
@@ -212,21 +238,24 @@ div.gallery {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: var(--space-4);
+  width: min(100%, 960px);
+  height: var(--bar-h);
+  padding: var(--space-4) 0;
 
   p {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: center;
-    gap: var(--space-2);
+    flex: 1;
+    min-width: 0;
     text-align: center;
     font-family: var(--font-sans);
     font-size: var(--text-sm);
+    line-height: 1.5;
+    @include line-clamp(2);
   }
 
   span {
+    margin-left: var(--space-2);
     color: var(--color-on-dark-muted);
+    white-space: nowrap;
   }
 }
 

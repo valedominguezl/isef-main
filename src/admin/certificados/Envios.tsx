@@ -65,6 +65,22 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
   const [editando, setEditando] = useState<Persona | null>(null);
   /** Persona agregada a mano que se está cargando ('nueva') o corrigiendo. */
   const [agregando, setAgregando] = useState<Persona | 'nueva' | null>(null);
+  // Lo último que mostró cada diálogo: sigue a la vista mientras se cierra con su animación de salida
+  // (antes el título cambiaba a «Certificado» y el contenido desaparecía antes de que se fuera)
+  const [ultimo, setUltimo] = useState<{ vista: Persona | null; editando: Persona | null; agregando: Persona | 'nueva' | null }>({ vista, editando, agregando });
+  if ((vista && vista !== ultimo.vista) || (editando && editando !== ultimo.editando) || (agregando && agregando !== ultimo.agregando))
+    setUltimo((u) => ({ vista: vista ?? u.vista, editando: editando ?? u.editando, agregando: agregando ?? u.agregando }));
+  // Cada apertura arranca el formulario de cero (si no, al volver a abrir quedaba lo escrito la vez anterior)
+  const [aperturas, setAperturas] = useState(0);
+  const abrirAgregar = (x: Persona | 'nueva') => {
+    setAperturas((n) => n + 1);
+    setAgregando(x);
+  };
+  const abrirEditar = (x: Persona) => {
+    setAperturas((n) => n + 1);
+    setEditando(x);
+  };
+  const verVista = vista ?? ultimo.vista;
   // Código que va a tener cada certificado todavía no emitido (se ve en la vista previa y se usa al emitir)
   const [codigosNuevos, setCodigosNuevos] = useState<Record<string, string>>({});
   const codigoDe = (clave: string) => emitidoDe.get(clave)?.codigo ?? codigosNuevos[clave] ?? nuevoCodigo();
@@ -282,7 +298,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
             <Button variant="ghost" icon={RotateCw} spin={cargando} onClick={() => void cargar()} disabled={cargando || ocupado}>
               Actualizar
             </Button>
-            <Button variant="secondary" icon={UserPlus} onClick={() => setAgregando('nueva')} disabled={!respuestas || ocupado}>
+            <Button variant="secondary" icon={UserPlus} onClick={() => abrirAgregar('nueva')} disabled={!respuestas || ocupado}>
               Agregar persona
             </Button>
             {lote ? (
@@ -303,7 +319,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
               Enviando {Math.min(lote.hechos + 1, lote.total)} de {lote.total}…
             </span>
             <div className={s.barra}>
-              <i style={{ width: `${(lote.hechos / lote.total) * 100}%` }} />
+              <i style={{ '--p': lote.hechos / lote.total } as React.CSSProperties} />
             </div>
           </div>
         )}
@@ -361,12 +377,19 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {lista.map(({ p, e, estado }) => {
+                {/* key: al cambiar de filtro las filas entran con la receta común de resultados (no al escribir ni durante un envío) */}
+                <tbody key={filtro}>
+                  {lista.map(({ p, e, estado }, i) => {
                     const trabajando = enCurso.has(p.clave);
                     const falla = fallas[p.clave];
+                    // Por qué no se puede enviar/descargar: va en el tooltip (el botón sigue enfocable con aria-disabled)
+                    const motivo = trabajando || ocupado ? 'esperá que termine el envío' : null;
+                    const motivoEnvio =
+                      motivo ?? (estado === 'no-aprobado' ? 'no aprobó' : estado === 'sin-mail' ? 'no tiene un mail válido' : cuota === 0 ? 'Gmail llegó al límite de hoy' : null);
+                    const motivoDescarga = motivo ?? (!p.aprobado ? 'no aprobó' : null);
+                    const conMotivo = (texto: string, m: string | null) => (m ? `${texto} (${m})` : texto);
                     return (
-                      <tr key={p.clave} data-trabajando={trabajando || undefined}>
+                      <tr key={p.clave} data-trabajando={trabajando || undefined} className={s.filaIn} style={{ '--i': i } as React.CSSProperties}>
                         <td>
                           <strong>{p.nombre || '(sin nombre)'}</strong>
                           <small>
@@ -386,16 +409,36 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
                         <td className={s.acciones}>
                           <div>
                           <IconButton icon={Eye} label={`Ver el certificado de ${p.nombre}`} tip="Vista previa" onClick={() => abrirVista(p)} />
-                          <IconButton icon={Pencil} label={`Corregir los datos de ${p.nombre}`} tip="Corregir datos" onClick={() => (p.manual ? setAgregando(p) : setEditando(p))} disabled={trabajando || ocupado} />
-                          <IconButton icon={Download} label={`Descargar el certificado de ${p.nombre}`} tip="Descargar PDF" onClick={() => void descargar(p)} disabled={trabajando || ocupado || !p.aprobado} />
+                          <IconButton
+                            icon={Pencil}
+                            label={`Corregir los datos de ${p.nombre}`}
+                            tip={conMotivo('Corregir datos', motivo)}
+                            onClick={() => (p.manual ? abrirAgregar(p) : abrirEditar(p))}
+                            disabled={trabajando || ocupado}
+                          />
+                          <IconButton
+                            icon={Download}
+                            label={`Descargar el certificado de ${p.nombre}`}
+                            tip={conMotivo('Descargar PDF', motivoDescarga)}
+                            onClick={() => void descargar(p)}
+                            disabled={Boolean(motivoDescarga)}
+                          />
                           <IconButton
                             icon={estado === 'enviado' ? RotateCcw : Mail}
                             label={`${estado === 'enviado' ? 'Reenviar' : 'Enviar'} el certificado a ${p.nombre}`}
-                            tip={estado === 'enviado' ? 'Reenviar por mail' : 'Enviar por mail'}
+                            tip={conMotivo(estado === 'enviado' ? 'Reenviar por mail' : 'Enviar por mail', motivoEnvio)}
                             onClick={() => void enviarUno(p, estado === 'enviado')}
-                            disabled={trabajando || ocupado || estado === 'no-aprobado' || estado === 'sin-mail' || cuota === 0}
+                            disabled={Boolean(motivoEnvio)}
                           />
-                          {p.manual && <IconButton icon={Trash2} label={`Quitar a ${p.nombre} de la lista`} tip="Quitar de la lista" onClick={() => void quitarAgregado(p)} disabled={trabajando || ocupado} />}
+                          {p.manual && (
+                            <IconButton
+                              icon={Trash2}
+                              label={`Quitar a ${p.nombre} de la lista`}
+                              tip={conMotivo('Quitar de la lista', motivo)}
+                              onClick={() => void quitarAgregado(p)}
+                              disabled={Boolean(motivo)}
+                            />
+                          )}
                           </div>
                         </td>
                       </tr>
@@ -413,63 +456,68 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
       <Modal
         open={vista !== null}
         onClose={() => setVista(null)}
-        title={vista ? `Certificado de ${vista.nombre}` : 'Certificado'}
+        title={verVista ? `Certificado de ${verVista.nombre}` : 'Certificado'}
         icon={Eye}
         wide
         actions={
-          vista && (
+          verVista && (
             <>
-              <Button variant="secondary" icon={Download} onClick={() => void descargar(vista)} disabled={!vista.aprobado || enCurso.has(vista.clave)}>
+              <Button variant="secondary" icon={Download} onClick={() => void descargar(verVista)} disabled={!verVista.aprobado || enCurso.has(verVista.clave)}>
                 Descargar PDF
               </Button>
               <Button
                 variant="primary"
                 icon={Send}
                 onClick={() => {
-                  const p = vista;
+                  const p = verVista;
                   setVista(null);
                   void enviarUno(p, emitidoDe.get(p.clave)?.enviado != null);
                 }}
-                disabled={estadoDe(vista, emitidoDe.get(vista.clave)) === 'no-aprobado' || estadoDe(vista, emitidoDe.get(vista.clave)) === 'sin-mail' || cuota === 0}
+                disabled={estadoDe(verVista, emitidoDe.get(verVista.clave)) === 'no-aprobado' || estadoDe(verVista, emitidoDe.get(verVista.clave)) === 'sin-mail' || cuota === 0}
               >
-                {emitidoDe.get(vista.clave)?.enviado ? 'Reenviar por mail' : 'Enviar por mail'}
+                {emitidoDe.get(verVista.clave)?.enviado ? 'Reenviar por mail' : 'Enviar por mail'}
               </Button>
             </>
           )
         }
       >
-        {vista && !emitidoDe.get(vista.clave) && <p className={s.notaVista}>El código de verificación queda registrado cuando se envía o se descarga.</p>}
-        {vista && (
+        {verVista && !emitidoDe.get(verVista.clave) && <p className={s.notaVista}>El código de verificación queda registrado cuando se envía o se descarga.</p>}
+        {verVista && (
           <Vista
             cert={cert}
-            datos={{ nombre: vista.nombre, dni: vista.dni, nota: cert.tipo === 'aprobacion' ? vista.nota : null, codigo: emitidoDe.get(vista.clave)?.codigo ?? codigosNuevos[vista.clave] ?? 'ISEF-····-····' }}
+            datos={{ nombre: verVista.nombre, dni: verVista.dni, nota: cert.tipo === 'aprobacion' ? verVista.nota : null, codigo: emitidoDe.get(verVista.clave)?.codigo ?? codigosNuevos[verVista.clave] ?? 'ISEF-····-····' }}
             firma={firma}
             firmaVersion={firmaVersion}
-            etiqueta={`Vista previa del certificado de ${vista.nombre}`}
+            etiqueta={`Vista previa del certificado de ${verVista.nombre}`}
           />
         )}
       </Modal>
 
-      {agregando && (
+      {/* Siempre montados (con lo último que mostraron): así se van con su animación de salida */}
+      {ultimo.agregando && (
         <AgregarPersona
-          persona={agregando === 'nueva' ? null : agregando}
+          key={`agregar-${aperturas}`}
+          open={agregando !== null}
+          persona={ultimo.agregando === 'nueva' ? null : ultimo.agregando}
           conNota={cert.tipo === 'aprobacion'}
           onClose={() => setAgregando(null)}
           onSave={async (d) => {
-            await guardarAgregado(d, agregando === 'nueva' ? null : agregando);
+            await guardarAgregado(d, agregando === 'nueva' || !agregando ? null : agregando);
             setAgregando(null);
           }}
         />
       )}
 
-      {editando && (
+      {ultimo.editando && (
         <EditarPersona
-          persona={editando}
-          original={armado?.lista.find((x) => x.clave === editando.clave) ?? editando}
+          key={`editar-${aperturas}`}
+          open={editando !== null}
+          persona={ultimo.editando}
+          original={armado?.lista.find((x) => x.clave === ultimo.editando?.clave) ?? ultimo.editando}
           conNota={cert.tipo === 'aprobacion'}
           onClose={() => setEditando(null)}
           onSave={(a) => {
-            guardarAjuste(editando.clave, a);
+            if (editando) guardarAjuste(editando.clave, a);
             setEditando(null);
           }}
         />
@@ -479,7 +527,21 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
 }
 
 /** Corregir nombre, DNI, mail o nota antes de enviar (p. ej. tildes o mayúsculas). Queda guardado en este navegador. */
-function EditarPersona({ persona, original, conNota, onClose, onSave }: { persona: Persona; original: Persona; conNota: boolean; onClose: () => void; onSave: (a: Ajuste | null) => void }) {
+function EditarPersona({
+  open,
+  persona,
+  original,
+  conNota,
+  onClose,
+  onSave,
+}: {
+  open: boolean;
+  persona: Persona;
+  original: Persona;
+  conNota: boolean;
+  onClose: () => void;
+  onSave: (a: Ajuste | null) => void;
+}) {
   const [v, setV] = useState({ nombre: persona.nombre, dni: persona.dni, email: persona.email, nota: persona.nota == null ? '' : String(persona.nota) });
   const guardar = () => {
     const a: Ajuste = {};
@@ -498,7 +560,7 @@ function EditarPersona({ persona, original, conNota, onClose, onSave }: { person
   );
   return (
     <Modal
-      open
+      open={open}
       onClose={onClose}
       title="Corregir datos"
       icon={Pencil}
@@ -534,7 +596,19 @@ function EditarPersona({ persona, original, conNota, onClose, onSave }: { person
 type Datos = { nombre: string; dni: string; email: string; nota: number | null };
 
 /** Sumar (o corregir) a alguien que no completó el formulario. Queda guardado en la planilla de Google. */
-function AgregarPersona({ persona, conNota, onClose, onSave }: { persona: Persona | null; conNota: boolean; onClose: () => void; onSave: (d: Datos) => Promise<void> }) {
+function AgregarPersona({
+  open,
+  persona,
+  conNota,
+  onClose,
+  onSave,
+}: {
+  open: boolean;
+  persona: Persona | null;
+  conNota: boolean;
+  onClose: () => void;
+  onSave: (d: Datos) => Promise<void>;
+}) {
   const [v, setV] = useState({ nombre: persona?.nombre ?? '', dni: persona?.dni ?? '', email: persona?.email ?? '', nota: persona?.nota == null ? '' : String(persona.nota) });
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
@@ -558,7 +632,7 @@ function AgregarPersona({ persona, conNota, onClose, onSave }: { persona: Person
   );
   return (
     <Modal
-      open
+      open={open}
       onClose={onClose}
       title={persona ? 'Corregir persona agregada' : 'Agregar persona'}
       icon={UserPlus}
@@ -579,7 +653,11 @@ function AgregarPersona({ persona, conNota, onClose, onSave }: { persona: Person
         {campo('dni', 'DNI', { inputMode: 'numeric' })}
         {campo('email', 'Mail (adonde se envía)', { type: 'email' })}
         {conNota && campo('nota', 'Nota (%) — opcional', { type: 'number', min: 0, max: 100 })}
-        {error && <p className={adm.error}>{error}</p>}
+        {error && (
+          <p className={adm.error} role="alert">
+            {error}
+          </p>
+        )}
         <p className={adm.help}>Para alguien que no completó el formulario. Se guarda en la planilla de registro de Google (no en el sitio).</p>
         <button type="submit" hidden />
       </form>

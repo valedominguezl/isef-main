@@ -3,6 +3,7 @@ import { KeyRound, Laptop, LoaderCircle } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { useAdmin } from '../AdminContext';
 import { Button } from '../ui/Button';
+import Notice from './Notice';
 import styles from '../Admin.module.scss';
 
 /** Ingreso simple: contraseña + recordar. (La "contraseña" es la clave de acceso al repositorio; no se explica acá a propósito.) */
@@ -48,11 +49,10 @@ export default function Login() {
         <label className={styles.checkRow}>
           <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Recordarme
         </label>
-        {error && (
-          <p className={styles.error} role="alert">
-            {error}
-          </p>
-        )}
+        {/* Aparece con altura + fundido: el botón de abajo no salta */}
+        <Notice show={!!error} ok={false}>
+          {error}
+        </Notice>
         <Button type="submit" variant="primary" icon={busy ? LoaderCircle : KeyRound} spin={busy} disabled={busy || !password}>
           {busy ? 'Ingresando…' : 'Ingresar'}
         </Button>

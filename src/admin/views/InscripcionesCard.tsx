@@ -7,6 +7,7 @@ import { useFile } from '../useEntries';
 import { clean } from '../fields/Fields';
 import { Sk } from './Skeleton';
 import Notice from './Notice';
+import { useUnsavedGuard } from '../useUnsavedGuard';
 import { Button } from '../ui/Button';
 import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
@@ -21,8 +22,11 @@ export default function InscripcionesCard() {
   const { stage } = useAdmin();
   const [insc, setInsc] = useState<Insc | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // El interruptor solo cambia el borrador hasta tocar Guardar: se avisa y no se pierde al irse
+  const [cambios, setCambios] = useState(false);
+  const guard = useUnsavedGuard(cambios);
   const toast = useToast();
-  const ids = { sw: useId(), ini: useId(), fin: useId() };
+  const ids = { sw: useId(), ini: useId(), fin: useId(), estado: useId() };
 
   // Solo la primera vez: una relectura no pisa un cambio sin guardar
   useEffect(() => {
@@ -31,6 +35,7 @@ export default function InscripcionesCard() {
 
   const set = (patch: Insc) => {
     setInsc((v) => ({ ...v, ...patch }));
+    setCambios(true);
     setError(null);
   };
 
@@ -47,6 +52,8 @@ export default function InscripcionesCard() {
       return;
     }
     stage([{ path: FILE, content: `${JSON.stringify(next, null, 2)}\n`, encoding: 'utf8', label: 'Inscripciones' }]);
+    setCambios(false);
+    guard.limpiar();
     toast.saved();
   };
 
@@ -66,7 +73,10 @@ export default function InscripcionesCard() {
         </span>
         <div>
           <h2>Inscripciones</h2>
-          <p className={styles.help}>{estado ?? (loadError ? 'No se pudo leer el estado. Revisá la conexión y recargá la página.' : <Sk w={280} h={14} />)}</p>
+          <p id={ids.estado} className={styles.help}>
+            {estado ?? (loadError ? 'No se pudo leer el estado. Revisá la conexión y recargá la página.' : <Sk w={280} h={14} />)}
+            {cambios && <strong> Sin guardar.</strong>}
+          </p>
         </div>
         {insc ? (
           <label className={styles.switchRow} htmlFor={ids.sw}>
@@ -77,8 +87,11 @@ export default function InscripcionesCard() {
               className={styles.switch}
               checked={Boolean(insc.abiertas)}
               onChange={(e) => set({ abiertas: e.target.checked })}
+              // Nombre fijo (el estado lo dice el interruptor); el texto de al lado cambia y se repetiría
+              aria-label="Inscripciones abiertas"
+              aria-describedby={ids.estado}
             />
-            <span>{insc.abiertas ? 'Abiertas' : 'Cerradas'}</span>
+            <span aria-hidden>{insc.abiertas ? 'Abiertas' : 'Cerradas'}</span>
           </label>
         ) : (
           <Sk w={120} h={28} r={999} />

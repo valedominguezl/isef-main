@@ -46,20 +46,54 @@ function Collapse({ open, children }: { open: boolean; children: ReactNode }) {
 /** Profundidad de anidamiento según la ruta del campo ("secciones.0.items.2.titulo" → 2). */
 const depthOf = (path: string) => path.split('.').filter((p) => /^\d+$/.test(p)).length;
 
-function Wrapper({ field, error, children, htmlFor, counter }: { field: Field; error?: string; children: ReactNode; htmlFor?: string; counter?: ReactNode }) {
+const esObligatorio = (field: Field) => 'required' in field && Boolean(field.required);
+
+/**
+ * Atributos de accesibilidad del control de un campo: la ayuda y el error quedan conectados
+ * (aria-describedby), y el lector de pantalla sabe si es obligatorio o si tiene un error.
+ */
+function a11yDe(id: string, field: Field, error?: string) {
+  const describedBy = [field.help && `${id}-ayuda`, error && `${id}-error`].filter(Boolean).join(' ') || undefined;
+  return { 'aria-invalid': error ? true : undefined, 'aria-describedby': describedBy, 'aria-required': esObligatorio(field) || undefined };
+}
+
+/**
+ * Etiqueta + control + ayuda + error. Con `htmlFor` la etiqueta apunta al control; sin él (foto, archivo,
+ * listas, chips) el contenido va en un grupo con nombre (role="group" + aria-labelledby).
+ * El error no es role="alert": al guardar se leería uno por campo; el resumen lo anuncia el aviso de arriba.
+ */
+function Wrapper({ id, field, error, children, htmlFor, counter }: { id: string; field: Field; error?: string; children: ReactNode; htmlFor?: string; counter?: ReactNode }) {
+  const marca = esObligatorio(field) && <span aria-hidden> *</span>;
   return (
     <div className={[styles.field, error && styles.fieldError].filter(Boolean).join(' ')}>
       <div className={styles.labelRow}>
-        <label htmlFor={htmlFor} className={styles.label}>
-          {field.label}
-          {'required' in field && field.required && <span aria-hidden> *</span>}
-        </label>
+        {htmlFor ? (
+          <label htmlFor={htmlFor} className={styles.label}>
+            {field.label}
+            {marca}
+          </label>
+        ) : (
+          <span id={`${id}-etiqueta`} className={styles.label}>
+            {field.label}
+            {marca}
+          </span>
+        )}
         {counter}
       </div>
-      {children}
-      {field.help && <p className={styles.help}>{field.help}</p>}
+      {htmlFor ? (
+        children
+      ) : (
+        <div role="group" aria-labelledby={`${id}-etiqueta`} {...a11yDe(id, field, error)} aria-invalid={undefined}>
+          {children}
+        </div>
+      )}
+      {field.help && (
+        <p id={`${id}-ayuda`} className={styles.help}>
+          {field.help}
+        </p>
+      )}
       {error && (
-        <p className={styles.error} role="alert">
+        <p id={`${id}-error`} className={styles.error}>
           {error}
         </p>
       )}
@@ -67,7 +101,21 @@ function Wrapper({ field, error, children, htmlFor, counter }: { field: Field; e
   );
 }
 
-function MarkdownEditor({ id, value, onChange, rows = 6, placeholder }: { id: string; value: string; onChange: (v: string) => void; rows?: number; placeholder?: string }) {
+function MarkdownEditor({
+  id,
+  value,
+  onChange,
+  rows = 6,
+  placeholder,
+  a11y,
+}: {
+  id: string;
+  value: string;
+  onChange: (v: string) => void;
+  rows?: number;
+  placeholder?: string;
+  a11y?: ReturnType<typeof a11yDe>;
+}) {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [preview, setPreview] = useState(false);
   const wrap = (before: string, after = before, placeholder = 'texto') => {
@@ -96,7 +144,7 @@ function MarkdownEditor({ id, value, onChange, rows = 6, placeholder }: { id: st
       {preview ? (
         <div className={styles.mdPreview}>{value || placeholder ? <Markdown text={value || placeholder || ''} /> : <p className={styles.help}>(vacío)</p>}</div>
       ) : (
-        <textarea id={id} ref={ref} rows={rows} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} className={styles.input} />
+        <textarea id={id} ref={ref} rows={rows} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} className={styles.input} {...a11y} />
       )}
     </div>
   );
@@ -136,8 +184,14 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
   const esActual = !value && Boolean(field.actual);
   return (
     <div className={styles.image}>
-      <div className={styles.imagePreview} style={field.aspect ? { aspectRatio: String(field.aspect) } : undefined}>
-        {src ? <img src={src} alt="" /> : <ImagePlus size={28} aria-hidden />}
+      <div className={styles.imagePreview} style={field.aspect ? { aspectRatio: String(field.aspect) } : undefined} aria-busy={busy || undefined}>
+        {/* key: la foto nueva entra con un fundido corto en vez de aparecer de golpe */}
+        {src ? <img key={src} src={src} alt="" className={styles.imgFade} /> : <ImagePlus size={28} aria-hidden />}
+        {busy && (
+          <span className={styles.stockBusy}>
+            <LoaderCircle size={28} className={styles.spin} aria-hidden />
+          </span>
+        )}
       </div>
       <div className={styles.imageActions}>
         {esActual && <p className={styles.help}>Foto actual del sitio.</p>}
@@ -153,7 +207,11 @@ function ImageField({ field, value, onChange, entrySlug }: { field: Extract<Fiel
             {field.actual ? 'Volver a la foto original' : 'Quitar foto'}
           </Button>
         )}
-        {err && <p className={styles.error}>{err}</p>}
+        {err && (
+          <p className={styles.error} role="alert">
+            {err}
+          </p>
+        )}
       </div>
       <StockPhotoPicker open={buscar !== null} query={buscar ?? ''} onClose={() => setBuscar(null)} onPick={(foto) => procesar(foto, 'foto')} />
     </div>
@@ -180,31 +238,85 @@ function FileField({ field, value, onChange }: { field: Extract<Field, { type: '
       {value && (
         <a href={value} target="_blank" rel="noreferrer" className={styles.path}>
           {value}
+          <span className="sr-only"> (se abre en otra pestaña)</span>
         </a>
       )}
     </div>
   );
 }
 
+/* ───────────── Identidad estable de los ítems de una lista ─────────────
+ * Con key={índice}, al subir/bajar el contenido se intercambiaba en el lugar: lo abierto/cerrado y el
+ * foco se quedaban en la posición vieja. Cada ítem lleva un id propio que viaja con él.
+ */
+let ultimoId = 0;
+const nuevoId = () => ++ultimoId;
+
+function useIds(n: number) {
+  const [ids, setIds] = useState(() => Array.from({ length: n }, nuevoId));
+  // Cambios que no pasan por acá (Deshacer, Restaurar, otro editor): se completa o recorta al final
+  if (ids.length !== n) setIds((k) => (k.length < n ? [...k, ...Array.from({ length: n - k.length }, nuevoId)] : k.slice(0, n)));
+  const swap = (i: number, d: number) =>
+    setIds((k) => {
+      const next = [...k];
+      [next[i], next[i + d]] = [next[i + d], next[i]];
+      return next;
+    });
+  const removeAt = (i: number) => setIds((k) => k.filter((_, j) => j !== i));
+  const insertAt = (i: number) => {
+    const id = nuevoId();
+    setIds((k) => [...k.slice(0, i), id, ...k.slice(i)]);
+    return id;
+  };
+  return { ids, swap, removeAt, insertAt };
+}
+
+/** Subir/Bajar: en la punta queda aria-disabled (no disabled) para que el foco no se caiga al body. */
+function MoveButtons({ i, total, onMove }: { i: number; total: number; onMove: (i: number, d: number) => void }) {
+  return (
+    <>
+      <IconButton icon={ArrowUp} label="Subir" aria-disabled={i === 0 || undefined} onClick={() => i > 0 && onMove(i, -1)} />
+      <IconButton icon={ArrowDown} label="Bajar" aria-disabled={i === total - 1 || undefined} onClick={() => i < total - 1 && onMove(i, 1)} />
+    </>
+  );
+}
+
 function ListField({ value, onChange, itemLabel = 'elemento', max }: { value: string[]; onChange: (v: unknown) => void; itemLabel?: string; max?: number }) {
+  const { ids, swap, removeAt, insertAt } = useIds(value.length);
+  const [nuevos, setNuevos] = useState<Set<number>>(() => new Set());
   const set = (i: number, v: string) => onChange(value.map((x, j) => (j === i ? v : x)));
   const move = (i: number, d: number) => {
     const next = [...value];
     [next[i], next[i + d]] = [next[i + d], next[i]];
+    swap(i, d);
     onChange(next);
   };
   return (
     <div className={styles.list}>
       {value.map((v, i) => (
-        <div key={i} className={styles.listRow}>
+        <div key={ids[i] ?? `i${i}`} className={[styles.listRow, nuevos.has(ids[i]) && styles.resultIn].filter(Boolean).join(' ')}>
           <input className={styles.input} value={v} onChange={(e) => set(i, e.target.value)} aria-label={`${itemLabel} ${i + 1}`} />
-          <IconButton icon={ArrowUp} label="Subir" disabled={i === 0} onClick={() => move(i, -1)} />
-          <IconButton icon={ArrowDown} label="Bajar" disabled={i === value.length - 1} onClick={() => move(i, 1)} />
-          <IconButton icon={X} label={`Quitar ${itemLabel}`} onClick={() => onChange(value.filter((_, j) => j !== i))} />
+          <MoveButtons i={i} total={value.length} onMove={move} />
+          <IconButton
+            icon={X}
+            label={`Quitar ${itemLabel}`}
+            onClick={() => {
+              removeAt(i);
+              onChange(value.filter((_, j) => j !== i));
+            }}
+          />
         </div>
       ))}
       {(!max || value.length < max) && (
-        <Button variant="ghost" icon={Plus} onClick={() => onChange([...value, ''])}>
+        <Button
+          variant="ghost"
+          icon={Plus}
+          onClick={() => {
+            const id = insertAt(value.length);
+            setNuevos((s) => new Set(s).add(id));
+            onChange([...value, '']);
+          }}
+        >
           Agregar {itemLabel}
         </Button>
       )}
@@ -217,21 +329,25 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
   const items = (Array.isArray(props.value) ? props.value : []) as Obj[];
   const toast = useToast();
   // "Deshacer" corre unos segundos después: usa la lista y el onChange del último render, no los de cuando se borró
-  const latest = useRef({ items, onChange });
+  const { ids, swap, removeAt, insertAt } = useIds(items.length);
+  const latest = useRef({ items, onChange, insertAt });
   useEffect(() => {
-    latest.current = { items, onChange };
+    latest.current = { items, onChange, insertAt };
   });
-  const [open, setOpen] = useState<Set<number>>(() => new Set(field.collapsed ? [] : items.map((_, i) => i)));
-  const toggle = (i: number) =>
+  // Abierto/cerrado por id (no por posición): acompaña al ítem cuando se mueve o se borra otro
+  const [open, setOpen] = useState<Set<number>>(() => new Set(field.collapsed ? [] : ids));
+  const [nuevos, setNuevos] = useState<Set<number>>(() => new Set());
+  const toggle = (id: number) =>
     setOpen((s) => {
       const n = new Set(s);
-      if (n.has(i)) n.delete(i);
-      else n.add(i);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
       return n;
     });
   const move = (i: number, d: number) => {
     const next = [...items];
     [next[i], next[i + d]] = [next[i + d], next[i]];
+    swap(i, d);
     onChange(next);
   };
   const titleOf = (it: Obj, i: number) => {
@@ -247,13 +363,16 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
   const remove = (i: number) => {
     const removed = items[i];
     const title = titleOf(removed, i);
+    const estabaAbierto = open.has(ids[i]);
+    removeAt(i);
     onChange(items.filter((_, j) => j !== i));
-    setOpen((s) => new Set([...s].filter((j) => j !== i).map((j) => (j > i ? j - 1 : j))));
     toast.show({
       text: `Se quitó «${title}». Falta guardar.`,
       icon: Trash2,
       undo: () => {
-        const { items: cur, onChange: set } = latest.current;
+        const { items: cur, onChange: set, insertAt: insertar } = latest.current;
+        const id = insertar(i);
+        if (estabaAbierto) setOpen((s) => new Set(s).add(id));
         set([...cur.slice(0, i), removed, ...cur.slice(i)]);
       },
     });
@@ -262,20 +381,24 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
   return (
     <div className={[styles.repeater, nested && styles.repNested].filter(Boolean).join(' ')}>
       {items.map((it, i) => {
-        const isOpen = open.has(i);
+        const id = ids[i];
+        // Un ítem con error se muestra abierto (si no, el error queda escondido)
         const hasErr = Object.keys(errors).some((k) => k.startsWith(`${path}.${i}.`));
+        const isOpen = open.has(id) || hasErr;
         return (
-          <div key={i} className={[styles.repItem, isOpen && styles.repOpen, hasErr && styles.repError].filter(Boolean).join(' ')}>
+          <div
+            key={id ?? `i${i}`}
+            className={[styles.repItem, isOpen && styles.repOpen, hasErr && styles.repError, nuevos.has(id) && styles.resultIn].filter(Boolean).join(' ')}
+          >
             <div className={styles.repHead}>
-              <button type="button" className={styles.repToggle} onClick={() => toggle(i)} aria-expanded={isOpen}>
-                <ChevronDown size={18} className={styles.chevron} />
+              <button type="button" className={styles.repToggle} onClick={() => toggle(id)} aria-expanded={isOpen}>
+                <ChevronDown size={18} className={styles.chevron} aria-hidden />
                 <span>
                   {titleOf(it, i)}
                   <small>{count(it)}</small>
                 </span>
               </button>
-              <IconButton icon={ArrowUp} label="Subir" disabled={i === 0} onClick={() => move(i, -1)} />
-              <IconButton icon={ArrowDown} label="Bajar" disabled={i === items.length - 1} onClick={() => move(i, 1)} />
+              <MoveButtons i={i} total={items.length} onMove={move} />
               <DeleteButton
                 what={titleOf(it, i)}
                 consequence="Se quita de la lista. El cambio queda al tocar Guardar."
@@ -307,8 +430,10 @@ function Repeater(props: FieldProps & { field: Extract<Field, { type: 'repeater'
         variant="ghost"
         icon={Plus}
         onClick={() => {
+          const id = insertAt(items.length);
+          setOpen((s) => new Set(s).add(id));
+          setNuevos((s) => new Set(s).add(id));
           onChange([...items, {}]);
-          setOpen((s) => new Set(s).add(items.length));
         }}
       >
         Agregar {field.itemLabel.toLowerCase()}
@@ -322,6 +447,7 @@ export function FieldRenderer(props: FieldProps) {
   const id = useId();
   const error = errors[path];
   const str = (value as string | undefined) ?? '';
+  const a = a11yDe(id, field, error);
 
   switch (field.type) {
     case 'text':
@@ -329,12 +455,12 @@ export function FieldRenderer(props: FieldProps) {
     case 'email':
       if (field.type === 'text' && field.sugerencias)
         return (
-          <Wrapper field={field} error={error} htmlFor={id}>
-            <Combobox id={id} value={str} onChange={onChange} opciones={(refs[field.sugerencias] ?? []).map((o) => o.label)} placeholder={field.placeholder} />
+          <Wrapper id={id} field={field} error={error} htmlFor={id}>
+            <Combobox id={id} value={str} onChange={onChange} opciones={(refs[field.sugerencias] ?? []).map((o) => o.label)} placeholder={field.placeholder} a11y={a} />
           </Wrapper>
         );
       return (
-        <Wrapper field={field} error={error} htmlFor={id} counter={field.max ? <Counter n={str.length} max={field.max} /> : null}>
+        <Wrapper id={id} field={field} error={error} htmlFor={id} counter={field.max ? <Counter n={str.length} max={field.max} /> : null}>
           <input
             id={id}
             type={field.type === 'text' ? 'text' : field.type}
@@ -342,24 +468,25 @@ export function FieldRenderer(props: FieldProps) {
             value={str}
             placeholder={field.placeholder}
             onChange={(e) => onChange(e.target.value)}
+            {...a}
           />
         </Wrapper>
       );
     case 'textarea':
       return (
-        <Wrapper field={field} error={error} htmlFor={id} counter={field.max ? <Counter n={str.length} max={field.max} /> : null}>
-          <textarea id={id} rows={field.rows ?? 4} className={styles.input} value={str} placeholder={field.placeholder} onChange={(e) => onChange(e.target.value)} />
+        <Wrapper id={id} field={field} error={error} htmlFor={id} counter={field.max ? <Counter n={str.length} max={field.max} /> : null}>
+          <textarea id={id} rows={field.rows ?? 4} className={styles.input} value={str} placeholder={field.placeholder} onChange={(e) => onChange(e.target.value)} {...a} />
         </Wrapper>
       );
     case 'markdown':
       return (
-        <Wrapper field={field} error={error} htmlFor={id}>
-          <MarkdownEditor id={id} value={str} onChange={onChange} rows={field.rows} placeholder={field.placeholder} />
+        <Wrapper id={id} field={field} error={error} htmlFor={id}>
+          <MarkdownEditor id={id} value={str} onChange={onChange} rows={field.rows} placeholder={field.placeholder} a11y={a} />
         </Wrapper>
       );
     case 'number':
       return (
-        <Wrapper field={field} error={error} htmlFor={id}>
+        <Wrapper id={id} field={field} error={error} htmlFor={id}>
           <input
             id={id}
             type="number"
@@ -367,27 +494,40 @@ export function FieldRenderer(props: FieldProps) {
             className={styles.input}
             value={value === undefined || value === null ? '' : String(value)}
             onChange={(e) => onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+            {...a}
           />
         </Wrapper>
       );
     case 'date':
       return (
-        <Wrapper field={field} error={error} htmlFor={id}>
-          <input id={id} type="date" className={styles.input} value={str} onChange={(e) => onChange(e.target.value || undefined)} />
+        <Wrapper id={id} field={field} error={error} htmlFor={id}>
+          <input id={id} type="date" className={styles.input} value={str} onChange={(e) => onChange(e.target.value || undefined)} {...a} />
         </Wrapper>
       );
     case 'boolean':
       return (
         <div className={styles.switchRow}>
-          <input id={id} type="checkbox" role="switch" className={styles.switch} checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)} />
+          <input
+            id={id}
+            type="checkbox"
+            role="switch"
+            className={styles.switch}
+            checked={Boolean(value)}
+            onChange={(e) => onChange(e.target.checked)}
+            aria-describedby={field.help ? `${id}-ayuda` : undefined}
+          />
           <label htmlFor={id}>{field.label}</label>
-          {field.help && <p className={styles.help}>{field.help}</p>}
+          {field.help && (
+            <p id={`${id}-ayuda`} className={styles.help}>
+              {field.help}
+            </p>
+          )}
         </div>
       );
     case 'select':
       return (
-        <Wrapper field={field} error={error} htmlFor={id}>
-          <select id={id} className={styles.input} value={str} onChange={(e) => onChange(e.target.value)}>
+        <Wrapper id={id} field={field} error={error} htmlFor={id}>
+          <select id={id} className={styles.input} value={str} onChange={(e) => onChange(e.target.value)} {...a}>
             {!field.required && !field.options.some((o) => o.value === '') && <option value="">—</option>}
             {field.options.map((o) => (
               <option key={o.value} value={o.value}>
@@ -399,19 +539,19 @@ export function FieldRenderer(props: FieldProps) {
       );
     case 'image':
       return (
-        <Wrapper field={field} error={error}>
+        <Wrapper id={id} field={field} error={error}>
           <ImageField field={field} value={value as string | undefined} onChange={onChange} entrySlug={entrySlug} />
         </Wrapper>
       );
     case 'file':
       return (
-        <Wrapper field={field} error={error}>
+        <Wrapper id={id} field={field} error={error}>
           <FileField field={field} value={value as string | undefined} onChange={onChange} />
         </Wrapper>
       );
     case 'list':
       return (
-        <Wrapper field={field} error={error}>
+        <Wrapper id={id} field={field} error={error}>
           <ListField value={(value as string[]) ?? []} onChange={onChange} itemLabel={field.itemLabel} max={field.max} />
         </Wrapper>
       );
@@ -419,8 +559,8 @@ export function FieldRenderer(props: FieldProps) {
       const options = refs[field.collection] ?? [];
       if (!field.multiple)
         return (
-          <Wrapper field={field} error={error} htmlFor={id}>
-            <select id={id} className={styles.input} value={str} onChange={(e) => onChange(e.target.value || undefined)}>
+          <Wrapper id={id} field={field} error={error} htmlFor={id}>
+            <select id={id} className={styles.input} value={str} onChange={(e) => onChange(e.target.value || undefined)} {...a}>
               <option value="">— Ninguno —</option>
               {options.map((o) => (
                 <option key={o.value} value={o.value}>
@@ -432,7 +572,7 @@ export function FieldRenderer(props: FieldProps) {
         );
       const sel = (value as string[]) ?? [];
       return (
-        <Wrapper field={field} error={error}>
+        <Wrapper id={id} field={field} error={error}>
           <div className={styles.chips}>
             {options.map((o) => (
               <button
@@ -459,7 +599,7 @@ export function FieldRenderer(props: FieldProps) {
           <Repeater {...props} field={field} />
         </Section>
       ) : (
-        <Wrapper field={field} error={error}>
+        <Wrapper id={id} field={field} error={error}>
           <Repeater {...props} field={field} />
         </Wrapper>
       );
@@ -484,11 +624,8 @@ export function Section({ title, help, error, collapsed, children }: { title: st
       <Collapse open={open}>
         <div className={styles.sectionBody}>
           {children}
-          {error && (
-            <p className={styles.error} role="alert">
-              {error}
-            </p>
-          )}
+          {/* Sin role="alert": el resumen de errores lo anuncia el aviso de arriba al guardar */}
+          {error && <p className={styles.error}>{error}</p>}
         </div>
       </Collapse>
     </section>

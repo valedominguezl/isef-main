@@ -12,6 +12,8 @@ interface Props {
   placeholder?: string;
   /** Texto bajo la lista cuando lo escrito no coincide con ninguna opción. */
   libre?: string;
+  /** aria-invalid / aria-describedby / aria-required del campo (ayuda y error conectados). */
+  a11y?: Record<string, string | boolean | undefined>;
 }
 
 /**
@@ -19,7 +21,7 @@ interface Props {
  * La lista muestra todas las opciones al abrir y se filtra al escribir (el <datalist> del navegador
  * solo muestra las que coinciden con lo escrito, así que con un valor cargado no mostraba nada).
  */
-export default function Combobox({ id, value, onChange, opciones, placeholder, libre = 'Se usa lo que escribiste.' }: Props) {
+export default function Combobox({ id, value, onChange, opciones, placeholder, libre = 'Se usa lo que escribiste.', a11y }: Props) {
   const [abierto, setAbierto] = useState(false);
   const [activa, setActiva] = useState(-1);
   // Al abrir se muestran todas; al escribir, se filtra
@@ -46,6 +48,7 @@ export default function Combobox({ id, value, onChange, opciones, placeholder, l
         value={value}
         placeholder={placeholder}
         autoComplete="off"
+        {...a11y}
         role="combobox"
         aria-expanded={abierto}
         aria-controls={lista}

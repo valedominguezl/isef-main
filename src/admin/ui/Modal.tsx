@@ -2,11 +2,10 @@ import { useEffect, useId, useRef, type ReactNode, type RefObject } from 'react'
 import { createPortal } from 'react-dom';
 import { AnimatePresence, m } from 'motion/react';
 import { X, type LucideIcon } from 'lucide-react';
+import { enter, exit } from '@/lib/motion';
 import { IconButton } from './Button';
 import styles from './Ui.module.scss';
 
-const EASE_IN = [0.25, 0.46, 0.45, 0.94] as const;
-const EASE_OUT = [0.4, 0, 1, 1] as const;
 const FOCUSABLE = 'button:not(:disabled), input:not(:disabled), textarea:not(:disabled), select:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])';
 
 interface ModalProps {
@@ -72,8 +71,8 @@ function Panel({ onClose, title, icon: Icon, actions, wide, initialFocus, childr
       className={styles.backdrop}
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { duration: 0.35, ease: EASE_IN } }}
-      exit={{ opacity: 0, transition: { duration: 0.2, ease: EASE_OUT } }}
+      animate={{ opacity: 1, transition: enter(0.35) }}
+      exit={{ opacity: 0, transition: exit() }}
     >
       <m.div
         ref={box}
@@ -83,8 +82,8 @@ function Panel({ onClose, title, icon: Icon, actions, wide, initialFocus, childr
         aria-labelledby={titleId}
         onKeyDown={onKeyDown}
         initial={{ opacity: 0, scale: 0.96, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: EASE_IN } }}
-        exit={{ opacity: 0, scale: 0.98, y: 6, transition: { duration: 0.2, ease: EASE_OUT } }}
+        animate={{ opacity: 1, scale: 1, y: 0, transition: enter() }}
+        exit={{ opacity: 0, scale: 0.98, y: 6, transition: exit() }}
       >
         <header className={styles.modalHead}>
           {Icon && (
