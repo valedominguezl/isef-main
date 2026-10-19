@@ -293,11 +293,21 @@
   width: 100%;
 }
 
+/* Firma y sello, uno al lado del otro (apilados en pantallas angostas) */
+.imagenes {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+
+  @include up($bp-sm) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .firma {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  margin-top: var(--space-5);
 }
 
 .firmaAcciones {

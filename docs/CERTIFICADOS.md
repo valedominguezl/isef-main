@@ -71,9 +71,17 @@ Se sube en /admin → Certificados → una actividad → **Datos del certificado
 - **Dónde se guarda:** en las propiedades del Apps Script, no en el repositorio (que es público).
 - **Calidad:** conviene un escaneo de buena resolución (al menos 800 px de ancho).
 
+## Sello del instituto
+
+Se sube en el mismo lugar: **Datos del certificado → Subir sello** (vale para todos los certificados). Sale a la izquierda de la firma, montado apenas sobre el comienzo de la línea, en tinta violeta.
+
+- **Fondo:** el panel le saca el fondo solo (lo oscuro queda como tinta; sirve una foto o una fotocopia).
+- **Dónde se guarda:** igual que la firma, en las propiedades del Apps Script.
+- **Requisito:** el `Codigo.gs` tiene que tener las acciones `sello` y `guardarSello` (versión del 19/10/2026). Con un script anterior el panel avisa «Para usar el sello hay que actualizar el Apps Script» y los certificados salen sin sello, sin tocar la firma.
+
 ## Desarrollo local
 
-En `npm run dev` la sección usa datos de ejemplo, porque en local no hay Worker ni Google. La firma de prueba queda en el navegador.
+En `npm run dev` la sección usa datos de ejemplo, porque en local no hay Worker ni Google. La firma y el sello de prueba quedan en el navegador.
 
 ## Pendiente
 

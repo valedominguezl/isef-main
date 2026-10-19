@@ -4,7 +4,8 @@
  * Lo llama SOLO el Worker de isefsanluis.net (con la clave compartida). Hace tres cosas:
  *   1. Lee las respuestas de los Google Forms desde su planilla de respuestas (nombre, DNI, mail y nota).
  *   2. Manda cada certificado por Gmail con el PDF adjunto (lo arma el panel /admin).
- *   3. Guarda la firma escaneada del rector (la sube el panel; no está en el repositorio público).
+ *   3. Guarda la firma escaneada del rector y el sello del instituto (los sube el panel; no están en el
+ *      repositorio público).
  *   4. Guarda el registro de certificados emitidos en la planilla «Certificados emitidos» (la crea sola),
  *      que también sirve para verificar los códigos en isefsanluis.net/verificar.
  *
@@ -36,9 +37,14 @@ function doPost(e) {
         quitar(p.formulario, p.clave);
         return salida({ ok: true });
       case 'firma':
-        return salida({ png: leerFirma() });
+        return salida({ png: leerImagen('FIRMA') });
       case 'guardarFirma':
-        guardarFirma(p.png);
+        guardarImagen('FIRMA', p.png);
+        return salida({ ok: true });
+      case 'sello':
+        return salida({ png: leerImagen('SELLO') });
+      case 'guardarSello':
+        guardarImagen('SELLO', p.png);
         return salida({ ok: true });
       default:
         return salida({ error: 'Acción desconocida.' });
@@ -378,30 +384,31 @@ function verificar(codigo) {
   return { valido: false, codigo: codigo };
 }
 
-/* ───────────────────────── Firma escaneada ───────────────────────── */
-// Se guarda en las propiedades del script, partida en pedazos (cada propiedad admite ~9 KB).
+/* ───────────────────────── Firma escaneada y sello ───────────────────────── */
+// Se guardan en las propiedades del script, partidas en pedazos (cada propiedad admite ~9 KB).
+// `nombre`: 'FIRMA' (la del rector) o 'SELLO' (el del instituto).
 const PEDAZO = 8000;
 
-function leerFirma() {
+function leerImagen(nombre) {
   const props = PropertiesService.getScriptProperties();
-  const n = Number(props.getProperty('FIRMA_PARTES') || 0);
+  const n = Number(props.getProperty(nombre + '_PARTES') || 0);
   if (!n) return null;
   let b64 = '';
-  for (let i = 0; i < n; i++) b64 += props.getProperty('FIRMA_' + i) || '';
+  for (let i = 0; i < n; i++) b64 += props.getProperty(nombre + '_' + i) || '';
   return b64 || null;
 }
 
-function guardarFirma(b64) {
+function guardarImagen(nombre, b64) {
   const props = PropertiesService.getScriptProperties();
-  const antes = Number(props.getProperty('FIRMA_PARTES') || 0);
-  for (let i = 0; i < antes; i++) props.deleteProperty('FIRMA_' + i);
-  props.deleteProperty('FIRMA_PARTES');
+  const antes = Number(props.getProperty(nombre + '_PARTES') || 0);
+  for (let i = 0; i < antes; i++) props.deleteProperty(nombre + '_' + i);
+  props.deleteProperty(nombre + '_PARTES');
   if (!b64) return;
-  if (b64.length > 400000) throw new Error('La firma es demasiado grande.');
+  if (b64.length > 400000) throw new Error('La imagen es demasiado grande.');
   const partes = {};
   let n = 0;
-  for (let i = 0; i < b64.length; i += PEDAZO) partes['FIRMA_' + n++] = b64.slice(i, i + PEDAZO);
-  partes.FIRMA_PARTES = String(n);
+  for (let i = 0; i < b64.length; i += PEDAZO) partes[nombre + '_' + n++] = b64.slice(i, i + PEDAZO);
+  partes[nombre + '_PARTES'] = String(n);
   props.setProperties(partes);
 }
 

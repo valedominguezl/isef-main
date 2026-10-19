@@ -38,6 +38,8 @@ export default function Vista({
   datos = MUESTRA,
   firma,
   firmaVersion = 0,
+  sello,
+  selloVersion = 0,
   etiqueta,
 }: {
   cert: Certificado;
@@ -45,25 +47,29 @@ export default function Vista({
   firma?: ArrayBuffer | null;
   /** Cambia cuando cambia la firma (los bytes no entran en la clave del efecto). */
   firmaVersion?: number;
+  sello?: ArrayBuffer | null;
+  selloVersion?: number;
   etiqueta: string;
 }) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const caja = useRef<HTMLDivElement>(null);
   const [estado, setEstado] = useState<'cargando' | 'listo' | 'error'>('cargando');
-  const clave = JSON.stringify([cert, datos, firmaVersion, firma === undefined]);
+  const clave = JSON.stringify([cert, datos, firmaVersion, firma === undefined, selloVersion, sello === undefined]);
 
   useEffect(() => {
     let cancelado = false;
     const t = setTimeout(async () => {
       try {
-        const [bytes, lib] = await Promise.all([generarCertificado(cert, datos, firma), cargarPdfjs()]);
+        const [bytes, lib] = await Promise.all([generarCertificado(cert, datos, firma, sello), cargarPdfjs()]);
         if (cancelado || !lienzo.current || !caja.current) return;
         const tarea = lib.getDocument({ data: bytes });
         const doc = await tarea.promise;
         const page = await doc.getPage(1);
         const base = page.getViewport({ scale: 1 });
         const ancho = caja.current.clientWidth || 600;
-        const viewport = page.getViewport({ scale: (ancho * Math.min(window.devicePixelRatio || 1, 2)) / base.width });
+        // Al menos el doble de los píxeles de pantalla (hasta 3×): la vista previa se ve nítida también al hacer zoom
+        const densidad = Math.min(Math.max(window.devicePixelRatio || 1, 2) * 1.5, 3);
+        const viewport = page.getViewport({ scale: (ancho * densidad) / base.width });
         const c = lienzo.current;
         c.width = Math.round(viewport.width);
         c.height = Math.round(viewport.height);

@@ -12,7 +12,7 @@ import { armarPersonas, claveDe, conAjuste, estadoDe, guardarAjustes, idFormular
 import { aBase64, generarCertificado } from './pdf';
 import { ASUNTO, completar, MENSAJE, nombreArchivo, notaTexto, nuevoCodigo } from './texto';
 import Vista from './Vista';
-import { useFirma } from './firma';
+import { useFirma, useSello } from './firma';
 import adm from '../Admin.module.scss';
 import s from './Certificados.module.scss';
 
@@ -47,6 +47,8 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
   const confirm = useConfirm();
   const form = idFormulario(cert.formulario);
   const { firma, version: firmaVersion } = useFirma(api);
+  // Sin sello cargado (o con el Apps Script todavía sin actualizar) el certificado sale igual, sin sello
+  const { sello, version: selloVersion } = useSello(api);
 
   const guardado = memoria.get(form);
   const [respuestas, setRespuestas] = useState<RespuestasForm | null>(guardado?.respuestas ?? null);
@@ -142,7 +144,7 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
     const previo = emitidoDe.get(p.clave);
     const codigo = codigoDe(p.clave);
     const nota = cert.tipo === 'aprobacion' ? p.nota : null;
-    const bytes = await generarCertificado(cert, { nombre: p.nombre, dni: p.dni, nota, codigo }, firma);
+    const bytes = await generarCertificado(cert, { nombre: p.nombre, dni: p.dni, nota, codigo }, firma, sello);
     const r = await api.certEmitir({
       formulario: form,
       clave: p.clave,
@@ -488,6 +490,8 @@ export default function Envios({ cert, slug }: { cert: Certificado; slug: string
             datos={{ nombre: verVista.nombre, dni: verVista.dni, nota: cert.tipo === 'aprobacion' ? verVista.nota : null, codigo: emitidoDe.get(verVista.clave)?.codigo ?? codigosNuevos[verVista.clave] ?? 'ISEF-····-····' }}
             firma={firma}
             firmaVersion={firmaVersion}
+            sello={sello}
+            selloVersion={selloVersion}
             etiqueta={`Vista previa del certificado de ${verVista.nombre}`}
           />
         )}

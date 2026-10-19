@@ -7,6 +7,7 @@
  *   POST /api/certificados/emitir           → registra un certificado y, si trae mail, lo manda por Gmail
  *   POST /api/certificados/agregado         → agrega/corrige o quita una persona que no está en el formulario
  *   GET/POST /api/certificados/firma        → firma escaneada del rector (guardada en el Apps Script, no en el repo)
+ *   GET/POST /api/certificados/sello        → sello del instituto (ídem)
  *   GET  /api/verificar?c=…                 → PÚBLICA: valida un código de certificado (página /verificar)
  * Gratis: no usa servicios pagos. Exige la contraseña del panel (token de GitHub con permiso de escritura),
  * salvo /api/verificar. La URL y la clave del Apps Script son secretos del Worker (docs/CERTIFICADOS.md).
@@ -94,7 +95,7 @@ async function descargarFoto(url: string): Promise<Response> {
 
 /* ───────────────────────── Certificados (Apps Script) ───────────────────────── */
 
-type Accion = 'respuestas' | 'emitidos' | 'emitir' | 'verificar' | 'firma' | 'guardarFirma' | 'agregar' | 'quitar';
+type Accion = 'respuestas' | 'emitidos' | 'emitir' | 'verificar' | 'firma' | 'guardarFirma' | 'sello' | 'guardarSello' | 'agregar' | 'quitar';
 
 /** Reenvía el pedido al Apps Script con la clave (que nunca llega al navegador). */
 async function script(env: Env, accion: Accion, datos: Record<string, unknown>): Promise<Response> {
@@ -141,13 +142,20 @@ async function certificados(req: Request, url: URL, env: Env): Promise<Response>
     if (!String(d.nombre ?? '').trim()) return error(400, 'Falta el nombre.');
     return script(env, 'agregar', { persona: d });
   }
-  if (url.pathname === '/api/certificados/firma') {
-    if (req.method === 'GET') return script(env, 'firma', {});
+  // Firma del rector y sello del instituto: acciones separadas en el Apps Script (un script viejo, sin
+  // «sello», contesta «Acción desconocida» en vez de pisar la firma)
+  const imagen = url.pathname === '/api/certificados/firma' ? 'firma' : url.pathname === '/api/certificados/sello' ? 'sello' : null;
+  if (imagen) {
+    if (req.method === 'GET') {
+      const r = await script(env, imagen, {});
+      if (imagen === 'sello' && r.status === 400) return error(400, 'Para usar el sello hay que actualizar el Apps Script (docs/CERTIFICADOS.md).');
+      return r;
+    }
     if (req.method === 'POST') {
       const d = (await req.json().catch(() => null)) as { png?: unknown } | null;
       const png = d?.png ?? null;
-      if (png !== null && (typeof png !== 'string' || png.length > 400_000 || !/^[A-Za-z0-9+/=]+$/.test(png))) return error(400, 'La imagen de la firma no es válida o es muy grande.');
-      return script(env, 'guardarFirma', { png });
+      if (png !== null && (typeof png !== 'string' || png.length > 400_000 || !/^[A-Za-z0-9+/=]+$/.test(png))) return error(400, `La imagen ${imagen === 'firma' ? 'de la firma' : 'del sello'} no es válida o es muy grande.`);
+      return script(env, imagen === 'firma' ? 'guardarFirma' : 'guardarSello', { png });
     }
   }
   return error(404, 'No existe.');

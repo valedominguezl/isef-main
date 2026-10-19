@@ -44,9 +44,15 @@ let recursos: Promise<Recursos> | null = null;
 
 const bajar = async (url: string) => (await fetch(url)).arrayBuffer();
 
-/** El logo es WebP (pdf-lib solo acepta PNG/JPG): se convierte acá. `gris` = para la marca de agua. */
+/**
+ * Escudo para el PDF: la versión de 512 px (public/icon-512.png). La de 192 px del sitio quedaba blanda
+ * al imprimir (≈180 dpi a 27 mm) y pixelada como marca de agua. Si no está, se usa la del sitio.
+ * Se pasa por un canvas: `gris` = para la marca de agua (y el WebP de respaldo queda en PNG, que pdf-lib acepta).
+ */
 async function logoPng(gris: boolean): Promise<ArrayBuffer> {
-  const img = await createImageBitmap(await (await fetch(logoUrl)).blob());
+  const grande = await fetch('/icon-512.png').catch(() => null);
+  const fuente = grande?.ok && (grande.headers.get('content-type') ?? '').startsWith('image/') ? grande : await fetch(logoUrl);
+  const img = await createImageBitmap(await fuente.blob());
   const canvas = document.createElement('canvas');
   canvas.width = img.width;
   canvas.height = img.height;
@@ -171,6 +177,18 @@ function marco(page: PDFPage) {
     page.drawRectangle({ x: x * MM, y: Y(y) - r * Math.SQRT2 / 2, width: r, height: r, color: C.oro, rotate: degrees(45) });
 }
 
+/** Números «al azar» pero siempre los mismos para el mismo texto (mulberry32 sobre un hash del código). */
+function azarDe(texto: string) {
+  let s = 2166136261;
+  for (let i = 0; i < texto.length; i++) s = Math.imul(s ^ texto.charCodeAt(i), 16777619);
+  return () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let r = Math.imul(s ^ (s >>> 15), 1 | s);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 function qr(page: PDFPage, texto: string, xMm: number, yMm: number, ladoMm: number) {
   const { data, size } = encode(texto, { border: 0, ecc: 'M' });
   const m = (ladoMm * MM) / size;
@@ -181,8 +199,11 @@ function qr(page: PDFPage, texto: string, xMm: number, yMm: number, ladoMm: numb
   );
 }
 
-/** PDF listo para descargar o adjuntar. `firma`: PNG transparente de la firma del rector (opcional). */
-export async function generarCertificado(cert: Certificado, d: DatosCertificado, firma?: ArrayBuffer | null): Promise<Uint8Array> {
+/**
+ * PDF listo para descargar o adjuntar. `firma`: PNG transparente de la firma del rector; `sello`: el del
+ * instituto (los dos opcionales).
+ */
+export async function generarCertificado(cert: Certificado, d: DatosCertificado, firma?: ArrayBuffer | null, sello?: ArrayBuffer | null): Promise<Uint8Array> {
   const r = await cargarRecursos();
   const pdf = await PDFDocument.create();
   pdf.registerFontkit(fontkit);
@@ -227,6 +248,25 @@ export async function generarCertificado(cert: Certificado, d: DatosCertificado,
   centrado(page, `Emitido el ${fechaCorta(cert.fecha)}`, cx, 190, { font: f.merriLightItalic, size: 10, color: C.gris });
 
   const fx = 239;
+  if (sello) {
+    // El sello va a la izquierda de la firma, como uno puesto a mano: caja de ~28 mm centrada cerca de
+    // x = 189, y = 170, tinta translúcida y torcido. Ángulo, posición, tamaño y tinta cambian entre
+    // certificados, pero salen siempre iguales para el mismo código (descargar o reenviar no lo mueve).
+    const azar = azarDe(d.codigo);
+    const img = await pdf.embedPng(sello);
+    const lado = 28 * (0.94 + azar() * 0.1);
+    const k = Math.min((lado * MM) / img.width, (lado * MM) / img.height);
+    const [sw, sh] = [img.width * k, img.height * k];
+    // Nunca recto: −14° a −5° (lo común, inclinado hacia la derecha) o, una de cada cuatro, +5° a +8°
+    const angulo = azar() < 0.75 ? -(5 + azar() * 9) : 5 + azar() * 3;
+    // Centro dentro de ±4,5 mm a lo ancho y ±4 mm a lo alto: no pisa «Emitido el…», el texto ni la firma
+    const [cxS, cyS] = [(189 + (azar() - 0.5) * 9) * MM, Y(170 + (azar() - 0.5) * 8)];
+    // pdf-lib rota alrededor de la esquina inferior izquierda: se corrige para que gire sobre su centro
+    const t = (angulo * Math.PI) / 180;
+    const x = cxS - ((sw / 2) * Math.cos(t) - (sh / 2) * Math.sin(t));
+    const y = cyS - ((sw / 2) * Math.sin(t) + (sh / 2) * Math.cos(t));
+    page.drawImage(img, { x, y, width: sw, height: sh, rotate: degrees(angulo), opacity: 0.42 + azar() * 0.12 });
+  }
   if (firma) {
     // La firma entra en una caja de 66 × 30 mm apoyada sobre la línea (la cruza un poco, como una firma real)
     const img = await pdf.embedPng(firma);

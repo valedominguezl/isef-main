@@ -76,11 +76,11 @@ export interface AdminApi {
   certRespuestas: (formulario: string, fresco?: boolean) => Promise<RespuestasForm>;
   certEmitidos: (formulario: string) => Promise<Emitido[]>;
   certEmitir: (e: Emision) => Promise<{ cuota: number }>;
-  /** Firma escaneada (PNG en base64) o null si todavía no se cargó. */
   certAgregar: (formulario: string, p: Agregado) => Promise<void>;
   certQuitar: (formulario: string, clave: string) => Promise<void>;
-  certFirma: () => Promise<string | null>;
-  certGuardarFirma: (png: string | null) => Promise<void>;
+  /** Firma escaneada del rector o sello del instituto (PNG en base64), o null si todavía no se cargó. */
+  certImagen: (cual: 'firma' | 'sello') => Promise<string | null>;
+  certGuardarImagen: (cual: 'firma' | 'sello', png: string | null) => Promise<void>;
 }
 
 export const NO_DISPONIBLE = 'Disponible en el panel publicado (isefsanluis.net/admin)';
@@ -126,9 +126,9 @@ function api(call: (path: string, init?: RequestInit) => Promise<Response>): Adm
     certQuitar: async (formulario, clave) => {
       await call('/api/certificados/agregado', { method: 'POST', body: JSON.stringify({ formulario, clave, quitar: true }) });
     },
-    certFirma: async () => ((await (await call('/api/certificados/firma')).json()) as { png: string | null }).png ?? null,
-    certGuardarFirma: async (png) => {
-      await call('/api/certificados/firma', { method: 'POST', body: JSON.stringify({ png }) });
+    certImagen: async (cual) => ((await (await call(`/api/certificados/${cual}`)).json()) as { png: string | null }).png ?? null,
+    certGuardarImagen: async (cual, png) => {
+      await call(`/api/certificados/${cual}`, { method: 'POST', body: JSON.stringify({ png }) });
     },
     buscarFotos: async (q, signal) => ((await (await call(`/api/fotos?q=${encodeURIComponent(q)}`, { signal })).json()) as { fotos: FotoStock[] }).fotos ?? [],
     descargarFoto: async (url, signal) => (await call(`/api/fotos/descargar?url=${encodeURIComponent(url)}`, { signal })).blob(),
@@ -139,9 +139,9 @@ function api(call: (path: string, init?: RequestInit) => Promise<Response>): Adm
 const demoEmitidos = new Map<string, Emitido>();
 let demoCuota = 100;
 const espera = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const FIRMA_DEMO = 'isef-cert-firma-demo';
+const IMAGEN_DEMO = (cual: string) => `isef-cert-${cual}-demo`;
 const demoAgregados = new Map<string, Agregado>();
-const certDemo: Pick<AdminApi, 'certRespuestas' | 'certEmitidos' | 'certEmitir' | 'certFirma' | 'certGuardarFirma' | 'certAgregar' | 'certQuitar'> = {
+const certDemo: Pick<AdminApi, 'certRespuestas' | 'certEmitidos' | 'certEmitir' | 'certImagen' | 'certGuardarImagen' | 'certAgregar' | 'certQuitar'> = {
   async certAgregar(_f, p) {
     await espera(300);
     demoAgregados.set(p.clave, { ...p, fecha: new Date().toISOString() });
@@ -150,17 +150,17 @@ const certDemo: Pick<AdminApi, 'certRespuestas' | 'certEmitidos' | 'certEmitir' 
     await espera(300);
     demoAgregados.delete(clave);
   },
-  async certFirma() {
+  async certImagen(cual) {
     try {
-      return localStorage.getItem(FIRMA_DEMO);
+      return localStorage.getItem(IMAGEN_DEMO(cual));
     } catch {
       return null;
     }
   },
-  async certGuardarFirma(png) {
+  async certGuardarImagen(cual, png) {
     try {
-      if (png) localStorage.setItem(FIRMA_DEMO, png);
-      else localStorage.removeItem(FIRMA_DEMO);
+      if (png) localStorage.setItem(IMAGEN_DEMO(cual), png);
+      else localStorage.removeItem(IMAGEN_DEMO(cual));
     } catch {
       /* sin almacenamiento en modo demo */
     }
