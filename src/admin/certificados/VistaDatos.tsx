@@ -10,9 +10,9 @@ import Vista from './Vista';
 import adm from '../Admin.module.scss';
 import s from './Certificados.module.scss';
 
-const TEXTOS: Record<Cual, { titulo: string; la: string; Mayus: string; vacia: string }> = {
-  firma: { titulo: 'Firma escaneada', la: 'la firma', Mayus: 'Firma', vacia: 'Subí una foto o escaneo de la firma: se le saca el fondo sola.' },
-  sello: { titulo: 'Sello del instituto', la: 'el sello', Mayus: 'Sello', vacia: 'Subí una foto o escaneo del sello: se le saca el fondo solo y sale al lado de la firma.' },
+const TEXTOS: Record<Cual, { titulo: string; la: string; Mayus: string }> = {
+  firma: { titulo: 'Firma escaneada', la: 'la firma', Mayus: 'Firma' },
+  sello: { titulo: 'Sello del instituto', la: 'el sello', Mayus: 'Sello' },
 };
 
 /** Subir, cambiar o quitar la firma o el sello (valen para todos los certificados). */
@@ -38,9 +38,8 @@ function ImagenCert({ cual, imagen, error, guardar }: { cual: Cual; imagen: Arra
   return (
     <div className={s.firma}>
       <p className={adm.label}>{t.titulo}</p>
-      <p className={adm.help}>
-        {imagen === undefined ? 'Cargando…' : imagen ? 'Se usa en todos los certificados. Se guarda en la cuenta de Google del instituto, no en el sitio.' : (error ?? t.vacia)}
-      </p>
+      {/* Sin descripción: solo se avisa si algo falló (p. ej. falta actualizar el Apps Script) */}
+      {!imagen && error && <p className={adm.help}>{error}</p>}
       <div className={s.firmaAcciones}>
         <Button variant="secondary" icon={ImageUp} spin={ocupado} disabled={ocupado} onClick={() => input.current?.click()}>
           {imagen ? `Cambiar ${cual}` : `Subir ${cual}`}
