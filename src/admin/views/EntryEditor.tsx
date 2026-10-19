@@ -423,13 +423,17 @@ export default function EntryEditor() {
         {col.preview && (
           <aside className={styles.preview} aria-label="Vista previa">
             <p className={styles.previewLabel}>{col.preview === 'certificado' ? 'Así sale el certificado (persona de muestra)' : 'Así se ve en el sitio'}</p>
-            {/* inert: es solo para mirar (pointer-events: none no frenaba al Tab, que entraba a los links de la tarjeta) */}
-            <div className={styles.previewCard} inert>
-              {col.preview === 'curso' && <CourseCard curso={card<Curso>({ disertantes: [], temario: [] }, 'imagen')} />}
-              {col.preview === 'novedad' && <NewsCard novedad={card<Novedad>({}, 'imagen')} />}
-              {col.preview === 'disertante' && <SpeakerCard disertante={card<Disertante>({ destacados: [] }, 'foto')} />}
-              {col.preview === 'certificado' && <CertVista draft={p} />}
-            </div>
+            {col.preview === 'certificado' ? (
+              // Sin inert: abajo de la vista previa están los botones para subir la firma y el sello
+              <CertVista draft={p} />
+            ) : (
+              // inert: es solo para mirar (pointer-events: none no frenaba al Tab, que entraba a los links de la tarjeta)
+              <div className={styles.previewCard} inert>
+                {col.preview === 'curso' && <CourseCard curso={card<Curso>({ disertantes: [], temario: [] }, 'imagen')} />}
+                {col.preview === 'novedad' && <NewsCard novedad={card<Novedad>({}, 'imagen')} />}
+                {col.preview === 'disertante' && <SpeakerCard disertante={card<Disertante>({ destacados: [] }, 'foto')} />}
+              </div>
+            )}
           </aside>
         )}
       </div>
