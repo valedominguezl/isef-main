@@ -30,7 +30,7 @@ GitHub Actions (`.github/workflows/deploy.yml`) corre los mismos chequeos en cad
 
 ## VPS del campus (Hostinger)
 Desde el 5/10/2026 el campus Chamilo vive en un **KVM 1** (`srv2036356.hstgr.cloud`, `179.236.245.24`, Ubuntu 24.04, 1 vCPU / 4 GB); el VPS anterior (KVM 4) se dio de baja. Solo sirve `campus.isefsanluis.net`:
-- nginx (`/etc/nginx/sites-available/campus`, traduce las reglas `.htaccess` de Chamilo), PHP 8.1 (ppa:ondrej, ajustes en `conf.d/99-isef.ini`), MariaDB 10.11 (base `chamilo`, usuario `admin@localhost`), código en `/var/www/chamilo` (sin 777: dueño root, `www-data` solo en `app/` y `web/`).
+- nginx (`/etc/nginx/sites-available/campus`, traduce las reglas `.htaccess` de Chamilo), PHP 8.2 (ppa:ondrej, ajustes en `/etc/php/8.2/fpm/conf.d/99-isef.ini`; desde el 21/10/2026 por PHP2Shell, CVE-2026-109618/109619 — 8.1 queda instalado pero apagado: para volver, `fastcgi_pass` a `php8.1-fpm.sock` y `systemctl enable --now php8.1-fpm`), MariaDB 10.11 (base `chamilo`, usuario `admin@localhost`), código en `/var/www/chamilo` (sin 777: dueño root, `www-data` solo en `app/` y `web/`).
 - Seguridad: SSH solo con clave, `ufw` (22/80/443), swap de 2 GB, actualizaciones automáticas.
 - Certificado Let's Encrypt `campus.isefsanluis.net` (certbot.timer lo renueva solo).
 - Backup diario 04:30 UTC: `/usr/local/bin/backup-chamilo` (cron en `/etc/cron.d/backup-chamilo`) → `/root/backups` (base 14 días, archivos los domingos, 4 semanas).
