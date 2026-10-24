@@ -5,8 +5,9 @@ import heroSm from '@/assets/media/home/hero-800.webp';
 import introImg from '@/assets/media/home/intro.webp';
 import especImg from '@/assets/media/home/especializaciones.webp';
 import cuotaImg from '@/assets/media/aranceles/main.webp';
-import { aranceles, cursos, faq, inscripciones, novedadesRecientes, paginas, plan, sitio, inscripcionesVigentes } from '@/content';
+import { aranceles, cursos, faq, inscripciones, novedadesRecientes, plan, sitio, inscripcionesVigentes } from '@/content';
 import { altFoto } from '@/content/paginas';
+import { Bloque, usePagina } from '@/features/vista-previa/vistaPrevia';
 import { normalize, whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import Seo from '@/components/seo/Seo';
@@ -31,10 +32,8 @@ import styles from './HomePage.module.scss';
 /** Íconos de fondo de cada número (mismo orden que sitio.estadisticas). */
 const STAT_ICONS = [ShieldCheck, Landmark, GraduationCap];
 
-/** Textos y fotos editables desde /admin → Páginas → Inicio. */
-const textos = paginas.inicio;
-
 function Faq() {
+  const textos = usePagina('inicio');
   const [q, setQ] = useState('');
   const [showAll, setShowAll] = useState(false);
   const query = useDebounced(q);
@@ -88,6 +87,8 @@ export function Component() {
   const destacados = cursos.slice(0, 3);
   const recientes = novedadesRecientes().slice(0, 6);
   const consultaCuota = whatsappUrl(sitio.whatsapp, 'Hola! Quisiera saber el valor de la cuota.');
+  /** Textos y fotos editables desde /admin → Páginas → Inicio. */
+  const textos = usePagina('inicio');
 
   return (
     <>
@@ -102,6 +103,7 @@ export function Component() {
         }}
       />
 
+      <Bloque id="hero">
       <PageHero
         size="full"
         align="start"
@@ -121,6 +123,7 @@ export function Component() {
           )
         }
       />
+      </Bloque>
 
       {/* Datos */}
       <Section tone="brand" spacing="sm" labelledBy="datos-title">
@@ -144,6 +147,7 @@ export function Component() {
       </Section>
 
       {/* Inscripción: lo que la persona viene a buscar (los pasos están en /inscripciones) */}
+      <Bloque id="inscribite">
       <Section id="inscribite" labelledBy="insc-title">
         <div className={styles.enroll}>
           <SectionHeader id="insc-title" title={textos.inscribite.titulo} lead={<Markdown text={textos.inscribite.texto} />} />
@@ -178,8 +182,10 @@ export function Component() {
           </div>
         </div>
       </Section>
+      </Bloque>
 
       {/* Bienvenida */}
+      <Bloque id="bienvenida">
       <Section tone="tint">
         <Feature
           title={textos.bienvenida.titulo}
@@ -190,8 +196,10 @@ export function Component() {
           <Prose text={textos.bienvenida.texto} />
         </Feature>
       </Section>
+      </Bloque>
 
       {/* Novedades: las de los últimos 90 días, completadas hasta 3 con las siguientes */}
+      <Bloque id="novedades">
       {recientes.length > 0 && (
         <Section labelledBy="novedades-title">
           <div className={styles.headRow}>
@@ -209,8 +217,10 @@ export function Component() {
           </Reveal>
         </Section>
       )}
+      </Bloque>
 
       {/* Especializaciones: la foto recortada apoya sobre el borde de la banda siguiente (como el sitio original) */}
+      <Bloque id="especializaciones">
       <Section className={styles.especIntro}>
         <Feature
           reverse
@@ -232,8 +242,10 @@ export function Component() {
           ))}
         </CardGrid>
       </Section>
+      </Bloque>
 
       {/* Cuota */}
+      <Bloque id="cuota">
       <Section image={textos.cuota.imagen ?? cuotaImg} width="prose" labelledBy="cuota-title" spacing="lg">
         <SectionHeader id="cuota-title" align="center" title={textos.cuota.titulo} lead={<Markdown text={textos.cuota.texto} />}>
           <div className={styles.center}>
@@ -249,8 +261,10 @@ export function Component() {
           </div>
         </SectionHeader>
       </Section>
+      </Bloque>
 
       {/* Sedes */}
+      <Bloque id="sedes">
       <Section id="sedes" labelledBy="sedes-title">
         <SectionHeader
           id="sedes-title"
@@ -266,8 +280,11 @@ export function Component() {
           ))}
         </CardGrid>
       </Section>
+      </Bloque>
 
-      <Faq />
+      <Bloque id="faq">
+        <Faq />
+      </Bloque>
 
     </>
   );

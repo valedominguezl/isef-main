@@ -9,6 +9,7 @@ import type { Certificado, Curso, Disertante, Novedad } from '@/content/schema';
 import { useAdmin } from '../AdminContext';
 import { getCollection, type Field, type QuickToggle } from '../config';
 import { clean, FieldRenderer, Section, useDebounced, type Errors, type RefOption } from '../fields/Fields';
+import type { PaginaVista } from '../fields/VistaPrevia';
 import { slugify } from '../image';
 import { useEntries, useFile } from '../useEntries';
 import { SkeletonForm, SkeletonHead } from './Skeleton';
@@ -46,7 +47,7 @@ export function validate(schema: ZodTypeAny, data: unknown): { ok: true; value: 
 }
 
 /** Formulario genérico + barra de guardado. Reutilizado por colecciones y singletons. */
-type FormProps = { fields: Field[]; draft: Obj; setDraft: (d: Obj) => void; errors: Errors; entrySlug: string; refs: Record<string, RefOption[]> };
+type FormProps = { fields: Field[]; draft: Obj; setDraft: (d: Obj) => void; errors: Errors; entrySlug: string; refs: Record<string, RefOption[]>; pagePreview?: PaginaVista };
 
 /** Campos que ya se dibujan como sección propia (tarjeta con título). */
 const isBlock = (f: Field) => f.type === 'group' || f.type === 'repeater' || f.type === 'section';
@@ -58,7 +59,7 @@ const isBlock = (f: Field) => f.type === 'group' || f.type === 'repeater' || f.t
 const sectionHasError = (s: Extract<Field, { type: 'section' }>, errors: Errors) =>
   Object.keys(errors).some((k) => s.fields.some((c) => k === c.name || k.startsWith(`${c.name}.`)));
 
-export function FormBody({ fields, draft, setDraft, errors, entrySlug, refs }: FormProps) {
+export function FormBody({ fields, draft, setDraft, errors, entrySlug, refs, pagePreview }: FormProps) {
   const render = (f: Field) =>
     f.type === 'section' ? (
       <Section
@@ -72,7 +73,7 @@ export function FormBody({ fields, draft, setDraft, errors, entrySlug, refs }: F
         {f.fields.map(render)}
       </Section>
     ) : (
-      <FieldRenderer key={f.name} field={f} value={draft[f.name]} onChange={(v) => setDraft({ ...draft, [f.name]: v })} errors={errors} path={f.name} entrySlug={entrySlug} refs={refs} />
+      <FieldRenderer key={f.name} field={f} value={draft[f.name]} onChange={(v) => setDraft({ ...draft, [f.name]: v })} errors={errors} path={f.name} entrySlug={entrySlug} refs={refs} pagePreview={pagePreview} />
     );
   const blocks: Field[][] = [];
   for (const f of fields) {

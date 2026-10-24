@@ -17,6 +17,7 @@ import {
   novedadSchema,
   planSchema,
   sitioSchema,
+  type PaginaKey,
 } from '@/content/schema';
 import { CV_SECCIONES, NOVEDAD_CATEGORIAS } from '@/content/constants';
 import { PAGINAS } from './paginasConfig';
@@ -115,6 +116,8 @@ export interface SingletonConfig {
   schema: ZodTypeAny;
   fields: Field[];
   sitePath?: string;
+  /** Editor de una página (grupo Páginas): cada bloque muestra su vista previa. */
+  pagina?: PaginaKey;
 }
 
 const today = () => new Date().toISOString().slice(0, 10);

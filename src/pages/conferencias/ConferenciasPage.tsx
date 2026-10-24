@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { FileText, PlayCircle } from 'lucide-react';
-import { conferencias, paginas } from '@/content';
+import { conferencias } from '@/content';
 import { normalize } from '@/lib/format';
+import { Bloque, usePagina } from '@/features/vista-previa/vistaPrevia';
 import Seo from '@/components/seo/Seo';
 import SearchField from '@/components/ui/SearchField';
 import { useDebounced } from '@/lib/useDebounced';
@@ -10,11 +11,10 @@ import Section from '@/components/ui/Section';
 import CardGrid from '@/components/ui/CardGrid';
 import styles from './ConferenciasPage.module.scss';
 
-/** Textos y foto editables desde /admin → Páginas → Conferencias. */
-const textos = paginas.conferencias;
-
 /** Grabaciones de conferencias para alumnos (URL no listada; noindex). */
 export function Component() {
+  /** Textos y foto editables desde /admin → Páginas → Conferencias. */
+  const textos = usePagina('conferencias');
   const [q, setQ] = useState('');
   const query = useDebounced(q);
   const list = useMemo(() => {
@@ -24,7 +24,9 @@ export function Component() {
   return (
     <>
       <Seo title="Conferencias" noindex />
-      <PageHero image={textos.hero.imagen} title={textos.hero.titulo} subtitle={textos.hero.subtitulo} />
+      <Bloque id="hero">
+        <PageHero image={textos.hero.imagen} title={textos.hero.titulo} subtitle={textos.hero.subtitulo} />
+      </Bloque>
       <Section width="wide">
         <SearchField className={styles.search} value={q} onChange={setQ} pending={q !== query} label="Buscar conferencias" placeholder="Buscar conferencias…" />
         <p role="status" className="sr-only">

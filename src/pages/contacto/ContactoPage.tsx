@@ -1,5 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
-import { paginas, sitio } from '@/content';
+import { sitio } from '@/content';
+import { Bloque, usePagina } from '@/features/vista-previa/vistaPrevia';
 import { Markdown } from '@/lib/markdown';
 import { formatPhone, whatsappUrl } from '@/lib/format';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
@@ -19,10 +20,9 @@ function Mapa({ src, title }: { src: string; title: string }) {
 /** Una fila por número: el directorio se lee como tabla y cada fila lleva a ese WhatsApp. */
 const filas = sitio.telefonos.flatMap((t) => t.numeros.map((n) => ({ ...t, numero: n })));
 
-/** Textos y fotos editables desde /admin → Páginas → Contacto (sin foto de cabecera, salvo que se cargue una). */
-const textos = paginas.contacto;
-
 export function Component() {
+  /** Textos y fotos editables desde /admin → Páginas → Contacto (sin foto de cabecera, salvo que se cargue una). */
+  const textos = usePagina('contacto');
   return (
     <>
       <Seo
@@ -34,8 +34,11 @@ export function Component() {
           { name: 'Contacto', path: '/contacto' },
         ])}
       />
-      <PageHero image={textos.hero.imagen} title={textos.hero.titulo} subtitle={textos.hero.subtitulo} breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Contacto' }]} />
+      <Bloque id="hero">
+        <PageHero image={textos.hero.imagen} title={textos.hero.titulo} subtitle={textos.hero.subtitulo} breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Contacto' }]} />
+      </Bloque>
 
+      <Bloque id="telefonos">
       <Section width="narrow" labelledBy="tel-title">
         <SectionHeader id="tel-title" title={textos.telefonos.titulo} lead={<Markdown text={textos.telefonos.texto} />} />
         <RevealGroup as="ul" className={styles.directory}>
@@ -64,7 +67,9 @@ export function Component() {
           ))}
         </RevealGroup>
       </Section>
+      </Bloque>
 
+      <Bloque id="sedes">
       <Section id="sedes" tone="tint" width="narrow" labelledBy="sedes-title">
         <SectionHeader id="sedes-title" title={textos.sedes.titulo} lead={<Markdown text={textos.sedes.texto} />} />
         <CardGrid reveal cols={2}>
@@ -75,6 +80,7 @@ export function Component() {
           ))}
         </CardGrid>
       </Section>
+      </Bloque>
     </>
   );
 }

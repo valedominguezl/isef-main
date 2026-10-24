@@ -94,7 +94,8 @@ export default function SingletonEditor() {
       <Notice show={Object.keys(errors).length > 0} ok={false}>
         Hay {Object.keys(errors).length} campo(s) para corregir.
       </Notice>
-      <div className={styles.narrow}>
+      {/* Páginas: más ancho, para la vista previa al lado de cada bloque */}
+      <div className={cfg.pagina ? undefined : styles.narrow}>
         <FormBody
           fields={cfg.fields}
           draft={draft}
@@ -105,6 +106,7 @@ export default function SingletonEditor() {
           errors={errors}
           entrySlug={cfg.key}
           refs={refs}
+          pagePreview={cfg.pagina && cfg.sitePath ? { pagina: cfg.pagina, sitePath: cfg.sitePath } : undefined}
         />
       </div>
     </>

@@ -4,6 +4,7 @@ import { createBrowserRouter, matchRoutes } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { routes } from '@/app/routes';
+import { BLOQUE_VISTA } from '@/features/vista-previa/vistaPrevia';
 import '@fontsource-variable/libre-franklin';
 import '@fontsource/merriweather/300.css';
 import '@fontsource/merriweather/300-italic.css';
@@ -12,7 +13,9 @@ import '@/styles/global.scss';
 
 async function start() {
   const container = document.getElementById('root')!;
-  const prerendered = Boolean(container.firstElementChild) && !container.dataset.shell;
+  // La vista previa del panel muestra un solo bloque: se dibuja de cero en vez de hidratar el HTML completo
+  const prerendered = Boolean(container.firstElementChild) && !container.dataset.shell && BLOQUE_VISTA == null;
+  if (BLOQUE_VISTA != null) container.replaceChildren();
 
   // Resolver las rutas lazy de la URL actual antes de hidratar (evita parpadeos/mismatch)
   const matches = matchRoutes(routes, window.location)?.filter((m) => m.route.lazy);

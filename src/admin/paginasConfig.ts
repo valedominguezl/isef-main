@@ -77,7 +77,7 @@ function bloque(
   };
 }
 
-type PaginaConfig = SingletonConfig & { key: `pagina-${PaginaKey}`; nav: string; icon: LucideIcon };
+type PaginaConfig = SingletonConfig & { key: `pagina-${PaginaKey}`; nav: string; icon: LucideIcon; pagina: PaginaKey };
 
 /**
  * Cada campo vacío muestra de fondo (placeholder) el texto que usa hoy el sitio: así se ve qué hay
@@ -99,6 +99,7 @@ const conTextoActual = (key: PaginaKey, fields: Field[]): Field[] => {
 
 const pagina = (key: PaginaKey, nav: string, label: string, sitePath: string, icon: LucideIcon, fields: Field[]): PaginaConfig => ({
   key: `pagina-${key}`,
+  pagina: key,
   nav,
   icon,
   label,

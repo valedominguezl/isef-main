@@ -3,8 +3,9 @@ import { Plus, X } from 'lucide-react';
 import heroImg from '@/assets/media/especializaciones/main.webp';
 import heroSm from '@/assets/media/especializaciones/main-800.webp';
 import introImg from '@/assets/media/especializaciones/intro.webp';
-import { cursos, disertantes, nombreCompleto, paginas } from '@/content';
+import { cursos, disertantes, nombreCompleto } from '@/content';
 import { altFoto } from '@/content/paginas';
+import { Bloque, usePagina } from '@/features/vista-previa/vistaPrevia';
 import { normalize } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
@@ -23,9 +24,6 @@ import CardGrid from '@/components/ui/CardGrid';
 import { useDebounced } from '@/lib/useDebounced';
 import styles from './EspecializacionesPage.module.scss';
 
-/** Textos y fotos editables desde /admin → Páginas → Especializaciones. */
-const textos = paginas.especializaciones;
-
 const searchable = cursos.map((c) => ({
   curso: c,
   text: normalize(
@@ -34,6 +32,8 @@ const searchable = cursos.map((c) => ({
 }));
 
 export function Component() {
+  /** Textos y fotos editables desde /admin → Páginas → Especializaciones. */
+  const textos = usePagina('especializaciones');
   const [q, setQ] = useState('');
   const [dis, setDis] = useState<string | null>(null);
   const [todosDis, setTodosDis] = useState(false);
@@ -78,6 +78,7 @@ export function Component() {
           ]),
         ]}
       />
+      <Bloque id="hero">
       <PageHero
         imageSmall={textos.hero.imagen ? undefined : heroSm}
         image={textos.hero.imagen ?? heroImg}
@@ -86,13 +87,17 @@ export function Component() {
         subtitle={textos.hero.subtitulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Especializaciones' }]}
       />
+      </Bloque>
 
+      <Bloque id="intro">
       <Section>
         <Feature title={textos.intro.titulo} image={textos.intro.imagen ?? introImg} imageAlt={altFoto(textos.intro, 'Clase de especialización')}>
           <Prose text={textos.intro.texto} />
         </Feature>
       </Section>
+      </Bloque>
 
+      <Bloque id="disertantes">
       <Section id="disertantes" tone="tint" width="wide" labelledBy="dis-title">
         <SectionHeader id="dis-title" align="center" title={textos.disertantes.titulo} lead={<Markdown text={textos.disertantes.texto} />} />
         <CardGrid reveal dense>
@@ -122,6 +127,7 @@ export function Component() {
           </div>
         )}
       </Section>
+      </Bloque>
 
       <Section id="cursos" width="wide" labelledBy="cursos-title">
         <SectionHeader id="cursos-title" align="center" title="Nuestras *especializaciones*" lead="Toda la información detallada de cada curso: temario, modalidad, fechas y disertantes." />

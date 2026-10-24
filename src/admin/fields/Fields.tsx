@@ -8,6 +8,7 @@ import { Button, IconButton } from '../ui/Button';
 import DeleteButton from '../ui/DeleteButton';
 import StockPhotoPicker from './StockPhotoPicker';
 import Combobox from './Combobox';
+import ConVistaPrevia, { type PaginaVista } from './VistaPrevia';
 import { useToast } from '../ui/Toaster';
 import styles from '../Admin.module.scss';
 
@@ -28,6 +29,8 @@ interface FieldProps {
   /** Slug de la entrada (para nombrar archivos subidos). */
   entrySlug: string;
   refs: Record<string, RefOption[]>;
+  /** Editor de una página: cada bloque (grupo de primer nivel) lleva su vista previa al lado. */
+  pagePreview?: PaginaVista;
 }
 
 /** Contenido plegable con animación de altura (grid 0fr → 1fr). Se monta al abrir por primera vez. */
@@ -633,7 +636,7 @@ export function Section({ title, help, error, collapsed, children }: { title: st
 }
 
 function GroupField(props: FieldProps & { field: Extract<Field, { type: 'group' }> }) {
-  const { field, value, onChange, errors, path, entrySlug, refs } = props;
+  const { field, value, onChange, errors, path, entrySlug, refs, pagePreview } = props;
   const obj = (value as Obj | undefined) ?? {};
   const body = field.fields.map((f) => (
     <FieldRenderer
@@ -651,7 +654,13 @@ function GroupField(props: FieldProps & { field: Extract<Field, { type: 'group' 
   if (!path.includes('.'))
     return (
       <Section title={field.label} help={field.help} collapsed={field.collapsed}>
-        {body}
+        {pagePreview ? (
+          <ConVistaPrevia {...pagePreview} bloque={field.name} datos={obj}>
+            {body}
+          </ConVistaPrevia>
+        ) : (
+          body
+        )}
       </Section>
     );
   return (

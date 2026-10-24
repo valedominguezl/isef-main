@@ -3,7 +3,8 @@ import heroImg from '@/assets/media/inscripciones/main.webp';
 import heroSm from '@/assets/media/inscripciones/main-800.webp';
 import { Fragment } from 'react';
 import { Link } from 'react-router';
-import { faq, inscripciones, paginas, sitio, inscripcionesVigentes } from '@/content';
+import { faq, inscripciones, sitio, inscripcionesVigentes } from '@/content';
+import { Bloque, usePagina } from '@/features/vista-previa/vistaPrevia';
 import { whatsappUrl } from '@/lib/format';
 import { Markdown, toPlainText } from '@/lib/markdown';
 import { track } from '@/lib/analytics';
@@ -19,9 +20,6 @@ import styles from './InscripcionesPage.module.scss';
 /** Ícono de cada paso (planilla, exámenes médicos, pago), como en el sitio original. */
 const STEP_ICONS = [FilePen, Stethoscope, Receipt];
 
-/** Textos y fotos editables desde /admin → Páginas → Inscripciones. */
-const textos = paginas.inscripciones;
-
 /** Título sobre la banda violeta: el *resaltado* va en negrita (no en color, que no contrasta). */
 const negrita = (titulo: string) =>
   titulo.split(/(\*[^*]+\*)/g).map((parte, i) =>
@@ -29,6 +27,8 @@ const negrita = (titulo: string) =>
   );
 
 export function Component() {
+  /** Textos y fotos editables desde /admin → Páginas → Inscripciones. */
+  const textos = usePagina('inscripciones');
   const preguntas = faq.preguntas.filter((p) => /inscrib|requisit|secundario|cuota|present/i.test(p.pregunta));
   return (
     <>
@@ -48,6 +48,7 @@ export function Component() {
           ]),
         ]}
       />
+      <Bloque id="hero">
       <PageHero
         imageSmall={textos.hero.imagen ? undefined : heroSm}
         image={textos.hero.imagen ?? heroImg}
@@ -55,7 +56,9 @@ export function Component() {
         subtitle={inscripcionesVigentes() ? sitio.inscripciones.texto : textos.hero.subtitulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Inscripciones' }]}
       />
+      </Bloque>
 
+      <Bloque id="requisitos">
       <Section labelledBy="req-title">
         <SectionHeader id="req-title" title={textos.requisitos.titulo} lead={<Markdown text={inscripciones.intro} />} />
         <RevealGroup className={styles.steps} as="ol">
@@ -102,7 +105,9 @@ export function Component() {
           <strong>{inscripciones.fechaLimiteRequisitos}</strong>.
         </p>
       </Section>
+      </Bloque>
 
+      <Bloque id="secundario">
       <Section tone="brand" labelledBy="sec-title">
         <div className={styles.secundario}>
           <Reveal>
@@ -115,7 +120,9 @@ export function Component() {
           </Reveal>
         </div>
       </Section>
+      </Bloque>
 
+      <Bloque id="mayores25">
       <Section labelledBy="m25-title">
         <SectionHeader id="m25-title" title={textos.mayores25.titulo} lead={<Markdown text={inscripciones.mayores25.descripcion} />} />
         <Reveal className={styles.files}>
@@ -126,7 +133,9 @@ export function Component() {
           ))}
         </Reveal>
       </Section>
+      </Bloque>
 
+      <Bloque id="dudas">
       {preguntas.length > 0 && (
         <Section tone="tint" labelledBy="dudas-title">
           <SectionHeader id="dudas-title" title={textos.dudas.titulo} align="center" />
@@ -139,6 +148,7 @@ export function Component() {
           </div>
         </Section>
       )}
+      </Bloque>
     </>
   );
 }

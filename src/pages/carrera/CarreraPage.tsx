@@ -7,8 +7,9 @@ import gabineteImg from '@/assets/media/carrera/gabinete.webp';
 import sanLuisLogo from '@/assets/validez/sanLuis.webp';
 import argentinaLogo from '@/assets/validez/argentina.webp';
 import mercosurLogo from '@/assets/validez/mercosur.webp';
-import { cursos, galeria, paginas, plan } from '@/content';
+import { cursos, galeria, plan } from '@/content';
 import { altFoto } from '@/content/paginas';
+import { Bloque, usePagina } from '@/features/vista-previa/vistaPrevia';
 import { Markdown } from '@/lib/markdown';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
 import Prose from '@/components/ui/Prose';
@@ -34,9 +35,6 @@ const DATOS = [
   { icon: Clock, label: 'Horario', value: 'De 07:30 a 13:30 h' },
   { icon: BadgeCheck, label: 'Validez', value: 'Nacional y MERCOSUR' },
 ];
-
-/** Textos y fotos editables desde /admin → Páginas → La carrera. */
-const textos = paginas.carrera;
 
 function Galeria() {
   const [index, setIndex] = useState<number | null>(null);
@@ -112,6 +110,8 @@ function Galeria() {
 
 export function Component() {
   const enCarrera = cursos.filter((c) => c.mostrarEnCarrera);
+  /** Textos y fotos editables desde /admin → Páginas → La carrera. */
+  const textos = usePagina('carrera');
   return (
     <>
       <Seo
@@ -135,6 +135,7 @@ export function Component() {
           ]),
         ]}
       />
+      <Bloque id="hero">
       <PageHero
         imageSmall={textos.hero.imagen ? undefined : heroSm}
         image={textos.hero.imagen ?? heroImg}
@@ -143,7 +144,9 @@ export function Component() {
         subtitle={textos.hero.subtitulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'La carrera' }]}
       />
+      </Bloque>
 
+      <Bloque id="intro">
       <Section>
         <Feature
           title={textos.intro.titulo}
@@ -154,7 +157,9 @@ export function Component() {
           <Prose text={textos.intro.texto} />
         </Feature>
       </Section>
+      </Bloque>
 
+      <Bloque id="especializaciones">
       {enCarrera.length > 0 && (
         <Section tone="tint" width="wide" labelledBy="esp-title">
           <SectionHeader id="esp-title" title={textos.especializaciones.titulo} lead={<Markdown text={textos.especializaciones.texto} />} />
@@ -167,7 +172,9 @@ export function Component() {
           </Reveal>
         </Section>
       )}
+      </Bloque>
 
+      <Bloque id="datos">
       <Section labelledBy="datos-title">
         <SectionHeader id="datos-title" title={textos.datos.titulo} />
         <CardGrid reveal dense as="ul">
@@ -182,7 +189,9 @@ export function Component() {
           ))}
         </CardGrid>
       </Section>
+      </Bloque>
 
+      <Bloque id="validez">
       <Section tone="dark" labelledBy="validez-title">
         <div className={styles.validez}>
           <SectionHeader
@@ -202,7 +211,9 @@ export function Component() {
           </Reveal>
         </div>
       </Section>
+      </Bloque>
 
+      <Bloque id="plan">
       <Section id="plan" tone="tint" labelledBy="plan-title">
         <SectionHeader
           id="plan-title"
@@ -242,11 +253,15 @@ export function Component() {
           />
         </Reveal>
       </Section>
+      </Bloque>
 
+      <Bloque id="gabinete">
       <Section image={textos.gabinete.imagen ?? gabineteImg} width="prose" labelledBy="gabinete-title">
         <SectionHeader id="gabinete-title" align="center" title={textos.gabinete.titulo} lead={<Markdown text={textos.gabinete.texto} />} />
       </Section>
+      </Bloque>
 
+      <Bloque id="explora">
       <Section width="wide" labelledBy="explora-title">
         <SectionHeader
           id="explora-title"
@@ -257,6 +272,7 @@ export function Component() {
           <Galeria />
         </Reveal>
       </Section>
+      </Bloque>
     </>
   );
 }

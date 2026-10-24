@@ -37,7 +37,7 @@ function PanelNav({ label }: { label: string }) {
       <NavLink to="/admin" end className={link}>
         <LayoutDashboard size={18} aria-hidden /> Inicio
       </NavLink>
-      <p className={styles.navGroup}>Contenido</p>
+      <p className={styles.navGroup}>Principal</p>
       {COLLECTIONS.filter((c) => !c.hidden).map(({ key, label, icon: Icon }) => (
         <NavLink key={key} to={`/admin/c/${key}`} className={link}>
           <Icon size={18} aria-hidden /> {label}

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import heroImg from '@/assets/media/noticias/main.webp';
 import heroSm from '@/assets/media/noticias/main-800.webp';
-import { novedades, paginas } from '@/content';
+import { novedades } from '@/content';
 import { NOVEDAD_CATEGORIAS } from '@/content/constants';
+import { Bloque, usePagina } from '@/features/vista-previa/vistaPrevia';
 import Seo, { breadcrumbJsonLd } from '@/components/seo/Seo';
 import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
@@ -14,10 +15,9 @@ import styles from './NovedadesPage.module.scss';
 
 type Cat = keyof typeof NOVEDAD_CATEGORIAS;
 
-/** Textos y fotos editables desde /admin → Páginas → Novedades. */
-const textos = paginas.novedades;
-
 export function Component() {
+  /** Textos y fotos editables desde /admin → Páginas → Novedades. */
+  const textos = usePagina('novedades');
   const [cat, setCat] = useState<Cat | null>(null);
   // Primera carga: entrada lenta al hacer scroll (Reveal). Después de tocar un filtro: la receta corta de resultados
   const [filtrado, setFiltrado] = useState(false);
@@ -35,6 +35,7 @@ export function Component() {
           { name: 'Novedades', path: '/novedades' },
         ])}
       />
+      <Bloque id="hero">
       <PageHero
         imageSmall={textos.hero.imagen ? undefined : heroSm}
         image={textos.hero.imagen ?? heroImg}
@@ -42,6 +43,7 @@ export function Component() {
         subtitle={textos.hero.subtitulo}
         breadcrumbs={[{ name: 'Inicio', path: '/' }, { name: 'Novedades' }]}
       />
+      </Bloque>
       <Section width="narrow">
         {cats.length > 1 && (
           <ChipGroup

@@ -11,6 +11,7 @@ import { ConsentProvider } from '@/features/consent/ConsentContext';
 import { SearchProvider } from '@/features/search/SearchContext';
 import { organizationJsonLd, safeJson } from '@/components/seo/Seo';
 import { trackPageView } from '@/lib/analytics';
+import { BLOQUE_VISTA, useVistaPrevia } from '@/features/vista-previa/vistaPrevia';
 import { Helmet } from 'react-helmet-async';
 
 export interface RouteHandle {
@@ -41,12 +42,16 @@ export default function Layout() {
   const handle = (matches[matches.length - 1]?.handle ?? {}) as RouteHandle;
   const { pathname } = useLocation();
   useHashScroll();
+  useVistaPrevia();
+  // Vista previa del panel: solo el bloque (con el menú si es la cabecera, que va encima de la foto)
+  const vista = BLOQUE_VISTA != null;
 
   useEffect(() => {
     // Espera a que Helmet actualice el <title>
+    if (vista) return;
     const t = setTimeout(() => trackPageView(pathname), 50);
     return () => clearTimeout(t);
-  }, [pathname]);
+  }, [pathname, vista]);
 
   return (
     <LazyMotion features={domAnimation} strict>
@@ -61,14 +66,14 @@ export default function Layout() {
             Saltar al contenido
           </a>
           <NavigationProgress />
-          {!handle.bare && <Navbar theme={handle.nav ?? 'overlay'} />}
+          {!handle.bare && (!vista || BLOQUE_VISTA === 'hero') && <Navbar theme={handle.nav ?? 'overlay'} />}
           <main id="contenido" tabIndex={-1}>
             {!handle.bare && <AmbientShapes />}
             <Outlet />
           </main>
-          {!handle.bare && <Footer />}
-          {!handle.bare && !handle.hideWhatsApp && <WhatsAppButton />}
-          {!handle.bare && <CookieBanner />}
+          {!handle.bare && !vista && <Footer />}
+          {!handle.bare && !vista && !handle.hideWhatsApp && <WhatsAppButton />}
+          {!handle.bare && !vista && <CookieBanner />}
           <ScrollRestoration getKey={(location) => location.pathname} />
         </SearchProvider>
       </ConsentProvider>

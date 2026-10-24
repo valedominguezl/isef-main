@@ -3,6 +3,7 @@
  * GA4 → categoría "analítica". GTM (píxeles/remarketing) → categoría "publicidad".
  */
 import { sitio } from '@/content';
+import { BLOQUE_VISTA } from '@/features/vista-previa/vistaPrevia';
 
 declare global {
   interface Window {
@@ -37,7 +38,8 @@ function loadScript(src: string) {
 }
 
 export function applyConsent(c: ConsentState) {
-  if (typeof window === 'undefined' || import.meta.env.DEV) return;
+  // La vista previa del panel no se mide (es la página dentro del editor)
+  if (typeof window === 'undefined' || import.meta.env.DEV || BLOQUE_VISTA != null) return;
   ensureGtag();
   window.gtag!('consent', gaLoaded || gtmLoaded ? 'update' : 'default', {
     analytics_storage: c.analitica ? 'granted' : 'denied',
