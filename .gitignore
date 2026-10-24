@@ -15,3 +15,17 @@ dist-ssr
 
 # Copias de trabajo de agentes (git worktree)
 .claude/worktrees/
+
+# Variables de entorno
+.env*
+!.env.example
+
+# Documentos con datos personales o firmas. El repo es publico (CLAUDE.md:14) y la
+# firma del rector se guarda en el Apps Script justamente para que no viva aca
+# (worker/index.ts:9-10): "firma de Tony.docx" estaba sin trackear pero sin regla,
+# o sea a un `git add -A` distraido de quedar publicada para siempre.
+*.docx
+*.doc
+# …salvo los que el sitio sirve de verdad en public/docs/ (solicitud de inscripcion,
+# examenes medicos, material y resolucion de mayores de 25): son publicos a proposito.
+!public/docs/**
