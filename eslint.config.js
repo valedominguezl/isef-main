@@ -4,7 +4,10 @@ import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
-  { ignores: ['dist', 'dist-ssr', 'node_modules', 'public', '.wrangler', '.claude/worktrees'] },
+  // `.exo/worktrees` por el mismo motivo que `.claude/worktrees`: la extension Exo de VS Code
+  // arma un worktree de git con su propio tsconfig.json, y typescript-eslint corta con
+  // "multiple candidate TSConfigRootDirs" en TODOS los archivos (232 errores) hasta que se ignora.
+  { ignores: ['dist', 'dist-ssr', 'node_modules', 'public', '.wrangler', '.claude/worktrees', '.exo'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
