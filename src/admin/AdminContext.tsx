@@ -80,7 +80,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         })
         .catch((e: Error) => {
           // Solo se olvida la contraseña si fue rechazada; un corte de red no obliga a volver a escribirla
-          if (/incorrecta|vencida/.test(e.message)) {
+          if (/incorrecta/.test(e.message)) {
             sessionStorage.removeItem(TOKEN_KEY);
             localStorage.removeItem(TOKEN_KEY);
           }

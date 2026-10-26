@@ -2,7 +2,8 @@
  * Almacenamiento del contenido para el panel.
  * - LocalStore: `npm run dev` → escribe directo en el disco (scripts/vite-content-api.ts).
  * - GitHubStore: producción → lee del repo y publica todos los cambios en UN commit
- *   (Git Data API). Ese push a `main` dispara el deploy de GitHub Actions.
+ *   (Git Data API) a través del Worker (/api/github, worker/index.ts), que tiene el token de GitHub.
+ *   El navegador solo manda la contraseña del panel. Ese push a `main` dispara el deploy.
  */
 
 export interface FileEntry {
@@ -55,6 +56,7 @@ export interface GitHubConfig {
   owner: string;
   repo: string;
   branch: string;
+  /** Contraseña del panel (la valida el Worker). */
   token: string;
 }
 
@@ -71,12 +73,11 @@ export class GitHubStore implements ContentStore {
   constructor(private cfg: GitHubConfig) {}
 
   private async api<T>(path: string, init: RequestInit = {}): Promise<T> {
-    const r = await fetch(`https://api.github.com/repos/${this.cfg.owner}/${this.cfg.repo}${path}`, {
+    // Mismo sitio: el Worker reenvía a la API de GitHub del repo (solo en el sitio publicado, no en `npm run dev`)
+    const r = await fetch(`/api/github${path}`, {
       ...init,
       headers: {
-        Accept: 'application/vnd.github+json',
         Authorization: `Bearer ${this.cfg.token}`,
-        'X-GitHub-Api-Version': '2022-11-28',
         ...(init.body ? { 'Content-Type': 'application/json' } : {}),
         ...init.headers,
       },
@@ -84,20 +85,26 @@ export class GitHubStore implements ContentStore {
     });
     if (!r.ok) {
       const body = await r.text();
-      if (r.status === 401) throw new Error('Contraseña incorrecta o vencida.');
-      if (r.status === 403) throw new Error('Esta contraseña no tiene permiso para guardar cambios.');
+      if (r.status === 401) throw new Error('Contraseña incorrecta.');
       if (r.status === 404 && init.method === undefined) throw Object.assign(new Error('No encontrado'), { status: 404 });
+      let mensaje: string | undefined;
+      try {
+        mensaje = (JSON.parse(body) as { error?: string }).error;
+      } catch {
+        /* no era JSON */
+      }
+      if (mensaje) throw new Error(mensaje);
+      if (r.status === 403) throw new Error('El sitio no tiene permiso para guardar cambios en GitHub.');
       throw new Error(`GitHub ${r.status}: ${body.slice(0, 200)}`);
     }
     return (r.status === 204 ? undefined : await r.json()) as T;
   }
 
-  /** Verifica el token y que tenga permiso de escritura. */
+  /** Verifica la contraseña (y que el sitio pueda escribir en el repo). */
   async verify(): Promise<{ login: string }> {
     const repo = await this.api<{ permissions?: { push?: boolean } }>('');
-    if (!repo.permissions?.push) throw new Error('Esta contraseña no tiene permiso para guardar cambios.');
-    const user = await fetch('https://api.github.com/user', { headers: { Authorization: `Bearer ${this.cfg.token}` } });
-    return { login: user.ok ? ((await user.json()) as { login: string }).login : 'admin' };
+    if (!repo.permissions?.push) throw new Error('El sitio no tiene permiso para guardar cambios en GitHub.');
+    return { login: 'Equipo ISEF' };
   }
 
   async list(dir: string) {

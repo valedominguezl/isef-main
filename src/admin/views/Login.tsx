@@ -6,7 +6,7 @@ import { Button } from '../ui/Button';
 import Notice from './Notice';
 import styles from '../Admin.module.scss';
 
-/** Ingreso simple: contraseña + recordar. (La "contraseña" es la clave de acceso al repositorio; no se explica acá a propósito.) */
+/** Ingreso simple: contraseña del panel (una para todo el equipo, la valida el Worker) + recordar. */
 export default function Login() {
   const { login, useLocal } = useAdmin();
   const [password, setPassword] = useState('');

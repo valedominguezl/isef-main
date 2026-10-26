@@ -9,8 +9,10 @@
  *   GET/POST /api/certificados/firma        → firma escaneada del rector (guardada en el Apps Script, no en el repo)
  *   GET/POST /api/certificados/sello        → sello del instituto (ídem)
  *   GET  /api/verificar?c=…                 → PÚBLICA: valida un código de certificado (página /verificar)
- * Gratis: no usa servicios pagos. Exige la contraseña del panel (token de GitHub con permiso de escritura),
- * salvo /api/verificar. La URL y la clave del Apps Script son secretos del Worker (docs/CERTIFICADOS.md).
+ *   *    /api/github/…                      → el panel lee y publica el contenido del repo a través del Worker
+ * Gratis: no usa servicios pagos. Exige la contraseña del panel (una sola, compartida por el equipo), salvo
+ * /api/verificar. Secretos del Worker: ADMIN_PASSWORD_SHA256 y GITHUB_TOKEN (docs/DEPLOY.md), y la URL y la
+ * clave del Apps Script (docs/CERTIFICADOS.md). El token de GitHub nunca llega al navegador.
  */
 
 interface Env {
@@ -19,6 +21,10 @@ interface Env {
   CERT_SCRIPT_URL?: string;
   /** Clave compartida con el Apps Script (propiedad CLAVE del script). */
   CERT_SCRIPT_KEY?: string;
+  /** SHA-256 (hex, minúsculas) de la contraseña del panel. */
+  ADMIN_PASSWORD_SHA256?: string;
+  /** Token de GitHub con permiso de escritura en el repo: solo lo usa el Worker. */
+  GITHUB_TOKEN?: string;
 }
 
 const REPO = 'valedominguezl/isef-main';
@@ -30,25 +36,60 @@ const json = (data: unknown, status = 200) =>
 
 const error = (status: number, mensaje: string) => json({ error: mensaje }, status);
 
-/** Contraseñas ya verificadas (token → vence): evita consultar a GitHub en cada pedido. */
-const verificados = new Map<string, number>();
+async function sha256(texto: string): Promise<string> {
+  const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
+  return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
 
-/** La "contraseña" del panel es un token de GitHub: tiene que poder escribir en el repositorio del sitio. */
-/** 'limite' = GitHub frenó las consultas por un rato (no es la contraseña). */
-async function autorizado(req: Request): Promise<'si' | 'no' | 'limite'> {
-  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '').trim();
-  if (!token) return 'no';
-  const vence = verificados.get(token);
-  if (vence && vence > Date.now()) return 'si';
-  const r = await fetch(`https://api.github.com/repos/${REPO}`, {
-    headers: { authorization: `Bearer ${token}`, accept: 'application/vnd.github+json', 'user-agent': 'isef-sanluis-admin' },
+/** Comparación en tiempo constante (no deja adivinar la contraseña midiendo cuánto tarda). */
+function iguales(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let dif = 0;
+  for (let i = 0; i < a.length; i++) dif |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return dif === 0;
+}
+
+/** La contraseña del panel se compara contra su hash (secreto del Worker): ni el repo ni el Worker la guardan. */
+async function autorizado(req: Request, env: Env): Promise<boolean> {
+  const clave = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '').trim();
+  const esperado = env.ADMIN_PASSWORD_SHA256?.trim().toLowerCase();
+  if (!clave || !esperado) return false;
+  return iguales(await sha256(clave), esperado);
+}
+
+/* ───────────────────────── Repositorio (GitHub) ───────────────────────── */
+
+/** Solo lo que usa el panel (src/admin/store.ts), y siempre sobre la rama main de este repo. */
+const RUTAS_GITHUB: [string, RegExp][] = [
+  ['GET', /^$/],
+  ['GET', /^\/contents\/.+$/],
+  ['GET', /^\/git\/ref\/heads\/main$/],
+  ['GET', /^\/git\/commits\/[0-9a-f]{40}$/],
+  ['POST', /^\/git\/(blobs|trees|commits)$/],
+  ['PATCH', /^\/git\/refs\/heads\/main$/],
+  ['GET', /^\/actions\/runs$/],
+];
+
+async function github(req: Request, url: URL, env: Env): Promise<Response> {
+  if (!env.GITHUB_TOKEN) return error(503, 'Falta conectar el panel con GitHub (secreto GITHUB_TOKEN del Worker, ver docs/DEPLOY.md).');
+  const ruta = url.pathname.slice('/api/github'.length);
+  if (!RUTAS_GITHUB.some(([metodo, re]) => metodo === req.method && re.test(ruta))) return error(404, 'No existe.');
+  const conCuerpo = req.method !== 'GET';
+  const r = await fetch(`https://api.github.com/repos/${REPO}${ruta}${url.search}`, {
+    method: req.method,
+    headers: {
+      authorization: `Bearer ${env.GITHUB_TOKEN}`,
+      accept: 'application/vnd.github+json',
+      'x-github-api-version': '2022-11-28',
+      'user-agent': 'isef-sanluis-admin',
+      ...(conCuerpo ? { 'content-type': 'application/json' } : {}),
+    },
+    body: conCuerpo ? await req.text() : undefined,
   });
-  if ((r.status === 403 || r.status === 429) && r.headers.get('x-ratelimit-remaining') === '0') return 'limite';
-  if (!r.ok) return 'no';
-  const repo = (await r.json()) as { permissions?: { push?: boolean } };
-  if (!repo.permissions?.push) return 'no';
-  verificados.set(token, Date.now() + 10 * 60_000);
-  return 'si';
+  // Un 401 de GitHub es el token del servidor, no la contraseña del panel
+  if (r.status === 401) return error(502, 'Venció el acceso del sitio a GitHub: hay que renovar el secreto GITHUB_TOKEN del Worker (docs/DEPLOY.md).');
+  if ((r.status === 403 || r.status === 429) && r.headers.get('x-ratelimit-remaining') === '0') return error(503, 'GitHub está limitando las consultas. Probá de nuevo en unos minutos.');
+  return new Response(r.body, { status: r.status, headers: { 'content-type': r.headers.get('content-type') ?? 'application/json', 'cache-control': 'no-store' } });
 }
 
 /* ───────────────────────── Fotos de stock ───────────────────────── */
@@ -171,9 +212,9 @@ async function api(req: Request, url: URL, env: Env): Promise<Response> {
     return script(env, 'verificar', { codigo: c });
   }
 
-  const auth = await autorizado(req);
-  if (auth === 'limite') return error(503, 'GitHub está limitando las consultas. Probá de nuevo en unos minutos.');
-  if (auth === 'no') return error(401, 'Contraseña incorrecta o vencida.');
+  if (!(await autorizado(req, env))) return error(401, 'Contraseña incorrecta.');
+
+  if (url.pathname === '/api/github' || url.pathname.startsWith('/api/github/')) return github(req, url, env);
 
   if (url.pathname === '/api/fotos' && req.method === 'GET') {
     const q = url.searchParams.get('q')?.trim();

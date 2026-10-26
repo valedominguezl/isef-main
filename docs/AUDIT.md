@@ -85,7 +85,7 @@ Referencias: ✅ aplicado · ⏳ pendiente / para decidir · ❌ descartado (con
 | Workflow con `StrictHostKeyChecking=no` y sin chequeos | ✅ `accept-new`, Node 20, `npm ci`, chequeos antes de desplegar, concurrencia, retención de builds |
 | Sin cabeceras de seguridad | ✅ HSTS, nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy |
 | Vulnerabilidades npm (14 altas) | ✅ `npm audit fix` → queda 1 en `sharp` (solo desarrollo; se resuelve con Node ≥ 20) |
-| Admin: token de GitHub en el navegador | ✅ Token fine-grained limitado a 1 repo; verificación de permisos; sesión opcional. ⏳ Si se suman muchos editores, evaluar un proxy OAuth |
+| Admin: acceso al repo | ✅ Contraseña única del equipo (hash SHA-256 en secreto del Worker, comparación en tiempo constante); el token de GitHub vive solo en el Worker y el proxy `/api/github` permite únicamente las rutas del panel sobre `main`; además, Cloudflare Access por mail |
 
 ## 9. Infraestructura y desarrollo (Windows)
 | Hallazgo | Acción |
