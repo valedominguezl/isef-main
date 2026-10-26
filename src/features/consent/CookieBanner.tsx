@@ -19,7 +19,7 @@ const CATEGORIAS = [
     key: 'analitica',
     titulo: 'Analítica',
     texto:
-      'Google Analytics 4 y Microsoft Clarity nos ayudan a entender qué páginas se visitan y cómo se usan, para mejorar el sitio. Los datos son anónimos y lo que escribís en formularios no se registra.',
+      'Google Analytics 4 y Microsoft Clarity nos ayudan a entender qué páginas se visitan y cómo se usan, para mejorar el sitio. Los datos son anónimos.',
   },
   {
     key: 'publicidad',

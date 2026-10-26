@@ -53,8 +53,8 @@ export function Component() {
             <li>
               <strong>Analítica (opcional):</strong> Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) con IP anonimizada, para saber
               qué páginas se visitan y mejorar el sitio. Se conservan hasta 14 meses. Microsoft Clarity (<code>_clck</code>,{' '}
-              <code>_clsk</code>) registra de forma anónima clics, desplazamientos y movimientos en la página para detectar partes confusas; oculta
-              lo que se escribe en formularios. Se conservan hasta 12 meses. Solo se activan si las aceptás.
+              <code>_clsk</code>) graba de forma anónima cómo se recorre la página (clics, desplazamientos y movimientos) para detectar partes
+              confusas. Se conservan hasta 12 meses. Solo se activan si las aceptás.
             </li>
             <li>
               <strong>Publicidad (opcional):</strong> Google Tag Manager puede activar etiquetas para medir campañas de difusión de inscripciones.
