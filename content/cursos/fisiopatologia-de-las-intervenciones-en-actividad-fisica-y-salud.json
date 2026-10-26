@@ -6,7 +6,9 @@
   "activo": true,
   "publicado": true,
   "mostrarEnCarrera": false,
-  "disertantes": [],
+  "disertantes": [
+    "nelio-bazan"
+  ],
   "temario": [],
   "imagen": "/media/cursos/fisiopatologia-de-las-intervenciones-en-actividad-fisica-y-salud-mvolo79l.webp",
   "fechaInicio": "2026-04-28",
