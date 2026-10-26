@@ -1,7 +1,8 @@
 {
   "hero": {
     "titulo": "Contacto",
-    "subtitulo": "Toda la información de nuestras sedes"
+    "subtitulo": "Toda la información de nuestras sedes",
+    "imagen": "/media/paginas/pagina-contacto-mvos7q2m.webp"
   },
   "telefonos": {
     "titulo": "Teléfonos *de contacto*",

@@ -8,8 +8,7 @@
     "texto": "Todo lo que necesitás saber para empezar a cursar."
   },
   "bienvenida": {
-    "titulo": "Te damos la bienvenida al *I.S.E.F.*",
-    "texto": "Hace más de 30 años que formamos profes en San Luis. Estudiás cerca de los tuyos, con docentes que te acompañan y con herramientas para trabajar **dentro y fuera de la escuela**: clubes, gimnasios, centros de salud y alto rendimiento."
+    "titulo": "Te damos la bienvenida "
   },
   "novedades": {
     "titulo": "Las *últimas noticias*",
@@ -17,7 +16,7 @@
   },
   "especializaciones": {
     "titulo": "Las *especializaciones*",
-    "texto": "Cursos **gratuitos para alumnos** con científicos de renombre internacional: neurociencias, nutrición deportiva, adulto mayor, enfermedades crónicas, inteligencia artificial y más. Te preparan para trabajar en equipos interdisciplinarios con médicos, psicólogos y kinesiólogos."
+    "texto": "Cursos **gratuitos para alumnos** con científicos de renombre internacional: neurociencias, nutrición deportiva, adulto mayor, enfermedades crónicas, inteligencia artificial y más. Te preparan para trabajar en equipos interdisciplinarios con médicos, psicólogos,  kinesiólogos, nutricionistas, etc."
   },
   "cuota": {
     "titulo": "La cuota más *competitiva*",
