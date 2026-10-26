@@ -16,7 +16,7 @@ Sitio del profesorado (isefsanluis.net). React 19 + TS 5.9 + Vite 8, **prerender
 
 ## Reglas
 - Contenido nuevo = JSON en `content/` (o desde /admin), nunca hardcodeado en componentes.
-- Estilos: CSS Modules + tokens (`var(--…)`); nada de colores/espaciados sueltos. `#7761FF` solo en texto grande; texto chico → `--violet-600`.
+- Estilos: CSS Modules + tokens (`var(--…)`); nada de colores/espaciados sueltos. Paleta del escudo: azul (`--blue-*`) y rojo de la «I» (`--red-*`); texto chico → `--blue-600`.
 - Animaciones: `<Reveal>`/`m.*` de Motion (LazyMotion). No sumar otras librerías de animación.
 - Imports con mayúsculas exactas (Linux rompe; `npm run case:check`).
 - Antes de terminar: `npm run check` y `npm run build`.

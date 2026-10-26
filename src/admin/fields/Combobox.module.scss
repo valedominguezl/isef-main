@@ -51,15 +51,15 @@
     cursor: pointer;
 
     @include hover {
-      background: var(--violet-50);
+      background: var(--blue-50);
     }
 
     &[data-activa] {
-      background: var(--violet-50);
+      background: var(--blue-50);
     }
 
     &[aria-selected='true'] {
-      color: var(--violet-700);
+      color: var(--blue-700);
       font-weight: var(--weight-semibold);
     }
   }

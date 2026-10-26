@@ -78,8 +78,8 @@
   --ib-fg: var(--color-primary-strong);
 
   @include ib-hover {
-    --ib-bg: var(--violet-50);
-    --ib-fg: var(--violet-700);
+    --ib-bg: var(--blue-50);
+    --ib-fg: var(--blue-700);
   }
 }
 
@@ -98,8 +98,8 @@
   --ib-border: var(--color-border-strong);
 
   @include ib-hover {
-    --ib-bg: var(--violet-500);
-    --ib-border: var(--violet-500);
+    --ib-bg: var(--blue-500);
+    --ib-border: var(--blue-500);
     --ib-fg: var(--color-on-dark);
   }
 }
@@ -107,11 +107,11 @@
 /* Gemelo de <Button variant="outline">: para ir al lado de uno */
 .outline.brand {
   --ib-fg: var(--color-primary-strong);
-  --ib-border: var(--violet-300);
+  --ib-border: var(--blue-300);
 
   @include ib-hover {
-    --ib-bg: var(--violet-50);
-    --ib-fg: var(--violet-700);
+    --ib-bg: var(--blue-50);
+    --ib-fg: var(--blue-700);
   }
 }
 
@@ -120,8 +120,8 @@
   --ib-border: rgb(255 255 255 / 0.2);
 
   @include ib-hover {
-    --ib-bg: var(--violet-500);
-    --ib-border: var(--violet-500);
+    --ib-bg: var(--blue-500);
+    --ib-border: var(--blue-500);
   }
 }
 

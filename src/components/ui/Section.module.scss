@@ -51,7 +51,7 @@
   background: var(--color-bg-tint-glass);
 }
 
-/* Bandas de color: la textura violeta del sitio original (no negro) */
+/* Bandas de color: la degradé azul del escudo (no negro) */
 .dark,
 .brand {
   background: var(--surface-fx);
@@ -62,7 +62,7 @@
 }
 
 .image {
-  background: var(--violet-950);
+  background: var(--blue-950);
   clip-path: inset(0); /* recorta la foto fija (parallax) al área de la sección */
 
   &::before {

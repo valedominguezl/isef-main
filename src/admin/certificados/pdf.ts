@@ -31,11 +31,11 @@ const H = 210 * MM;
 const hex = (h: string): RGB => rgb(parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255);
 const C = {
   papel: hex('#FCFAF5'),
-  indigo: hex('#3C3182'),
-  violeta: hex('#5B46E0'),
+  azul: hex('#142A50'), // fondo del escudo
+  rojo: hex('#A8141B'), // la «I» del escudo
   oro: hex('#B08D57'),
-  tinta: hex('#1F1B3A'),
-  gris: hex('#5E5A73'),
+  tinta: hex('#141A2E'),
+  gris: hex('#545C6E'),
 };
 
 /* ── Recursos (se bajan una vez y quedan en memoria) ── */
@@ -120,7 +120,7 @@ function parrafo(page: PDFPage, tramos: Tramo[], f: Fuentes, xMm: number, yMm: n
     normal: { font: f.merriLight, color: C.tinta },
     negrita: { font: f.merriBold, color: C.tinta },
     cursiva: { font: f.merriLightItalic, color: C.tinta },
-    negritaCursiva: { font: f.merriBoldItalic, color: C.indigo },
+    negritaCursiva: { font: f.merriBoldItalic, color: C.azul },
   };
   const piezas = tramos.flatMap((t) => t.texto.split(/(\s+)/).filter(Boolean).map((texto) => ({ texto: /^\s+$/.test(texto) ? ' ' : texto, ...estilo[t.estilo] })));
   const ancho = (p: (typeof piezas)[number]) => p.font.widthOfTextAtSize(p.texto, size);
@@ -164,8 +164,8 @@ function parrafo(page: PDFPage, tramos: Tramo[], f: Fuentes, xMm: number, yMm: n
 
 function marco(page: PDFPage) {
   page.drawRectangle({ x: 0, y: 0, width: W, height: H, color: C.papel });
-  page.drawRectangle({ x: 8 * MM, y: 8 * MM, width: W - 16 * MM, height: H - 16 * MM, borderColor: C.indigo, borderWidth: 1.6 });
-  page.drawRectangle({ x: 12.6 * MM, y: 12.6 * MM, width: W - 25.2 * MM, height: H - 25.2 * MM, borderColor: C.violeta, borderWidth: 0.6 });
+  page.drawRectangle({ x: 8 * MM, y: 8 * MM, width: W - 16 * MM, height: H - 16 * MM, borderColor: C.azul, borderWidth: 1.6 });
+  page.drawRectangle({ x: 12.6 * MM, y: 12.6 * MM, width: W - 25.2 * MM, height: H - 25.2 * MM, borderColor: C.rojo, borderWidth: 0.6 });
   // Rombos dorados en las esquinas
   const r = 1.25 * MM;
   for (const [x, y] of [
@@ -221,7 +221,7 @@ export async function generarCertificado(cert: Certificado, d: DatosCertificado,
   page.drawImage(marca, { x: (cx - 60) * MM, y: Y(113.4 + 60), width: 120 * MM, height: 120 * MM, opacity: 0.045 });
 
   page.drawImage(logo, { x: (cx - 13.5) * MM, y: Y(20 + 27), width: 27 * MM, height: 27 * MM });
-  centrado(page, 'Instituto Superior de Educación Física “San Luis”', cx, 59, { font: f.merriBold, size: 17, color: C.indigo, max: 240 });
+  centrado(page, 'Instituto Superior de Educación Física “San Luis”', cx, 59, { font: f.merriBold, size: 17, color: C.azul, max: 240 });
   const norma = { font: f.franklin, size: 7.4, color: C.gris, tracking: 0.14, max: 240 };
   centrado(page, (cert.resolucion?.trim() || RESOLUCION).toUpperCase(), cx, 65.5, norma);
   centrado(page, 'MINISTERIO DE EDUCACIÓN · GOBIERNO DE SAN LUIS', cx, 70, norma);
@@ -234,7 +234,7 @@ export async function generarCertificado(cert: Certificado, d: DatosCertificado,
 
   const tam = centrado(page, d.nombre, cx, 108, { font: f.merriItalic, size: 33, color: C.tinta, max: 215 });
   const ancho = Math.max(150, f.merriItalic.widthOfTextAtSize(d.nombre, tam) / MM + 12);
-  page.drawLine({ start: { x: (cx - ancho / 2) * MM, y: Y(112.5) }, end: { x: (cx + ancho / 2) * MM, y: Y(112.5) }, thickness: 0.6, color: C.indigo, opacity: 0.35 });
+  page.drawLine({ start: { x: (cx - ancho / 2) * MM, y: Y(112.5) }, end: { x: (cx + ancho / 2) * MM, y: Y(112.5) }, thickness: 0.6, color: C.azul, opacity: 0.35 });
 
   parrafo(page, cuerpo(cert, d.dni, cert.tipo === 'aprobacion' ? d.nota : null), f, cx, 126, 210, 12.5, 7.8);
 

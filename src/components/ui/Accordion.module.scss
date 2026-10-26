@@ -111,21 +111,21 @@
 
 @media (hover: hover) {
   .card .item:not(.open) .trigger:hover .chevron {
-    background: var(--violet-100);
+    background: var(--blue-100);
   }
 }
 
 .card .chevron {
-  background: var(--violet-50);
-  color: var(--violet-600);
+  background: var(--blue-50);
+  color: var(--blue-600);
 }
 
 .card .open .chevron {
-  background: var(--violet-500);
+  background: var(--blue-500);
   color: white;
 }
 
-/* Variante marca: cabecera con gradiente violeta (firma del sitio original) */
+/* Variante marca: cabecera con degradé azul del escudo */
 .brand .item {
   background: var(--color-surface);
   box-shadow: var(--shadow-sm);
@@ -133,8 +133,8 @@
 
 /* Degradé un tono más profundo que el de los botones: el texto blanco chico (horas) llega a AA (≈6:1) */
 .brand .trigger {
-  --color-focus: white; /* el contorno violeta no se ve sobre el degradé */
-  background: linear-gradient(90deg, var(--violet-600), var(--violet-700));
+  --color-focus: white; /* el contorno azul no se ve sobre el degradé */
+  background: linear-gradient(90deg, var(--blue-600), var(--blue-700));
   color: white;
 
   @include hover {
@@ -149,7 +149,7 @@
 
 .brand .chevron {
   background: white;
-  color: var(--violet-600);
+  color: var(--blue-600);
 }
 
 .brand .body {
@@ -170,7 +170,7 @@
   padding-inline: 0;
 
   @include hover {
-    color: var(--violet-700);
+    color: var(--blue-700);
   }
 }
 

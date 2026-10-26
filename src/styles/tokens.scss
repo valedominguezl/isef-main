@@ -5,39 +5,41 @@
  */
 :root {
   /* ── Color: marca ─────────────────────────────────────────── */
-  --violet-50: #f4f2ff;
-  --violet-100: #e9e5ff;
-  --violet-200: #d3ccff;
-  --violet-300: #b3a7ff;
-  --violet-400: #9483ff;
-  --violet-500: #7761ff; /* Primario de marca */
-  --violet-600: #5b42f5; /* Texto/enlaces sobre blanco (AA 6:1) */
-  --violet-700: #4a2fdb;
-  --violet-800: #3a22a8;
-  --violet-900: #261670;
-  --violet-950: #160c45;
+  /* Paleta del escudo: azul del fondo y del aro, rojo de la «I» */
+  --blue-50: #f1f5fc;
+  --blue-100: #e2eaf8;
+  --blue-200: #c5d5f0;
+  --blue-300: #9db8e4;
+  --blue-400: #6f93d2;
+  --blue-500: #3f6dc0; /* Primario: azul del escudo, más luminoso (5:1 sobre blanco) */
+  --blue-600: #2c56a3; /* Texto/enlaces sobre blanco (7:1) */
+  --blue-700: #234685;
+  --blue-800: #1c3768; /* aro del escudo */
+  --blue-900: #142a50; /* fondo del escudo */
+  --blue-950: #0c1a34;
 
-  --coral-50: #fff1f0;
-  --coral-100: #ffdfdd;
-  --coral-300: #ff9c97;
-  --coral-500: #ff554e; /* Acento de marca */
-  --coral-600: #e8352e;
-  --coral-700: #c0221c;
+  /* Rojo de la «I» */
+  --red-50: #fdf0f0;
+  --red-100: #fadcdc;
+  --red-300: #ee8f8f;
+  --red-500: #c8232b;
+  --red-600: #a8141b; /* la «I» del escudo */
+  --red-700: #8c0d13;
 
-  /* Neutros con un leve tinte violeta */
+  /* Neutros con un leve tinte azul */
   --ink-0: #ffffff;
-  --ink-25: #fbfaff;
-  --ink-50: #f6f5fb;
-  --ink-100: #eceaf5;
-  --ink-200: #dad7e6;
-  --ink-300: #bdb9ce;
-  --ink-400: #9894ad;
-  --ink-500: #6f6b85;
-  --ink-600: #57536b;
-  --ink-700: #403d52;
-  --ink-800: #2a2838;
-  --ink-900: #18161f;
-  --ink-950: #0d0c12;
+  --ink-25: #fafbfd;
+  --ink-50: #f4f6fa;
+  --ink-100: #e8ecf3;
+  --ink-200: #d5dbe6;
+  --ink-300: #b8c0cf;
+  --ink-400: #949daf;
+  --ink-500: #6b7488;
+  --ink-600: #545c6e;
+  --ink-700: #3d4453;
+  --ink-800: #282d38;
+  --ink-900: #171a21;
+  --ink-950: #0c0e13;
 
   --success-500: #12a150;
   --success-700: #0b6b35; /* texto verde sobre fondos claros (AA) */
@@ -48,40 +50,47 @@
   /* ── Color: semánticos ───────────────────────────────────── */
   --color-bg: var(--ink-0);
   --color-bg-subtle: var(--ink-25);
-  --color-bg-tint: color-mix(in srgb, var(--violet-500) 5%, white);
+  --color-bg-tint: color-mix(in srgb, var(--blue-500) 5%, white);
   /* Mismos tonos que subtle/tint pero translúcidos: las secciones dejan ver las formas de fondo */
-  --color-bg-subtle-glass: color-mix(in srgb, var(--violet-500) 2.5%, transparent);
-  --color-bg-tint-glass: color-mix(in srgb, var(--violet-500) 5%, transparent);
+  --color-bg-subtle-glass: color-mix(in srgb, var(--blue-500) 2.5%, transparent);
+  --color-bg-tint-glass: color-mix(in srgb, var(--blue-500) 5%, transparent);
   /* Formas de fondo (AmbientShapes) */
-  --ambient-circle: linear-gradient(155deg, var(--violet-200) 35%, var(--violet-100));
-  --ambient-pill: linear-gradient(90deg, color-mix(in srgb, var(--violet-300) 60%, transparent), var(--violet-100));
-  --ambient-glow: radial-gradient(closest-side, color-mix(in srgb, var(--violet-500) 30%, transparent), transparent);
+  --ambient-circle: linear-gradient(155deg, var(--blue-200) 35%, var(--blue-100));
+  --ambient-pill: linear-gradient(90deg, color-mix(in srgb, var(--blue-300) 60%, transparent), var(--blue-100));
+  --ambient-glow: radial-gradient(closest-side, color-mix(in srgb, var(--blue-500) 30%, transparent), transparent);
   --color-surface: var(--ink-0);
   --color-border: var(--ink-100);
   --color-border-strong: var(--ink-200);
-  --color-border-card: var(--violet-200); /* tarjetas blancas: se separan del fondo con tinte violeta y las formas lila */
+  --color-border-card: var(--blue-200); /* tarjetas blancas: se separan del fondo con tinte azul y las formas celestes */
   --color-text: var(--ink-900);
   --color-text-body: var(--ink-700);
   --color-text-muted: var(--ink-600);
-  --color-primary: var(--violet-500);
-  --color-primary-strong: var(--violet-600);
-  --color-accent: var(--coral-500);
-  --color-link: var(--violet-600);
-  --color-focus: var(--violet-500);
+  --color-primary: var(--blue-500);
+  --color-primary-strong: var(--blue-600);
+  --color-accent: var(--red-500);
+  --color-link: var(--blue-600);
+  --color-focus: var(--blue-500);
   --color-on-dark: #ffffff;
   --color-on-dark-body: rgb(255 255 255 / 0.9);
   --color-on-dark-muted: rgb(255 255 255 / 0.75);
+  /* El escudo es azul marino: sobre fondos oscuros va con un aro blanco (versión «positiva») */
+  --logo-ring-dark: 0 0 0 2px rgb(255 255 255 / 0.95), 0 2px 12px rgb(0 0 0 / 0.35);
 
   /* ── Gradientes firma ────────────────────────────────────── */
-  --gradient-brand: linear-gradient(120deg, var(--violet-500), var(--coral-500));
-  --gradient-brand-soft: linear-gradient(120deg, rgb(119 97 255 / 0.9), rgb(255 85 78 / 0.9));
-  --gradient-primary: linear-gradient(90deg, var(--violet-500) 0%, var(--violet-600) 45%, #4b2eff 100%); /* botón del sitio original; el texto cae sobre violet-600 (AA) */
-  --gradient-accent: linear-gradient(90deg, #d92d26 0%, var(--coral-700) 100%); /* AA con texto blanco */
+  /* Azul marino → azul del aro → apenas de rojo al final, como el escudo */
+  --gradient-brand: linear-gradient(120deg, var(--blue-900), var(--blue-600) 70%, var(--red-600));
+  --gradient-brand-soft: linear-gradient(120deg, var(--blue-900), var(--blue-700)); /* navbar: opaco (con modo oscuro forzado no se ve lo de atrás) */
+  --gradient-primary: linear-gradient(90deg, var(--blue-600) 0%, var(--blue-700) 100%); /* botones: texto blanco AA en todo el ancho */
+  --gradient-accent: linear-gradient(90deg, var(--red-600) 0%, var(--red-700) 100%); /* AA con texto blanco */
   --gradient-brand-ink: linear-gradient(rgb(13 12 18 / 0.22), rgb(13 12 18 / 0.22)), var(--gradient-brand); /* banda de marca con texto */
   --gradient-ink: linear-gradient(120deg, var(--ink-950), var(--ink-800)); /* solo detalles chicos: las bandas usan --surface-fx */
-  --surface-fx: linear-gradient(rgb(0 0 0 / 0.2), rgb(0 0 0 / 0.2)), url('@/assets/media/fx/fondo.webp') center / cover; /* banda violeta del sitio original */
-  --color-footer: #3c3182; /* índigo del sitio original */
-  --overlay-image: linear-gradient(135deg, rgb(13 12 18 / 0.86), rgb(119 97 255 / 0.62));
+  /* Bandas: azul del escudo con luz arriba a la izquierda y un rastro rojo abajo a la derecha */
+  --surface-fx:
+    radial-gradient(60% 80% at 15% 10%, rgb(63 109 192 / 0.45), transparent 70%),
+    radial-gradient(50% 70% at 95% 100%, rgb(168 20 27 / 0.35), transparent 70%),
+    linear-gradient(135deg, var(--blue-950), var(--blue-800));
+  --color-footer: var(--blue-900); /* fondo del escudo */
+  --overlay-image: linear-gradient(135deg, rgb(12 26 52 / 0.88), rgb(44 86 163 / 0.6));
   --overlay-image-bottom: linear-gradient(180deg, rgb(13 12 18 / 0.1) 30%, rgb(13 12 18 / 0.85));
 
   /* ── Tipografía ──────────────────────────────────────────── */
@@ -146,10 +155,10 @@
   --shadow-sm: 0 2px 8px rgb(24 22 31 / 0.06), 0 1px 2px rgb(24 22 31 / 0.04);
   --shadow-md: 0 10px 24px -6px rgb(24 22 31 / 0.12), 0 2px 6px rgb(24 22 31 / 0.05);
   --shadow-lg: 0 24px 48px -12px rgb(24 22 31 / 0.22);
-  --shadow-brand: 0 14px 32px -10px rgb(119 97 255 / 0.55);
-  /* Tarjetas blancas: una sola sombra para todas, teñida con el índigo del footer (y una más marcada al pasar el mouse) */
-  --shadow-card: 0 1px 2px rgb(60 49 130 / 0.08), 0 12px 32px -16px rgb(60 49 130 / 0.28);
-  --shadow-card-hover: 0 2px 4px rgb(60 49 130 / 0.08), 0 20px 40px -16px rgb(60 49 130 / 0.36);
+  --shadow-brand: 0 14px 32px -10px rgb(44 86 163 / 0.55);
+  /* Tarjetas blancas: una sola sombra para todas, teñida con el azul del footer (y una más marcada al pasar el mouse) */
+  --shadow-card: 0 1px 2px rgb(20 42 80 / 0.08), 0 12px 32px -16px rgb(20 42 80 / 0.28);
+  --shadow-card-hover: 0 2px 4px rgb(20 42 80 / 0.08), 0 20px 40px -16px rgb(20 42 80 / 0.36);
 
   /* ── Movimiento ──────────────────────────────────────────── */
   --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1); /* ease: hovers y cambios de color */

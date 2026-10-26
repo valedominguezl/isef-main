@@ -24,9 +24,9 @@
     font-weight: var(--weight-regular);
   }
 
-  /* violet-600 liso (antes cada celda repetía el degradé y arrancaba en #7761FF, sin contraste AA) */
+  /* blue-600 liso (antes cada celda repetía el degradé y arrancaba en el violeta claro, sin contraste AA) */
   thead th {
-    background: var(--violet-600);
+    background: var(--blue-600);
     color: white;
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);
@@ -47,13 +47,13 @@
   }
 
   strong {
-    color: var(--violet-600);
+    color: var(--blue-600);
   }
 }
 
 .group th {
-  background: var(--violet-50);
-  color: var(--violet-700);
+  background: var(--blue-50);
+  color: var(--blue-700);
   font-weight: var(--weight-semibold) !important;
   font-size: var(--text-sm);
 }

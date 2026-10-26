@@ -10,7 +10,7 @@
   border-radius: var(--radius-xl);
   overflow: hidden;
   isolation: isolate;
-  background: var(--violet-950);
+  background: var(--blue-950);
   @include card-hover;
   @include card-focus;
 
@@ -71,7 +71,7 @@
 
 .link,
 .link:hover {
-  color: white; /* gana sobre el a:hover global, que lo volvía violeta oscuro */
+  color: white; /* gana sobre el a:hover global, que lo volvía azul oscuro */
   text-decoration: none;
 }
 

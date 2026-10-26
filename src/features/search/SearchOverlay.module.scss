@@ -79,8 +79,8 @@
   @include press-bounce;
 
   @include hover {
-    background: var(--violet-50);
-    color: var(--violet-700);
+    background: var(--blue-50);
+    color: var(--blue-700);
   }
 
   kbd {
@@ -139,8 +139,8 @@
   @media (pointer: coarse) {
     min-height: 44px; /* área táctil mínima */
   }
-  background: var(--violet-50);
-  color: var(--violet-700);
+  background: var(--blue-50);
+  color: var(--blue-700);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
@@ -152,7 +152,7 @@
   @include press-bounce;
 
   @include hover {
-    background: var(--violet-600);
+    background: var(--blue-600);
     color: white;
   }
 }
@@ -188,8 +188,8 @@
     }
 
     @include hover {
-      color: var(--violet-700);
-      background: var(--violet-50);
+      color: var(--blue-700);
+      background: var(--blue-50);
     }
 
     svg {
@@ -225,7 +225,7 @@
   transition: background-color var(--duration-fast);
 
   &[data-active='true'] {
-    background: var(--violet-50);
+    background: var(--blue-50);
 
     .enter {
       opacity: 1;
@@ -233,7 +233,7 @@
   }
 
   mark {
-    background: var(--violet-100);
+    background: var(--blue-100);
     color: inherit;
     border-radius: 2px;
   }
@@ -266,7 +266,7 @@
   right: var(--space-3);
   top: 50%;
   translate: 0 -50%;
-  color: var(--violet-500);
+  color: var(--blue-500);
   opacity: 0;
 }
 
@@ -289,11 +289,11 @@
   @include focus-ring(-3px);
 
   &[data-active='true'] {
-    background: var(--violet-50);
+    background: var(--blue-50);
   }
 
   @include hover {
-    background: var(--violet-50);
+    background: var(--blue-50);
   }
 }
 

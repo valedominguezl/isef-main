@@ -10,7 +10,7 @@ interface BaseProps {
   size?: 'sm' | 'md' | 'lg';
   /** ghost: sin borde · outline: con borde · overlay: círculo oscuro translúcido sobre fotos. */
   variant?: 'ghost' | 'outline' | 'overlay';
-  /** default: neutro sobre claro · brand: violeta (gemelo de Button outline) · light: sobre fondos oscuros. */
+  /** default: neutro sobre claro · brand: azul (gemelo de Button outline) · light: sobre fondos oscuros. */
   tone?: 'default' | 'brand' | 'light';
   className?: string;
 }

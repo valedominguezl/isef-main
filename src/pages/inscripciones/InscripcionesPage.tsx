@@ -20,7 +20,7 @@ import styles from './InscripcionesPage.module.scss';
 /** Ícono de cada paso (planilla, exámenes médicos, pago), como en el sitio original. */
 const STEP_ICONS = [FilePen, Stethoscope, Receipt];
 
-/** Título sobre la banda violeta: el *resaltado* va en negrita (no en color, que no contrasta). */
+/** Título sobre la banda azul: el *resaltado* va en negrita (no en color, que no contrasta). */
 const negrita = (titulo: string) =>
   titulo.split(/(\*[^*]+\*)/g).map((parte, i) =>
     parte.length > 2 && parte.startsWith('*') && parte.endsWith('*') ? <strong key={i}>{parte.slice(1, -1)}</strong> : <Fragment key={i}>{parte}</Fragment>,

@@ -99,8 +99,8 @@
 }
 
 .dialogIconAccion {
-  background: var(--violet-50);
-  color: var(--violet-600);
+  background: var(--blue-50);
+  color: var(--blue-600);
 }
 
 .dialogActions {
@@ -153,7 +153,7 @@
   align-items: center;
   gap: var(--space-2) var(--space-3);
   padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
-  border: 1px solid var(--violet-200);
+  border: 1px solid var(--blue-200);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   box-shadow: var(--shadow-lg);
@@ -169,7 +169,7 @@
 
 .toastIcon {
   flex: none;
-  color: var(--violet-600);
+  color: var(--blue-600);
 }
 
 .toastActions {
@@ -228,8 +228,8 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-pill);
-  background: var(--violet-50);
-  color: var(--violet-600);
+  background: var(--blue-50);
+  color: var(--blue-600);
 }
 
 .modalBody {

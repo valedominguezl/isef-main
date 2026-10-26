@@ -89,7 +89,7 @@ $bp-xl: 1280px;
 }
 
 /* Contorno de foco de una tarjeta-enlace: solo con teclado (no al hacer clic) */
-@mixin card-focus($color: var(--violet-600)) {
+@mixin card-focus($color: var(--blue-600)) {
   &:has(:focus-visible) {
     outline: 2px solid $color;
     outline-offset: 3px;

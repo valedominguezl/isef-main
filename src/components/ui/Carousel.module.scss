@@ -86,7 +86,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: var(--violet-400); /* 3:1 sobre blanco (el 300 daba 2,1:1; el 200 se perdía sobre las formas lila) */
+    background: var(--blue-400); /* 3:1 sobre blanco (el 300 daba 2,1:1; el 200 se perdía sobre las formas lila) */
     clip-path: inset(0 9px round 999px);
     transition:
       clip-path var(--duration-base) var(--ease-emphasized),
@@ -95,7 +95,7 @@
 
   @media (hover: hover) {
     &:hover:not(.dotActive)::before {
-      background: var(--violet-500);
+      background: var(--blue-500);
     }
   }
 
@@ -109,7 +109,7 @@
 
 .dotActive::before {
   clip-path: inset(0 0 round 999px);
-  background: var(--violet-500);
+  background: var(--blue-500);
 }
 
 .dots {

@@ -72,7 +72,7 @@
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid rgb(255 255 255 / 0.9);
-  box-shadow: 0 0 0 6px rgb(119 97 255 / 0.5), var(--shadow-lg);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--blue-500) 50%, transparent), var(--shadow-lg);
 
   @include up($bp-md) {
     width: 200px;
@@ -96,7 +96,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  color: var(--violet-200) !important;
+  color: var(--blue-200) !important;
 }
 
 .summary {
@@ -150,8 +150,8 @@
     font-weight: var(--weight-semibold);
     padding: 2px 8px;
     border-radius: var(--radius-pill);
-    background: var(--violet-50);
-    color: var(--violet-700);
+    background: var(--blue-50);
+    color: var(--blue-700);
   }
 }
 
@@ -181,7 +181,7 @@
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   font-variant-numeric: tabular-nums;
-  color: var(--violet-600);
+  color: var(--blue-600);
   line-height: var(--leading-body);
 }
 
@@ -223,7 +223,7 @@
   @include focus-ring;
 
   @include hover {
-    color: var(--violet-800);
+    color: var(--blue-800);
     text-decoration-color: currentColor;
   }
 }
@@ -244,7 +244,7 @@
     padding: 0 0 var(--space-6);
     background: none !important;
     color: var(--ink-900) !important;
-    border-bottom: 2px solid var(--violet-500);
+    border-bottom: 2px solid var(--blue-500);
 
     &::after {
       display: none;
@@ -275,7 +275,7 @@
     width: 110px;
     height: 110px;
     box-shadow: none;
-    border: 2px solid var(--violet-500);
+    border: 2px solid var(--blue-500);
   }
 
   .identity h1 {
@@ -283,7 +283,7 @@
   }
 
   .area {
-    color: var(--violet-700) !important;
+    color: var(--blue-700) !important;
   }
 
   .tags li {

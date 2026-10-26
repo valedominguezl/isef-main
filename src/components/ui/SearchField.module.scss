@@ -15,13 +15,13 @@
     box-shadow var(--duration-slow) var(--ease-standard);
 
   @include hover {
-    border-color: var(--violet-300);
+    border-color: var(--blue-300);
   }
 
-  /* Foco visible (3:1 contra el fondo): borde y anillo violet-600 */
+  /* Foco visible (3:1 contra el fondo): borde y anillo blue-600 */
   &:focus-within {
-    border-color: var(--violet-600);
-    box-shadow: 0 0 0 1px var(--violet-600);
+    border-color: var(--blue-600);
+    box-shadow: 0 0 0 1px var(--blue-600);
   }
 
   input {
@@ -59,7 +59,7 @@
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    background: var(--violet-400);
+    background: var(--blue-400);
     animation: dot 1s var(--ease-standard) infinite;
 
     &:nth-child(2) {

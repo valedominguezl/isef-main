@@ -25,20 +25,20 @@
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   box-shadow: var(--shadow-sm);
-  color: var(--violet-500);
+  color: var(--blue-500);
 
   transition:
     border-color var(--duration-slow) var(--ease-standard),
     box-shadow var(--duration-slow) var(--ease-standard);
 
   @include hover {
-    border-color: var(--violet-300);
+    border-color: var(--blue-300);
   }
 
   /* Foco visible (3:1 contra el fondo) */
   &:focus-within {
-    border-color: var(--violet-600);
-    box-shadow: 0 0 0 1px var(--violet-600);
+    border-color: var(--blue-600);
+    box-shadow: 0 0 0 1px var(--blue-600);
   }
 
   input {
@@ -99,7 +99,7 @@
   }
 
   mark {
-    background: var(--violet-100);
+    background: var(--blue-100);
     color: inherit;
   }
 }

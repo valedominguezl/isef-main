@@ -6,7 +6,7 @@
 }
 
 .icono {
-  color: var(--violet-500);
+  color: var(--blue-500);
   margin-bottom: var(--space-4);
 }
 
@@ -63,11 +63,11 @@
       letter-spacing: 0.08em;
     }
 
-    /* Foco visible (3:1 contra el fondo): borde y anillo violet-600 */
+    /* Foco visible (3:1 contra el fondo): borde y anillo blue-600 */
     &:focus {
       outline: none;
-      border-color: var(--violet-600);
-      box-shadow: 0 0 0 1px var(--violet-600);
+      border-color: var(--blue-600);
+      box-shadow: 0 0 0 1px var(--blue-600);
     }
 
     &[aria-invalid='true'] {

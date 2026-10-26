@@ -77,12 +77,12 @@
 .outline {
   --btn-bg: transparent;
   --btn-fg: var(--color-primary-strong);
-  --btn-border: var(--violet-300);
+  --btn-border: var(--blue-300);
   box-shadow: none;
 
   @include hover {
-    --btn-bg: var(--violet-50);
-    --btn-fg: var(--violet-700);
+    --btn-bg: var(--blue-50);
+    --btn-fg: var(--blue-700);
     opacity: 1;
   }
 }
@@ -108,7 +108,7 @@
   padding-inline: var(--space-2);
 
   @include hover {
-    --btn-fg: var(--violet-800);
+    --btn-fg: var(--blue-800);
     opacity: 1;
   }
 }

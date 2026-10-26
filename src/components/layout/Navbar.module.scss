@@ -18,8 +18,7 @@
     inset: 0;
     z-index: -1;
     background: var(--gradient-brand-soft);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: var(--blue-900);
     opacity: 0;
     transition: opacity var(--duration-slow) var(--ease-standard);
   }
@@ -27,7 +26,7 @@
 
 /* Sobre la foto de cabecera */
 .clear {
-  --color-focus: white; /* el violeta no se ve sobre la foto ni sobre el degradé */
+  --color-focus: white; /* el azul no se ve sobre la foto ni sobre el degradé */
   color: white;
   background-color: transparent;
 }
@@ -97,7 +96,12 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
+    box-shadow: var(--logo-ring-dark); /* sobre la foto, el degradé y el menú (fondos oscuros) */
   }
+}
+
+.light .brand img {
+  box-shadow: none;
 }
 
 
@@ -354,10 +358,10 @@
   display: flex;
   flex-direction: column;
   padding: 0 var(--gutter) var(--space-8);
-  /* Degradé de marca translúcido + desenfoque: se intuye la página detrás */
-  background: linear-gradient(120deg, rgb(119 97 255 / 0.8), rgb(255 85 78 / 0.74));
-  backdrop-filter: blur(24px) saturate(1.3);
-  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  /* Opaco: con el modo oscuro forzado de algunos navegadores (Samsung Internet) el desenfoque no se aplica
+     y un fondo translúcido dejaba ver la página de atrás */
+  background: var(--surface-fx);
+  background-color: var(--blue-900);
   overflow-y: auto;
 }
 
@@ -478,7 +482,7 @@
 
     &:hover {
       background: white;
-      color: var(--violet-600);
+      color: var(--blue-600);
     }
   }
 }

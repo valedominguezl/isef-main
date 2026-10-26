@@ -11,7 +11,7 @@ export interface ConfirmOptions {
   body?: string;
   confirmLabel?: string;
   icon?: LucideIcon;
-  /** 'accion' = botón violeta (enviar, publicar); por defecto es una eliminación (rojo). */
+  /** 'accion' = botón azul (enviar, publicar); por defecto es una eliminación (rojo). */
   tono?: 'peligro' | 'accion';
 }
 

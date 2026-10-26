@@ -418,7 +418,7 @@ function html(texto) {
   const conLinks = esc.replace(/https?:\/\/[^\s<]+/g, function (u) {
     return '<a href="' + u + '">' + u + '</a>';
   });
-  return '<div style="font-family:Georgia,serif;font-size:15px;line-height:1.6;color:#1F1B3A">' + conLinks.replace(/\n/g, '<br>') + '</div>';
+  return '<div style="font-family:Georgia,serif;font-size:15px;line-height:1.6;color:#141A2E">' + conLinks.replace(/\n/g, '<br>') + '</div>';
 }
 
 /** Correr UNA vez a mano desde el editor: pide los permisos y crea la planilla del registro. */

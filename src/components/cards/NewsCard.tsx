@@ -16,7 +16,7 @@ export default function NewsCard({ novedad, variant = 'overlay', headingLevel = 
       )}
       <div className={styles.content}>
         <div className={styles.meta}>
-          <Badge tone={variant === 'overlay' ? 'light' : 'violet'}>{etiquetaNovedad(novedad)}</Badge>
+          <Badge tone={variant === 'overlay' ? 'light' : 'blue'}>{etiquetaNovedad(novedad)}</Badge>
           <time dateTime={novedad.fecha}>{formatDate(novedad.fecha)}</time>
         </div>
         <H className={styles.title}>

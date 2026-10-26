@@ -74,7 +74,7 @@
     background-color var(--duration-base) var(--ease-standard);
 
   &:hover:not(:has(:disabled)) {
-    border-color: var(--violet-300);
+    border-color: var(--blue-300);
     background: var(--color-bg-tint);
   }
 }
@@ -128,7 +128,7 @@
   }
 
   &:checked {
-    background: var(--violet-500);
+    background: var(--blue-500);
     box-shadow: none;
 
     &::after {

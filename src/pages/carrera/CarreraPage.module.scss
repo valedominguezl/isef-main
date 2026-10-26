@@ -87,7 +87,7 @@
     line-height: 1.5;
 
     &::marker {
-      color: var(--violet-600); /* texto chico: violet-600 (el 500 no llega a AA) */
+      color: var(--blue-600); /* texto chico: blue-600 (el 500 no llega a AA) */
       font-family: var(--font-sans);
       font-weight: var(--weight-semibold);
     }
@@ -117,7 +117,7 @@ div.gallery {
   margin: 0;
   border-radius: var(--radius-xl);
   overflow: hidden;
-  background: var(--violet-950);
+  background: var(--blue-950);
 
   button {
     display: block;
@@ -178,7 +178,7 @@ div.gallery {
 
   @media (hover: hover) {
     .photo:hover & {
-      background: var(--violet-600);
+      background: var(--blue-600);
     }
   }
 

@@ -12,9 +12,9 @@
 | Atributo | Cómo se expresa | Referencia |
 |---|---|---|
 | **Académico, confiable** | Serif para lectura larga, mucho aire, encabezados livianos con una palabra destacada | *Harvard Gazette*, *The Guardian* (cuerpo serif + titulares sans) |
-| **Energía deportiva** | Gradiente violeta→coral, fotografía de acción a sangre, movimiento con aceleración marcada | *Nike Training Club*, *Strava* (acento cálido sobre oscuro) |
-| **Moderno, digital** | Violeta eléctrico, tarjetas con overlay, microinteracciones | *Stripe* (el violeta `#7761FF` es primo del *blurple* `#635BFF`) |
-| **Cálido, cercano** | Coral como acento humano, tono "vos", WhatsApp siempre a mano | *Airbnb* (el coral `#FF554E` es casi el *Rausch* `#FF5A5F`) |
+| **Energía deportiva** | Degradé azul marino → azul con un rastro del rojo de la «I», fotografía de acción a sangre, movimiento con aceleración marcada | *Nike Training Club*, *Strava* (acento cálido sobre oscuro) |
+| **Institucional, con historia** | Los colores del escudo: azul marino, azul del aro y el rojo de la «I» | Escudos universitarios (*Yale*, *Columbia*) |
+| **Cálido, cercano** | Rojo como acento humano y escaso, tono "vos", WhatsApp siempre a mano | *Airbnb* |
 | **Buscador institucional** | Overlay a pantalla completa, búsquedas frecuentes, resultados por tipo | *harvard.edu* |
 
 **En una frase:** *Stripe × Harvard Gazette con el pulso de Nike Training.*
@@ -25,46 +25,50 @@
 
 ## 2. Color
 
-### Marca
+### Marca (los colores del escudo)
 | Token | Hex | Uso |
 |---|---|---|
-| `violet-500` · **Primario** | `#7761FF` | Palabra destacada en títulos grandes, íconos, decoración, gradientes |
-| `violet-600` | `#5B42F5` | Texto/enlaces sobre blanco y fondos con texto blanco chico (contraste 6:1) |
-| `violet-700` | `#4A2FDB` | Hover, final de gradientes |
-| `coral-500` · **Acento** | `#FF554E` | Solo dentro del gradiente de marca (menú móvil). No como color suelto |
-| `color-footer` | `#3C3182` | Footer (índigo del sitio original) |
-| `ink-950` | `#0D0C12` | Solo el visor de fotos. **Nada de secciones negras** (la barra lateral del panel es clara: `color-bg-tint`) |
+| `blue-500` · **Primario** | `#3F6DC0` | Palabra destacada en títulos, íconos, decoración (5:1 sobre blanco) |
+| `blue-600` | `#2C56A3` | Texto/enlaces sobre blanco, botones (7:1) |
+| `blue-700` | `#234685` | Hover, final de gradientes |
+| `blue-800` | `#1C3768` | Aro del escudo |
+| `blue-900` · `color-footer` | `#142A50` | Fondo del escudo: footer, navbar al bajar, `theme-color` |
+| `red-600` · **Acento** | `#A8141B` | La «I» del escudo. Escaso: final del degradé de marca, rastro en las bandas oscuras, botones de acento |
+| `ink-950` | `#0C0E13` | Solo el visor de fotos. **Nada de secciones negras** (la barra lateral del panel es clara: `color-bg-tint`) |
 | `danger-700` | `#B42828` | Texto rojo sobre fondos claros (errores del panel). `danger-500` queda para bordes e íconos |
-| `ink-700` | `#403D52` | Texto de párrafos (10:1 sobre blanco) |
-| `ink-600` | `#57536B` | Texto secundario (`color-text-muted`) |
+| `ink-700` | `#3D4453` | Texto de párrafos (10:1 sobre blanco) |
+| `ink-600` | `#545C6E` | Texto secundario (`color-text-muted`) |
 
-Escalas completas (50→950) en `tokens.json`. Neutros con un leve tinte violeta (nunca gris puro).
+Escalas completas (50→950) en `tokens.json`. Neutros con un leve tinte azul (nunca gris puro).
 
-**Paleta corta, sitio claro** (como el sitio original): blanco + tinte violeta suave, violeta de marca y la textura violeta `fx/fondo.webp`. Las bandas de color (`Section tone="dark"|"brand"`) usan `--surface-fx`, no negro. No sumar colores nuevos (rojos, dorados, grises oscuros).
+**Paleta corta, sitio claro**: blanco + tinte azul suave, azul de marca y las bandas azul marino (`--surface-fx`). Las bandas de color (`Section tone="dark"|"brand"`) usan `--surface-fx`, no negro. El rojo nunca como fondo grande. No sumar colores nuevos (dorados, verdes, grises oscuros).
 
 ### Gradientes firma
-- **Marca**: `linear-gradient(120deg, #7761FF, #FF554E)` → menú móvil (translúcido, con desenfoque).
-- **Primario (botones)**: `linear-gradient(90deg, #7761FF, #5B42F5 45%, #4B2EFF)` → el del sitio original; el texto cae sobre `violet-600` (AA).
-- **Textura violeta** (`--surface-fx`): `fx/fondo.webp` con 20 % de negro → bandas de datos, validez, CTA final, cabecera de disertantes.
-- **Overlay de imagen**: `linear-gradient(135deg, rgba(13,12,18,.86), rgba(119,97,255,.62))` → toda foto con texto encima.
+- **Marca**: `linear-gradient(120deg, #142A50, #2C56A3 70%, #A8141B)` → franjas finas (pie de las imágenes para redes).
+- **Navbar al bajar**: `linear-gradient(120deg, #142A50, #234685)`, **opaco** (sin desenfoque: con el modo oscuro forzado de Samsung Internet un fondo translúcido dejaba ver la página).
+- **Primario (botones)**: `linear-gradient(90deg, #2C56A3, #234685)` → texto blanco AA en todo el ancho.
+- **Bandas oscuras** (`--surface-fx`): `#0C1A34 → #1C3768` a 135° + luz azul arriba a la izquierda y un rastro rojo abajo a la derecha → bandas de datos, validez, CTA final, cabecera de disertantes, menú móvil (opaco).
+- **Overlay de imagen**: `linear-gradient(135deg, rgba(12,26,52,.88), rgba(44,86,163,.6))` → toda foto con texto encima.
+
+El sitio declara `color-scheme: only light` (meta y `html`): el modo oscuro automático de Chrome/Samsung Internet no lo repinta.
 
 ### Formas de fondo (`AmbientShapes`)
-Para que el blanco no sea plano: círculos y píldoras lila con un halo violeta difuso asoman por los costados, alternando lados, detrás del contenido (`src/components/layout/AmbientShapes.tsx`, montado en `Layout`).
-- **Solo en zonas claras**: secciones con `data-surface="light"` contiguas. Cada forma y su halo entran completos en la zona (32 px de aire), así nunca quedan cortadas por una banda violeta, una foto o el footer. Las secciones claras son translúcidas (`--color-bg-subtle-glass`, `--color-bg-tint-glass`) para que las formas crucen de una a otra.
-- **Colores**: `--ambient-circle` (violet-200 → 100), `--ambient-pill` (violet-300 al 60 % → 100, rotada ±18°), `--ambient-glow` (violet-500 al 30 %, radial). Centro visible ≈ R 205–215 sobre blanco: más claro no se ve, más oscuro compite.
+Para que el blanco no sea plano: círculos y píldoras celestes con un halo azul difuso asoman por los costados, alternando lados, detrás del contenido (`src/components/layout/AmbientShapes.tsx`, montado en `Layout`).
+- **Solo en zonas claras**: secciones con `data-surface="light"` contiguas. Cada forma y su halo entran completos en la zona (32 px de aire), así nunca quedan cortadas por una banda azul, una foto o el footer. Las secciones claras son translúcidas (`--color-bg-subtle-glass`, `--color-bg-tint-glass`) para que las formas crucen de una a otra.
+- **Colores**: `--ambient-circle` (blue-200 → 100), `--ambient-pill` (blue-300 al 60 % → 100, rotada ±18°), `--ambient-glow` (blue-500 al 30 %, radial). Centro visible ≈ R 205–215 sobre blanco: más claro no se ve, más oscuro compite.
 - **Medidas**: escritorio 420–500 px (se achican hasta 0,65× para entrar en un hueco), 55 % fuera de pantalla, 700 px de aire entre formas del mismo costado; celular 0,55× y 62 % afuera, 1100 px de aire. Halo de 1,5× (círculo) / 1,1× (píldora).
 - **Esquivan** botones y enlaces (32 px de aire) y toda superficie con fondo propio: tarjetas, paneles, fotos (el halo no puede tocarlas; si no, se vería cortado en línea recta). Lo sticky cuenta con todo su recorrido. Por eso una página llena de tarjetas de borde a borde puede quedar sin formas: es preferible a un halo cortado.
 - **Movimiento**: deriva muy lenta (±18 px, 22–34 s) solo en escritorio con mouse; quietas con movimiento reducido.
 - No sumar otras formas sueltas en componentes.
 
 ### Reglas de contraste (WCAG 2.2 AA)
-- `#7761FF` **solo** en texto ≥ 24 px (o 19 px bold) o decorativo. Para texto chico usar `violet-600`.
-- Texto blanco sobre coral: usar `coral-700` o el gradiente de acento.
+- `blue-500` alcanza AA (5:1), pero para texto chico y enlaces usar `blue-600` (7:1).
+- Texto blanco sobre rojo: `red-600`/`red-700` o el gradiente de acento.
 - Párrafos: `ink-700` sobre blanco; en fondos oscuros, blanco al 90 % (secundario 75 %). Sin transparencias más fuertes.
 - Verde para texto: `success-700` (#0B6B35), nunca suelto.
 
 ### Foco y accesibilidad
-- Contorno de foco `--color-focus` (violeta) que pasa a **blanco** en `.on-dark`, el navbar sobre foto/degradé y el acordeón de marca. Tarjetas-enlace: contorno `violet-600` solo con teclado (mixin `card-focus`, `:has(:focus-visible)`). Campos de texto: borde + anillo de 1 px `violet-600`.
+- Contorno de foco `--color-focus` (azul) que pasa a **blanco** en `.on-dark`, el navbar sobre foto/degradé y el acordeón de marca. Tarjetas-enlace: contorno `blue-600` solo con teclado (mixin `card-focus`, `:has(:focus-visible)`). Campos de texto: borde + anillo de 1 px `blue-600`.
 - Menú móvil y buscador: el resto de la página queda `inert` mientras están abiertos y el foco vuelve al botón que los abrió (`useModalFocus`). Botones que se deshabilitan sin salir de la pantalla (flechas del carrusel, «Verificar») usan `aria-disabled` para no perder el foco.
 - Enlaces que abren otra pestaña lo avisan a lectores de pantalla (`Button`, `IconButton`, Markdown y el footer lo hacen solos). Resultados filtrados: un `role="status"` siempre montado con la cantidad.
 - Atajo del buscador: solo Ctrl/⌘+K (el botón Buscar muestra «Ctrl K» o «⌘K»). Nada de atajos de una sola tecla: se disparan sin querer con dictado por voz (WCAG 2.1.4).
@@ -81,11 +85,11 @@ Para que el blanco no sea plano: círculos y píldoras lila con un halo violeta 
 | Lectura | **Merriweather** | 300 cuerpo · 700 negrita | Interlineado 1.7 |
 | Datos/código | sistema monoespaciado | 400 | Numeración de temario, URLs |
 
-**Firma tipográfica:** título liviano (300) con **una** palabra en semibold violeta → «Bienvenido al **I.S.E.F.**», «Las **últimas noticias**». En código: `title="Bienvenido al *I.S.E.F.*"`.
+**Firma tipográfica:** título liviano (300) con **una** palabra en semibold azul → «Bienvenido al **I.S.E.F.**», «Las **últimas noticias**». En código: `title="Bienvenido al *I.S.E.F.*"`.
 
 **Sin antetítulos decorativos.** Nada de etiquetas chicas en MAYÚSCULAS espaciadas arriba del título. El prop `eyebrow` queda solo para un dato real (resolución ministerial, fecha de una novedad) y se ve como texto chico normal.
 
-**Sin líneas separadoras.** Se separa con espacio y fondos alternados (tinte violeta), no con `hr`/bordes.
+**Sin líneas separadoras.** Se separa con espacio y fondos alternados (tinte azul), no con `hr`/bordes.
 
 **Nombre en el navbar:** semibold en blanco sobre la foto; regular cuando el navbar es claro.
 
@@ -98,8 +102,8 @@ Escala fluida (clamp): display 44→88 px · h1 34→64 · h2 28→46 · h3 20�
 - Un solo ancho de contenido: **1400 px**, el mismo borde que el navbar y el footer (texto largo 72ch). Excepción: páginas de tarjetas de borde a borde (contacto, novedades) usan `Section width="narrow"` (1120 px) para que las formas de fondo tengan lugar. Gutter 16→48 px. Los bloques internos llenan el contenedor (nada de anchos máximos sueltos) y las grillas de dos columnas usan las proporciones de `Feature` (1.15fr / 1fr) para que las columnas coincidan entre secciones.
 - Radios: 6 · 10 (botones, inputs) · 16 · **24 (tarjetas)** · pill.
 - Sombras suaves; botones con la sombra del original (`0 10px 15px rgb(0 0 0/.1)`).
-- **Tarjetas blancas** (disertantes, sedes, preguntas frecuentes, novedades planas, conferencias, pasos de inscripción, datos de la carrera y del curso, resultado de /verificar): mixin `card-surface` → borde `--color-border-card` (violet-200) y una sola sombra `--shadow-card` teñida con el índigo del footer (`--shadow-card-hover` al pasar el mouse si son enlace). Con el borde gris de antes casi no se separaban del fondo teñido.
-- **Retratos de disertantes** sobre un degradé lila (violet-50 → 100) con `mix-blend-mode: multiply`: el fondo blanco de las fotos se funde con el lila.
+- **Tarjetas blancas** (disertantes, sedes, preguntas frecuentes, novedades planas, conferencias, pasos de inscripción, datos de la carrera y del curso, resultado de /verificar): mixin `card-surface` → borde `--color-border-card` (blue-200) y una sola sombra `--shadow-card` teñida con el azul del footer (`--shadow-card-hover` al pasar el mouse si son enlace). Con el borde gris de antes casi no se separaban del fondo teñido.
+- **Retratos de disertantes** sobre un degradé celeste (blue-50 → 100) con `mix-blend-mode: multiply`: el fondo blanco de las fotos se funde con el celeste.
 - **Hover solo en lo clickeable.** Tarjetas informativas sin sombra ni elevación al pasar el mouse.
 - Fotos de `Feature`: lado de afuera en píldora (radio 10rem), como el original.
 
@@ -129,7 +133,7 @@ Es una web institucional: las **entradas son lentas y elegantes** (como el sitio
 - *Botones* (Button, IconButton, chips, botones del navbar, WhatsApp, botones del admin): mixin `press-bounce` → al pasar el mouse crecen a `scale-hover` con `ease-bounce`; al presionar se hunden a `scale-press` en 150 ms y vuelven rebotando. Usa la propiedad `scale` (no pisa otros `transform`) y se suma `$press-transition` al `transition` del componente. Los colores del botón no cambian (el primario se aclara apenas; la flecha avanza).
 - *Tarjetas-enlace* (CourseCard, NewsCard, SpeakerCard): `card-hover` (sube 2 px + sombra) y la foto se acerca lentamente.
 - *Enlaces de texto*: subrayado tenue que se completa (`a` global); los que no van subrayados (footer, migas, menú) usan `underline-on-hover` (el subrayado aparece con fundido).
-- *Filas y disparadores* (acordeón, resultados, filas del admin, pestañas): tinte violeta suave de fondo o color. Nada de rojo; hover solo en lo clickeable.
+- *Filas y disparadores* (acordeón, resultados, filas del admin, pestañas): tinte azul suave de fondo o color. Nada de rojo; hover solo en lo clickeable.
 - *Solo con mouse*: todo hover que cambia fondo, color o posición va dentro de `@media (hover: hover)` (mixin `hover`); en pantallas táctiles quedaba «pegado» después de tocar. Los desplazamientos (flechas que avanzan, fotos que se acercan) además piden `pointer: fine` y respetan reducir movimiento.
 
 **Resultados que cambian por una acción** (filtros de especializaciones/novedades, buscadores de preguntas, conferencias, CV «ver todos»): mixin `results-in` (cada ítem con `--i` para el escalonado) y `results-pending` (los resultados viejos se atenúan mientras se escribe). Novedades usa la entrada lenta (`Reveal`) solo en la primera carga.
@@ -150,11 +154,11 @@ Es una web institucional: las **entradas son lentas y elegantes** (como el sitio
 | `SectionHeader` | align start/center | Título con énfasis + bajada |
 | `PageHero` | md · lg · full; start/center | Imagen + overlay; breadcrumbs |
 | `Feature` | normal · reverse | Texto + imagen con el lado de afuera en píldora |
-| `Accordion` | card · brand · plain | Accesible, animación de altura. `brand` usa violet-600 → 700 (no el degradé de botón): el texto blanco chico llega a AA |
-| `Carousel` | light · dark | Scroll-snap nativo (sin librerías). Puntos inactivos violet-400 (3:1), activo violet-500 y más largo |
-| `Badge` | violet · white · neutral · light · success | `white` para «¡Nuevo!» sobre fotos |
+| `Accordion` | card · brand · plain | Accesible, animación de altura. `brand` usa blue-600 → 700 (no el degradé de botón): el texto blanco chico llega a AA |
+| `Carousel` | light · dark | Scroll-snap nativo (sin librerías). Puntos inactivos blue-400 (3:1), activo blue-500 y más largo |
+| `Badge` | blue · white · neutral · light · success | `white` para «¡Nuevo!» sobre fotos |
 | `Dialog` | sm · md · lg · full; default · dark | `<dialog>` nativo; entra y sale animado (clase `closing`) |
-| `ChipGroup` (`Chips.tsx`) | align start · center; chip «Todos» opcional; `count` por opción | Filtros en píldora (`role="group"` + `aria-pressed`). Activo: relleno `violet-600`; hover: borde `violet-400`, tinte `violet-50` y crecimiento con rebote. Tocar el activo lo apaga |
+| `ChipGroup` (`Chips.tsx`) | align start · center; chip «Todos» opcional; `count` por opción | Filtros en píldora (`role="group"` + `aria-pressed`). Activo: relleno `blue-600`; hover: borde `blue-400`, tinte `blue-50` y crecimiento con rebote. Tocar el activo lo apaga |
 | `IconButton` | ghost · outline · overlay; tone default · brand · light; sm 36 (44 táctil) · md 44 · lg 48 | Botón redondo de solo ícono; `label` obligatorio (aria-label). Con `href` es un `<a>` (redes) |
 | `CardGrid` | cols 2 · 3 · 4; `dense`; `reveal`; as div · ul · ol | 1 columna en móvil → 2 desde md → 3 desde xl (`dense`: 2 desde sm, 3 desde lg). Estira las tarjetas de una fila al mismo alto. Las grillas asimétricas siguen con CSS propio |
 | Tarjetas | `CourseCard` · `NewsCard` (overlay/plain) · `SpeakerCard` | Toda la tarjeta es clickeable |

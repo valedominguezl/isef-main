@@ -151,7 +151,7 @@ const mermaid = `flowchart LR
   classDef ok fill:#e8f8ee,stroke:#12a150,color:#0b4d27
   classDef warn fill:#fff6e0,stroke:#c98a00,color:#5c3f00
   classDef bad fill:#ffe9e8,stroke:#d93636,color:#6b1111
-  classDef core fill:#7761ff,stroke:#4a2fdb,color:#fff`;
+  classDef core fill:#2c56a3,stroke:#142a50,color:#fff`;
 
 const md = `# Mapa de salud del proyecto
 

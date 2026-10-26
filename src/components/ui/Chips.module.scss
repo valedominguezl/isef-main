@@ -44,15 +44,15 @@
   /* Solo con mouse: al tocar el chip activo para apagarlo quedaba medio pintado */
   @media (hover: hover) {
     &:hover:not([aria-pressed='true']) {
-      border-color: var(--violet-400);
-      background: var(--violet-50);
-      color: var(--violet-700);
+      border-color: var(--blue-400);
+      background: var(--blue-50);
+      color: var(--blue-700);
     }
   }
 
   &[aria-pressed='true'] {
-    background: var(--violet-600);
-    border-color: var(--violet-600);
+    background: var(--blue-600);
+    border-color: var(--blue-600);
     color: var(--color-on-dark);
   }
 }
