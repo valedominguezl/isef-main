@@ -460,6 +460,7 @@ export const SINGLETONS: SingletonConfig[] = [
           { type: 'group', name: 'analytics', label: 'Analítica', fields: [
             { type: 'text', name: 'ga4', label: 'ID de Google Analytics 4' },
             { type: 'text', name: 'gtm', label: 'ID de Google Tag Manager' },
+            { type: 'text', name: 'clarity', label: 'ID de proyecto de Microsoft Clarity' },
           ] },
         ],
       },

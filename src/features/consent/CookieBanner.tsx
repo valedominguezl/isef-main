@@ -18,7 +18,8 @@ const CATEGORIAS = [
   {
     key: 'analitica',
     titulo: 'Analítica',
-    texto: 'Google Analytics 4 nos ayuda a entender qué páginas se visitan para mejorar el sitio. Los datos son anónimos (IP anonimizada).',
+    texto:
+      'Google Analytics 4 y Microsoft Clarity nos ayudan a entender qué páginas se visitan y cómo se usan, para mejorar el sitio. Los datos son anónimos y lo que escribís en formularios no se registra.',
   },
   {
     key: 'publicidad',

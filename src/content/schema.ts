@@ -238,7 +238,7 @@ export const sitioSchema = z.object({
     }),
   ),
   redes: z.array(z.object({ red: z.enum(['facebook', 'instagram', 'youtube', 'tiktok']), etiqueta: z.string(), url: z.string().url() })),
-  analytics: z.object({ ga4: z.string(), gtm: z.string() }),
+  analytics: z.object({ ga4: z.string(), gtm: z.string(), clarity: z.string().optional() }),
 });
 
 /* -------------------- Textos y fotos de las páginas (content/paginas) -------------------- */

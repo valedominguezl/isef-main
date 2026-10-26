@@ -52,7 +52,9 @@ export function Component() {
             </li>
             <li>
               <strong>Analítica (opcional):</strong> Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) con IP anonimizada, para saber
-              qué páginas se visitan y mejorar el sitio. Se conservan hasta 14 meses. Solo se activa si la aceptás.
+              qué páginas se visitan y mejorar el sitio. Se conservan hasta 14 meses. Microsoft Clarity (<code>_clck</code>,{' '}
+              <code>_clsk</code>) registra de forma anónima clics, desplazamientos y movimientos en la página para detectar partes confusas; oculta
+              lo que se escribe en formularios. Se conservan hasta 12 meses. Solo se activan si las aceptás.
             </li>
             <li>
               <strong>Publicidad (opcional):</strong> Google Tag Manager puede activar etiquetas para medir campañas de difusión de inscripciones.
@@ -66,8 +68,8 @@ export function Component() {
 
           <h2>5. Transferencia internacional</h2>
           <p>
-            Google Analytics y Google Tag Manager son servicios de Google LLC, que puede procesar los datos en servidores fuera de la Argentina
-            (por ejemplo, en Estados Unidos). Solo ocurre si aceptás esas categorías.
+            Google Analytics y Google Tag Manager son servicios de Google LLC, y Clarity de Microsoft Corporation; pueden procesar los datos en
+            servidores fuera de la Argentina (por ejemplo, en Estados Unidos). Solo ocurre si aceptás esas categorías.
           </p>
 
           <h2>6. Cómo gestionar tus preferencias</h2>

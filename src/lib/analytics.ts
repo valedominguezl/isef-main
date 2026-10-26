@@ -1,6 +1,6 @@
 /**
  * Analítica respetando el consentimiento (modo básico: nada se carga hasta aceptar).
- * GA4 → categoría "analítica". GTM (píxeles/remarketing) → categoría "publicidad".
+ * GA4 y Microsoft Clarity → categoría "analítica". GTM (píxeles/remarketing) → categoría "publicidad".
  */
 import { sitio } from '@/content';
 import { BLOQUE_VISTA } from '@/features/vista-previa/vistaPrevia';
@@ -9,6 +9,7 @@ declare global {
   interface Window {
     dataLayer: unknown[];
     gtag?: (...args: unknown[]) => void;
+    clarity?: ((...args: unknown[]) => void) & { q?: unknown[] };
   }
 }
 
@@ -19,6 +20,7 @@ export interface ConsentState {
 
 let gaLoaded = false;
 let gtmLoaded = false;
+let clarityLoaded = false;
 
 function ensureGtag() {
   window.dataLayer = window.dataLayer || [];
@@ -53,6 +55,18 @@ export function applyConsent(c: ConsentState) {
     window.gtag!('js', new Date());
     window.gtag!('config', sitio.analytics.ga4, { anonymize_ip: true });
     loadScript(`https://www.googletagmanager.com/gtag/js?id=${sitio.analytics.ga4}`);
+  }
+  // Clarity: grabaciones de sesión y mapas de calor. Sin ID cargado en el panel no se activa
+  const clarityId = sitio.analytics.clarity ?? '';
+  if (c.analitica && clarityId && !clarityLoaded) {
+    clarityLoaded = true;
+    window.clarity =
+      window.clarity ||
+      function clarity() {
+        // eslint-disable-next-line prefer-rest-params
+        (window.clarity!.q = window.clarity!.q || []).push(arguments);
+      };
+    loadScript(`https://www.clarity.ms/tag/${clarityId}`);
   }
   if (c.publicidad && !gtmLoaded) {
     gtmLoaded = true;

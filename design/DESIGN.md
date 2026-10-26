@@ -167,4 +167,4 @@ Es una web institucional: las **entradas son lentas y elegantes** (como el sitio
 - **Plantilla OG**: `public/og-default.jpg` (1200×630) es la referencia.
 - Nunca: logo deformado, más de 2 colores de acento, texto sobre foto sin overlay.
 
-Logo: escudo circular con la «I» roja (`src/assets/logo.webp`). Usarlo sobre fondo oscuro o blanco, con aire de al menos ½ del diámetro.
+Logo: escudo circular en relieve con la «I» roja, recortado al círculo y sin las asas doradas (`src/assets/logo.webp`, y en `public/` el favicon, `icon-192/512.png` y `og-default.jpg`). Es el mismo en todo el sitio, el panel y los certificados. Usarlo sobre fondo oscuro o blanco, con aire de al menos ½ del diámetro.
