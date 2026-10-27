@@ -461,6 +461,7 @@ export const SINGLETONS: SingletonConfig[] = [
             { type: 'text', name: 'ga4', label: 'ID de Google Analytics 4' },
             { type: 'text', name: 'gtm', label: 'ID de Google Tag Manager' },
             { type: 'text', name: 'clarity', label: 'ID de proyecto de Microsoft Clarity' },
+            { type: 'url', name: 'tablero', label: 'Enlace al tablero de Looker Studio', help: 'Se abre desde «Estadísticas». Compartilo en Looker solo con las cuentas de Google del equipo: este enlace queda en el repositorio, que es público.' },
           ] },
         ],
       },

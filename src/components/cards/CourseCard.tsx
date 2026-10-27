@@ -32,7 +32,7 @@ export default function CourseCard({ curso, headingLevel = 3, size = 'md' }: Pro
           <Link
             to={`/especializaciones/${curso.slug}`}
             className={styles.link}
-            onClick={() => track('curso_ver_mas', { curso: curso.titulo })}
+            onClick={() => track('curso_ver_mas', { curso: curso.slug })}
           >
             {curso.titulo}
           </Link>

@@ -22,9 +22,10 @@ export function Component() {
     setType(null);
     let cancel = false;
     search(q).then((r) => {
-      if (!cancel) setHits(r);
+      if (cancel) return;
+      setHits(r);
+      if (q) track('search', { search_term: q, resultados: r.length });
     });
-    if (q) track('search', { search_term: q });
     return () => {
       cancel = true;
     };

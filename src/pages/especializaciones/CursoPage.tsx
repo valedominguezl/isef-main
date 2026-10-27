@@ -163,7 +163,7 @@ export function Component() {
               onClick={() =>
                 track("whatsapp_click", {
                   origen: "curso",
-                  curso: curso.titulo,
+                  curso: curso.slug,
                 })
               }
             >
@@ -349,7 +349,7 @@ export function Component() {
                 onClick={() =>
                   track("whatsapp_click", {
                     origen: "curso_aside",
-                    curso: curso.titulo,
+                    curso: curso.slug,
                   })
                 }
               >

@@ -21,6 +21,11 @@ export interface ConsentState {
 let gaLoaded = false;
 let gtmLoaded = false;
 let clarityLoaded = false;
+/**
+ * Eventos llamados antes de la primera elección de cookies. Al cargar una página de cero, el efecto de la
+ * página (p. ej. la búsqueda de /buscar?q=) corre antes que el del consentimiento y el evento se perdía.
+ */
+let pendientes: [string, Record<string, unknown>][] | null = [];
 
 function ensureGtag() {
   window.dataLayer = window.dataLayer || [];
@@ -73,15 +78,24 @@ export function applyConsent(c: ConsentState) {
     window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
     loadScript(`https://www.googletagmanager.com/gtm.js?id=${sitio.analytics.gtm}`);
   }
+  // Lo que se midió antes de conocer la elección sale ahora (si aceptó) o se descarta; de acá en más ya no se guarda
+  if (pendientes && gaLoaded) for (const [event, params] of pendientes) window.gtag!('event', event, params);
+  pendientes = null;
 }
 
 /** Evento de analítica. No hace nada si no hubo consentimiento. */
 export function track(event: string, params: Record<string, unknown> = {}) {
-  if (typeof window === 'undefined' || !gaLoaded || !window.gtag) return;
+  if (typeof window === 'undefined') return;
+  if (!gaLoaded || !window.gtag) {
+    if (pendientes && pendientes.length < 20) pendientes.push([event, params]);
+    return;
+  }
   window.gtag('event', event, params);
 }
 
 export function trackPageView(path: string) {
   if (typeof window === 'undefined' || !gaLoaded || !window.gtag) return;
-  window.gtag('event', 'page_view', { page_path: path, page_location: window.location.href, page_title: document.title });
+  // En la página de un curso va también su slug: así visitas, clics y consultas se cruzan por `curso` (docs/ESTADISTICAS.md)
+  const curso = /^\/especializaciones\/([^/]+)/.exec(path)?.[1];
+  window.gtag('event', 'page_view', { page_path: path, page_location: window.location.href, page_title: document.title, ...(curso && { curso }) });
 }

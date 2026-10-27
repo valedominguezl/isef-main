@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import { AnimatePresence, m } from 'motion/react';
-import { CheckCircle2, CircleDashed, ExternalLink, LayoutDashboard, LogOut, Menu, UploadCloud, X, XCircle } from 'lucide-react';
+import { BarChart3, CheckCircle2, CircleDashed, ExternalLink, LayoutDashboard, LogOut, Menu, UploadCloud, X, XCircle } from 'lucide-react';
 import logo from '@/assets/logo.webp';
 import { DURATION, EASE_OUT, exit } from '@/lib/motion';
 import { useModalFocus } from '@/lib/useModalFocus';
@@ -36,6 +36,9 @@ function PanelNav({ label }: { label: string }) {
     <nav aria-label={label}>
       <NavLink to="/admin" end className={link}>
         <LayoutDashboard size={18} aria-hidden /> Inicio
+      </NavLink>
+      <NavLink to="/admin/estadisticas" className={link}>
+        <BarChart3 size={18} aria-hidden /> Estadísticas
       </NavLink>
       <p className={styles.navGroup}>Principal</p>
       {COLLECTIONS.filter((c) => !c.hidden).map(({ key, label, icon: Icon }) => (

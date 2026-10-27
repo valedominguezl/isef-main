@@ -7,6 +7,7 @@ import Dashboard from './views/Dashboard';
 import CollectionList from './views/CollectionList';
 import EntryEditor from './views/EntryEditor';
 import SingletonEditor from './views/SingletonEditor';
+import Estadisticas from './views/Estadisticas';
 import { SkeletonShell } from './views/Skeleton';
 
 // Cada pantalla se monta de cero al cambiar de colección/entrada: nada del estado anterior se arrastra
@@ -30,6 +31,7 @@ function AdminRoutes() {
         <Route path="c/:key" element={<Keyed.List />} />
         <Route path="c/:key/:slug" element={<Keyed.Entry />} />
         <Route path="s/:key" element={<Keyed.Singleton />} />
+        <Route path="estadisticas" element={<Estadisticas />} />
         <Route path="*" element={<Dashboard />} />
       </Routes>
     </Shell>

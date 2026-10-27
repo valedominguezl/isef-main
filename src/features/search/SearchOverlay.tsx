@@ -59,11 +59,13 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
     };
   }, [q]);
 
+  // Se mide la búsqueda ya resuelta, con cuántos resultados dio (0 = algo que buscan y el sitio no tiene)
   useEffect(() => {
-    if (q.trim().length < 3) return;
-    const t = setTimeout(() => track('search', { search_term: q.trim() }), 1200);
+    const term = settled.trim();
+    if (term.length < 3) return;
+    const t = setTimeout(() => track('search', { search_term: term, resultados: hits.length }), 850);
     return () => clearTimeout(t);
-  }, [q]);
+  }, [settled, hits]);
 
   const terms = useMemo(() => settled.trim().split(/\s+/), [settled]);
   const pending = q.trim() !== settled.trim();
