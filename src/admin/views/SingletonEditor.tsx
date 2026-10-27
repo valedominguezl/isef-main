@@ -70,7 +70,7 @@ export default function SingletonEditor() {
 
   return (
     <>
-      <div className={styles.pageHead}>
+      <div className={`${styles.pageHead} ${styles.pageHeadFija}`}>
         <div className={styles.titleRow}>
           <span className={styles.titleIcon} aria-hidden>
             <cfg.icon size={22} />

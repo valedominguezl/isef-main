@@ -312,7 +312,7 @@ export default function EntryEditor() {
 
   return (
     <>
-      <div className={styles.pageHead}>
+      <div className={`${styles.pageHead} ${styles.pageHeadFija}`}>
         <div>
           <Link to={`/admin/c/${col.key}`} className={styles.back}>
             <ArrowLeft size={16} aria-hidden /> {col.label}
