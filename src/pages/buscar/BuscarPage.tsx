@@ -4,7 +4,7 @@ import { Search } from 'lucide-react';
 import { search, snippet, type Hit } from '@/features/search/engine';
 import Highlight from '@/features/search/Highlight';
 import { TYPE_LABELS, TYPE_ORDER, type SearchType } from '@/features/search/types';
-import { track } from '@/lib/analytics';
+import { trackSearch } from '@/features/search/trackSearch';
 import Seo from '@/components/seo/Seo';
 import Section from '@/components/ui/Section';
 import ChipGroup from '@/components/ui/Chips';
@@ -24,7 +24,7 @@ export function Component() {
     search(q).then((r) => {
       if (cancel) return;
       setHits(r);
-      if (q) track('search', { search_term: q, resultados: r.length });
+      if (q) trackSearch(q, r.length);
     });
     return () => {
       cancel = true;

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { AnimatePresence, m } from 'motion/react';
 import { ArrowRight, CornerDownLeft, Search, X } from 'lucide-react';
-import { track } from '@/lib/analytics';
+import { trackSearch } from './trackSearch';
 import { EASE_EMPHASIZED, EASE_EXIT } from '@/lib/motion';
 import { useModalFocus } from '@/lib/useModalFocus';
 import { loadIndex, search, snippet, type Hit } from './engine';
@@ -63,7 +63,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
   useEffect(() => {
     const term = settled.trim();
     if (term.length < 3) return;
-    const t = setTimeout(() => track('search', { search_term: term, resultados: hits.length }), 850);
+    const t = setTimeout(() => trackSearch(term, hits.length), 850);
     return () => clearTimeout(t);
   }, [settled, hits]);
 
