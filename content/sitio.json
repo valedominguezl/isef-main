@@ -19,7 +19,6 @@
     },
     {
       "valor": 4,
-      "prefijo": "",
       "etiqueta": "años de carrera con título oficial"
     },
     {
@@ -122,6 +121,7 @@
   "analytics": {
     "ga4": "G-L4QFYTY1XM",
     "gtm": "GTM-KFMMQ36H",
-    "clarity": "z3xsv5ftmq"
+    "clarity": "z3xsv5ftmq",
+    "tablero": "https://datastudio.google.com/reporting/81f1c168-3ef7-4f51-9bb9-24798a02da27"
   }
 }
