@@ -38,7 +38,7 @@ Desde el 5/10/2026 el campus Chamilo vive en un **KVM 1** (`srv2036356.hstgr.clo
 - Tema visual: `isefsanluis` (copia de `chamilo` con los colores del escudo y su logo), en `web/css/themes/` y `app/Resources/public/css/themes/`. Se activa con `settings_current.stylesheets`; para volver al de fábrica: `UPDATE settings_current SET selected_value='chamilo' WHERE variable='stylesheets'`. Respaldo previo: `/root/backups/tema-antes-2026-10-26.tgz`. Cloudflare guarda el CSS del campus 4 h: si un cambio no se ve, purgar la caché o renombrar el tema.
 - Seguridad: SSH solo con clave, `ufw` (22/80/443), swap de 2 GB, actualizaciones automáticas.
 - Certificado Let's Encrypt `campus.isefsanluis.net` (certbot.timer lo renueva solo).
-- Backup diario 04:30 UTC: `/usr/local/bin/backup-chamilo` (cron en `/etc/cron.d/backup-chamilo`) → `/root/backups` (base 14 días, archivos los domingos, 4 semanas).
+- Backups: los del VPS de Hostinger, nada más. El 29/10/2026 se sacó el backup diario propio (`/usr/local/bin/backup-chamilo` y su cron) con sus copias: llenaba el disco y Hostinger ya respalda el VPS. En `/root/backups` quedan solo los respaldos sueltos de antes de cambios puntuales.
 - Correo: `msmtp` como `sendmail` vía Gmail (`/etc/msmtprc`, clave de aplicación en `/etc/msmtp-gmail.pass`, log en `/var/log/msmtp.log`). El aviso de cuentas nuevas va al mail del usuario `admin` de Chamilo.
 
 Plan B del sitio (si alguna vez hubiera que servirlo desde un VPS): [`deploy/nginx/isefsanluis.net.conf`](../deploy/nginx/isefsanluis.net.conf) reproduce las reglas de `_redirects`/`_headers` para nginx, y el deploy por rsync está en el historial de `deploy.yml`.
