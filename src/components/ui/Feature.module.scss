@@ -110,3 +110,8 @@
 .cutout .media img {
   border-radius: 0;
 }
+
+/* Video en lugar de la foto: 16:9, sin el recorte en píldora de las fotos */
+.mediaVideo {
+  align-self: center;
+}

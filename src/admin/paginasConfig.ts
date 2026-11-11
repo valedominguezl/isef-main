@@ -20,6 +20,9 @@ import fotoEspecIntro from '@/assets/media/especializaciones/intro.webp';
 import fotoInscripciones from '@/assets/media/inscripciones/main.webp';
 import fotoNovedades from '@/assets/media/noticias/main.webp';
 
+/** Ayuda del campo de video (el video no se sube: se pega el link). Vive acá porque config.ts importa este archivo. */
+export const AYUDA_VIDEO = 'Link de YouTube (puede ser «no listado»). Copialo del navegador o del botón «Compartir».';
+
 /** Cabecera de la página: título, bajada y foto de fondo. */
 function hero({ subtitulo = true, ayudaSubtitulo, ayudaFoto, help, actual }: { subtitulo?: boolean; ayudaSubtitulo?: string; ayudaFoto?: string; help?: string; actual?: string } = {}): Field {
   return {
@@ -50,7 +53,7 @@ function hero({ subtitulo = true, ayudaSubtitulo, ayudaFoto, help, actual }: { s
 function bloque(
   name: string,
   label: string,
-  { texto = true, foto, actual, rows = 4, help, alt }: { texto?: boolean; foto?: string; actual?: string; rows?: number; help?: string; alt?: boolean } = {},
+  { texto = true, foto, actual, rows = 4, help, alt, video }: { texto?: boolean; foto?: string; actual?: string; rows?: number; help?: string; alt?: boolean; video?: boolean } = {},
 ): Field {
   return {
     type: 'group',
@@ -72,6 +75,9 @@ function bloque(
               help: 'Qué se ve, en una frase (la leen quienes usan lector de pantalla). Completala si cambiás la foto.',
             } satisfies Field,
           ]
+        : []),
+      ...(video
+        ? [{ type: 'url', name: 'video', label: 'Video (en lugar de la foto)', placeholder: 'https://www.youtube.com/watch?v=…', help: `${AYUDA_VIDEO} Si hay video, se muestra el video y no la foto.` } satisfies Field]
         : []),
     ],
   };
@@ -114,7 +120,7 @@ export const PAGINAS: PaginaConfig[] = [
   pagina('inicio', 'Inicio', 'Página de inicio', '/', House, [
     hero({ ayudaSubtitulo: 'El botón de abajo cambia solo según las inscripciones.', actual: fotoInicio }),
     bloque('inscribite', '«Inscribite en el profesorado»', { rows: 2, help: 'Las fechas y datos de cursado salen de Inscripciones y del Plan de estudios.' }),
-    bloque('bienvenida', '«Te damos la bienvenida»', { foto: 'Se recorta en 4:3.', actual: fotoInicioBienvenida, alt: true }),
+    bloque('bienvenida', '«Te damos la bienvenida»', { foto: 'Se recorta en 4:3.', actual: fotoInicioBienvenida, alt: true, video: true }),
     bloque('novedades', '«Las últimas noticias»', { rows: 2 }),
     bloque('especializaciones', '«Las especializaciones»', {
       foto: 'PNG sin fondo (con transparencia). Solo se ve en computadoras.',
@@ -127,7 +133,7 @@ export const PAGINAS: PaginaConfig[] = [
   ]),
   pagina('carrera', 'La carrera', 'Página de la carrera', '/carrera', School, [
     hero({ actual: fotoCarrera }),
-    bloque('intro', '«Te necesitan, profe»', { foto: 'Se recorta en 4:3.', rows: 6, actual: fotoCarreraIntro, alt: true }),
+    bloque('intro', '«Te necesitan, profe»', { foto: 'Se recorta en 4:3.', rows: 6, actual: fotoCarreraIntro, alt: true, video: true }),
     bloque('especializaciones', '«Algunas de nuestras especializaciones»', {
       rows: 2,
       help: 'Los cursos que aparecen se eligen en cada curso con «Mostrar en la página La carrera».',
@@ -136,11 +142,11 @@ export const PAGINAS: PaginaConfig[] = [
     bloque('validez', '«Validez nacional e internacional»', { rows: 3 }),
     bloque('plan', '«Plan de estudios»', { texto: false, help: 'Las materias y horas se cargan en Configuración → Plan de estudios.' }),
     bloque('gabinete', '«Gabinete psicopedagógico»', { foto: 'Va de fondo, oscurecida.', rows: 4, actual: fotoCarreraGabinete }),
-    bloque('explora', '«Exploramos lo lindo que es San Luis»', { rows: 5, help: 'Las fotos del carrusel se cargan en Configuración → Galería de la carrera.' }),
+    bloque('explora', '«Exploramos lo lindo que es San Luis»', { rows: 5, help: 'Las fotos y videos del carrusel se cargan en Configuración → Galería de la carrera.' }),
   ]),
   pagina('especializaciones', 'Especializaciones', 'Página de especializaciones', '/especializaciones', Microscope, [
     hero({ actual: fotoEspec }),
-    bloque('intro', '«Siempre con las últimas novedades»', { foto: 'Se recorta en 4:3.', rows: 8, actual: fotoEspecIntro, alt: true }),
+    bloque('intro', '«Siempre con las últimas novedades»', { foto: 'Se recorta en 4:3.', rows: 8, actual: fotoEspecIntro, alt: true, video: true }),
     bloque('disertantes', '«Conocé a los disertantes»', { rows: 2 }),
   ]),
   pagina('inscripciones', 'Inscripciones', 'Página de inscripciones', '/inscripciones', ClipboardList, [

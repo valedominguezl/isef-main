@@ -1,0 +1,204 @@
+@use '@/styles/mixins' as *;
+
+/* Siempre en 3:2. Doble: 1 por vista en celular y 2 desde tablet. Simple: 1 por vista (columnas angostas). */
+div.doble {
+  --slide-w: 92%;
+
+  @include up($bp-md) {
+    --slide-w: calc((100% - var(--slide-gap)) / 2);
+  }
+}
+
+div.simple {
+  --slide-w: 92%;
+}
+
+.photo {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--blue-950);
+
+  button {
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    @include focus-ring(-4px);
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    transition: transform var(--duration-image) var(--ease-emphasized);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover img {
+      transform: scale(var(--scale-image));
+    }
+  }
+
+  /* Video sin foto: la miniatura de YouTube (4:3) trae franjas negras arriba y abajo; se recortan */
+  .ytThumb {
+    scale: 1.19;
+  }
+
+  .esVideo {
+    cursor: pointer;
+  }
+
+  figcaption {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-10) var(--space-5) var(--space-4);
+    background: linear-gradient(transparent, rgb(13 12 18 / 0.85));
+    pointer-events: none;
+
+    strong {
+      font-family: var(--font-sans);
+      font-weight: var(--weight-semibold);
+    }
+
+    small {
+      font-family: var(--font-sans);
+      font-size: var(--text-xs);
+      color: var(--color-on-dark-muted);
+    }
+  }
+}
+
+.zoom {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: var(--radius-pill);
+  background: rgb(13 12 18 / 0.5);
+  color: white;
+  transition:
+    $press-transition,
+    background-color var(--duration-base) var(--ease-standard);
+
+  @media (hover: hover) {
+    .photo:hover & {
+      background: var(--blue-600);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .photo:hover & {
+      scale: var(--scale-hover);
+    }
+  }
+}
+
+/* Visor a pantalla completa: la foto ocupa todo lo que entra en 3:2 y la barra de abajo tiene alto fijo
+   (antes el nombre del lugar en 1 o 2 líneas cambiaba el alto del visor) */
+.lightbox {
+  --bar-h: 96px;
+  display: grid;
+  grid-template-rows: auto var(--bar-h);
+  align-content: center; /* foto + barra juntas en el medio de la pantalla */
+  justify-items: center;
+  height: 100svh;
+  padding: var(--space-16) var(--gutter) 0;
+
+  /* Celular: la foto de borde a borde (en 3:2 es lo más grande que entra a lo ancho) */
+  @include down($bp-sm) {
+    padding-inline: 0;
+
+    .frame {
+      border-radius: 0;
+    }
+
+    .lightboxBar {
+      padding-inline: var(--space-3);
+    }
+  }
+}
+
+/* Mismo marco para todas: 3:2, tan grande como entre (ancho y alto), la foto recortada para llenarlo */
+.frame {
+  position: relative;
+  width: min(100%, calc((100svh - var(--bar-h) - var(--space-16) - var(--space-4)) * 3 / 2), 1600px);
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--ink-950);
+
+  /* absoluta: la foto no puede estirar el marco (eso pasaba con las que no eran 3:2) */
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.lightboxBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: min(100%, 960px);
+  height: var(--bar-h);
+  padding: var(--space-4) 0;
+
+  p {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    @include line-clamp(2);
+  }
+
+  span {
+    margin-left: var(--space-2);
+    color: var(--color-on-dark-muted);
+    white-space: nowrap;
+  }
+}
+
+/* Cambio de foto en el lightbox: entra desde el lado hacia el que se avanza (--dir ±1);
+   el blur disimula el doble estado */
+.swap {
+  animation: swapIn 400ms var(--ease-emphasized);
+}
+
+@keyframes swapIn {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--dir, 1) * 24px));
+    filter: blur(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swap {
+    animation-name: fadeOnly;
+  }
+
+  @keyframes fadeOnly {
+    from {
+      opacity: 0;
+    }
+  }
+}

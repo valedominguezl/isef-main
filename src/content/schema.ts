@@ -12,12 +12,20 @@ const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Solo minúsculas, n
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato AAAA-MM-DD');
 const mediaPath = z.string().regex(/^\/(media|docs)\/[\w\-./]+$/, 'Ruta dentro de /media o /docs');
 const markdown = z.string();
+/** Link de YouTube (el video no se sube al sitio: se muestra con el reproductor de YouTube). */
+const youtubeUrl = z.string().regex(/^https:\/\/(www\.|m\.)?(youtube\.com\/(watch\?(.*&)?v=|shorts\/|live\/|embed\/)|youtu\.be\/)[\w-]{11}/, 'Pegá el link del video de YouTube');
+/** Una foto o un video de YouTube, con leyenda opcional (carruseles de fotos y videos). */
+const mediaItem = z
+  .object({ imagen: mediaPath.optional(), video: youtubeUrl.optional(), titulo: z.string().max(120).optional() })
+  .refine((g) => g.imagen || g.video, 'Cargá una foto o un video');
 
 /* ---------------------------------- Cursos --------------------------------- */
 export const cursoSchema = z.object({
   titulo: z.string().min(3),
   subtitulo: z.string().min(3),
   imagen: mediaPath.optional(),
+  /** Fotos y videos del curso: sección propia en su página (carrusel si hay más de uno). */
+  galeria: z.array(mediaItem).default([]),
   etiqueta: z.string().max(24).optional(),
   destacado: z.boolean().default(false),
   publicado: z.boolean().default(true),
@@ -88,6 +96,8 @@ export const novedadSchema = z.object({
   resumen: z.string().min(10).max(500),
   cuerpo: markdown.optional(),
   imagen: mediaPath.optional(),
+  /** Fotos y videos: entre el resumen y el texto (carrusel si hay más de uno). */
+  galeria: z.array(mediaItem).default([]),
   curso: slug.optional(),
   enlace: z.object({ texto: z.string(), url: z.string() }).optional(),
   destacado: z.boolean().default(false),
@@ -203,7 +213,12 @@ export const conferenciasSchema = z.object({
 });
 
 export const galeriaSchema = z.object({
-  imagenes: z.array(z.object({ imagen: mediaPath, lugar: z.string(), credito: z.string().optional() })),
+  /** Fotos y videos: un video sin foto usa la miniatura de YouTube. */
+  imagenes: z.array(
+    z
+      .object({ imagen: mediaPath.optional(), video: youtubeUrl.optional(), lugar: z.string(), credito: z.string().optional() })
+      .refine((g) => g.imagen || g.video, 'Cargá una foto o un video'),
+  ),
 });
 
 const telefono = z.string().regex(/^\d{10,15}$/, 'Solo dígitos con código de país, ej: 5492664564435');
@@ -250,7 +265,9 @@ export const sitioSchema = z.object({
 const opcional = z.string().optional();
 const heroPagina = z.object({ titulo: opcional, subtitulo: opcional, imagen: mediaPath.optional() }).optional();
 /** imagenAlt: descripción de la foto cargada desde el panel (texto alternativo para lectores de pantalla). */
-const bloquePagina = z.object({ titulo: opcional, texto: markdown.optional(), imagen: mediaPath.optional(), imagenAlt: opcional }).optional();
+const bloquePagina = z
+  .object({ titulo: opcional, texto: markdown.optional(), imagen: mediaPath.optional(), imagenAlt: opcional, video: youtubeUrl.optional() })
+  .optional();
 const tituloPagina = z.object({ titulo: opcional }).optional();
 
 export const paginaSchemas = {

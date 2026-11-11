@@ -20,8 +20,24 @@ import {
   type PaginaKey,
 } from '@/content/schema';
 import { CV_SECCIONES, NOVEDAD_CATEGORIAS } from '@/content/constants';
-import { PAGINAS } from './paginasConfig';
+import { AYUDA_VIDEO, PAGINAS } from './paginasConfig';
 import { ASUNTO, MENSAJE, RESOLUCION } from './certificados/texto';
+
+/** Lista de fotos y videos: con varios se ve en carrusel; con uno, solo ese. */
+const fotosYVideos = (folder: string, help: string): Field => ({
+  type: 'repeater',
+  name: 'galeria',
+  label: 'Fotos y videos',
+  help,
+  itemLabel: 'Foto o video',
+  titleField: 'titulo',
+  collapsed: true,
+  fields: [
+    { type: 'image', name: 'imagen', label: 'Foto', folder, maxWidth: 1920, help: 'Horizontal. Si cargás un video, la foto es opcional: se usa la miniatura de YouTube.' },
+    { type: 'url', name: 'video', label: 'Video', placeholder: 'https://www.youtube.com/watch?v=…', help: AYUDA_VIDEO },
+    { type: 'text', name: 'titulo', label: 'Leyenda', max: 120, help: 'Opcional: se ve sobre la foto o el video.' },
+  ],
+});
 
 export type Field =
   | {
@@ -146,6 +162,7 @@ export const COLLECTIONS: CollectionConfig[] = [
       { type: 'textarea', name: 'resumen', label: 'Resumen', help: 'De 1 a 3 oraciones: se ve en las tarjetas y en Google.', max: 500, rows: 4, required: true },
       { type: 'markdown', name: 'cuerpo', label: 'Texto completo (opcional)', rows: 10 },
       { type: 'image', name: 'imagen', label: 'Imagen', folder: 'novedades', maxWidth: 1600, help: 'Horizontal.' },
+      fotosYVideos('novedades', 'Se ven entre el resumen y el texto. Con más de uno, en carrusel.'),
       { type: 'reference', name: 'curso', label: 'Curso relacionado', collection: 'cursos', multiple: false, help: 'Agrega un botón "Ver el curso".' },
     ],
     quick: [
@@ -189,6 +206,7 @@ export const COLLECTIONS: CollectionConfig[] = [
       { type: 'text', name: 'duracion', label: 'Duración y horario', placeholder: '5 encuentros, jueves de 19 a 21 h' },
       { type: 'text', name: 'cargaHoraria', label: 'Carga horaria total', placeholder: '12 horas reloj', help: 'Para los certificados: se completa sola al elegir este curso.' },
       { type: 'text', name: 'costo', label: 'Costo', placeholder: 'Gratuito para alumnos' },
+      fotosYVideos('cursos', 'Se ven arriba de «Sobre el curso». Con más de uno, en carrusel. La portada sigue siendo la de las tarjetas y al compartir el link.'),
       { type: 'markdown', name: 'descripcion', label: 'Descripción', rows: 10 },
       {
         type: 'repeater',
@@ -568,16 +586,17 @@ export const SINGLETONS: SingletonConfig[] = [
   {
     key: 'galeria',
     label: 'Galería de la carrera',
-    description: 'Fotos de los lugares de práctica en San Luis.',
+    description: 'Fotos y videos de los lugares de práctica en San Luis.',
     icon: Images,
     file: 'content/galeria.json',
     schema: galeriaSchema,
     sitePath: '/carrera',
     fields: [
-      { type: 'repeater', name: 'imagenes', label: 'Fotos', itemLabel: 'Foto', titleField: 'lugar', fields: [
-        { type: 'image', name: 'imagen', label: 'Imagen', folder: 'galeria', maxWidth: 1920 },
+      { type: 'repeater', name: 'imagenes', label: 'Fotos y videos', itemLabel: 'Foto o video', titleField: 'lugar', fields: [
+        { type: 'image', name: 'imagen', label: 'Foto', folder: 'galeria', maxWidth: 1920, help: 'Si cargás un video, la foto es opcional: se usa la miniatura de YouTube.' },
+        { type: 'url', name: 'video', label: 'Video', placeholder: 'https://www.youtube.com/watch?v=…', help: AYUDA_VIDEO },
         { type: 'text', name: 'lugar', label: 'Lugar' },
-        { type: 'text', name: 'credito', label: 'Crédito de la foto' },
+        { type: 'text', name: 'credito', label: 'Crédito' },
       ] },
     ],
   },

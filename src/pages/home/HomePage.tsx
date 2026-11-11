@@ -190,6 +190,7 @@ export function Component() {
         <Feature
           title={textos.bienvenida.titulo}
           image={textos.bienvenida.imagen ?? introImg}
+          video={textos.bienvenida.video}
           imageAlt={altFoto(textos.bienvenida, 'Vista aérea del predio del profesorado con las sierras de San Luis')}
           actions={<Button to="/carrera">Conocé la carrera</Button>}
         >

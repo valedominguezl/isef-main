@@ -91,7 +91,7 @@ export function Component() {
 
       <Bloque id="intro">
       <Section>
-        <Feature title={textos.intro.titulo} image={textos.intro.imagen ?? introImg} imageAlt={altFoto(textos.intro, 'Clase de especialización')}>
+        <Feature title={textos.intro.titulo} image={textos.intro.imagen ?? introImg} video={textos.intro.video} imageAlt={altFoto(textos.intro, 'Clase de especialización')}>
           <Prose text={textos.intro.texto} />
         </Feature>
       </Section>

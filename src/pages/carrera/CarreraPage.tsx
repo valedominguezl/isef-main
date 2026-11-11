@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { BadgeCheck, CalendarDays, ChevronLeft, ChevronRight, Clock, GraduationCap, Hourglass, MapPin, Maximize2 } from 'lucide-react';
+import { BadgeCheck, CalendarDays, Clock, GraduationCap, Hourglass, MapPin } from 'lucide-react';
 import heroImg from '@/assets/media/carrera/main.webp';
 import heroSm from '@/assets/media/carrera/main-800.webp';
 import introImg from '@/assets/media/carrera/intro.webp';
@@ -18,12 +17,11 @@ import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Feature from '@/components/ui/Feature';
 import Button from '@/components/ui/Button';
-import Carousel from '@/components/ui/Carousel';
 import Accordion from '@/components/ui/Accordion';
-import Dialog from '@/components/ui/Dialog';
 import Reveal, { RevealItem } from '@/components/ui/Reveal';
 import CardGrid from '@/components/ui/CardGrid';
-import IconButton from '@/components/ui/IconButton';
+import Carousel from '@/components/ui/Carousel';
+import MediaGallery from '@/components/ui/MediaGallery';
 import CourseCard from '@/components/cards/CourseCard';
 import styles from './CarreraPage.module.scss';
 
@@ -35,78 +33,6 @@ const DATOS = [
   { icon: Clock, label: 'Horario', value: 'De 07:30 a 13:30 h' },
   { icon: BadgeCheck, label: 'Validez', value: 'Nacional y MERCOSUR' },
 ];
-
-function Galeria() {
-  const [index, setIndex] = useState<number | null>(null);
-  // Última foto abierta: el visor la sigue mostrando mientras se cierra con su animación de salida
-  const [last, setLast] = useState(0);
-  if (index != null && index !== last) setLast(index);
-  // Sentido del último paso: la foto nueva entra desde el lado hacia el que se avanza
-  const [dir, setDir] = useState(1);
-  const imgs = galeria.imagenes;
-  const current = imgs[index ?? last];
-  const step = (d: number) => {
-    setDir(d);
-    setIndex((i) => (i == null ? i : (i + d + imgs.length) % imgs.length));
-  };
-  // Flechas del teclado mientras el visor está abierto (antes solo andaban con el foco dentro de la foto)
-  const abierto = index != null;
-  useEffect(() => {
-    if (!abierto) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') step(1);
-      if (e.key === 'ArrowLeft') step(-1);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- step solo usa setters estables
-  }, [abierto]);
-
-  return (
-    <>
-      <Carousel label="Galería de lugares de práctica" className={styles.gallery} standardWidth={false}>
-        {imgs.map((g, i) => (
-          <figure key={g.imagen} className={styles.photo}>
-            <button type="button" onClick={() => setIndex(i)} aria-label={`Ampliar foto: ${g.lugar}`}>
-              <img src={g.imagen} alt={g.lugar} loading="lazy" decoding="async" />
-              <Maximize2 className={styles.zoom} size={20} aria-hidden />
-            </button>
-            <figcaption className="on-dark">
-              <strong>{g.lugar}</strong>
-              {g.credito && <small>{g.credito}</small>}
-            </figcaption>
-          </figure>
-        ))}
-      </Carousel>
-      {/* Pantalla completa: la foto lo más grande posible */}
-      <Dialog open={index != null} onClose={() => setIndex(null)} title={current?.lugar ?? 'Galería'} hideTitle size="full" variant="dark">
-        {current && (
-          <div className={styles.lightbox}>
-            {/* Marco 3:2 fijo y la foto recortada (cover): todas se ven con el mismo formato y el visor no cambia de tamaño */}
-            <div className={styles.frame}>
-              <img key={current.imagen} className={styles.swap} src={current.imagen} alt={current.lugar} style={{ '--dir': dir } as React.CSSProperties} />
-            </div>
-            <div className={`${styles.lightboxBar} on-dark`}>
-              <IconButton label="Foto anterior" tone="light" onClick={() => step(-1)}>
-                <ChevronLeft />
-              </IconButton>
-              <p>
-                <strong>{current.lugar}</strong>
-                {current.credito && <small> · {current.credito}</small>}
-                <span>
-                  {(index ?? last) + 1} / {imgs.length}
-                </span>
-              </p>
-              <IconButton label="Foto siguiente" tone="light" onClick={() => step(1)}>
-                <ChevronRight />
-              </IconButton>
-            </div>
-          </div>
-        )}
-      </Dialog>
-    </>
-  );
-}
 
 export function Component() {
   const enCarrera = cursos.filter((c) => c.mostrarEnCarrera);
@@ -151,6 +77,7 @@ export function Component() {
         <Feature
           title={textos.intro.titulo}
           image={textos.intro.imagen ?? introImg}
+          video={textos.intro.video}
           imageAlt={altFoto(textos.intro, 'Profesor de educación física trabajando con alumnos')}
           actions={<Button to="/especializaciones">Ver talleres</Button>}
         >
@@ -269,7 +196,7 @@ export function Component() {
           lead={<Markdown text={textos.explora.texto} />}
         />
         <Reveal>
-          <Galeria />
+          <MediaGallery label="Galería de lugares de práctica" items={galeria.imagenes.map((g) => ({ ...g, titulo: g.lugar }))} />
         </Reveal>
       </Section>
       </Bloque>

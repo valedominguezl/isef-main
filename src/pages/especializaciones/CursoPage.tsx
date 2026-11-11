@@ -28,6 +28,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import Prose from "@/components/ui/Prose";
+import MediaGallery from "@/components/ui/MediaGallery";
 import Accordion from "@/components/ui/Accordion";
 import Reveal, { RevealItem } from "@/components/ui/Reveal";
 import CardGrid from "@/components/ui/CardGrid";
@@ -194,6 +195,12 @@ export function Component() {
       <Section width="wide">
         <div className={styles.layout}>
           <div className={styles.main}>
+            {(curso.galeria ?? []).length > 0 && (
+              <Reveal as="section" aria-label="Fotos y videos">
+                <MediaGallery items={curso.galeria ?? []} label={curso.titulo} columnas="simple" />
+              </Reveal>
+            )}
+
             {curso.descripcion && (
               <Reveal as="section" aria-labelledby="desc-title">
                 <h2 id="desc-title" className={styles.h2}>

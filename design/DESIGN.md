@@ -153,9 +153,11 @@ Es una web institucional: las **entradas son lentas y elegantes** (como el sitio
 | `Section` | tone: default · tint · subtle · dark · ink · brand · image | Fondo + padding + contenedor |
 | `SectionHeader` | align start/center | Título con énfasis + bajada |
 | `PageHero` | md · lg · full; start/center | Imagen + overlay; breadcrumbs |
-| `Feature` | normal · reverse | Texto + imagen con el lado de afuera en píldora |
+| `Feature` | normal · reverse | Texto + imagen con el lado de afuera en píldora; con `video`, el video (16:9) en lugar de la foto |
 | `Accordion` | card · brand · plain | Accesible, animación de altura. `brand` usa blue-600 → 700 (no el degradé de botón): el texto blanco chico llega a AA |
 | `Carousel` | light · dark | Scroll-snap nativo (sin librerías). Puntos inactivos blue-400 (3:1), activo blue-500 y más largo |
+| `Video` | — | YouTube liviano: miniatura + play (blue-700 → red-600 al pasar el mouse); el reproductor (youtube-nocookie) carga recién al tocarlo. Solo links de YouTube: los videos no se suben al sitio |
+| `MediaGallery` | columnas doble · simple | Fotos y videos en 3:2: con varios, carrusel + visor a pantalla completa (el video se reproduce en el visor); con uno, solo ese. Galería de La carrera, cursos y novedades |
 | `Badge` | blue · white · neutral · light · success | `white` para «¡Nuevo!» sobre fotos |
 | `Dialog` | sm · md · lg · full; default · dark | `<dialog>` nativo; entra y sale animado (clase `closing`) |
 | `ChipGroup` (`Chips.tsx`) | align start · center; chip «Todos» opcional; `count` por opción | Filtros en píldora (`role="group"` + `aria-pressed`). Activo: relleno `blue-600`; hover: borde `blue-400`, tinte `blue-50` y crecimiento con rebote. Tocar el activo lo apaga |

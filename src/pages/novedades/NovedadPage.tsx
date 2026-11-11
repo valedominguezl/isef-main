@@ -7,6 +7,7 @@ import PageHero from '@/components/ui/PageHero';
 import Section from '@/components/ui/Section';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Prose from '@/components/ui/Prose';
+import MediaGallery from '@/components/ui/MediaGallery';
 import Button from '@/components/ui/Button';
 import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal';
 import NewsCard from '@/components/cards/NewsCard';
@@ -56,6 +57,11 @@ export function Component() {
       <Section>
         <Reveal as="article" className={styles.article}>
           <p className={styles.lead}>{n.resumen}</p>
+          {(n.galeria ?? []).length > 0 && (
+            <div className={styles.media}>
+              <MediaGallery items={n.galeria ?? []} label={n.titulo} columnas="simple" />
+            </div>
+          )}
           <Prose text={n.cuerpo} />
           <div className={styles.actions}>
             {n.enlace && (

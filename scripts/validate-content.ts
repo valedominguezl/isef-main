@@ -44,6 +44,7 @@ for (const [, { file, schema }] of Object.entries(singletons)) {
 for (const s of slugs.cursos) {
   const c = read(`content/cursos/${s}.json`);
   if (!exists(c.imagen)) fail(`cursos/${s}`, `no existe la imagen ${c.imagen}`);
+  for (const g of c.galeria ?? []) if (!exists(g.imagen)) fail(`cursos/${s}`, `fotos y videos: no existe ${g.imagen}`);
   for (const d of c.disertantes ?? []) if (!slugs.disertantes.has(d)) fail(`cursos/${s}`, `disertante inexistente "${d}"`);
 }
 for (const s of slugs.disertantes) {
@@ -58,6 +59,7 @@ for (const s of slugs.cv) {
 for (const s of slugs.novedades) {
   const n = read(`content/novedades/${s}.json`);
   if (!exists(n.imagen)) fail(`novedades/${s}`, `no existe la imagen ${n.imagen}`);
+  for (const g of n.galeria ?? []) if (!exists(g.imagen)) fail(`novedades/${s}`, `fotos y videos: no existe ${g.imagen}`);
   if (n.curso && !slugs.cursos.has(n.curso)) fail(`novedades/${s}`, `curso inexistente "${n.curso}"`);
 }
 const insc = read('content/inscripciones.json');

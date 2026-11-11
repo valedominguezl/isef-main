@@ -1,0 +1,95 @@
+@use '@/styles/mixins' as *;
+
+.video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--blue-950);
+  box-shadow: var(--shadow-card);
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+.facade {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-image) var(--ease-out);
+  }
+
+  /* Oscurece abajo para que se lea la leyenda */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-image-bottom);
+  }
+
+  @include hover {
+    img {
+      transform: scale(var(--scale-image));
+    }
+
+    .play {
+      transform: scale(var(--scale-hover));
+      background: var(--red-600);
+    }
+  }
+
+  /* El contorno va en el botón de play: el del marco lo recorta el overflow redondeado */
+  &:focus-visible {
+    outline: none;
+
+    .play {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 3px;
+    }
+  }
+}
+
+.play {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  padding-left: 0.2rem; /* el triángulo se ve centrado */
+  border-radius: var(--radius-pill);
+  background: var(--blue-700);
+  color: var(--ink-0);
+  box-shadow: var(--shadow-lg);
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
+}
+
+.caption {
+  position: absolute;
+  z-index: 1;
+  inset: auto var(--space-5) var(--space-4);
+  color: var(--color-on-dark);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-align: left;
+  @include line-clamp(2);
+}
