@@ -103,9 +103,6 @@ export const PAGINAS_POR_DEFECTO = {
   aranceles: {
     hero: { titulo: 'Aranceles' },
   },
-  conferencias: {
-    hero: { titulo: 'Conferencias', subtitulo: 'Accedé a las grabaciones desde un solo lugar' },
-  },
 } satisfies Record<PaginaKey, Textos>;
 
 type PorDefecto = typeof PAGINAS_POR_DEFECTO;

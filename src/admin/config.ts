@@ -3,11 +3,10 @@
  * Para agregar un campo nuevo: sumarlo al esquema (src/content/schema.ts) y acá.
  */
 import type { ZodTypeAny } from 'zod';
-import { Award, CircleHelp, FileText, GraduationCap, Images, Library, Newspaper, Receipt, Settings2, Users, Video, type LucideIcon } from 'lucide-react';
+import { Award, CircleHelp, FileText, GraduationCap, Images, Library, Newspaper, Receipt, Settings2, Users, type LucideIcon } from 'lucide-react';
 import {
   arancelesSchema,
   certificadoSchema,
-  conferenciasSchema,
   cursoSchema,
   cvSchema,
   disertanteSchema,
@@ -597,25 +596,6 @@ export const SINGLETONS: SingletonConfig[] = [
         { type: 'url', name: 'video', label: 'Video', placeholder: 'https://www.youtube.com/watch?v=…', help: AYUDA_VIDEO },
         { type: 'text', name: 'lugar', label: 'Lugar' },
         { type: 'text', name: 'credito', label: 'Crédito' },
-      ] },
-    ],
-  },
-  {
-    key: 'conferencias',
-    label: 'Grabaciones de conferencias',
-    description: 'Página privada /hijos.htm con enlaces a videos y PDFs.',
-    icon: Video,
-    file: 'content/conferencias.json',
-    schema: conferenciasSchema,
-    sitePath: '/hijos.htm',
-    fields: [
-      { type: 'repeater', name: 'grabaciones', label: 'Cursos grabados', itemLabel: 'Curso', titleField: 'titulo', collapsed: true, fields: [
-        { type: 'text', name: 'titulo', label: 'Título' },
-        { type: 'text', name: 'subtitulo', label: 'Subtítulo', placeholder: '6 encuentros' },
-        { type: 'repeater', name: 'enlaces', label: 'Enlaces', itemLabel: 'Enlace', titleField: 'nombre', fields: [
-          { type: 'text', name: 'nombre', label: 'Nombre' },
-          { type: 'text', name: 'url', label: 'URL' },
-        ] },
       ] },
     ],
   },

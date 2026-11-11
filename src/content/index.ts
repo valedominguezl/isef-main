@@ -2,13 +2,12 @@
  * Acceso tipado al contenido. Los JSON se importan en build (sin pedidos de red) y se
  * validan con `npm run content:check`, por eso acá solo se tipan (zod no entra al bundle público).
  */
-import type { Aranceles, Conferencias, Curso, Cv, Disertante, Faq, Galeria, Inscripciones, Novedad, Plan, Sitio } from './schema';
+import type { Aranceles, Curso, Cv, Disertante, Faq, Galeria, Inscripciones, Novedad, Plan, Sitio } from './schema';
 import sitioJson from '@content/sitio.json';
 import faqJson from '@content/faq.json';
 import planJson from '@content/plan.json';
 import inscripcionesJson from '@content/inscripciones.json';
 import arancelesJson from '@content/aranceles.json';
-import conferenciasJson from '@content/conferencias.json';
 import galeriaJson from '@content/galeria.json';
 import { resolverPagina, type PaginaResuelta } from './paginas';
 import { NOVEDAD_CATEGORIAS } from './constants';
@@ -32,7 +31,6 @@ export const faq = faqJson as Faq;
 export const plan = planJson as Plan;
 export const inscripciones = inscripcionesJson as Inscripciones;
 export const aranceles = arancelesJson as Aranceles;
-export const conferencias = conferenciasJson as Conferencias;
 export const galeria = galeriaJson as Galeria;
 
 /** Textos y fotos de cada página (content/paginas/*.json, editables en /admin → Páginas). */
@@ -46,7 +44,6 @@ export const paginas: { [K in PaginaKey]: PaginaResuelta<K> } = {
   novedades: pagina('novedades'),
   contacto: pagina('contacto'),
   aranceles: pagina('aranceles'),
-  conferencias: pagina('conferencias'),
 };
 
 /** Inscripciones abiertas hoy: el interruptor del panel + la ventana inicio/cierre (si están cargadas). */

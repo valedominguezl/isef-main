@@ -202,16 +202,6 @@ export const arancelesSchema = z.object({
   uniforme: markdown,
 });
 
-export const conferenciasSchema = z.object({
-  grabaciones: z.array(
-    z.object({
-      titulo: z.string(),
-      subtitulo: z.string(),
-      enlaces: z.array(z.object({ nombre: z.string(), url: z.string() })),
-    }),
-  ),
-});
-
 export const galeriaSchema = z.object({
   /** Fotos y videos: un video sin foto usa la miniatura de YouTube. */
   imagenes: z.array(
@@ -296,7 +286,6 @@ export const paginaSchemas = {
   novedades: z.object({ hero: heroPagina }),
   contacto: z.object({ hero: heroPagina, telefonos: bloquePagina, sedes: bloquePagina }),
   aranceles: z.object({ hero: heroPagina }),
-  conferencias: z.object({ hero: heroPagina }),
 } as const;
 
 export type PaginaKey = keyof typeof paginaSchemas;
@@ -312,7 +301,6 @@ export type Faq = z.infer<typeof faqSchema>;
 export type Plan = z.infer<typeof planSchema>;
 export type Inscripciones = z.infer<typeof inscripcionesSchema>;
 export type Aranceles = z.infer<typeof arancelesSchema>;
-export type Conferencias = z.infer<typeof conferenciasSchema>;
 export type Galeria = z.infer<typeof galeriaSchema>;
 export type Sitio = z.infer<typeof sitioSchema>;
 
@@ -331,7 +319,6 @@ export const singletons = {
   plan: { file: 'content/plan.json', schema: planSchema },
   inscripciones: { file: 'content/inscripciones.json', schema: inscripcionesSchema },
   aranceles: { file: 'content/aranceles.json', schema: arancelesSchema },
-  conferencias: { file: 'content/conferencias.json', schema: conferenciasSchema },
   galeria: { file: 'content/galeria.json', schema: galeriaSchema },
   paginaInicio: { file: 'content/paginas/inicio.json', schema: paginaSchemas.inicio },
   paginaCarrera: { file: 'content/paginas/carrera.json', schema: paginaSchemas.carrera },
@@ -340,5 +327,4 @@ export const singletons = {
   paginaNovedades: { file: 'content/paginas/novedades.json', schema: paginaSchemas.novedades },
   paginaContacto: { file: 'content/paginas/contacto.json', schema: paginaSchemas.contacto },
   paginaAranceles: { file: 'content/paginas/aranceles.json', schema: paginaSchemas.aranceles },
-  paginaConferencias: { file: 'content/paginas/conferencias.json', schema: paginaSchemas.conferencias },
 } as const;

@@ -29,7 +29,7 @@ Secretos del Worker (Worker → Settings → Variables and Secrets, o `npx wrang
 
 ## Estructura de `dist/`
 - `index.html`, `carrera.html`, `especializaciones/<slug>.html`, … (una página prerenderizada por URL)
-- `admin.html`, `test-hiit.html`, `hijos.htm` (solo cliente), `404.html`
+- `admin.html`, `test-hiit.html`, `404.html`
 - `sitemap.xml`, `robots.txt`, `search-index.json`, `assets/` (con hash), `media/`, `docs/`
 
 ## VPS del campus (Hostinger)

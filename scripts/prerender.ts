@@ -131,7 +131,6 @@ await page('/verificar');
 await page('/404', path.join(DIST, '404.html'));
 shell('/admin', 'Administración', fileFor('/admin'), ADMIN_BOOT);
 shell('/test-hiit', 'Test HIIT');
-shell('/hijos.htm', 'Conferencias', path.join(DIST, 'hijos.htm'));
 
 // ── Índice de búsqueda: contenido + secciones reales de cada página ─────
 const docs: SearchDoc[] = contentDocs();
@@ -174,7 +173,7 @@ const urls = [...staticRoutes, ...dynamicRoutes]
 fs.writeFileSync(path.join(DIST, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
 fs.writeFileSync(
   path.join(DIST, 'robots.txt'),
-  `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /buscar\nDisallow: /verificar\nDisallow: /hijos.htm\nDisallow: /test-hiit\n\nSitemap: ${sitio.url}/sitemap.xml\n`,
+  `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /buscar\nDisallow: /verificar\nDisallow: /test-hiit\n\nSitemap: ${sitio.url}/sitemap.xml\n`,
 );
 
 // ── Imágenes para compartir (Open Graph) con el título de cada página ───

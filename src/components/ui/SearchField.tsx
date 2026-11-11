@@ -15,7 +15,7 @@ interface Props {
   inputRef?: RefObject<HTMLInputElement | null>;
 }
 
-/** Campo de búsqueda único del sitio (FAQ, especializaciones, conferencias). Combinar con useDebounced. */
+/** Campo de búsqueda único del sitio (FAQ, especializaciones). Combinar con useDebounced. */
 export default function SearchField({ value, onChange, placeholder, label, pending, className, inputRef }: Props) {
   const own = useRef<HTMLInputElement>(null);
   const input = inputRef ?? own;

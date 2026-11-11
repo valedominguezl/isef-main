@@ -3,7 +3,7 @@
  * (content/paginas/<pagina>.json, esquemas en src/content/schema.ts → paginaSchemas).
  * Todo es opcional: lo que se deja vacío vuelve al texto/foto original (src/content/paginas.ts).
  */
-import { Clapperboard, ClipboardList, House, Megaphone, Microscope, Phone, School, Wallet, type LucideIcon } from 'lucide-react';
+import { ClipboardList, House, Megaphone, Microscope, Phone, School, Wallet, type LucideIcon } from 'lucide-react';
 import { paginaSchemas, type PaginaKey } from '@/content/schema';
 import { PAGINAS_POR_DEFECTO } from '@/content/paginas';
 import type { Field, SingletonConfig } from './config';
@@ -165,7 +165,6 @@ export const PAGINAS: PaginaConfig[] = [
   pagina('aranceles', 'Aranceles', 'Página de aranceles', '/aranceles', Wallet, [
     hero({ subtitulo: false, help: 'La bajada es la nota que se carga en Configuración → Aranceles.', actual: fotoAranceles }),
   ]),
-  pagina('conferencias', 'Conferencias', 'Página de conferencias', '/hijos.htm', Clapperboard, [hero({ ayudaFoto: 'Opcional: hoy no tiene foto. Horizontal, va de fondo oscurecida.' })]),
 ];
 
 /** Claves de los editores de páginas (para separarlos de "Configuración" en la barra lateral). */
