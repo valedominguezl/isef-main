@@ -72,8 +72,9 @@ export function useSello(api: AdminApi) {
 }
 
 /**
- * Saca el fondo de la foto o escaneo del sello y lo recorta. Lo oscuro queda como tinta de sello
- * (violeta-índigo, la de los sellos de goma), lo claro desaparece. PNG transparente de hasta 900 px.
+ * Saca el fondo de la foto o escaneo del sello y lo recorta. Lo oscuro queda como tinta de sello en el azul del
+ * escudo (`blue-700` de DESIGN.md, más claro que el azul de la firma para que no se confundan); lo claro desaparece.
+ * PNG transparente de hasta 900 px.
  */
 export async function limpiarSello(archivo: File): Promise<ArrayBuffer> {
   const img = await createImageBitmap(archivo);
@@ -93,7 +94,7 @@ export async function limpiarSello(archivo: File): Promise<ArrayBuffer> {
     const oscuro = 255 - (p[i] + p[i + 1] + p[i + 2]) / 3;
     // Umbral suave: el gris del papel desaparece y la tinta queda pareja
     const v = Math.max(0, Math.min(255, (oscuro - 70) * 2.2));
-    [p[i], p[i + 1], p[i + 2], p[i + 3]] = [52, 44, 132, v];
+    [p[i], p[i + 1], p[i + 2], p[i + 3]] = [35, 70, 133, v]; // #234685
     if (v > 60) {
       const px = k % w;
       const py = Math.floor(k / w);

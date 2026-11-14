@@ -73,7 +73,7 @@ Se sube en /admin → Certificados → una actividad → **Datos del certificado
 
 ## Sello del instituto
 
-Se sube en el mismo lugar: **Datos del certificado → Subir sello** (vale para todos los certificados). Sale a la izquierda de la firma, montado apenas sobre el comienzo de la línea, en tinta violeta.
+Se sube en el mismo lugar: **Datos del certificado → Subir sello** (vale para todos los certificados). Sale a la izquierda de la firma, montado apenas sobre el comienzo de la línea, en tinta azul del escudo (`#234685`; hasta el 14/11/2026 era violeta, de la paleta vieja).
 
 - **Fondo:** el panel le saca el fondo solo (lo oscuro queda como tinta; sirve una foto o una fotocopia).
 - **Dónde se guarda:** igual que la firma, en las propiedades del Apps Script.
